@@ -1,0 +1,41 @@
+---
+alwaysApply: true
+---
+
+# Conteúdo em Português
+
+## Idioma e Localização
+
+- **Sempre responder em português** (conforme regra do usuário)
+- **Conteúdo em português brasileiro** para o público-alvo
+- **Terminologia técnica** adequada ao mercado brasileiro
+- **Formatação brasileira** (datas, números, moeda)
+
+## Terminologia da Profills
+
+- **Máquinas envasadoras** (não "packaging machines")
+- **Embalagens flexíveis** (flexible packaging)
+- **Sachês, bisnagas, frascos** (sachets, tubes, bottles)
+- **Produtos líquidos, pastosos e sólidos**
+- **Plantas de fábricas** (factory layouts)
+
+## SEO e Conteúdo
+
+- **Keywords em português** definidas em [app/layout.tsx](mdc:app/layout.tsx)
+- **Meta descriptions** em português
+- **Alt texts** para imagens em português
+- **Títulos e headings** em português
+
+## Formulários e Validação
+
+- **Mensagens de erro** em português
+- **Placeholders** em português
+- **Labels** e instruções em português
+- **Validação de CEP** brasileiro
+
+## Navegação e UX
+
+- **Menu de navegação** em português
+- **CTAs** (Call-to-Actions) em português
+- **Mensagens de feedback** em português
+- **Tooltips e help text** em português

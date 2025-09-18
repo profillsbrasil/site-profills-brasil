@@ -1,0 +1,55 @@
+---
+globs: *3d*.tsx,*model*.tsx
+alwaysApply: false
+---
+
+# Modelos 3D e Animações
+
+## Modelos 3D
+
+- **Three.js** para renderização 3D
+- **Google Model Viewer** para modelos GLB/GLTF
+- **Otimização** com hooks customizados
+- **Fallbacks** para dispositivos sem suporte WebGL
+
+## Framer Motion
+
+- **Animações suaves** e performáticas
+- **Variants** para animações complexas
+- **Layout animations** quando apropriado
+- **Reduced motion** para acessibilidade
+
+## MagicUI Components
+
+- **Highlighter** para texto destacado
+- **NumberTicker** para contadores animados
+- **Marquee** para carrosséis infinitos
+- **GridPattern** para backgrounds
+
+## Performance
+
+- **Lazy loading** para modelos 3D pesados
+- **Otimização de assets** (compressão, formatos)
+- **Hooks customizados** para gerenciar estado 3D
+- **Cleanup** adequado de recursos
+
+## Padrões de Implementação
+
+```tsx
+// Hook customizado para modelos 3D
+const { model, loading, error } = useOptimized3DModel('/path/to/model.glb');
+
+// Animação com Framer Motion
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+>
+```
+
+## Acessibilidade
+
+- **Reduced motion** respeitado
+- **Alt text** para modelos 3D
+- **Controles de interação** claros
+- **Fallbacks** para dispositivos limitados

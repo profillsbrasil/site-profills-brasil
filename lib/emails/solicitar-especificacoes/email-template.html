@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>{{subject}}</title>
+
+    <style>
+      /* Resets básicos */
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+      }
+      * {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
+      table,
+      td {
+        mso-table-lspace: 0pt !important;
+        mso-table-rspace: 0pt !important;
+      }
+      table {
+        border-collapse: collapse !important;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+        outline: none;
+        text-decoration: none;
+        height: auto;
+        display: block;
+      }
+      a {
+        text-decoration: none;
+      }
+      /* Cores e estilos inspirados na sua folha de estilos (verde 059669/10b981, cinzas) */
+      .bg {
+        background-color: #f5f5f5;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+      .header {
+        background: #1f2937;
+        color: #ffffff;
+        text-align: center;
+        padding: 28px 24px;
+      }
+      .h1 {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0;
+        color: #ffffff;
+      }
+      .preheader {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        font-size: 1px;
+        line-height: 1px;
+      }
+      .content {
+        padding: 20px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #333333;
+      }
+      .section-title {
+        color: #059669;
+        font-weight: 700;
+        font-size: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e5e7eb;
+        margin: 0 0 12px 0;
+      }
+      .info {
+        background: #f8fafc;
+        /* border: 1px solid #374151; */
+        border-radius: 8px;
+        padding: 12px;
+        margin: 0 0 10px 0;
+      }
+      .label {
+        color: #374151;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .value {
+        color: #6b7280;
+      }
+      .highlight {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        border-radius: 12px;
+        text-align: center;
+        padding: 16px;
+        margin: 16px 0;
+      }
+      .highlight-title {
+        color: #059669;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+      }
+      .chip {
+        display: inline-block;
+        background: #059669;
+        color: #ffffff;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .timestamp {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-align: center;
+      }
+      .observ {
+        background: #fef3c7;
+        color: #92400e;
+        border-radius: 8px;
+        padding: 12px;
+        font-style: italic;
+      }
+      .btn-wrap {
+        text-align: center;
+        padding: 8px 0 0;
+      }
+      .btn-email {
+        background: #059669 !important;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+        padding: 12px 24px !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        border: none !important;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+      }
+      .btn-email:hover {
+        background: #047857 !important;
+      }
+      .footer {
+        background: #374151;
+        color: #ffffff;
+        text-align: center;
+        font-size: 12px;
+        padding: 16px;
+      }
+      /* Mobile */
+      @media screen and (max-width: 600px) {
+        .content {
+          padding: 22px 18px;
+        }
+        .header {
+          padding: 22px 18px;
+        }
+      }
+      /* Outlook button fallback */
+      .mso-btn a {
+        color: #ffffff !important;
+      }
+    </style>
+  </head>
+  <body class="bg">
+    <!-- Preheader (aparece no preview do inbox) -->
+    <div class="preheader">{{preheader}}</div>
+
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      class="bg"
+    >
+      <tr>
+        <td align="center" style="padding: 20px">
+          <table
+            role="presentation"
+            cellpadding="0"
+            cellspacing="0"
+            class="wrap"
+          >
+            <tr>
+              <td class="card">
+                <!-- Header -->
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td class="header">
+                      {{#if logoUrl}}
+                      <img
+                        src="{{logoUrl}}"
+                        width="250"
+                        alt="Logo Profills"
+                        style="margin: 0 auto 12px auto; display: block"
+                      />
+                      {{/if}}
+                      <h1 class="h1 fallback-font">{{saudacao}}</h1>
+                      <p
+                        style="
+                          margin: 8px 0 0;
+                          opacity: 0.9;
+                          font-family:
+                            &quot;Segoe UI&quot;, Tahoma, Geneva, Verdana,
+                            sans-serif;
+                          color: #ffffff;
+                        "
+                      >
+                        Sistema Profills - Máquinas Envasadoras
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Conteúdo -->
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td class="content">
+                      {{#if timestamp}}
+                      <div class="timestamp fallback-font">{{timestamp}}</div>
+                      {{/if}} {{#if maquinaNome}}
+                      <div class="highlight">
+                        <p class="highlight-title fallback-font">
+                          {{maquinaNome}}
+                        </p>
+                        {{#if urlMaquina}}
+                        <div style="text-align: center; margin: 16px 0">
+                          <!-- BOTÃO À PROVA DE OUTLOOK -->
+                          <!--[if mso]>
+                            <v:roundrect
+                              xmlns:v="urn:schemas-microsoft-com:vml"
+                              href="{{urlMaquina}}"
+                              style="
+                                height: 44px;
+                                v-text-anchor: middle;
+                                width: 140px;
+                              "
+                              arcsize="18%"
+                              stroke="f"
+                              fillcolor="#059669"
+                            >
+                              <w:anchorlock />
+                              <center
+                                style="
+                                  color: #ffffff;
+                                  font-family:
+                                    Segoe UI,
+                                    Arial;
+                                  font-size: 14px;
+                                  font-weight: 700;
+                                "
+                              >
+                                Ver Máquina
+                              </center>
+                            </v:roundrect>
+                          <![endif]-->
+                          <!--[if !mso]><!-- -->
+                          <table
+                            role="presentation"
+                            cellspacing="0"
+                            cellpadding="0"
+                            style="margin: 0 auto"
+                          >
+                            <tr>
+                              <td
+                                align="center"
+                                style="border-radius: 8px; background: #059669"
+                              >
+                                <a
+                                  href="{{urlMaquina}}"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style="
+                                    display: inline-block;
+                                    padding: 12px 24px;
+                                    font-family:
+                                      &quot;Segoe UI&quot;, Tahoma, Geneva,
+                                      Verdana, sans-serif;
+                                    font-size: 14px;
+                                    font-weight: 700;
+                                    color: #ffffff !important;
+                                    text-decoration: none;
+                                    border: none;
+                                  "
+                                >
+                                  Ver Máquina
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
+                          <!--<![endif]-->
+                        </div>
+                        {{/if}}
+                      </div>
+                      {{/if}}
+
+                      <h2 class="section-title fallback-font">
+                        Dados do contato
+                      </h2>
+                      <div class="info">
+                        <span class="label fallback-font">Nome</span>
+                        <span class="value">{{nome}}</span>
+                      </div>
+                      <div class="info">
+                        <span class="label fallback-font">E-mail</span>
+                        <span class="value">{{email}}</span>
+                      </div>
+                      {{#if telefone}}
+                      <div class="info">
+                        <span class="label fallback-font">Telefone</span>
+                        <span class="value">{{telefone}}</span>
+                      </div>
+                      {{/if}} {{#if empresa}}
+                      <div class="info">
+                        <span class="label fallback-font">Empresa</span>
+                        <span class="value">{{empresa}}</span>
+                      </div>
+                      {{/if}} {{#if observacoes}}
+                      <div class="observ">
+                        <strong style="display: block; margin-bottom: 6px"
+                          >Mensagem do cliente</strong
+                        >
+                        <p style="margin: 0">{{observacoes}}</p>
+                      </div>
+                      {{/if}}
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Footer -->
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td class="footer fallback-font">
+                      Profills Brasil - Máquinas Envasadoras de Excelência<br />
+                      Este é um e-mail automático. Por favor, não responda.
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

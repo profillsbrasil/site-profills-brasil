@@ -1,0 +1,47 @@
+---
+globs: *form*.ts,*form*.tsx,*schema*.ts
+---
+
+# Formulários e Validação
+
+## Validação com Zod
+
+- **Schemas Zod** em [lib/schemas/](mdc:lib/schemas/)
+- **Validação por etapas** para formulários complexos
+- **Mensagens em português** para usuários brasileiros
+- **Validação de CEP** com API externa
+
+## React Hook Form
+
+- **Integração** com Zod via `@hookform/resolvers`
+- **Validação em tempo real** com feedback visual
+- **Máscaras de input** para telefone, CEP, etc.
+- **Estados de loading** e erro
+
+## Estrutura de Formulários
+
+```tsx
+// Schema Zod
+export const formSchema = z.object({
+  field: z.string().min(1, "Campo obrigatório"),
+});
+
+// Componente
+const form = useForm<FormData>({
+  resolver: zodResolver(formSchema),
+});
+```
+
+## Padrões de UX
+
+- **Formulários multi-etapas** para dados complexos
+- **Auto-preenchimento** de endereço via CEP
+- **Feedback visual** com toasts (Sonner)
+- **Validação progressiva** por seções
+
+## APIs e Integração
+
+- **Rotas API** em [app/api/](mdc:app/api/)
+- **Validação server-side** com Zod
+- **Tratamento de erros** consistente
+- **Loading states** apropriados

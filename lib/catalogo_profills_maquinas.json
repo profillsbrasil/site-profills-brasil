@@ -1,0 +1,2013 @@
+{
+  "company": "Profills do Brasil",
+  "catalog_year": 2026,
+  "machines": [
+    {
+      "id": "linha-tp",
+      "name": "Linha TP",
+      "category": "Sachês (3 soldas)",
+      "description": "Envasadoras de sachês para líquidos e secos com alta produtividade e precisão.",
+      "packaging_formats": [
+        "sachê 3 soldas"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PEBD",
+        "PEAD"
+      ],
+      "capacity": {
+        "up_to": 3000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": {
+        "min": 1.95,
+        "max": 2.15,
+        "unit": "kW"
+      },
+      "consumed_power_kwh": {
+        "min": 1.2,
+        "max": 1.8,
+        "unit": "kWh"
+      },
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 277,
+      "operation_area_mm": {
+        "width": 2100,
+        "length": 2450
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 85,
+          "max": 300,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 60,
+          "max": 90,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 35,
+          "max": 160,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 40,
+          "max": 250,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Solda corte",
+        "Solda larga",
+        "Ferramental simples",
+        "Ferramental trapezoidal"
+      ]
+    },
+    {
+      "id": "linha-tp-4-vias",
+      "name": "Linha TP 4 Vias",
+      "category": "Sachês (4 soldas)",
+      "description": "Envase simultâneo em quatro vias para aumentar produtividade.",
+      "packaging_formats": [
+        "sachê 4 soldas"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 6000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado"
+      ],
+      "datador": [
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 3.46,
+      "consumed_power_kwh": 2.45,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 580,
+      "operation_area_mm": {
+        "width": 2100,
+        "length": 1430
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": 340,
+        "thickness_um": {
+          "min": 60,
+          "max": 90,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 35,
+          "max": 40,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 40,
+          "max": 250,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Solda corte",
+        "Solda larga",
+        "Ferramental simples",
+        "Ferramental trapezoidal"
+      ]
+    },
+    {
+      "id": "linha-tc4s-1-via",
+      "name": "Linha TC4s 1 Via",
+      "category": "Sachês (4 soldas)",
+      "description": "Envase em uma via com alto controle de dosagem.",
+      "packaging_formats": [
+        "sachê 4 soldas"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 2000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 2.37,
+      "consumed_power_kwh": 2.05,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 360,
+      "operation_area_mm": {
+        "width": 2250,
+        "length": 2400
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 120,
+          "max": 360,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 40,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 60,
+          "max": 180,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 180,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Abre fácil (simples, triangular, serrilhado)",
+        "Formato especial"
+      ]
+    },
+    {
+      "id": "linha-tc4s-2-vias",
+      "name": "Linha TC4s 2 Vias",
+      "category": "Sachês (4 soldas)",
+      "description": "Envase simultâneo em duas vias com alta performance.",
+      "packaging_formats": [
+        "sachê 4 soldas"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 4000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 2.75,
+      "consumed_power_kwh": 2.4,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 360,
+      "operation_area_mm": {
+        "width": 2250,
+        "length": 2400
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 200,
+          "max": 360,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 50,
+          "max": 90,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 180,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Abre fácil (simples, triangular, serrilhado)",
+        "Formato especial"
+      ]
+    },
+    {
+      "id": "linha-tc4s-3-vias",
+      "name": "Linha TC4s 3 Vias",
+      "category": "Sachês (4 soldas)",
+      "description": "Três vias de envase para máxima produtividade.",
+      "packaging_formats": [
+        "sachê 4 soldas"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 6000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": {
+        "min": 3.19,
+        "max": 3.43,
+        "unit": "kW"
+      },
+      "consumed_power_kwh": {
+        "min": 2.75,
+        "max": 3.05,
+        "unit": "kWh"
+      },
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 360,
+      "operation_area_mm": {
+        "width": 2250,
+        "length": 2400
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 204,
+          "max": 400,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 34,
+          "max": 67,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 180,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Abre fácil (simples, triangular, serrilhado)",
+        "Formato especial"
+      ]
+    },
+    {
+      "id": "linha-tc4s-3-vias-formatado",
+      "name": "Linha TC4s 3 Vias - Formatado",
+      "category": "Sachês (4 soldas)",
+      "description": "Envase em sachês pré-formatados (3 vias) para alto desempenho.",
+      "packaging_formats": [
+        "sachê 4 soldas (pré-formatado)"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 6000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado"
+      ],
+      "datador": [
+        "Alto relevo"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 4.86,
+      "consumed_power_kwh": 3.4,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 572,
+      "operation_area_mm": {
+        "width": 1900,
+        "length": 2000
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 400,
+          "max": 500,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 70,
+          "max": 80,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 80,
+          "max": 170,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Abre fácil (simples, triangular, serrilhado)",
+        "Formato especial"
+      ]
+    },
+    {
+      "id": "linha-tc3sc-po-solidos",
+      "name": "Linha TC 3SC - Pós e Sólidos",
+      "category": "Sachês (3 soldas)",
+      "description": "Envasadora 3 soldas para pós e sólidos.",
+      "packaging_formats": [
+        "sachê 3 soldas"
+      ],
+      "applications": [
+        "pós",
+        "sólidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 1800,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 1.97,
+      "consumed_power_kwh": 1.8,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 245,
+      "operation_area_mm": {
+        "width": 2300,
+        "length": 2600
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 140,
+          "max": 360,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 40,
+          "max": 160,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 180,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Abre fácil (simples, triangular, serrilhado)",
+        "Formato especial"
+      ]
+    },
+    {
+      "id": "linha-tc3sc-liquidos-secos",
+      "name": "Linha TC 3SC - Líquidos e Secos",
+      "category": "Sachês (3 soldas)",
+      "description": "Envasadora 3 soldas para líquidos e secos.",
+      "packaging_formats": [
+        "sachê 3 soldas"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 1800,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 2.14,
+      "consumed_power_kwh": 2.0,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 245,
+      "operation_area_mm": {
+        "width": 2300,
+        "length": 2600
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 100,
+          "max": 350,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 40,
+          "max": 150,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 180,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Abre fácil (simples, triangular, serrilhado)",
+        "Formato especial"
+      ]
+    },
+    {
+      "id": "linha-tc3sc-stick-1-4-vias",
+      "name": "Linha TC 3SC Stick (1 a 4 vias)",
+      "category": "Stick Pack",
+      "description": "Envase em embalagens stick para suplementos, condimentos e bebidas em pó.",
+      "packaging_formats": [
+        "stick pack"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 4000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 2.75,
+      "consumed_power_kwh": 2.0,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 360,
+      "operation_area_mm": null,
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 200,
+          "max": 360,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 50,
+          "max": 90,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 180,
+          "unit": "mm"
+        }
+      },
+      "options": [
+        "Abre fácil (simples, triangular, serrilhado)",
+        "Formato especial"
+      ]
+    },
+    {
+      "id": "linha-tc3sl-liquidos-secos",
+      "name": "Linha TC 3SL - Líquidos e Secos",
+      "category": "Sachês (3 soldas)",
+      "description": "Envasadora 3 soldas com alta compatibilidade de materiais.",
+      "packaging_formats": [
+        "sachê 3 soldas"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 4000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 2.35,
+      "consumed_power_kwh": 2.0,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 245,
+      "operation_area_mm": {
+        "width": 2300,
+        "length": 2600
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 140,
+          "max": 220,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 35,
+          "max": 55,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 230,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-tc3sl-pos-solidos",
+      "name": "Linha TC 3SL - Pós e Sólidos",
+      "category": "Sachês (3 soldas)",
+      "description": "Envasadora 3 soldas específica para pós e sólidos.",
+      "packaging_formats": [
+        "sachê 3 soldas"
+      ],
+      "applications": [
+        "pós",
+        "sólidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 4000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Alto relevo",
+        "Inkjet",
+        "Hotstamping"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 2.35,
+      "consumed_power_kwh": 2.0,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 245,
+      "operation_area_mm": {
+        "width": 2300,
+        "length": 2600
+      },
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio",
+        "Policarbonato",
+        "Aço carbono"
+      ],
+      "film": {
+        "width_mm": {
+          "min": 140,
+          "max": 220,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 35,
+          "max": 55,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 230,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-frascos-horizontal-linear",
+      "name": "Linha de Frascos - Horizontal Linear",
+      "category": "Frascos",
+      "description": "Envase linear para frascos; versões 4, 6 ou 8 bicos.",
+      "packaging_formats": [
+        "frascos"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "Qualquer material de frasco"
+      ],
+      "capacity": {
+        "up_to": 1800,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Volumétrico",
+        "Temporizado"
+      ],
+      "datador": [
+        "Inkjet"
+      ],
+      "installed_power_kw": {
+        "min": 2.69,
+        "max": 7.8,
+        "unit": "kW"
+      },
+      "consumed_power_kwh": {
+        "min": 2.35,
+        "max": 6.6,
+        "unit": "kWh"
+      },
+      "air_consumption_l_min": {
+        "min": 102,
+        "max": 180,
+        "unit": "L/min"
+      },
+      "operation_area_mm": {
+        "width": 7500,
+        "length": 3000
+      },
+      "feeding": [
+        "Automática",
+        "Manual"
+      ],
+      "bottles": {
+        "volume_l": {
+          "min": 0.1,
+          "max": 5.0,
+          "unit": "L"
+        }
+      },
+      "closing": [
+        "Automática",
+        "Manual"
+      ]
+    },
+    {
+      "id": "linha-frascos-horizontal-tribloc",
+      "name": "Linha de Frascos - Horizontal Tribloc",
+      "category": "Frascos",
+      "description": "Sistema tribloc com alta produtividade para frascos.",
+      "packaging_formats": [
+        "frascos"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "compatible_materials": [
+        "Frascos plásticos"
+      ],
+      "capacity": {
+        "up_to": 5000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado"
+      ],
+      "datador": [
+        "Inkjet",
+        "Laser"
+      ],
+      "installed_power_kw": 3.1,
+      "consumed_power_kwh": 2.65,
+      "air_consumption_l_min": 400,
+      "operation_area_mm": {
+        "width": 3400,
+        "length": 3000
+      },
+      "feeding": [
+        "Automática",
+        "Manual"
+      ],
+      "bottles": {
+        "volume_ml": {
+          "min": 50,
+          "unit": "mL"
+        }
+      },
+      "closing": [
+        "Automática"
+      ]
+    },
+    {
+      "id": "linha-frascos-horizontal-rotativa",
+      "name": "Linha de Frascos - Horizontal Rotativa",
+      "category": "Frascos",
+      "description": "Versão rotativa para volumes de 0,5 a 5,0 L, alta cadência.",
+      "packaging_formats": [
+        "frascos"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "compatible_materials": [
+        "Qualquer material de frasco"
+      ],
+      "capacity": {
+        "up_to": 5000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado"
+      ],
+      "datador": [
+        "Inkjet",
+        "Laser"
+      ],
+      "installed_power_kw": 5.5,
+      "consumed_power_kwh": 4.0,
+      "air_consumption_l_min": 30,
+      "operation_area_mm": {
+        "width": 10000,
+        "length": 4100
+      },
+      "feeding": [
+        "Manual",
+        "Esteira",
+        "Automática"
+      ],
+      "bottles": {
+        "volume_l": {
+          "min": 0.5,
+          "max": 5.0,
+          "unit": "L"
+        }
+      },
+      "closing": [
+        "Automática",
+        "Manual"
+      ]
+    },
+    {
+      "id": "linha-frascos-tubulares",
+      "name": "Linha de Frascos - Frascos Tubulares",
+      "category": "Frascos",
+      "description": "Envase de frascos tubulares de 50 a 150 mL.",
+      "packaging_formats": [
+        "frascos tubulares"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "compatible_materials": [
+        "Frascos plásticos"
+      ],
+      "capacity": {
+        "up_to": 1000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado"
+      ],
+      "datador": [
+        "Inkjet",
+        "Laser"
+      ],
+      "installed_power_kw": 4.7,
+      "consumed_power_kwh": 3.5,
+      "air_consumption_l_min": 314,
+      "operation_area_mm": {
+        "width": 6400,
+        "length": 4200
+      },
+      "feeding": [
+        "Automática",
+        "Manual"
+      ],
+      "bottles": {
+        "volume_ml": {
+          "min": 50,
+          "max": 150,
+          "unit": "mL"
+        }
+      },
+      "closing": [
+        "Automática"
+      ]
+    },
+    {
+      "id": "linha-frascos-rotativa-3000",
+      "name": "Envasadora Horizontal Rotativa para Frascos (3.000 u/h)",
+      "category": "Frascos",
+      "description": "Rotativa com bomba volumétrica e cilindro pneumático.",
+      "packaging_formats": [
+        "frascos"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "compatible_materials": [
+        "Qualquer material de frasco"
+      ],
+      "capacity": {
+        "up_to": 3000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Bomba volumétrica com cilindro pneumático"
+      ],
+      "installed_power_kw": 10.2,
+      "consumed_power_kwh": 7.19,
+      "air_consumption_l_min": 888,
+      "operation_area_mm": {
+        "width": 10000,
+        "length": 4100
+      },
+      "feeding": [
+        "Manual",
+        "Esteira",
+        "Automática"
+      ],
+      "bottles": {
+        "volume_ml": 500
+      },
+      "closing": [
+        "Automática",
+        "Manual"
+      ]
+    },
+    {
+      "id": "linha-baldes",
+      "name": "Linha Baldes",
+      "category": "Baldes/Latas/Bombonas",
+      "description": "Envase de frascos, baldes, latas e bombonas.",
+      "packaging_formats": [
+        "frascos",
+        "baldes",
+        "latas",
+        "bombonas"
+      ],
+      "applications": [
+        "líquidos",
+        "pastosos"
+      ],
+      "compatible_materials": [
+        "Qualquer material de embalagem rígida"
+      ],
+      "capacity": {
+        "up_to": 800,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Bomba de engrenagem"
+      ],
+      "installed_power_kw": 0.3,
+      "consumed_power_kwh": 0.21,
+      "air_consumption_l_min": 90,
+      "operation_area_mm": {
+        "width": 4690,
+        "length": 3760
+      }
+    },
+    {
+      "id": "linha-doypack-pneumatica",
+      "name": "Linha Doypack - Pneumática",
+      "category": "Stand-up pouch (SUP)",
+      "description": "Envase de líquidos, pós e alguns sólidos em SUP com 2 ou 4 bicos.",
+      "packaging_formats": [
+        "stand-up pouch (doypack)"
+      ],
+      "applications": [
+        "líquidos",
+        "pós",
+        "alguns sólidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 2800,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico (servo)"
+      ],
+      "datador": [
+        "Hotstamping",
+        "Inkjet"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 6.65,
+      "consumed_power_kwh": 5.8,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 900,
+      "operation_area_mm": {
+        "width": 7400,
+        "length": 3000
+      },
+      "film": {
+        "width_mm": {
+          "min": 320,
+          "max": 650,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 130,
+          "max": 160,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "height_mm": {
+          "min": 125,
+          "max": 280,
+          "unit": "mm"
+        },
+        "width_mm": {
+          "min": 100,
+          "max": 200,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-speed-sup-mecanica",
+      "name": "Linha Speed - Envasadora Stand-Up Pouch (Mecânica)",
+      "category": "Stand-up pouch (SUP)",
+      "description": "SUP mecânica de alta cadência para líquidos, pós e alguns sólidos.",
+      "packaging_formats": [
+        "stand-up pouch (doypack)"
+      ],
+      "applications": [
+        "líquidos",
+        "pós",
+        "alguns sólidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 5400,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Hotstamping",
+        "Inkjet"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 8.97,
+      "consumed_power_kwh": 6.65,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 349,
+      "operation_area_mm": {
+        "width": 5300,
+        "length": 3300
+      },
+      "film": {
+        "width_mm": {
+          "min": 320,
+          "max": 650,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 130,
+          "max": 160,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "height_mm": {
+          "min": 125,
+          "max": 280,
+          "unit": "mm"
+        },
+        "width_mm": {
+          "min": 100,
+          "max": 200,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-pouch-pronto",
+      "name": "Linha Pouch Pronto",
+      "category": "Pouch com tampas / bicos",
+      "description": "Envase em pouches prontos com aplicação de tampas roscadas.",
+      "packaging_formats": [
+        "pouch pronto com tampas"
+      ],
+      "applications": [
+        "líquidos",
+        "pós",
+        "alguns sólidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 2400,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado"
+      ],
+      "datador": [
+        "Inkjet"
+      ],
+      "installed_power_kw": 5.1,
+      "consumed_power_kwh": 4.15,
+      "air_consumption_l_min": 257,
+      "operation_area_mm": {
+        "width": 5300,
+        "length": 3300
+      },
+      "final_pack": {
+        "width_mm": 157,
+        "length_mm": {
+          "min": 180,
+          "max": 280,
+          "unit": "mm"
+        }
+      },
+      "notes": [
+        "Aplicação de tampas rosqueáveis"
+      ]
+    },
+    {
+      "id": "linha-mini-pouch",
+      "name": "Linha Mini Pouch",
+      "category": "Mini stand-up pouch",
+      "description": "Envase de líquidos em mini SUP com servo dosagem.",
+      "packaging_formats": [
+        "mini stand-up pouch"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 1500,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Volumétrico (servo)"
+      ],
+      "datador": [
+        "Hotstamping",
+        "Inkjet"
+      ],
+      "installed_power_kw": 3.55,
+      "consumed_power_kwh": 3.1,
+      "air_consumption_l_min": 363,
+      "operation_area_mm": {
+        "width": 3800,
+        "length": 2500
+      },
+      "film": {
+        "width_mm": {
+          "min": 200,
+          "max": 280,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "height_mm": {
+          "min": 86.5,
+          "max": 125,
+          "unit": "mm"
+        },
+        "width_mm": {
+          "min": 75,
+          "max": 95,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-tc4u",
+      "name": "Linha TC 4U",
+      "category": "Enfardadeira",
+      "description": "Enfardamento automático de produtos acabados e previamente embalados.",
+      "packaging_formats": [
+        "fardos (shrink/envolvimento de filme)"
+      ],
+      "applications": [
+        "produtos acabados e previamente embalados"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 1100,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Balança",
+        "Sensor contador",
+        "Sensor temporizado"
+      ],
+      "datador": [
+        "Hotstamping",
+        "Inkjet"
+      ],
+      "installed_power_kw": 1.95,
+      "consumed_power_kwh": 1.7,
+      "air_consumption_l_min": 277,
+      "operation_area_mm": {
+        "width": 2250,
+        "length": 2400
+      },
+      "film": {
+        "width_mm": {
+          "min": 450,
+          "max": 1200,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 210,
+          "max": 560,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 190,
+          "max": 450,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-ptc-speed",
+      "name": "Linha PTC Speed",
+      "category": "Embaladora Vertical (VFFS)",
+      "description": "Embalagem vertical para pós e sólidos com múltiplas opções de dosagem.",
+      "packaging_formats": [
+        "sachê/almofada VFFS",
+        "pacote vertical"
+      ],
+      "applications": [
+        "pó",
+        "sólidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH",
+        "PEBD",
+        "PEAD"
+      ],
+      "capacity": {
+        "up_to": 4200,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Balança multicabeçote",
+        "Alimentador de gaveta",
+        "Canecas",
+        "Rosca"
+      ],
+      "datador": [
+        "Hotstamping",
+        "Inkjet"
+      ],
+      "installed_power_kw": 4.36,
+      "consumed_power_kwh": 3.85,
+      "air_consumption_l_min": 250,
+      "operation_area_mm": {
+        "width": 9300,
+        "length": 4100
+      },
+      "film": {
+        "width_mm": {
+          "min": 200,
+          "max": 600,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 70,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 80,
+          "max": 280,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 100,
+          "max": 500,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-tc3sc-bag",
+      "name": "Linha TC 3SC Bag",
+      "category": "Bags (sacos)",
+      "description": "Envase em bags de grande largura de filme.",
+      "packaging_formats": [
+        "bag"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 1200,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Hotstamping",
+        "Inkjet"
+      ],
+      "installed_power_kw": 5.19,
+      "consumed_power_kwh": 4.85,
+      "air_consumption_l_min": 245,
+      "operation_area_mm": {
+        "width": 2300,
+        "length": 3500
+      },
+      "film": {
+        "width_mm": 600,
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": 270,
+        "length_mm": {
+          "min": 100,
+          "max": 500,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-flowpack",
+      "name": "Linha Flowpack",
+      "category": "Flowpack (HFFS)",
+      "description": "Embalagem flowpack para produtos sólidos unitários.",
+      "packaging_formats": [
+        "flowpack"
+      ],
+      "applications": [
+        "sólidos unitários"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 3000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Fotocélula"
+      ],
+      "datador": [
+        "Hotstamping",
+        "Inkjet"
+      ],
+      "installed_power_kw": 2.77,
+      "consumed_power_kwh": 2.55,
+      "air_consumption_l_min": 250,
+      "operation_area_mm": {
+        "width": 4500,
+        "length": 2500
+      },
+      "film": {
+        "width_mm": {
+          "min": 500,
+          "max": 600,
+          "unit": "mm"
+        },
+        "thickness_um": {
+          "min": 50,
+          "max": 100,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "width_mm": {
+          "min": 235,
+          "max": 285,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 70,
+          "max": 250,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-bisnagas",
+      "name": "Linha Bisnagas",
+      "category": "Bisnagas/Tubos",
+      "description": "Envase de líquidos em bisnagas plásticas, metálicas e cartonadas.",
+      "packaging_formats": [
+        "bisnagas"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "compatible_materials": [
+        "Bisnagas plásticas",
+        "Metálicas",
+        "Cartonadas"
+      ],
+      "capacity": {
+        "up_to": 1800,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Prensa extrusora",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Inkjet"
+      ],
+      "installed_power_kw": 6.0,
+      "consumed_power_kwh": 4.85,
+      "air_consumption_l_min": 255,
+      "operation_area_mm": {
+        "width": 3400,
+        "length": 3000
+      },
+      "tubes": {
+        "diameter_mm": {
+          "min": 10,
+          "max": 52,
+          "unit": "mm"
+        },
+        "length_mm": {
+          "min": 60,
+          "max": 250,
+          "unit": "mm"
+        },
+        "volume_ml": {
+          "min": 1.5,
+          "max": 350,
+          "unit": "mL"
+        }
+      }
+    },
+    {
+      "id": "linha-embalagens-cartonadas-gable-top",
+      "name": "Linha Embalagens Cartonadas (Gable Top)",
+      "category": "Cartonadas (Gable Top)",
+      "description": "Envasadora para embalagens do tipo gable top com esterilização UV.",
+      "packaging_formats": [
+        "gable top"
+      ],
+      "applications": [
+        "líquidos (leite, sucos, molhos, bebidas)"
+      ],
+      "compatible_materials": [
+        "PEBD + papel cartão + PEBD"
+      ],
+      "capacity": {
+        "up_to": 3000,
+        "unit": "unidades/hora"
+      },
+      "dosage_tolerance": {
+        "min": 0.1,
+        "max": 1.0,
+        "unit": "%"
+      },
+      "dosage_systems": [
+        "Volumétrico"
+      ],
+      "injection_system": "Temporizado",
+      "datador": [
+        "Inkjet"
+      ],
+      "sterilization": "Lâmpada germicida UV",
+      "clp": "CLP com IHM touchscreen",
+      "seal_system": [
+        "Barra quente",
+        "Ar quente",
+        "Pressão"
+      ],
+      "transfer_pump": "Bomba centrífuga",
+      "dimensions_m": {
+        "width": 2.85,
+        "length": 1.8,
+        "height": 1.65
+      },
+      "weight_kg": 1200,
+      "nr12": [
+        "Portas de policarbonato",
+        "Proteções elétricas e mecânicas"
+      ],
+      "materials_of_construction": [
+        "Aço inox AISI 304",
+        "Alumínio"
+      ],
+      "carton": {
+        "volume_ml": {
+          "min": 250,
+          "max": 5000,
+          "unit": "mL"
+        },
+        "base_sizes_mm": [
+          "70x70 (Regular)",
+          "57x57",
+          "65x65",
+          "91x91",
+          "95x95",
+          "140x140",
+          "70x95"
+        ]
+      }
+    },
+    {
+      "id": "linha-caixas-assepticas",
+      "name": "Linha Caixas Assépticas",
+      "category": "Cartonadas Assépticas",
+      "description": "Envase asséptico para leite UHT, sucos, cafés e bebidas vegetais.",
+      "packaging_formats": [
+        "asséptica (cartonada)"
+      ],
+      "applications": [
+        "leite UHT",
+        "sucos",
+        "cafés",
+        "bebidas vegetais"
+      ],
+      "compatible_materials": [
+        "PEBD + papel cartão + alumínio"
+      ],
+      "capacity": {
+        "up_to": 6000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Prensa extrusora",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "datador": [
+        "Inkjet"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 35.0,
+      "consumed_power_kwh": 35.0,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 500,
+      "operation_area_mm": {
+        "width": 4690,
+        "length": 3760
+      },
+      "carton": {
+        "volume_ml": {
+          "min": 100,
+          "max": 1000,
+          "unit": "mL"
+        }
+      }
+    },
+    {
+      "id": "linha-potes",
+      "name": "Linha Potes",
+      "category": "Potes (rotativa)",
+      "description": "Envasadora rotativa para potes com fechamento automático.",
+      "packaging_formats": [
+        "potes"
+      ],
+      "applications": [
+        "líquidos",
+        "secos"
+      ],
+      "compatible_materials": [
+        "Potes plásticos",
+        "Potes cartonados"
+      ],
+      "capacity": {
+        "up_to": 1000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado"
+      ],
+      "datador": [
+        "Inkjet"
+      ],
+      "voltage_hz": "220 V / 60 Hz",
+      "installed_power_kw": 1.3,
+      "consumed_power_kwh": 1.15,
+      "clp": "CLP com IHM touchscreen",
+      "air_consumption_l_min": 114,
+      "operation_area_mm": {
+        "width": 3100,
+        "length": 2500
+      },
+      "jars": {
+        "diameter_mm": {
+          "min": 40,
+          "max": 80,
+          "unit": "mm"
+        },
+        "height_mm": {
+          "min": 60,
+          "max": 150,
+          "unit": "mm"
+        },
+        "closing": "Automático"
+      }
+    },
+    {
+      "id": "linha-speed-sup-cartonadas",
+      "name": "Linha Speed - SUP para embalagens cartonadas",
+      "category": "Stand-up pouch (SUP) para cartonadas",
+      "description": "Envasadora SUP aplicável a estruturas cartonadas com alta velocidade.",
+      "packaging_formats": [
+        "stand-up pouch (cartonadas)"
+      ],
+      "applications": [
+        "líquidos",
+        "pós",
+        "alguns sólidos"
+      ],
+      "compatible_materials": [
+        "PET+PE",
+        "PET+PE+Al",
+        "BOPP",
+        "BOPPA",
+        "EVOH"
+      ],
+      "capacity": {
+        "up_to": 5400,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Temporizado",
+        "Bomba positiva",
+        "Volumétrico"
+      ],
+      "installed_power_kw": 8.97,
+      "consumed_power_kwh": 6.65,
+      "air_consumption_l_min": 349,
+      "operation_area_mm": {
+        "width": 5300,
+        "length": 3300
+      },
+      "final_pack": {
+        "height_mm": {
+          "min": 125,
+          "max": 280,
+          "unit": "mm"
+        },
+        "width_mm": {
+          "min": 100,
+          "max": 200,
+          "unit": "mm"
+        }
+      }
+    },
+    {
+      "id": "linha-galoes-envasadora",
+      "name": "Linha de Frascos - Envasadora para Galão",
+      "category": "Galões",
+      "description": "Envase gravimétrico para galões de 1 a 25 L.",
+      "packaging_formats": [
+        "galões"
+      ],
+      "applications": [
+        "líquidos"
+      ],
+      "materials_of_construction": [
+        "Aço inox AISI 316",
+        "Aço inox AISI 304",
+        "Revestimento epóxi"
+      ],
+      "capacity": {
+        "up_to": 2000,
+        "unit": "unidades/hora"
+      },
+      "dosage_systems": [
+        "Gravimétrico"
+      ],
+      "installed_power_kw": 6.74,
+      "consumed_power_kwh": 4.71,
+      "air_consumption_l_min": 613,
+      "operation_area_mm": {
+        "width": 2700,
+        "length": 10000
+      },
+      "feeding": [
+        "Manual",
+        "Esteira",
+        "Automática"
+      ],
+      "bottles": {
+        "volume_l": {
+          "min": 1,
+          "max": 25,
+          "unit": "L"
+        }
+      },
+      "closing": [
+        "Automática",
+        "Manual"
+      ]
+    },
+    {
+      "id": "linha-galoes-lavadora",
+      "name": "Linha Galões - Máquina de Lavagem de Galões",
+      "category": "Lavadora de Galões",
+      "description": "Lavadora com 5 bicos, alimentação manual e esteira de saída (2.560 mm).",
+      "packaging_formats": [
+        "galões 10 L",
+        "galões 20 L"
+      ],
+      "applications": [
+        "lavagem de galões"
+      ],
+      "operation_area_mm": {
+        "width": 3400,
+        "length": 3000
+      },
+      "features": [
+        "5 bicos de lavagem",
+        "CLP",
+        "Alimentação manual",
+        "Esteira de saída 2.560 mm"
+      ]
+    },
+    {
+      "id": "envolvedora-overlap",
+      "name": "Máquina Envolvedora Overlap",
+      "category": "Envolvedora/Embalagem secundária",
+      "description": "Envoltório tipo overlap para packs (ex.: garrafas PET).",
+      "packaging_formats": [
+        "overlap (packs)"
+      ],
+      "applications": [
+        "embalagem secundária de garrafas PET e similares"
+      ],
+      "capacity": {
+        "up_to": 90,
+        "unit": "unidades/hora"
+      },
+      "voltage_hz": "220 V / 380 V - 60 Hz",
+      "installed_power_kw": 38.5,
+      "consumed_power_kwh": 27.35,
+      "air_consumption_l_min": 120,
+      "operation_area_mm": {
+        "width": 3400,
+        "length": 3000
+      },
+      "film": {
+        "width_mm": 750,
+        "thickness_um": {
+          "min": 40,
+          "max": 120,
+          "unit": "µm"
+        }
+      },
+      "final_pack": {
+        "dimensions_mm": {
+          "width": 500,
+          "length": 350,
+          "height": 300
+        }
+      },
+      "compatible_materials": [
+        "PEBD"
+      ],
+      "notes": [
+        "Aplicação típica: packs de garrafas PET"
+      ]
+    },
+    {
+      "id": "linha-automatizada",
+      "name": "Linha Automatizada",
+      "category": "Integração de Linha",
+      "description": "Integrações ponta-a-ponta com envasadoras, transportadores, encartuchadeiras/encaixotadeiras, paletização e mais. Projetos sob medida.",
+      "packaging_formats": [
+        "customizados"
+      ],
+      "applications": [
+        "líquidos",
+        "pós",
+        "sólidos",
+        "embalagem secundária"
+      ],
+      "notes": [
+        "Integração completa: envase ao empacotamento final"
+      ]
+    }
+  ]
+}

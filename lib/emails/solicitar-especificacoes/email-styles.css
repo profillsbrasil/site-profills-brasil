@@ -1,0 +1,231 @@
+/* Reset e configurações básicas para emails */
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333333;
+  background-color: #f5f5f5;
+}
+
+* {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  box-sizing: border-box;
+}
+
+table,
+td {
+  mso-table-lspace: 0pt !important;
+  mso-table-rspace: 0pt !important;
+}
+
+table {
+  border-collapse: collapse !important;
+}
+
+img {
+  -ms-interpolation-mode: bicubic;
+  border: 0;
+  outline: none;
+  text-decoration: none;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Classes de layout do email */
+.bg {
+  background-color: #f5f5f5;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.preheader {
+  display: none;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  mso-hide: all;
+  font-size: 1px;
+  line-height: 1px;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #ffffff;
+  text-align: center;
+  padding: 28px 24px;
+}
+
+.h1 {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header p {
+  margin: 8px 0 0;
+  opacity: 0.9;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Conteúdo */
+.content {
+  padding: 28px 24px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333333;
+}
+
+/* Títulos de seção */
+.section-title {
+  color: #059669;
+  font-weight: 700;
+  font-size: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+  margin: 0 0 12px 0;
+}
+
+/* Informações */
+.info {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 0 0 10px 0;
+}
+
+.label {
+  color: #333333;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.value {
+  color: #6b7280;
+}
+
+/* Destaque */
+.highlight {
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  border-radius: 12px;
+  text-align: center;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.highlight-title {
+  color: #059669;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+}
+
+.chip {
+  display: inline-block;
+  background: #059669;
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Timestamp */
+.timestamp {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+  margin: 0 0 16px 0;
+}
+
+/* Observações */
+.observ {
+  background: #fff7ed;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  border-radius: 8px;
+  padding: 12px;
+  font-style: italic;
+}
+
+/* Botões */
+.btn-wrap {
+  text-align: center;
+  padding: 8px 0 0;
+}
+
+.btn {
+  background: #059669;
+  border-radius: 10px;
+  display: inline-block;
+  padding: 12px 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Footer */
+.footer {
+  background: #1f2937;
+  color: #ffffff;
+  text-align: center;
+  font-size: 12px;
+  padding: 16px;
+}
+
+/* Fallback font para Outlook */
+.fallback-font {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Responsividade para emails */
+@media only screen and (max-width: 600px) {
+  .content {
+    padding: 22px 18px;
+  }
+
+  .header {
+    padding: 22px 18px;
+  }
+
+  .h1 {
+    font-size: 20px;
+  }
+
+  .highlight {
+    padding: 15px;
+    margin: 15px 0;
+  }
+
+  .info {
+    padding: 10px;
+  }
+}
+
+/* Outlook button fallback */
+.mso-btn a {
+  color: #ffffff !important;
+}
