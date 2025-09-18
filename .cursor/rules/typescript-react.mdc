@@ -1,0 +1,41 @@
+---
+globs: *.ts,*.tsx
+---
+
+# Padrões TypeScript e React
+
+## TypeScript
+
+- **Sempre usar TypeScript** com tipagem estrita
+- **Interfaces explícitas** para props de componentes
+- **Tipos inferidos** do Zod para formulários
+- **Generics** quando apropriado para reutilização
+
+## React
+
+- **Componentes funcionais** com hooks
+- **Server Components** por padrão, Client Components quando necessário
+- **"use client"** apenas quando usar hooks, eventos ou APIs do browser
+- **Props destructuring** com tipagem explícita
+- **Fragmentos** (`<>`) para evitar divs desnecessárias
+
+## Estrutura de Componentes
+
+```tsx
+interface ComponentProps {
+  // Props tipadas
+}
+
+export default function Component({ prop1, prop2 }: ComponentProps) {
+  // Lógica do componente
+  return (
+    // JSX
+  );
+}
+```
+
+## Imports
+
+- **Imports absolutos** usando `@/` (configurado em [tsconfig.json](mdc:tsconfig.json))
+- **Ordem**: React, bibliotecas externas, componentes internos, utilitários
+- **Named exports** para componentes, default exports para páginas

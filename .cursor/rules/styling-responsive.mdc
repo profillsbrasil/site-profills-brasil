@@ -1,0 +1,42 @@
+---
+globs: *.tsx,*.css
+---
+
+# Padrões de Estilização e Responsividade
+
+## Tailwind CSS
+
+- **Tailwind CSS 4** com sistema de design personalizado
+- **Classes utilitárias** em vez de CSS customizado
+- **Variáveis CSS** definidas em [app/globals.css](mdc:app/globals.css)
+- **Sistema de cores** com paleta sofisticada e cores de destaque sutis
+
+## Responsividade
+
+- **Mobile-first** como padrão
+- **Apenas breakpoint `md:`** para desktop (conforme memória do usuário)
+- **Classes responsivas**: `md:flex-row`, `md:text-left`, etc.
+- **Layout flexível** que se adapta a diferentes tamanhos
+
+## Padrões de Layout
+
+```tsx
+// Estrutura responsiva padrão
+<div className="flex flex-col gap-4 md:flex-row md:gap-8">
+  <div className="w-full md:w-1/2">{/* Conteúdo mobile/desktop */}</div>
+</div>
+```
+
+## Componentes UI
+
+- **Radix UI** para acessibilidade
+- **Shadcn/ui** para componentes base
+- **MagicUI** para componentes avançados
+- **Framer Motion** para animações suaves
+
+## Cores e Temas
+
+- **Variáveis CSS** para consistência
+- **Cores semânticas**: `primary`, `secondary`, `accent`, `muted`, `slate-500`
+- **Gradientes sutis** para profundidade visual
+- **Contraste adequado** para acessibilidade

@@ -1,0 +1,34 @@
+---
+alwaysApply: true
+---
+
+# Estrutura do Projeto Profills
+
+Este é um projeto Next.js 15 com App Router para o site da Profills Brasil, empresa de máquinas envasadoras.
+
+## Estrutura Principal
+
+- **App Router**: [app/](mdc:app/) - Páginas e rotas do Next.js 15
+- **Componentes**: [components/](mdc:components/) - Componentes reutilizáveis
+- **Bibliotecas**: [lib/](mdc:lib/) - Utilitários, schemas e dados
+- **Hooks**: [hooks/](mdc:hooks/) - Hooks customizados do React
+
+## Tecnologias Principais
+
+- **Next.js 15** com App Router e Turbopack
+- **React 19** com TypeScript
+- **Tailwind CSS 4** com sistema de design personalizado
+- **Radix UI** para componentes acessíveis
+- **Framer Motion** para animações
+- **Zod** para validação de formulários
+- **Three.js** para modelos 3D
+- **MagicUI** para componentes avançados
+
+## Padrões de Arquitetura
+
+- **Componentes por página**: Cada página tem sua pasta `_components/`
+- **Layout responsivo**: Usar apenas breakpoint `md:` para desktop
+- **Sistema de cores**: Paleta sofisticada com cores de destaque sutis
+- **Formulários**: Validação com Zod e React Hook Form
+- **Imagens**: Otimização com Next.js Image
+- **Modelos 3D**: Integração com Three.js e Google Model Viewer

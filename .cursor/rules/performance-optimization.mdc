@@ -1,0 +1,65 @@
+---
+globs: *.tsx,*.ts,*.json
+---
+
+# Otimização de Performance
+
+## Next.js 15 e Turbopack
+
+- **Turbopack** para builds mais rápidos
+- **App Router** com Server Components
+- **Streaming** para carregamento progressivo
+- **Image optimization** automática
+
+## Imagens e Assets
+
+- **Next.js Image** para otimização automática
+- **WebP/AVIF** quando possível
+- **Lazy loading** para imagens abaixo do fold
+- **Responsive images** com diferentes tamanhos
+
+## Modelos 3D
+
+- **Compressão GLB** para modelos menores
+- **Lazy loading** para modelos pesados
+- **Fallbacks** para dispositivos limitados
+- **Hooks customizados** para gerenciar recursos
+
+## Bundle e Code Splitting
+
+- **Dynamic imports** para componentes pesados
+- **Tree shaking** automático
+- **Chunk splitting** otimizado
+- **Preloading** de recursos críticos
+
+## Caching e CDN
+
+- **Static generation** quando possível
+- **ISR** (Incremental Static Regeneration) para dados dinâmicos
+- **Edge caching** para assets estáticos
+- **Service workers** para cache offline
+
+## Monitoramento
+
+- **Core Web Vitals** otimizados
+- **Lighthouse scores** altos
+- **Bundle analyzer** para identificar gargalos
+- **Performance budgets** definidos
+
+## Padrões de Otimização
+
+```tsx
+// Dynamic import para componentes pesados
+const HeavyComponent = dynamic(() => import("./HeavyComponent"), {
+  loading: () => <Skeleton />,
+});
+
+// Image otimizada
+<Image
+  src="/image.jpg"
+  alt="Descrição"
+  width={800}
+  height={600}
+  priority={isAboveFold}
+/>;
+```
