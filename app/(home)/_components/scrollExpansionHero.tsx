@@ -3,6 +3,7 @@
 import { GridPattern } from "@/components/layout/gridPatternBg";
 import { Highlighter } from "@/components/magicui/highlighter";
 import { Caixa3d } from "@/components/modelo3d/caixaHome3d";
+
 import { AnimatePresence, motion } from "framer-motion";
 import {
   useCallback,
