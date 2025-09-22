@@ -9,6 +9,7 @@ interface CaixaHome3dProps {
   autoRotate?: boolean;
   cameraOrbit?: string;
   placeholder?: React.ReactNode;
+  isMobile?: boolean;
 }
 
 export function CaixaHome3d({
@@ -18,6 +19,7 @@ export function CaixaHome3d({
   autoRotate = true,
   cameraOrbit = "40deg 75deg 105%",
   placeholder,
+  isMobile = false,
 }: CaixaHome3dProps) {
   const {
     containerRef,
@@ -65,14 +67,14 @@ export function CaixaHome3d({
           style={{
             width: "100%",
             height: "100%",
-            minHeight: "600px",
+            minHeight: isMobile ? "400px" : "600px",
             backgroundColor: "transparent",
             "--poster-color": "transparent",
             opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
             pointerEvents: isVisible ? "auto" : "none", // Desabilita interação quando não visível
           }}
           className={`transition-all duration-300 ${
-            isVisible ? "hover:scale-[1.02]" : ""
+            isVisible && !isMobile ? "hover:scale-[1.02]" : ""
           }`}
         >
           {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
@@ -83,7 +85,7 @@ export function CaixaHome3d({
       {(!shouldRender || !isLoaded) && (
         <div
           className="flex h-full w-full items-center justify-center"
-          style={{ minHeight: "250px" }}
+          style={{ minHeight: isMobile ? "200px" : "250px" }}
         >
           {placeholder || (
             <div className="text-muted-foreground flex flex-col items-center justify-center space-y-2">
@@ -92,11 +94,7 @@ export function CaixaHome3d({
                   <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent"></div>
                   <span className="text-sm">Carregando modelo 3D...</span>
                 </>
-              ) : (
-                <div className="flex h-32 w-32 items-center justify-center rounded-xs bg-gradient-to-br from-slate-700 to-slate-800">
-                  <span className="text-xs text-slate-400">Modelo 3D</span>
-                </div>
-              )}
+              ) : null}
             </div>
           )}
         </div>
