@@ -79,7 +79,7 @@ export default function Gt3000() {
 
         <Image
           src={imageGt3000}
-          className="h-48 w-full rounded-xs object-cover md:h-96"
+          className="h-48 w-full rounded-xs object-contain md:h-96 md:object-cover"
           alt="GT-3000"
         />
       </div>
