@@ -149,8 +149,11 @@ export default function ScrollExpandMedia({
 
   // === SETUP DE EVENT LISTENERS ===
 
-  // Configura todos os listeners de interação (wheel, touch, scroll)
+  // Configura todos os listeners de interação (wheel, touch, scroll) - APENAS NO DESKTOP
   useEffect(() => {
+    // Se for mobile, não adiciona os listeners que interceptam scroll
+    if (isMobile) return;
+
     const wheelHandler = handleWheel as unknown as EventListener;
     const touchStartHandler = handleTouchStart as unknown as EventListener;
     const touchMoveHandler = handleTouchMove as unknown as EventListener;
@@ -185,6 +188,7 @@ export default function ScrollExpandMedia({
     handleTouchMove,
     handleTouchEnd,
     handleScroll,
+    isMobile, // Adiciona isMobile como dependência
   ]);
 
   // Detecta mudanças de tamanho de tela para ajustar comportamento mobile/desktop
@@ -251,7 +255,59 @@ export default function ScrollExpandMedia({
     };
   }, [scrollProgress, isMobile]);
 
-  // === RENDERIZAÇÃO DO COMPONENTE ===
+  // === VERSÃO MOBILE SIMPLIFICADA ===
+  // Se for mobile, renderiza versão simplificada sem animações de scroll
+  if (isMobile) {
+    return (
+      <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Pattern de fundo decorativo */}
+        <GridPattern />
+
+        {/* Layout mobile simplificado */}
+        <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center gap-4">
+          {/* Título principal */}
+          <div className="mb-5 h-1/2 w-full text-center">
+            <h1 className="from-accent via-accent/70 to-accent/50 bg-gradient-to-r bg-clip-text text-4xl leading-tight font-bold text-transparent">
+              Máquinas e<br />
+              Peças para o <br /> Seu Negócio!
+            </h1>
+
+            {/* Slogan mobile */}
+            <p className="mt-4 text-xl text-white">
+              <Highlighter
+                action="underline"
+                color="#2d62ef"
+                animationDuration={4000}
+                textColor="text-white"
+              >
+                O futuro cabe aqui!
+              </Highlighter>
+            </p>
+          </div>
+
+          {/* Modelo 3D mobile */}
+          <div className="flex h-1/2 w-1/2 items-center justify-center">
+            <CaixaHome3d
+              alt="Modelo 3D - Linha de Produtos Profills"
+              modelSrc="/caixa-teste-3d.glb"
+              cameraOrbit="40deg 75deg 105%"
+              autoRotate={true}
+              isMobile={true}
+              className="h-full w-full"
+            />
+          </div>
+        </div>
+
+        {/* Conteúdo adicional mobile */}
+        <section className="relative z-20 min-h-screen bg-white pt-8">
+          {children}
+        </section>
+      </div>
+    );
+  }
+
+  // === RENDERIZAÇÃO DO COMPONENTE DESKTOP ===
+  // Versão original com animações de scroll - mantida intacta para desktop
 
   return (
     // Container principal com background dinâmico que transiciona de escuro para claro
