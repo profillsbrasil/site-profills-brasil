@@ -2,7 +2,7 @@
 
 import { GridPattern } from "@/components/layout/gridPatternBg";
 import { Highlighter } from "@/components/magicui/highlighter";
-import { Caixa3d } from "@/components/modelo3d/caixaHome3d";
+import { CaixaHome3d } from "@/components/modelo3d/caixaHome3d";
 
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -364,10 +364,11 @@ export default function ScrollExpandMedia({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6, duration: 0.8 }}
                 >
-                  <Caixa3d
+                  <CaixaHome3d
                     alt="Modelo 3D - Linha de Produtos Profills"
-                    autoRotate={visualCalculations.centerImageOpacity > 0.5}
-                    cameraOrbit="40deg 75deg 105%"
+                    modelSrc="/caixa-teste-3d.glb"
+                    cameraOrbit="40deg 55deg 105%"
+                    autoRotate={true}
                     className="transition-opacity duration-200"
                   />
                 </motion.div>
