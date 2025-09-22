@@ -1,7 +1,7 @@
 "use client";
 
+import { useOptimized3DModel } from "@/components/modelo3d/hooks/useOptimized3DModel";
 import { ModelViewerElement } from "@google/model-viewer";
-import { useEffect } from "react";
 
 // Declaração local dos tipos para model-viewer
 declare global {
@@ -444,80 +444,103 @@ declare global {
   }
 }
 
-export function Caixa3d() {
-  useEffect(() => {
-    // Dinamicamente importa o model-viewer apenas no lado cliente
-    const loadModelViewer = async () => {
-      await import("@google/model-viewer");
-    };
+interface Caixa3dProps {
+  autoRotate?: boolean;
+  className?: string;
+  alt?: string;
+  cameraOrbit?: string;
+}
 
-    loadModelViewer();
-
-    // Remove a barra de progresso após o carregamento
-    const style = document.createElement("style");
-    style.textContent = `
-      model-viewer::part(default-progress-bar) {
-        display: none !important;
-      }
-      model-viewer::part(default-progress-mask) {
-        display: none !important;
-      }
-      model-viewer .default-progress-bar {
-        display: none !important;
-      }
-      model-viewer #default-progress-bar {
-        display: none !important;
-      }
-      model-viewer > div[slot="progress-bar"] {
-        display: none !important;
-      }
-      model-viewer > .default-progress-bar {
-        display: none !important;
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      if (document.head.contains(style)) {
-        document.head.removeChild(style);
-      }
-    };
-  }, []);
+export function Caixa3d({
+  autoRotate = true,
+  className = "",
+  alt = "Modelo 3D - Tudo na caixa",
+  cameraOrbit = "40deg 75deg 105%",
+}: Caixa3dProps) {
+  const {
+    containerRef,
+    modelViewerRef,
+    isVisible,
+    isLoaded,
+    shouldRender,
+    hasBeenLoaded,
+    handleModelLoad,
+    handleModelError,
+  } = useOptimized3DModel({
+    src: "/caixa-teste-3d.glb",
+    threshold: 0.1,
+    rootMargin: "100px",
+  });
 
   return (
-    <div className="flex h-full w-full items-center justify-center">
-      {/* @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React */}
-      <model-viewer
-        src="/caixa-teste-3d.glb"
-        alt="Modelo 3D - Tudo na caixa"
-        camera-controls
-        camera-orbit="40deg 75deg 105%"
-        min-camera-orbit="auto auto 50%"
-        max-camera-orbit="auto auto 200%"
-        disable-pan={true}
-        disable-zoom={true}
-        auto-rotate
-        auto-rotate-delay="200"
-        environment-image="neutral"
-        shadow-intensity="1"
-        exposure="1"
-        interaction-prompt="none"
-        loading="eager"
-        reveal="auto"
-        style={{
-          width: "100%",
-          height: "100%",
-          minHeight: "600px",
-          backgroundColor: "transparent",
-          "--poster-color": "transparent",
-          "--progress-bar-color": "transparent",
-          "--progress-container-color": "transparent",
-          "--progress-mask": "transparent",
-        }}
-        className="transition-all duration-300 hover:scale-[1.02]"
-      >
-        {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
-      </model-viewer>
+    <div
+      ref={containerRef}
+      className={`flex h-full w-full items-center justify-center ${className}`}
+    >
+      {/* Model-viewer otimizado: Uma vez carregado, sempre renderizado mas com visibilidade controlada */}
+      {shouldRender && isLoaded && (
+        // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
+        <model-viewer
+          ref={modelViewerRef}
+          src="/caixa-teste-3d.glb"
+          alt={alt}
+          camera-controls
+          camera-orbit={cameraOrbit}
+          min-camera-orbit="auto auto 50%"
+          max-camera-orbit="auto auto 200%"
+          disable-pan={true}
+          disable-zoom={true}
+          auto-rotate={autoRotate && isVisible} // Só roda animação se estiver visível
+          auto-rotate-delay="500"
+          environment-image="neutral"
+          shadow-intensity="1"
+          exposure="1"
+          interaction-prompt="none"
+          loading="lazy" // Mudança de "eager" para "lazy"
+          reveal="auto"
+          onLoad={handleModelLoad}
+          onError={handleModelError}
+          style={{
+            width: "100%",
+            height: "100%",
+            minHeight: "600px", // Mantém a altura original
+            backgroundColor: "transparent",
+            "--poster-color": "transparent",
+            "--progress-bar-color": "transparent",
+            "--progress-container-color": "transparent",
+            "--progress-mask": "transparent",
+            opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
+            pointerEvents: isVisible ? "auto" : "none", // Desabilita interação quando não visível
+            willChange: isVisible && autoRotate ? "transform" : "auto", // Otimização GPU
+          }}
+          className={`transition-all duration-300 ${
+            isVisible ? "hover:scale-[1.02]" : ""
+          }`}
+        >
+          {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
+        </model-viewer>
+      )}
+
+      {/* Placeholder otimizado: Só mostra se o modelo nunca foi carregado */}
+      {(!shouldRender || !isLoaded) && (
+        <div
+          className="flex h-full w-full items-center justify-center"
+          style={{ minHeight: "600px" }} // Mantém a altura original
+        >
+          <div className="text-muted-foreground flex flex-col items-center justify-center space-y-2">
+            {isVisible && !hasBeenLoaded ? (
+              <>
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+                <span className="text-lg">Carregando modelo 3D...</span>
+              </>
+            ) : (
+              <div className="flex h-48 w-48 items-center justify-center rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl">
+                <span className="text-lg text-slate-400">Modelo 3D</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -26,8 +27,26 @@ export default function ScrollExpandMedia({
   const [mediaFullyExpanded, setMediaFullyExpanded] = useState<boolean>(false);
   const [touchStartY, setTouchStartY] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const animationFrameId = useRef<number | null>(null);
+
+  // RAF-based update para smooth animations
+  const updateScrollProgress = useCallback((newProgress: number) => {
+    if (animationFrameId.current) {
+      cancelAnimationFrame(animationFrameId.current);
+    }
+
+    animationFrameId.current = requestAnimationFrame(() => {
+      setScrollProgress(newProgress);
+
+      if (newProgress >= 0.9) {
+        setMediaFullyExpanded(true);
+        setShowContent(true);
+      } else if (newProgress < 0.3) {
+        setShowContent(false);
+      }
+    });
+  }, []);
 
   const handleWheel = useCallback(
     (e: WheelEvent) => {
@@ -36,22 +55,22 @@ export default function ScrollExpandMedia({
         e.preventDefault();
       } else if (!mediaFullyExpanded) {
         e.preventDefault();
-        const scrollDelta = e.deltaY * 0.001; // Mais responsivo
+        const scrollDelta = e.deltaY * 0.0008; // Movimento mais suave
         const newProgress = Math.min(
           Math.max(scrollProgress + scrollDelta, 0),
           1,
         );
-        setScrollProgress(newProgress);
 
-        if (newProgress >= 0.9) {
-          setMediaFullyExpanded(true);
-          setShowContent(true);
-        } else if (newProgress < 0.3) {
-          setShowContent(false);
+        // Throttle usando RAF
+        if (animationFrameId.current) {
+          cancelAnimationFrame(animationFrameId.current);
         }
+        animationFrameId.current = requestAnimationFrame(() => {
+          updateScrollProgress(newProgress);
+        });
       }
     },
-    [scrollProgress, mediaFullyExpanded],
+    [scrollProgress, mediaFullyExpanded, updateScrollProgress],
   );
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
@@ -70,25 +89,24 @@ export default function ScrollExpandMedia({
         e.preventDefault();
       } else if (!mediaFullyExpanded) {
         e.preventDefault();
-        const scrollFactor = deltaY < 0 ? 0.008 : 0.005;
+        const scrollFactor = deltaY < 0 ? 0.006 : 0.004; // Movimento mais suave
         const scrollDelta = deltaY * scrollFactor;
         const newProgress = Math.min(
           Math.max(scrollProgress + scrollDelta, 0),
           1,
         );
-        setScrollProgress(newProgress);
 
-        if (newProgress >= 0.9) {
-          setMediaFullyExpanded(true);
-          setShowContent(true);
-        } else if (newProgress < 0.3) {
-          setShowContent(false);
+        // Throttle usando RAF
+        if (animationFrameId.current) {
+          cancelAnimationFrame(animationFrameId.current);
         }
-
+        animationFrameId.current = requestAnimationFrame(() => {
+          updateScrollProgress(newProgress);
+        });
         setTouchStartY(touchY);
       }
     },
-    [scrollProgress, mediaFullyExpanded, touchStartY],
+    [scrollProgress, mediaFullyExpanded, touchStartY, updateScrollProgress],
   );
 
   const handleTouchEnd = useCallback((): void => {
@@ -101,7 +119,7 @@ export default function ScrollExpandMedia({
     }
   }, [mediaFullyExpanded]);
 
-  // Event listeners em useEffect separado
+  // Event listeners otimizados
   useEffect(() => {
     const wheelHandler = handleWheel as unknown as EventListener;
     const touchStartHandler = handleTouchStart as unknown as EventListener;
@@ -109,20 +127,27 @@ export default function ScrollExpandMedia({
     const touchEndHandler = handleTouchEnd as EventListener;
     const scrollHandler = handleScroll as EventListener;
 
+    // Use passive quando possível para melhor performance
     window.addEventListener("wheel", wheelHandler, { passive: false });
-    window.addEventListener("scroll", scrollHandler);
+    window.addEventListener("scroll", scrollHandler, { passive: true });
     window.addEventListener("touchstart", touchStartHandler, {
       passive: false,
     });
     window.addEventListener("touchmove", touchMoveHandler, { passive: false });
-    window.addEventListener("touchend", touchEndHandler);
+    window.addEventListener("touchend", touchEndHandler, { passive: true });
 
     return () => {
+      // Cleanup de event listeners
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("scroll", scrollHandler);
       window.removeEventListener("touchstart", touchStartHandler);
       window.removeEventListener("touchmove", touchMoveHandler);
       window.removeEventListener("touchend", touchEndHandler);
+
+      // Cleanup de animationFrame
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
     };
   }, [
     handleWheel,
@@ -151,34 +176,45 @@ export default function ScrollExpandMedia({
     setMediaFullyExpanded(false);
   }, []);
 
-  // Movimentos mais suaves e naturais
-  const leftCardTranslateX = scrollProgress * (isMobile ? -200 : -300);
-  const rightCardTranslateX = scrollProgress * (isMobile ? 200 : 300);
-  const centerImageOpacity = Math.max(
-    0,
-    Math.min(1, (scrollProgress - 0.2) * 2),
-  );
-  const cardsOpacity = Math.max(0, 1 - scrollProgress * 1.5);
-  const centerImageScale = 0.8 + scrollProgress * 0.4;
+  // Cálculos otimizados com useMemo
+  const visualCalculations = useMemo(() => {
+    const leftCardTranslateX = scrollProgress * (isMobile ? -200 : -300);
+    const rightCardTranslateX = scrollProgress * (isMobile ? 200 : 300);
+    const centerImageOpacity = Math.max(
+      0,
+      Math.min(1, (scrollProgress - 0.2) * 2),
+    );
+    const cardsOpacity = Math.max(0, 1 - scrollProgress * 1.5);
+    const centerImageScale = 0.8 + scrollProgress * 0.4;
 
-  // Função de easing suave para transição do background
-  const backgroundTransition = Math.min(
-    1,
-    Math.max(0, (centerImageOpacity - 0.1) / 0.8),
-  );
-  const easeTransition =
-    backgroundTransition *
-    backgroundTransition *
-    (3 - 2 * backgroundTransition); // smoothstep
+    // Função de easing suave para transição do background
+    const backgroundTransition = Math.min(
+      1,
+      Math.max(0, (centerImageOpacity - 0.1) / 0.8),
+    );
+    const easeTransition =
+      backgroundTransition *
+      backgroundTransition *
+      (3 - 2 * backgroundTransition); // smoothstep
+
+    return {
+      leftCardTranslateX,
+      rightCardTranslateX,
+      centerImageOpacity,
+      cardsOpacity,
+      centerImageScale,
+      easeTransition,
+    };
+  }, [scrollProgress, isMobile]);
 
   return (
     <div
       ref={sectionRef}
       className="relative min-h-screen transition-colors duration-1000"
       style={{
-        backgroundColor: `rgb(${15 + easeTransition * 240}, ${
-          23 + easeTransition * 232
-        }, ${42 + easeTransition * 213})`,
+        backgroundColor: `rgb(${15 + visualCalculations.easeTransition * 240}, ${
+          23 + visualCalculations.easeTransition * 232
+        }, ${42 + visualCalculations.easeTransition * 213})`,
       }}
     >
       <GridPattern />
@@ -189,22 +225,22 @@ export default function ScrollExpandMedia({
         animate={{ opacity: 0.1 }}
         transition={{ duration: 1, ease: "easeOut" }}
         style={{
-          opacity: Math.max(0, 0.1 - easeTransition * 0.1),
+          opacity: Math.max(0, 0.1 - visualCalculations.easeTransition * 0.1),
         }}
       >
         <div
           className="absolute inset-0 transition-all duration-1500 ease-out"
           style={{
             background: `linear-gradient(to bottom right,
-              rgba(${2 + easeTransition * 246}, ${6 + easeTransition * 244}, ${
-                23 + easeTransition * 229
-              }, ${0.95 - easeTransition * 0.3}),
-              rgba(${15 + easeTransition * 226}, ${
-                23 + easeTransition * 222
-              }, ${42 + easeTransition * 207}, ${0.9 - easeTransition * 0.3}),
-              rgba(${2 + easeTransition * 246}, ${6 + easeTransition * 244}, ${
-                23 + easeTransition * 229
-              }, ${0.95 - easeTransition * 0.3}))`,
+              rgba(${2 + visualCalculations.easeTransition * 246}, ${6 + visualCalculations.easeTransition * 244}, ${
+                23 + visualCalculations.easeTransition * 229
+              }, ${0.95 - visualCalculations.easeTransition * 0.3}),
+              rgba(${15 + visualCalculations.easeTransition * 226}, ${
+                23 + visualCalculations.easeTransition * 222
+              }, ${42 + visualCalculations.easeTransition * 207}, ${0.9 - visualCalculations.easeTransition * 0.3}),
+              rgba(${2 + visualCalculations.easeTransition * 246}, ${6 + visualCalculations.easeTransition * 244}, ${
+                23 + visualCalculations.easeTransition * 229
+              }, ${0.95 - visualCalculations.easeTransition * 0.3}))`,
           }}
         />
       </motion.div>
@@ -212,26 +248,13 @@ export default function ScrollExpandMedia({
       {/* Layout principal */}
       <div className="relative z-10 flex min-h-screen w-full items-center justify-center overflow-hidden">
         <div className="w-full flex-1">
-          {/* Logo */}
-          {/* <motion.div
-            className="absolute top-0 left-[27.5%] flex h-1/4 w-1/4 -translate-x-1/2 items-center justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-          >
-            <Image
-              src={logoProfills}
-              alt="Profills Logo"
-              className="h-full w-full object-contain drop-shadow-2xl filter"
-            />
-          </motion.div> */}
           <div className="relative mx-auto flex h-full w-full max-w-[70vw] flex-col items-start justify-center md:flex-row">
             {/* Card Esquerdo - Logo */}
             <motion.div
               className="relative flex h-[85vh] w-1/2 flex-col items-center justify-between"
               style={{
-                transform: `translateX(${leftCardTranslateX}px)`,
-                opacity: cardsOpacity,
+                transform: `translateX(${visualCalculations.leftCardTranslateX}px)`,
+                opacity: visualCalculations.cardsOpacity,
               }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
@@ -279,19 +302,25 @@ export default function ScrollExpandMedia({
             <motion.div
               className="absolute inset-0 flex items-center justify-center"
               style={{
-                opacity: centerImageOpacity,
-                scale: centerImageScale,
+                opacity: visualCalculations.centerImageOpacity,
+                scale: visualCalculations.centerImageScale,
               }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
               <motion.div className="relative h-full max-h-[75vh] w-full max-w-[70vw] overflow-hidden">
                 <video
                   src="/videos/video.mp4"
-                  autoPlay
+                  autoPlay={visualCalculations.centerImageOpacity > 0.3}
                   loop
                   muted
                   playsInline
                   className="h-full w-full rounded-md object-cover"
+                  style={{
+                    willChange:
+                      visualCalculations.centerImageOpacity > 0.3
+                        ? "transform"
+                        : "auto",
+                  }}
                 />
 
                 <div className="absolute"></div>
@@ -302,8 +331,8 @@ export default function ScrollExpandMedia({
             <motion.div
               className="relative flex w-1/2 flex-col items-center lg:items-end"
               style={{
-                transform: `translateX(${rightCardTranslateX}px)`,
-                opacity: cardsOpacity,
+                transform: `translateX(${visualCalculations.rightCardTranslateX}px)`,
+                opacity: visualCalculations.cardsOpacity,
               }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
@@ -334,9 +363,12 @@ export default function ScrollExpandMedia({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6, duration: 0.8 }}
                 >
-                  <div className="h-full w-full">
-                    <Caixa3d />
-                  </div>
+                  <Caixa3d
+                    alt="Modelo 3D - Linha de Produtos Profills"
+                    autoRotate={visualCalculations.centerImageOpacity > 0.5}
+                    cameraOrbit="40deg 75deg 105%"
+                    className="transition-opacity duration-200"
+                  />
                 </motion.div>
               </motion.div>
             </motion.div>
