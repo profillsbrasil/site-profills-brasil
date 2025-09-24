@@ -31,13 +31,13 @@ export default function CtaMonteSuaFabrica() {
         </p>
         <Link
           className="cursor-pointer"
-          href="/servicos-personalizados#entre-em-contato"
+          href="/montar-fabrica"
         >
           <Button
             size="lg"
             className="group border-border !bg-background hover:border-accent/30 group hover:bg-accent hover:text-accent z-10 w-full rounded-xs border font-semibold text-black shadow-md transition-all duration-300 hover:scale-[1.02] md:w-auto"
           >
-            <span className="text-sm md:text-base">Ver catálogo completo</span>
+            <span className="text-sm md:text-base">Monte sua fábrica</span>
             <ArrowRight className="group-hover:text-accent ml-2 h-5 w-5 text-black transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
           </Button>
         </Link>
