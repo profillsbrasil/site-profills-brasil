@@ -62,7 +62,6 @@ export default function MachineBuilder() {
   const [selectedProductType, setSelectedProductType] = useState<string>("");
   const [recommendation, setRecommendation] =
     useState<MachineRecommendation | null>(null);
-  const [showDetails, setShowDetails] = useState(false);
   const [contactForm, setContactForm] = useState<ContactFormData>(
     initialContactFormData,
   );
@@ -76,10 +75,8 @@ export default function MachineBuilder() {
         selectedProductType,
       );
       setRecommendation(bestRecommendation);
-      setShowDetails(true);
     } else {
       setRecommendation(null);
-      setShowDetails(false);
     }
   }, [selectedPackaging, selectedProductType]);
 
@@ -117,22 +114,23 @@ export default function MachineBuilder() {
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-12">
         {/* Header */}
+        <div className="text-center">
+          <Highlighter
+            action="underline"
+            color="#2d62ef"
+            animationDuration={4000}
+            textColor="mb-4 text-4xl font-bold text-white md:text-5xl"
+          >
+            Monte sua Máquina
+          </Highlighter>{" "}
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
+          className="pb-12 text-center"
         >
-          <h1 className="mb-4 text-center">
-            <Highlighter
-              action="underline"
-              color="#2d62ef"
-              animationDuration={4000}
-              textColor="text-4xl font-bold text-white md:text-5xl"
-            >
-              Monte sua Máquina
-            </Highlighter>
-          </h1>
           <p className="mx-auto max-w-3xl text-xl text-pretty text-slate-300">
             Preencha os dados abaixo e descubra qual a máquina ideal para o seu
             produto.
@@ -250,219 +248,250 @@ export default function MachineBuilder() {
         </motion.div>
 
         {/* Product Details / Contact Form */}
-        {showDetails && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mb-12"
-          >
-            <div className="flex h-full w-full flex-col">
-              <h3 className="mb-6 text-xl font-bold text-white">
-                {recommendation
-                  ? "Máquina Recomendada"
-                  : "Solicitar Orçamento Personalizado"}
-              </h3>
-
-              {recommendation ? (
-                // Mostrar detalhes da máquina recomendada
-                <div className="flex h-full w-full flex-row items-center justify-center gap-6">
-                  <div className="border-border/20 relative flex h-96 w-1/3 items-center justify-center rounded-xs border border-dashed bg-slate-900/80 py-4 shadow-xl backdrop-blur">
-                    <Image
-                      src={recommendation.machine.imgMaquina}
-                      alt={recommendation.machine.name}
-                      className="h-full w-auto object-contain"
-                    />
-                  </div>
-                  <div className="flex h-80 max-h-96 w-2/3 flex-col items-center justify-between gap-2">
-                    <div className="border-border/20 flex h-full w-full flex-col gap-4 rounded-xs border border-dashed bg-slate-900/80 p-6 shadow-xl backdrop-blur">
-                      <div>
-                        <h2 className="text-xl font-bold text-white">
-                          {recommendation.machine.name}
-                        </h2>
-                        <p className="mb-2 text-sm text-blue-400">
-                          {recommendation.machine.categoria} • Compatibilidade:{" "}
-                          {Math.round(recommendation.compatibilityScore)}%
-                        </p>
-                        <p className="mb-3 text-sm text-slate-300">
-                          {recommendation.machine.about}
-                        </p>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4 text-xs">
-                        <div>
-                          <span className="font-semibold text-white">
-                            Capacidade:
-                          </span>
-                          <p className="text-slate-300">
-                            Até{" "}
-                            {recommendation.machine.unidadeMaxima?.toLocaleString() ||
-                              "N/A"}{" "}
-                            unidades/hora
-                          </p>
-                        </div>
-                        <div>
-                          <span className="font-semibold text-white">
-                            Embalagens:
-                          </span>
-                          <p className="text-slate-300">
-                            {recommendation.machine.embalagensCompativeis.join(
-                              ", ",
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex h-full w-full items-center justify-center">
-                      <Link href={`/maquinas/${recommendation.machine.id}`}>
-                        <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                          Ver mais sobre esta máquina
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                // Mostrar formulário de contato quando não há máquina compatível
-                <div className="flex h-full w-full flex-row items-start justify-center gap-6">
-                  <div className="border-border/20 relative flex h-96 w-1/3 items-center justify-center rounded-xs border border-dashed bg-slate-900/80 py-4 shadow-xl backdrop-blur">
-                    <div className="flex flex-col items-center justify-center text-center text-slate-400">
-                      <Drill className="h-16 w-16" />
-
-                      <p className="mt-2 text-xs">Preencha o formulário</p>
-                      <p className="text-xs">
-                        Receber uma solução personalizada.
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mb-12"
+        >
+          <div className="flex h-full w-full flex-col">
+            {!selectedPackaging || !selectedProductType ? (
+              // Estado inicial - convite para seleção
+              <>
+                <h3 className="mb-6 text-xl font-bold text-white">
+                  Descubra a Máquina Ideal para o seu negócio
+                </h3>
+                <div className="flex h-96 w-full items-center justify-center">
+                  <div className="border-border/20 flex h-full w-full items-center justify-center rounded-xs border border-dashed bg-slate-900/80 shadow-xl backdrop-blur">
+                    <div className="text-center text-slate-400">
+                      <Drill className="mx-auto mb-6 h-20 w-20" />
+                      <h4 className="mb-2 text-lg font-semibold text-white">
+                        Selecione uma embalagem e produto
+                      </h4>
+                      <p className="text-sm">
+                        Recomendaremos máquinas compatíveis com a embalagem e
+                        produto selecionados.
                       </p>
                     </div>
                   </div>
+                </div>
+              </>
+            ) : (
+              // Estados com seleção completa
+              <>
+                <h3 className="mb-6 text-xl font-bold text-white">
+                  {recommendation
+                    ? "Máquina Recomendada"
+                    : "Solicitar Orçamento Personalizado"}
+                </h3>
 
-                  <div className="flex w-2/3 flex-col">
-                    <div className="border-border/20 h-96 items-center justify-center rounded-xs border border-dashed bg-slate-900/80 p-6 shadow-xl backdrop-blur">
-                      <form
-                        onSubmit={handleContactFormSubmit}
-                        className="h-full space-y-4"
-                      >
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="nome" className="text-white">
-                              Nome *
-                            </Label>
-                            <Input
-                              id="nome"
-                              type="text"
-                              placeholder="Seu nome completo"
-                              value={contactForm.nome}
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) =>
-                                handleContactFormChange("nome", e.target.value)
-                              }
-                              className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
-                              required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="email" className="text-white">
-                              E-mail *
-                            </Label>
-                            <Input
-                              id="email"
-                              type="email"
-                              placeholder="seu@email.com"
-                              value={contactForm.email}
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) =>
-                                handleContactFormChange("email", e.target.value)
-                              }
-                              className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
-                              required
-                            />
-                          </div>
+                {recommendation ? (
+                  // Mostrar detalhes da máquina recomendada
+                  <div className="flex h-full w-full flex-row items-center justify-center gap-6">
+                    <div className="border-border/20 relative flex h-96 w-1/3 items-center justify-center rounded-xs border border-dashed bg-slate-900/80 py-4 shadow-xl backdrop-blur">
+                      <Image
+                        src={recommendation.machine.imgMaquina}
+                        alt={recommendation.machine.name}
+                        className="h-full w-auto object-contain"
+                      />
+                    </div>
+                    <div className="flex h-80 max-h-96 w-2/3 flex-col items-center justify-between gap-2">
+                      <div className="border-border/20 flex h-full w-full flex-col gap-4 rounded-xs border border-dashed bg-slate-900/80 p-6 shadow-xl backdrop-blur">
+                        <div>
+                          <h2 className="text-xl font-bold text-white">
+                            {recommendation.machine.name}
+                          </h2>
+                          <p className="mb-2 text-sm text-blue-400">
+                            {recommendation.machine.categoria} •
+                            Compatibilidade:{" "}
+                            {Math.round(recommendation.compatibilityScore)}%
+                          </p>
+                          <p className="mb-3 text-sm text-slate-300">
+                            {recommendation.machine.about}
+                          </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="empresa" className="text-white">
-                              Empresa
-                            </Label>
-                            <Input
-                              id="empresa"
-                              type="text"
-                              placeholder="Nome da sua empresa"
-                              value={contactForm.empresa}
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) =>
-                                handleContactFormChange(
-                                  "empresa",
-                                  e.target.value,
-                                )
-                              }
-                              className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
-                            />
+                        <div className="grid grid-cols-2 gap-4 text-xs">
+                          <div>
+                            <span className="font-semibold text-white">
+                              Capacidade:
+                            </span>
+                            <p className="text-slate-300">
+                              Até{" "}
+                              {recommendation.machine.unidadeMaxima?.toLocaleString() ||
+                                "N/A"}{" "}
+                              unidades/hora
+                            </p>
                           </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="contato" className="text-white">
-                              Telefone/WhatsApp
-                            </Label>
-                            <Input
-                              id="contato"
-                              type="text"
-                              placeholder="(11) 99999-9999"
-                              value={contactForm.contato}
-                              onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>,
-                              ) =>
-                                handleContactFormChange(
-                                  "contato",
-                                  e.target.value,
-                                )
-                              }
-                              className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
-                            />
+                          <div>
+                            <span className="font-semibold text-white">
+                              Embalagens:
+                            </span>
+                            <p className="text-slate-300">
+                              {recommendation.machine.embalagensCompativeis.join(
+                                ", ",
+                              )}
+                            </p>
                           </div>
                         </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="detalhes" className="text-white">
-                            Detalhes do seu produto (volume, características
-                            especiais, etc.) *
-                          </Label>
-                          <Textarea
-                            id="detalhes"
-                            value={contactForm.detalhes}
-                            onChange={(
-                              e: React.ChangeEvent<HTMLTextAreaElement>,
-                            ) =>
-                              handleContactFormChange(
-                                "detalhes",
-                                e.target.value,
-                              )
-                            }
-                            className="focus:ring-accent/50 min-h-[100px] border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
-                            placeholder="Descreva seu produto, volume desejado, características especiais..."
-                            required
-                          />
-                        </div>
-
-                        <Button
-                          type="submit"
-                          className="w-full bg-purple-600 hover:bg-purple-700"
-                          disabled={isSubmitting}
-                        >
-                          {isSubmitting
-                            ? "Enviando..."
-                            : "Solicitar Orçamento Personalizado"}
-                        </Button>
-                      </form>
+                      </div>
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Link href={`/maquinas/${recommendation.machine.id}`}>
+                          <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                            Ver mais sobre esta máquina
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
+                ) : (
+                  // Mostrar formulário de contato quando não há máquina compatível
+                  <div className="flex h-full w-full flex-row items-start justify-center gap-6">
+                    <div className="border-border/20 relative flex h-96 w-1/3 items-center justify-center rounded-xs border border-dashed bg-slate-900/80 py-4 shadow-xl backdrop-blur">
+                      <div className="flex flex-col items-center justify-center text-center text-slate-400">
+                        <Drill className="h-16 w-16" />
+
+                        <p className="mt-2 text-xs">Preencha o formulário</p>
+                        <p className="text-xs">
+                          Receber uma solução personalizada.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex w-2/3 flex-col">
+                      <div className="border-border/20 h-96 items-center justify-center rounded-xs border border-dashed bg-slate-900/80 p-6 shadow-xl backdrop-blur">
+                        <form
+                          onSubmit={handleContactFormSubmit}
+                          className="h-full space-y-4"
+                        >
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="nome" className="text-white">
+                                Nome *
+                              </Label>
+                              <Input
+                                id="nome"
+                                type="text"
+                                placeholder="Seu nome completo"
+                                value={contactForm.nome}
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLInputElement>,
+                                ) =>
+                                  handleContactFormChange(
+                                    "nome",
+                                    e.target.value,
+                                  )
+                                }
+                                className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
+                                required
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="email" className="text-white">
+                                E-mail *
+                              </Label>
+                              <Input
+                                id="email"
+                                type="email"
+                                placeholder="seu@email.com"
+                                value={contactForm.email}
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLInputElement>,
+                                ) =>
+                                  handleContactFormChange(
+                                    "email",
+                                    e.target.value,
+                                  )
+                                }
+                                className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="empresa" className="text-white">
+                                Empresa
+                              </Label>
+                              <Input
+                                id="empresa"
+                                type="text"
+                                placeholder="Nome da sua empresa"
+                                value={contactForm.empresa}
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLInputElement>,
+                                ) =>
+                                  handleContactFormChange(
+                                    "empresa",
+                                    e.target.value,
+                                  )
+                                }
+                                className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="contato" className="text-white">
+                                Telefone/WhatsApp
+                              </Label>
+                              <Input
+                                id="contato"
+                                type="text"
+                                placeholder="(11) 99999-9999"
+                                value={contactForm.contato}
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLInputElement>,
+                                ) =>
+                                  handleContactFormChange(
+                                    "contato",
+                                    e.target.value,
+                                  )
+                                }
+                                className="focus:ring-accent/50 border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="detalhes" className="text-white">
+                              Detalhes do seu produto (volume, características
+                              especiais, etc.) *
+                            </Label>
+                            <Textarea
+                              id="detalhes"
+                              value={contactForm.detalhes}
+                              onChange={(
+                                e: React.ChangeEvent<HTMLTextAreaElement>,
+                              ) =>
+                                handleContactFormChange(
+                                  "detalhes",
+                                  e.target.value,
+                                )
+                              }
+                              className="focus:ring-accent/50 min-h-[100px] border-slate-600 !bg-slate-800 text-white placeholder:text-slate-400"
+                              placeholder="Descreva seu produto, volume desejado, características especiais..."
+                              required
+                            />
+                          </div>
+
+                          <Button
+                            type="submit"
+                            className="w-full bg-purple-600 hover:bg-purple-700"
+                            disabled={isSubmitting}
+                          >
+                            {isSubmitting
+                              ? "Enviando..."
+                              : "Solicitar Orçamento Personalizado"}
+                          </Button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
