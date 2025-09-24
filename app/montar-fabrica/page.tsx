@@ -71,23 +71,24 @@ export default function MonteSuaFabrica() {
 
       {/* Container principal */}
       <div className="relative z-10 flex min-h-screen flex-col">
-        {/* Título principal */}
-        <div className="absolute top-28 right-1/2 z-10 flex w-full translate-x-1/2 justify-center">
+        {/* Título principal - Responsivo */}
+        <div className="absolute top-20 z-10 flex w-full justify-center px-4 md:top-28">
           <h1 className="text-center">
             <Highlighter
               action="underline"
               color="#2d62ef"
               animationDuration={4000}
-              textColor="text-2xl font-bold tracking-wider text-white uppercase md:text-4xl"
+              textColor="text-xl font-bold tracking-wider text-white uppercase md:text-4xl"
             >
               Monte sua Fábrica
             </Highlighter>
           </h1>
         </div>
 
-        {/* Primeira seção - Layout atual (conforme aprovado) */}
-        <div className="flex w-full items-center justify-center px-4">
-          <div className="h-full w-full md:w-2/3">
+        {/* Primeira seção - Layout responsivo */}
+        <div className="flex w-full flex-col items-center justify-center px-4 pt-28 md:flex-row md:pt-20">
+          {/* Imagem - Mobile primeiro */}
+          <div className="mb-6 h-full w-full md:mb-0 md:w-2/3">
             <Image
               src={imgFabricaCompleta}
               loading="eager"
@@ -96,17 +97,18 @@ export default function MonteSuaFabrica() {
             />
           </div>
 
+          {/* Texto explicativo - Mobile primeiro */}
           <div className="z-20 h-full w-full md:w-1/3 md:pr-10">
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="border-border/20 flex flex-col items-start justify-center rounded-xs border border-dashed bg-slate-900 p-5 shadow-xl shadow-black/10"
+              className="border-border/20 flex flex-col items-start justify-center rounded-xs border border-dashed bg-slate-900 p-4 shadow-xl shadow-black/10 md:p-5"
             >
-              <h2 className="mb-4 text-2xl font-bold text-white md:text-3xl">
+              <h2 className="mb-3 text-xl font-bold text-white md:mb-4 md:text-3xl">
                 Como funciona?
               </h2>
-              <p className="mb-3 text-sm leading-relaxed text-white md:text-base">
+              <p className="mb-2 text-xs leading-relaxed text-white md:mb-3 md:text-base">
                 Nossa equipe acompanha todo o processo: do{" "}
                 <span className="text-accent font-semibold">
                   planejamento do seu projeto
@@ -117,7 +119,7 @@ export default function MonteSuaFabrica() {
                 </span>
                 .
               </p>
-              <p className="text-sm leading-relaxed text-white md:text-base">
+              <p className="text-xs leading-relaxed text-white md:text-base">
                 Fornecemos{" "}
                 <span className="text-accent font-semibold">
                   consultoria técnica
@@ -132,9 +134,9 @@ export default function MonteSuaFabrica() {
           </div>
         </div>
         {/* Segunda seção - Formulário e informações */}
-        <div className="flex flex-1 items-center justify-center px-4 py-16 md:px-8">
+        <div className="flex flex-1 items-center justify-center px-4 py-8 md:px-8 md:py-16">
           <div className="relative mx-auto w-full max-w-7xl">
-            <div className="flex flex-col gap-8 md:flex-row md:gap-12">
+            <div className="flex flex-col gap-6 md:flex-row md:gap-12">
               {/* Coluna do formulário */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
@@ -142,115 +144,121 @@ export default function MonteSuaFabrica() {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="w-full md:w-1/2"
               >
-                <div className="border-border/20 flex h-full flex-col justify-between rounded-xs border border-dashed bg-slate-900/80 p-6 shadow-xl backdrop-blur">
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="mb-6 flex items-center gap-3">
-                      <Building2 className="text-accent h-6 w-6" />
-                      <h2 className="text-2xl font-bold text-white">
+                <div className="border-border/20 flex h-full flex-col justify-between rounded-xs border border-dashed bg-slate-900/80 p-4 shadow-xl backdrop-blur md:p-6">
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-3 md:space-y-4"
+                  >
+                    <div className="mb-4 flex items-center gap-2 md:mb-6 md:gap-3">
+                      <Building2 className="text-accent h-5 w-5 md:h-6 md:w-6" />
+                      <h2 className="text-lg font-bold text-white md:text-2xl">
                         Solicite seu Orçamento
                       </h2>
                     </div>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+                      <div className="space-y-1 md:space-y-2">
                         <Label
                           htmlFor="nome"
-                          className="flex items-center gap-2 text-white"
+                          className="flex items-center gap-1 text-sm text-white md:gap-2 md:text-base"
                         >
-                          <User className="h-4 w-4" />
+                          <User className="h-3 w-3 md:h-4 md:w-4" />
                           Nome completo
                         </Label>
                         <Input
                           id="nome"
                           {...register("nome")}
-                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground rounded-xs border !bg-slate-900/80 text-white"
+                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground h-10 rounded-xs border !bg-slate-900/80 text-sm text-white md:h-11 md:text-base"
                           placeholder="Seu nome completo"
                         />
                         {errors.nome && (
-                          <p className="mt-1 text-sm text-red-400">
+                          <p className="mt-1 text-xs text-red-400 md:text-sm">
                             {errors.nome.message}
                           </p>
                         )}
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1 md:space-y-2">
                         <Label
                           htmlFor="empresa"
-                          className="flex items-center gap-2 text-white"
+                          className="flex items-center gap-1 text-sm text-white md:gap-2 md:text-base"
                         >
-                          <Building2 className="h-4 w-4" />
+                          <Building2 className="h-3 w-3 md:h-4 md:w-4" />
                           Empresa
                         </Label>
                         <Input
                           id="empresa"
                           {...register("empresa")}
-                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground rounded-xs border !bg-slate-900/80 text-white"
+                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground h-10 rounded-xs border !bg-slate-900/80 text-sm text-white md:h-11 md:text-base"
                           placeholder="Nome da sua empresa"
                         />
                         {errors.empresa && (
-                          <p className="mt-1 text-sm text-red-400">
+                          <p className="mt-1 text-xs text-red-400 md:text-sm">
                             {errors.empresa.message}
                           </p>
                         )}
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+                      <div className="space-y-1 md:space-y-2">
                         <Label
                           htmlFor="email"
-                          className="flex items-center gap-2 text-white"
+                          className="flex items-center gap-1 text-sm text-white md:gap-2 md:text-base"
                         >
-                          <Mail className="h-4 w-4" />
+                          <Mail className="h-3 w-3 md:h-4 md:w-4" />
                           E-mail
                         </Label>
                         <Input
                           id="email"
                           type="email"
                           {...register("email")}
-                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground rounded-xs border !bg-slate-900/80 text-white"
+                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground h-10 rounded-xs border !bg-slate-900/80 text-sm text-white md:h-11 md:text-base"
                           placeholder="seu@email.com"
                         />
                         {errors.email && (
-                          <p className="mt-1 text-sm text-red-400">
+                          <p className="mt-1 text-xs text-red-400 md:text-sm">
                             {errors.email.message}
                           </p>
                         )}
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1 md:space-y-2">
                         <Label
                           htmlFor="telefone"
-                          className="flex items-center gap-2 text-white"
+                          className="flex items-center gap-1 text-sm text-white md:gap-2 md:text-base"
                         >
-                          <Phone className="h-4 w-4" />
+                          <Phone className="h-3 w-3 md:h-4 md:w-4" />
                           Telefone
                         </Label>
                         <Input
                           id="telefone"
                           {...register("telefone")}
-                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground rounded-xs border !bg-slate-900/80 text-white"
+                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground h-10 rounded-xs border !bg-slate-900/80 text-sm text-white md:h-11 md:text-base"
                           placeholder="(11) 99999-9999"
                         />
                         {errors.telefone && (
-                          <p className="mt-1 text-sm text-red-400">
+                          <p className="mt-1 text-xs text-red-400 md:text-sm">
                             {errors.telefone.message}
                           </p>
                         )}
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="mensagem" className="text-white">
+                    <div className="space-y-1 md:space-y-2">
+                      <Label
+                        htmlFor="mensagem"
+                        className="text-sm text-white md:text-base"
+                      >
                         Conte-nos sobre seu projeto
                       </Label>
                       <Textarea
                         id="mensagem"
                         {...register("mensagem")}
-                        className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground min-h-[100px] rounded-xs border !bg-slate-900/80 text-white"
+                        className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground min-h-[80px] rounded-xs border !bg-slate-900/80 text-sm text-white md:min-h-[100px] md:text-base"
                         placeholder="Descreva o tipo de fábrica que deseja montar, produtos que irá processar, capacidade de produção desejada..."
                       />
                       {errors.mensagem && (
-                        <p className="mt-1 text-sm text-red-400">
+                        <p className="mt-1 text-xs text-red-400 md:text-sm">
                           {errors.mensagem.message}
                         </p>
                       )}
@@ -260,14 +268,14 @@ export default function MonteSuaFabrica() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-accent hover:bg-accent/90 w-full py-3 font-semibold text-white"
+                    className="bg-accent hover:bg-accent/90 mt-4 w-full py-2.5 text-sm font-semibold text-white md:mt-6 md:py-3 md:text-base"
                   >
                     {isSubmitting ? (
                       "Enviando..."
                     ) : (
                       <>
                         Solicitar Orçamento
-                        <ArrowRight className="ml-2 h-4 w-4" />
+                        <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
                       </>
                     )}
                   </Button>
@@ -279,15 +287,15 @@ export default function MonteSuaFabrica() {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="w-full space-y-6 md:w-1/2"
+                className="w-full space-y-4 md:w-1/2 md:space-y-6"
               >
-                <div className="border-border/20 rounded-xs border border-dashed bg-slate-900/80 p-6 shadow-xl backdrop-blur">
-                  <h3 className="mb-4 text-xl font-bold text-white">
+                <div className="border-border/20 rounded-xs border border-dashed bg-slate-900/80 p-4 shadow-xl backdrop-blur md:p-6">
+                  <h3 className="mb-3 text-lg font-bold text-white md:mb-4 md:text-xl">
                     Como começar?
                   </h3>
-                  <div className="space-y-3 text-sm text-white/90">
-                    <div className="flex items-start gap-3">
-                      <div className="bg-accent/20 mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full">
+                  <div className="space-y-2 text-xs text-white/90 md:space-y-3 md:text-sm">
+                    <div className="flex items-start gap-2 md:gap-3">
+                      <div className="bg-accent/20 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full md:h-6 md:w-6">
                         <span className="text-accent text-xs font-bold">1</span>
                       </div>
                       <p>
@@ -295,14 +303,14 @@ export default function MonteSuaFabrica() {
                         necessidades
                       </p>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <div className="bg-accent/20 mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full">
+                    <div className="flex items-start gap-2 md:gap-3">
+                      <div className="bg-accent/20 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full md:h-6 md:w-6">
                         <span className="text-accent text-xs font-bold">2</span>
                       </div>
                       <p>Nossa equipe técnica analisará seu projeto</p>
                     </div>
-                    <div className="flex items-start gap-3">
-                      <div className="bg-accent/20 mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full">
+                    <div className="flex items-start gap-2 md:gap-3">
+                      <div className="bg-accent/20 mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full md:h-6 md:w-6">
                         <span className="text-accent text-xs font-bold">3</span>
                       </div>
                       <p>
@@ -313,11 +321,11 @@ export default function MonteSuaFabrica() {
                   </div>
                 </div>
 
-                <div className="border-border/20 rounded-xs border border-dashed bg-slate-900/80 p-6 shadow-xl backdrop-blur">
-                  <h3 className="mb-4 text-xl font-bold text-white">
+                <div className="border-border/20 rounded-xs border border-dashed bg-slate-900/80 p-4 shadow-xl backdrop-blur md:p-6">
+                  <h3 className="mb-3 text-lg font-bold text-white md:mb-4 md:text-xl">
                     O que oferecemos?
                   </h3>
-                  <div className="space-y-2 text-sm text-white/90">
+                  <div className="space-y-1.5 text-xs text-white/90 md:space-y-2 md:text-sm">
                     <p>
                       •{" "}
                       <span className="text-accent font-semibold">
