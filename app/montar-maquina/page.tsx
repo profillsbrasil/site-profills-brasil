@@ -112,7 +112,7 @@ export default function MachineBuilder() {
     <div className="relative min-h-screen w-full bg-slate-900 pt-12">
       <GridPattern />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 py-6 md:py-12">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-6 md:pt-12">
         {/* Header */}
         <div className="text-center">
           <Highlighter
