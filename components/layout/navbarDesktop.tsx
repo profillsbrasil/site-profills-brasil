@@ -42,52 +42,52 @@ const projetos: {
     title: "Profills P&D",
     href: "/projetos/profills-pd",
     description: "IA e Indústria 4.0, com menos paradas e falhas.",
-    icon: <Brain className="text-accent mr-2 size-7" />,
+    icon: <Brain className="text-accent mr-2 size-6" />,
   },
 
   {
     title: "Profills ERP",
     href: "/projetos/profills-erp",
     description: "Gestão integrada em nuvem, automação e menos erros.",
-    icon: <Cloud className="text-accent mr-2 size-7" />,
+    icon: <Cloud className="text-accent mr-2 size-6" />,
   },
   {
     title: "Profills Bank",
     href: "/projetos/profills-bank",
     description: "Finanças digitais acessíveis e seguras.",
-    icon: <Landmark className="text-accent mr-2 size-7" />,
+    icon: <Landmark className="text-accent mr-2 size-6" />,
   },
   {
     title: "Profills HUB",
     href: "/projetos/profills-hub",
     description:
       "Presença internacional, embalagens seguras e soluções completas",
-    icon: <Globe className="text-accent mr-2 size-7" />,
+    icon: <Globe className="text-accent mr-2 size-6" />,
   },
   {
     title: "Profills Locação",
     href: "/projetos/profills-locacao",
     description: "Máquinas por assinatura, acesso fácil e baixo risco.",
-    icon: <Calendar className="text-accent mr-2 size-7" />,
+    icon: <Calendar className="text-accent mr-2 size-6" />,
   },
   {
     title: "Profills Marketplace",
     href: "/projetos/profills-marketplace",
     description:
       "Conexão digital segura entre produtores, clientes e parceiros.",
-    icon: <Store className="text-accent mr-2 size-7" />,
+    icon: <Store className="text-accent mr-2 size-6" />,
   },
   {
     title: "Profills School",
     href: "/projetos/profills-school",
     description: "Educação técnica acessível para capacitar e gerar impacto.",
-    icon: <GraduationCap className="text-accent mr-2 size-7" />,
+    icon: <GraduationCap className="text-accent mr-2 size-6" />,
   },
   {
     title: "Profills Sustentabilidade",
     href: "/projetos/profills-sustentabilidade",
     description: "Soluções em alimento, educação e futuro com impacto.",
-    icon: <Leaf className="text-accent mr-2 size-7" />,
+    icon: <Leaf className="text-accent mr-2 size-6" />,
   },
 ];
 
@@ -267,13 +267,6 @@ export default function NavbarDesktop() {
                   />
                 </div>
               </div>
-              <ListItem
-                href="/docs/primitives/typography"
-                title="Ver catálogo completo!"
-                className="border-accent mt-2 mb-1 flex h-full w-full rounded-xs border"
-              >
-                Veja nosso catálogo completo de peças a venda.
-              </ListItem>
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
