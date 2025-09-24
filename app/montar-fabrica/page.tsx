@@ -25,6 +25,9 @@ const monteFabricaSchema = z.object({
   mensagem: z.string().min(10, "Mensagem deve ter pelo menos 10 caracteres"),
 });
 
+// TODO: Tornar Funcional o envio do formulário
+// TODO: Melhorar o Botão de Solicitar Orçamento
+
 type MonteFabricaData = z.infer<typeof monteFabricaSchema>;
 
 export default function MonteSuaFabrica() {

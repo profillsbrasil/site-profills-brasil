@@ -107,6 +107,8 @@ export default function MachineBuilder() {
       setIsSubmitting(false);
     }
   };
+  // TODO: Tornar Funcional o envio do formulário
+  // TODO: Melhorar o Botão de Solicitar Orçamento Personalizado
 
   return (
     <div className="relative min-h-screen w-full bg-slate-900 pt-12">
