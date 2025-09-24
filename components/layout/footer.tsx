@@ -14,7 +14,7 @@ import { GridPattern } from "./gridPatternBg";
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <footer className="relative overflow-hidden bg-slate-900">
       <GridPattern />
 
       <div className="relative mx-auto max-w-7xl px-6 py-14">
