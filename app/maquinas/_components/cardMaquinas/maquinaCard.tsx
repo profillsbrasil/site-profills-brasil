@@ -1,6 +1,6 @@
 import { AnimatedContainer } from "@/components/AnimatedContainer";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MaquinaData } from "./maquinasData";
 
 interface MaquinaCardProps {
@@ -15,14 +15,20 @@ export default function MaquinaCard({ maquina, index }: MaquinaCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [pkgLoaded, setPkgLoaded] = useState(false);
 
-  // Delay escalonado para animação suave (máximo 0.6s para os últimos cards)
-  const animationDelay = Math.min(index * 0.05, 0.6);
+  // Reset dos estados quando a máquina muda (importante para filtros)
+  useEffect(() => {
+    setImgLoaded(false);
+    setPkgLoaded(false);
+  }, [maquina.id]);
+
+  // Delay escalonado para animação suave (máximo 0.3s para melhor performance)
+  const animationDelay = Math.min(index * 0.03, 0.3);
 
   return (
     <AnimatedContainer
       delay={animationDelay}
       trigger="inView"
-      once={true}
+      once={false} // Permite reanimação quando filtros mudam
       amount={0.1} // Dispara quando 10% do elemento está visível
       className={`border-border/20 group hover:border-accent/30 flex h-[28rem] w-full flex-col overflow-hidden rounded-xs border bg-slate-900 text-white md:h-[32rem]`}
     >
@@ -32,8 +38,8 @@ export default function MaquinaCard({ maquina, index }: MaquinaCardProps) {
           alt="Máquina"
           width={400}
           height={300}
-          loading={index < 6 ? "eager" : "lazy"} // Primeiras 6 imagens carregam imediatamente
-          onLoadingComplete={() => setImgLoaded(true)}
+          loading={index < 9 ? "eager" : "lazy"} // Primeiras 9 imagens carregam imediatamente
+          onLoad={() => setImgLoaded(true)}
           className={`${
             maquina.imgMaquinaClassName || "h-full w-full object-contain"
           } transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
@@ -43,8 +49,8 @@ export default function MaquinaCard({ maquina, index }: MaquinaCardProps) {
           alt="Embalagem"
           width={200}
           height={150}
-          loading={index < 6 ? "eager" : "lazy"} // Primeiras 6 imagens carregam imediatamente
-          onLoadingComplete={() => setPkgLoaded(true)}
+          loading={index < 9 ? "eager" : "lazy"} // Primeiras 9 imagens carregam imediatamente
+          onLoad={() => setPkgLoaded(true)}
           className={`${
             maquina.imgEmbalagemClassName ||
             "absolute right-3 bottom-0 h-1/2 w-1/2 object-cover"

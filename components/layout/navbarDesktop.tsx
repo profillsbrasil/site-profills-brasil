@@ -126,25 +126,25 @@ export default function NavbarDesktop() {
               <div className="flex h-full w-[350px] items-center justify-center gap-2">
                 <div className="flex h-full w-1/2 flex-col gap-3">
                   <ListItem
-                    href="/maquinas"
+                    href="/maquinas?categoria=Envasadoras"
                     title="Envasadoras"
                     className="w-full"
                     icon={<Droplets className="text-accent mr-2 size-6" />}
                   />
                   <ListItem
-                    href="/maquinas"
+                    href="/maquinas?categoria=Enfardadeiras"
                     title="Enfardadeiras"
                     className="w-full"
                     icon={<Archive className="text-accent mr-2 size-6" />}
                   />
                   <ListItem
-                    href="/maquinas"
+                    href="/maquinas?categoria=Embaladoras"
                     className="w-full"
                     title="Embaladoras"
                     icon={<Package className="text-accent mr-2 size-6" />}
                   />
                   <ListItem
-                    href="/maquinas"
+                    href="/maquinas?categoria=Envolvedoras"
                     className="w-full"
                     title="Envolvedoras"
                     icon={<Layers className="text-accent mr-2 size-6" />}

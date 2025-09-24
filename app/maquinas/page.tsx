@@ -2,7 +2,8 @@
 
 import { GridPattern } from "@/components/layout/gridPatternBg";
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import CardMaquina from "./_components/cardMaquinas/cardMaquina";
 import {
   categorias,
@@ -10,9 +11,52 @@ import {
   tiposEmbalagem,
 } from "./_components/cardMaquinas/maquinasData";
 
-export default function Maquinas() {
+function MaquinasContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [categoriaFiltro, setCategoriaFiltro] = useState<string>("Todas");
   const [embalagemFiltro, setEmbalagemFiltro] = useState<string>("Todas");
+
+  // Função para atualizar a URL com os filtros
+  const updateUrl = (categoria: string, embalagem: string) => {
+    const params = new URLSearchParams();
+
+    if (categoria !== "Todas") {
+      params.set("categoria", categoria);
+    }
+
+    if (embalagem !== "Todas") {
+      params.set("embalagem", embalagem);
+    }
+
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+
+    router.replace(newUrl, { scroll: false });
+  };
+
+  // Lê os parâmetros da URL e aplica os filtros
+  useEffect(() => {
+    const categoriaFromUrl = searchParams.get("categoria");
+    const embalagemFromUrl = searchParams.get("embalagem");
+
+    if (
+      categoriaFromUrl &&
+      categorias.includes(categoriaFromUrl as (typeof categorias)[number])
+    ) {
+      setCategoriaFiltro(categoriaFromUrl);
+    }
+
+    if (
+      embalagemFromUrl &&
+      tiposEmbalagem.includes(
+        embalagemFromUrl as (typeof tiposEmbalagem)[number],
+      )
+    ) {
+      setEmbalagemFiltro(embalagemFromUrl);
+    }
+  }, [searchParams]);
 
   const maquinasFiltradas = useMemo(() => {
     return maquinasData.filter((maquina) => {
@@ -49,7 +93,10 @@ export default function Maquinas() {
         <GridPattern />
         <Button
           variant="ghost"
-          onClick={() => setCategoriaFiltro("Todas")}
+          onClick={() => {
+            setCategoriaFiltro("Todas");
+            updateUrl("Todas", embalagemFiltro);
+          }}
           className={`border-border/20 z-11 rounded-xs border text-xs md:text-sm ${
             categoriaFiltro === "Todas" ? "bg-slate-700" : "bg-slate-900"
           }`}
@@ -60,7 +107,10 @@ export default function Maquinas() {
           <Button
             key={categoria}
             variant="ghost"
-            onClick={() => setCategoriaFiltro(categoria)}
+            onClick={() => {
+              setCategoriaFiltro(categoria);
+              updateUrl(categoria, embalagemFiltro);
+            }}
             className={`border-border/20 z-11 rounded-xs border text-xs md:text-sm ${
               categoriaFiltro === categoria ? "bg-slate-700" : "bg-slate-900"
             }`}
@@ -75,7 +125,10 @@ export default function Maquinas() {
         <div className="scrollbar-hide flex gap-3 overflow-x-auto">
           <Button
             variant="ghost"
-            onClick={() => setCategoriaFiltro("Todas")}
+            onClick={() => {
+              setCategoriaFiltro("Todas");
+              updateUrl("Todas", embalagemFiltro);
+            }}
             className={`border-border/20 flex-shrink-0 rounded-xs border text-xs whitespace-nowrap text-white ${
               categoriaFiltro === "Todas" ? "bg-slate-700" : "bg-slate-800"
             }`}
@@ -86,7 +139,10 @@ export default function Maquinas() {
             <Button
               key={categoria}
               variant="ghost"
-              onClick={() => setCategoriaFiltro(categoria)}
+              onClick={() => {
+                setCategoriaFiltro(categoria);
+                updateUrl(categoria, embalagemFiltro);
+              }}
               className={`border-border/20 flex-shrink-0 rounded-xs border text-xs whitespace-nowrap text-white ${
                 categoriaFiltro === categoria ? "bg-slate-700" : "bg-slate-800"
               }`}
@@ -104,6 +160,7 @@ export default function Maquinas() {
             onClick={() => {
               setEmbalagemFiltro("Todas");
               setCategoriaFiltro("Todas");
+              updateUrl("Todas", "Todas");
             }}
             variant="ghost"
             className="border-border/20 mb-2 w-full rounded-xs border bg-slate-900 py-2 text-center text-sm font-semibold"
@@ -113,7 +170,10 @@ export default function Maquinas() {
           <div className="flex w-3/4 flex-col gap-2">
             <Button
               variant="ghost"
-              onClick={() => setEmbalagemFiltro("Todas")}
+              onClick={() => {
+                setEmbalagemFiltro("Todas");
+                updateUrl(categoriaFiltro, "Todas");
+              }}
               className={`border-border/20 z-11 rounded-xs border text-xs ${
                 embalagemFiltro === "Todas" ? "bg-slate-700" : "bg-slate-900"
               }`}
@@ -124,7 +184,10 @@ export default function Maquinas() {
               <Button
                 key={tipo}
                 variant="ghost"
-                onClick={() => setEmbalagemFiltro(tipo)}
+                onClick={() => {
+                  setEmbalagemFiltro(tipo);
+                  updateUrl(categoriaFiltro, tipo);
+                }}
                 className={`border-border/20 z-11 rounded-xs border text-xs ${
                   embalagemFiltro === tipo ? "bg-slate-700" : "bg-slate-900"
                 }`}
@@ -146,6 +209,7 @@ export default function Maquinas() {
                 onClick={() => {
                   setEmbalagemFiltro("Todas");
                   setCategoriaFiltro("Todas");
+                  updateUrl("Todas", "Todas");
                 }}
                 className="border-border/20 z-20 w-full rounded-xs border text-xs md:w-auto md:text-sm"
               >
@@ -154,9 +218,26 @@ export default function Maquinas() {
             </div>
           </div>
         ) : (
-          <CardMaquina maquinas={maquinasFiltradas} />
+          <CardMaquina
+            maquinas={maquinasFiltradas}
+            filterKey={`${categoriaFiltro}-${embalagemFiltro}`}
+          />
         )}
       </div>
     </div>
+  );
+}
+
+export default function Maquinas() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen w-full items-center justify-center bg-slate-900">
+          <div className="text-white">Carregando...</div>
+        </div>
+      }
+    >
+      <MaquinasContent />
+    </Suspense>
   );
 }
