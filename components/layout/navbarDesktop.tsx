@@ -1,13 +1,17 @@
 "use client";
 
 import {
+  Archive,
   Brain,
   Calendar,
   Cloud,
+  Droplets,
   Globe,
   GraduationCap,
   Landmark,
+  Layers,
   Leaf,
+  Package,
   Store,
 } from "lucide-react";
 import Link from "next/link";
@@ -119,46 +123,38 @@ export default function NavbarDesktop() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Máquinas</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="flex h-full w-[500px] items-center justify-center gap-2">
-                <div className="flex h-full w-2/3 flex-col gap-2">
+              <div className="flex h-full w-[350px] items-center justify-center gap-2">
+                <div className="flex h-full w-1/2 flex-col gap-3">
                   <ListItem
                     href="/maquinas"
                     title="Envasadoras"
                     className="w-full"
-                  >
-                    Maquinas para embalar produtos em sachês, bisnagas, frascos,
-                    galões, baldes, pouchs, mini pouchs, entre outros.
-                  </ListItem>
+                    icon={<Droplets className="text-accent mr-2 size-6" />}
+                  />
                   <ListItem
                     href="/maquinas"
                     title="Enfardadeiras"
                     className="w-full"
-                  >
-                    Maquinas para enfardar produtos em fardos, sacos, entre
-                    outros.
-                  </ListItem>
+                    icon={<Archive className="text-accent mr-2 size-6" />}
+                  />
                   <ListItem
                     href="/maquinas"
                     className="w-full"
                     title="Embaladoras"
-                  >
-                    Maquinas para embalar produtos em sacos, bisnagas, frascos,
-                    galões, baldes, pouchs, mini pouchs, entre outros.
-                  </ListItem>
+                    icon={<Package className="text-accent mr-2 size-6" />}
+                  />
                   <ListItem
                     href="/maquinas"
                     className="w-full"
                     title="Envolvedoras"
-                  >
-                    Maquinas para envolver produtos em bisnagas, frascos,
-                    galões, baldes, pouchs, mini pouchs, entre outros.
-                  </ListItem>
+                    icon={<Layers className="text-accent mr-2 size-6" />}
+                  />
                 </div>
                 <Image
                   src={maquinaImagem}
                   loading="eager"
                   alt="Máquina de embalagem cartonada"
-                  className="mt-5 h-full w-1/3 scale-180 object-contain"
+                  className="mt-5 h-full w-1/2 scale-130 object-contain"
                 />
               </div>
             </NavigationMenuContent>
@@ -366,9 +362,11 @@ function ListItem({
             <div className="group-hover:text-accent/90 text-accent mb-1 text-sm leading-none font-bold">
               {title}
             </div>
-            <p className="line-clamp-1 text-sm leading-tight text-white group-hover:text-white">
-              {children}
-            </p>
+            {children && (
+              <p className="line-clamp-1 text-sm leading-tight text-white group-hover:text-white">
+                {children}
+              </p>
+            )}
           </div>
         </Link>
       </NavigationMenuLink>
