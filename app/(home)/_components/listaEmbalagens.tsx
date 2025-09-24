@@ -65,10 +65,11 @@ export default function ListaEmbalagens() {
             action="underline"
             color="#2d62ef"
             animationDuration={4000}
-            textColor="text-2xl mb-3 flex gap-2 leading-tight font-bold md:text-3xl md:mb-2"
+            textColor="text-2xl mb-3 hidden md:flex gap-2 leading-tight font-bold md:text-3xl md:mb-2"
           >
-            Conheça Algumas das Nossas Embalagens
+            Nossas Embalagens
           </Highlighter>
+
           <p className="text-muted-foreground text-sm leading-relaxed md:text-base">
             Soluções para todos os tipos de produtos
           </p>

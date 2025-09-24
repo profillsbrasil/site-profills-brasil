@@ -29,10 +29,7 @@ export default function CtaMonteSuaFabrica() {
           da sua empresa, garantindo o máximo desempenho e eficiência em cada
           etapa do processo.
         </p>
-        <Link
-          className="cursor-pointer"
-          href="/montar-fabrica"
-        >
+        <Link className="z-30 cursor-pointer" href="/montar-fabrica">
           <Button
             size="lg"
             className="group border-border !bg-background hover:border-accent/30 group hover:bg-accent hover:text-accent z-10 w-full rounded-xs border font-semibold text-black shadow-md transition-all duration-300 hover:scale-[1.02] md:w-auto"

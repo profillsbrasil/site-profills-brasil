@@ -348,7 +348,7 @@ export const maquinasData: MaquinaData[] = [
   },
   {
     id: 17,
-    name: "Envasadora Rotativa para Frascos",
+    name: "Rotativa para Frascos",
     imgMaquina: maquinaRotativaParaFrascos,
     imgMaquinaClassName: "h-full w-full object-cover",
     imgEmbalagem: embalagemRotativaParaFrascos,
