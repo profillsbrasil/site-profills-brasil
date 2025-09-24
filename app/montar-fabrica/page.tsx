@@ -90,6 +90,7 @@ export default function MonteSuaFabrica() {
           <div className="h-full w-full md:w-2/3">
             <Image
               src={imgFabricaCompleta}
+              loading="eager"
               alt="Monte sua fábrica"
               className="h-full w-full object-contain"
             />

@@ -299,7 +299,12 @@ export default function NavbarDesktop() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href="/montar-fabrica">Monte a sua fabrica</Link>
+              <Link href="/montar-fabrica">Monte a sua fábrica</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href="/montar-maquina">Monte a sua máquina</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
