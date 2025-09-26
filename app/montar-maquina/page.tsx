@@ -38,6 +38,7 @@ import produtoSolido from "@/lib/images/embalagensPequenas/solidos.png";
 import { Drill } from "lucide-react";
 import { IMaskInput } from "react-imask";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const packagingOptions = [
   { id: "cartonada", name: "Cartonada", image: embalagemGabletop },
@@ -95,16 +96,45 @@ export default function MachineBuilder() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Aqui você pode adicionar a lógica para enviar o formulário
-    // Por exemplo, chamar uma API route
     try {
-      console.log("Enviando formulário:", contactForm);
-      // await fetch('/api/contact-machine-request', { method: 'POST', body: JSON.stringify(contactForm) });
-      alert("Solicitação enviada com sucesso! Entraremos em contato em breve.");
+      const payload = {
+        nome: contactForm.nome,
+        email: contactForm.email,
+        empresa: contactForm.empresa,
+        contato: contactForm.contato,
+        detalhes: contactForm.detalhes,
+        selectedPackaging,
+        selectedProductType,
+      };
+
+      const response = await fetch("/api/montar-maquina", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result?.message || "Erro ao enviar solicitação");
+      }
+
+      toast.success("Solicitação enviada com sucesso!", {
+        description:
+          "Entraremos em contato em breve para elaborar sua solução personalizada.",
+        duration: 5000,
+      });
+
       setContactForm(initialContactFormData);
     } catch (error) {
-      console.error("Erro ao enviar formulário:", error);
-      alert("Erro ao enviar solicitação. Tente novamente.");
+      console.error("Erro ao enviar solicitação Montar Máquina:", error);
+      toast.error("Erro ao enviar solicitação", {
+        description:
+          error instanceof Error
+            ? error.message
+            : "Tente novamente em instantes.",
+        duration: 5000,
+      });
     } finally {
       setIsSubmitting(false);
     }
