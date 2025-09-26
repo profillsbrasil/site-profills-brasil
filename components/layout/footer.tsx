@@ -28,9 +28,8 @@ export default function Footer() {
               <Image
                 src={logoProfills}
                 alt="Logo Profills"
-                className="mx-auto h-12 w-auto transition-transform duration-300 group-hover:scale-105 md:h-16"
+                className="mx-auto h-12 w-auto transition-transform duration-300 md:h-16"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
             </div>
           </Link>
           <div className="mx-auto max-w-3xl">
@@ -58,7 +57,7 @@ export default function Footer() {
               <h3 className="mb-4 text-center text-lg font-bold text-white md:mb-6 md:text-xl">
                 Vendas/Peças
               </h3>
-              <div className="space-y-3 md:space-y-4">
+              <div className="flex flex-col items-center space-y-3 md:items-start md:space-y-4">
                 <Link
                   href="mailto:comercial@profillsdobrasil.com.br"
                   className="group/link flex items-center gap-2 text-slate-300 transition-colors hover:text-cyan-400 md:gap-3"
@@ -91,7 +90,7 @@ export default function Footer() {
               <h3 className="mb-4 text-center text-lg font-bold text-white md:mb-6 md:text-xl">
                 Suporte e Assistência Técnica
               </h3>
-              <div className="space-y-3 md:space-y-4">
+              <div className="flex flex-col items-center space-y-3 md:items-start md:space-y-4">
                 <Link
                   href="mailto:suporte@profillsdobrasil.com.br"
                   className="group/link flex items-center gap-2 text-slate-300 transition-colors hover:text-orange-400 md:gap-3"
@@ -115,7 +114,7 @@ export default function Footer() {
               <h3 className="mb-4 text-center text-lg font-bold text-white md:mb-6 md:text-xl">
                 Compras (Fornecedores)
               </h3>
-              <div className="space-y-3 md:space-y-4">
+              <div className="flex flex-col items-center space-y-3 md:items-start md:space-y-4">
                 <Link
                   href="mailto:compras@profillsdobrasil.com.br"
                   className="group/link flex items-center gap-2 text-slate-300 transition-colors hover:text-emerald-400 md:gap-3"

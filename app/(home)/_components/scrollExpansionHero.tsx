@@ -415,7 +415,7 @@ export default function ScrollExpandMedia({
                 loop
                 muted
                 playsInline
-                className="relative h-full max-h-[75vh] w-full max-w-[70vw] rounded-md object-cover"
+                className="relative h-full max-h-[75vh] w-full max-w-[70vw] rounded-md object-cover pt-5"
                 style={{
                   willChange:
                     visualCalculations.centerImageOpacity > 0.3
