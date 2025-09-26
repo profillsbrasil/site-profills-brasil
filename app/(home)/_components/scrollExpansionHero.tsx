@@ -256,7 +256,7 @@ export default function ScrollExpandMedia({
   }, [scrollProgress, isMobile]);
 
   // === VERSÃO MOBILE SIMPLIFICADA ===
-  // Se for mobile, renderiza versão simplificada sem animações de scroll
+  // Se for mobile, renderiza versão simplificada sem animações de scroll.
   if (isMobile) {
     return (
       <div className="relative min-h-[90vh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-3">

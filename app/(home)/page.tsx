@@ -16,7 +16,7 @@ export default function Home() {
     // Reset suave da página
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Evento de reset personalizado
+    // Evento de reset personalizado.
     const resetEvent = new CustomEvent("resetSection", {
       detail: { timestamp: Date.now() },
     });
