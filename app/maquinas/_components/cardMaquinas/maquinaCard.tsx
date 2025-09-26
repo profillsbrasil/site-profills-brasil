@@ -6,9 +6,14 @@ import { MaquinaData } from "./maquinasData";
 interface MaquinaCardProps {
   maquina: MaquinaData;
   index: number; // Para delay escalonado
+  filtersApplied?: boolean; // Indica se os filtros foram aplicados da URL
 }
 
-export default function MaquinaCard({ maquina, index }: MaquinaCardProps) {
+export default function MaquinaCard({
+  maquina,
+  index,
+  filtersApplied = false,
+}: MaquinaCardProps) {
   // Padronização: todos os cards com mesmas dimensões externas
   // e mesma proporção de conteúdo/rodapé para evitar desalinhamentos
 
@@ -27,8 +32,8 @@ export default function MaquinaCard({ maquina, index }: MaquinaCardProps) {
   return (
     <AnimatedContainer
       delay={animationDelay}
-      trigger="inView"
-      once={false} // Permite reanimação quando filtros mudam
+      trigger={filtersApplied ? "mount" : "inView"} // Usa "mount" quando filtros aplicados da URL
+      once={!filtersApplied} // Permite reanimação quando filtros mudam
       amount={0.1} // Dispara quando 10% do elemento está visível
       className={`border-border/20 group hover:border-accent/30 flex h-[28rem] w-full flex-col overflow-hidden rounded-xs border bg-slate-900 text-white md:h-[32rem]`}
     >
@@ -38,7 +43,7 @@ export default function MaquinaCard({ maquina, index }: MaquinaCardProps) {
           alt="Máquina"
           width={400}
           height={300}
-          loading={index < 9 ? "eager" : "lazy"} // Primeiras 9 imagens carregam imediatamente
+          loading={"eager"} // Primeiras 9 imagens carregam imediatamente
           onLoad={() => setImgLoaded(true)}
           className={`${
             maquina.imgMaquinaClassName || "h-full w-full object-contain"
@@ -49,7 +54,7 @@ export default function MaquinaCard({ maquina, index }: MaquinaCardProps) {
           alt="Embalagem"
           width={200}
           height={150}
-          loading={index < 9 ? "eager" : "lazy"} // Primeiras 9 imagens carregam imediatamente
+          loading={"eager"} // Primeiras 9 imagens carregam imediatamente
           onLoad={() => setPkgLoaded(true)}
           className={`${
             maquina.imgEmbalagemClassName ||

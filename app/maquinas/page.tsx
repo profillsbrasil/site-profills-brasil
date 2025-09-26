@@ -58,6 +58,18 @@ function MaquinasContent() {
     }
   }, [searchParams]);
 
+  // Estado para controlar se os filtros foram aplicados da URL
+  const [filtersApplied, setFiltersApplied] = useState(false);
+
+  useEffect(() => {
+    // Marca que os filtros foram aplicados após a primeira leitura da URL
+    const timer = setTimeout(() => {
+      setFiltersApplied(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [categoriaFiltro, embalagemFiltro]);
+
   const maquinasFiltradas = useMemo(() => {
     return maquinasData.filter((maquina) => {
       const categoriaPassa =
@@ -87,7 +99,6 @@ function MaquinasContent() {
   return (
     <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-900 py-10">
       <GridPattern />
-
       {/* Navegação superior - visível em desktop */}
       <div className="sticky top-16 left-0 z-20 hidden h-14 w-full items-center justify-center gap-3 bg-slate-900 py-2 text-white md:flex">
         <GridPattern />
@@ -221,6 +232,7 @@ function MaquinasContent() {
           <CardMaquina
             maquinas={maquinasFiltradas}
             filterKey={`${categoriaFiltro}-${embalagemFiltro}`}
+            filtersApplied={filtersApplied}
           />
         )}
       </div>

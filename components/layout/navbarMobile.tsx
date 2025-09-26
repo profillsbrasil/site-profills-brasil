@@ -168,13 +168,18 @@ const servicos = [
 export default function NavbarMobile() {
   return (
     <div className="border-border/10 fixed top-0 z-50 flex h-16 w-full border-b bg-slate-900 md:hidden">
-      <Link href="/" className="flex h-full w-full items-center justify-center">
-        <Image
-          src={logoProfills}
-          alt="Logo Profills"
-          className="h-8 w-auto object-contain"
-        />
-      </Link>
+      <div className="flex h-full w-full items-center justify-center">
+        <Link
+          href="/"
+          className="flex h-full w-full items-center justify-center"
+        >
+          <Image
+            src={logoProfills}
+            alt="Logo Profills"
+            className="h-8 w-auto object-contain"
+          />
+        </Link>
+      </div>
 
       <div className="absolute top-1/2 right-4 -translate-y-1/2">
         <Drawer direction="right">
@@ -252,15 +257,20 @@ export default function NavbarMobile() {
                   <AccordionContent className="pb-4">
                     <div className="space-y-2 pl-6">
                       {maquinas.map((maquina) => (
-                        <DrawerClose asChild key={maquina.title}>
-                          <Link
-                            href={maquina.href}
-                            className="hover:text-accent flex items-center py-2 text-slate-300 transition-colors"
-                          >
-                            {maquina.icon}
-                            {maquina.title}
-                          </Link>
-                        </DrawerClose>
+                        <div
+                          key={maquina.title}
+                          className="hover:text-accent flex items-center py-2 text-slate-300 transition-colors"
+                        >
+                          <DrawerClose asChild>
+                            <Link
+                              href={maquina.href}
+                              className="flex w-full items-center"
+                            >
+                              {maquina.icon}
+                              {maquina.title}
+                            </Link>
+                          </DrawerClose>
+                        </div>
                       ))}
                     </div>
                   </AccordionContent>
@@ -277,15 +287,20 @@ export default function NavbarMobile() {
                   <AccordionContent className="pb-4">
                     <div className="space-y-2 pl-6">
                       {pecas.map((peca) => (
-                        <DrawerClose asChild key={peca.title}>
-                          <Link
-                            href={peca.href}
-                            target="_blank"
-                            className="hover:text-accent flex items-center py-2 text-slate-300 transition-colors"
-                          >
-                            {peca.title}
-                          </Link>
-                        </DrawerClose>
+                        <div
+                          key={peca.title}
+                          className="hover:text-accent flex items-center py-2 text-slate-300 transition-colors"
+                        >
+                          <DrawerClose asChild>
+                            <Link
+                              href={peca.href}
+                              target="_blank"
+                              className="flex w-full items-center"
+                            >
+                              {peca.title}
+                            </Link>
+                          </DrawerClose>
+                        </div>
                       ))}
                     </div>
                   </AccordionContent>
@@ -302,17 +317,24 @@ export default function NavbarMobile() {
                   <AccordionContent className="pb-4">
                     <div className="space-y-3 pl-6">
                       {projetos.map((projeto) => (
-                        <DrawerClose asChild key={projeto.title}>
-                          <Link
-                            href={projeto.href}
-                            className="hover:text-accent flex items-start py-2 text-slate-300 transition-colors"
-                          >
-                            <div className="flex items-start">
-                              {projeto.icon}
-                              <div className="font-medium">{projeto.title}</div>
-                            </div>
-                          </Link>
-                        </DrawerClose>
+                        <div
+                          key={projeto.title}
+                          className="hover:text-accent flex items-start py-2 text-slate-300 transition-colors"
+                        >
+                          <DrawerClose asChild>
+                            <Link
+                              href={projeto.href}
+                              className="flex w-full items-start"
+                            >
+                              <div className="flex items-start">
+                                {projeto.icon}
+                                <div className="font-medium">
+                                  {projeto.title}
+                                </div>
+                              </div>
+                            </Link>
+                          </DrawerClose>
+                        </div>
                       ))}
                     </div>
                   </AccordionContent>
@@ -329,14 +351,19 @@ export default function NavbarMobile() {
                   <AccordionContent className="pb-4">
                     <div className="space-y-2 pl-6">
                       {servicos.map((servico) => (
-                        <DrawerClose asChild key={servico.title}>
-                          <Link
-                            href={servico.href}
-                            className="hover:text-accent flex items-center py-2 text-slate-300 transition-colors"
-                          >
-                            {servico.title}
-                          </Link>
-                        </DrawerClose>
+                        <div
+                          key={servico.title}
+                          className="hover:text-accent flex items-center py-2 text-slate-300 transition-colors"
+                        >
+                          <DrawerClose asChild>
+                            <Link
+                              href={servico.href}
+                              className="flex w-full items-center"
+                            >
+                              {servico.title}
+                            </Link>
+                          </DrawerClose>
+                        </div>
                       ))}
                     </div>
                   </AccordionContent>
