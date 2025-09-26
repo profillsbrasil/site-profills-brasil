@@ -46,6 +46,7 @@ export function useOptimized3DModel({
 
   // Intersection Observer para lazy loading inteligente
   useEffect(() => {
+    const observedElement = containerRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -65,13 +66,13 @@ export function useOptimized3DModel({
       { threshold, rootMargin },
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    if (observedElement) {
+      observer.observe(observedElement);
     }
 
     return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
+      if (observedElement) {
+        observer.unobserve(observedElement);
       }
       observer.disconnect();
     };

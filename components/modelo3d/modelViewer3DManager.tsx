@@ -29,41 +29,51 @@ export function ModelViewer3DProvider({
   maxCacheSize = 5,
   preloadImportantModels = [],
 }: ModelViewer3DProviderProps) {
-  // Cache global de modelos
-  const modelCache = new Map<string, boolean>();
+  // Cache global de modelos estável entre renders
+  const modelCacheRef = React.useRef<Map<string, boolean>>(new Map());
 
-  const preloadModel = useCallback(async (src: string) => {
-    if (modelCache.get(src)) return;
+  const preloadModel = useCallback(
+    async (src: string) => {
+      if (modelCacheRef.current.get(src)) return;
 
-    try {
-      // Pré-carrega o modelo sem renderizar
-      const link = document.createElement("link");
-      link.rel = "prefetch";
-      link.href = src;
-      document.head.appendChild(link);
+      try {
+        // Pré-carrega o modelo sem renderizar
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = src;
+        document.head.appendChild(link);
 
-      modelCache.set(src, true);
-
-      // Remove o link após um tempo para não poluir o DOM
-      setTimeout(() => {
-        if (document.head.contains(link)) {
-          document.head.removeChild(link);
+        // Respeita capacidade máxima do cache
+        if (modelCacheRef.current.size >= maxCacheSize) {
+          const oldestKey = modelCacheRef.current.keys().next().value as
+            | string
+            | undefined;
+          if (oldestKey) modelCacheRef.current.delete(oldestKey);
         }
-      }, 5000);
-    } catch (error) {
-      console.warn("Erro ao pré-carregar modelo:", error);
-    }
-  }, []);
+        modelCacheRef.current.set(src, true);
+
+        // Remove o link após um tempo para não poluir o DOM
+        setTimeout(() => {
+          if (document.head.contains(link)) {
+            document.head.removeChild(link);
+          }
+        }, 5000);
+      } catch (error) {
+        console.warn("Erro ao pré-carregar modelo:", error);
+      }
+    },
+    [maxCacheSize],
+  );
 
   const isModelCached = useCallback((src: string) => {
-    return modelCache.has(src);
+    return modelCacheRef.current.has(src);
   }, []);
 
   const clearModelCache = useCallback((src?: string) => {
     if (src) {
-      modelCache.delete(src);
+      modelCacheRef.current.delete(src);
     } else {
-      modelCache.clear();
+      modelCacheRef.current.clear();
     }
   }, []);
 
