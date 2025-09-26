@@ -16,10 +16,10 @@ import {
   specificationFormSchema,
   type SpecificationFormData,
 } from "@/lib/schemas/specification-form";
-import { applyPhoneMask } from "@/lib/utils/input-masks";
+import { IMaskInput } from "react-imask";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Resolver, useForm } from "react-hook-form";
+import { Controller, Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { MaquinaData } from "../../_components/cardMaquinas/maquinasData";
 
@@ -37,8 +37,7 @@ export default function SpecificationModal({
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
-    watch,
+    control,
   } = useForm<SpecificationFormData>({
     resolver: zodResolver(
       specificationFormSchema,
@@ -49,7 +48,7 @@ export default function SpecificationModal({
     },
   });
 
-  const telefoneValue = watch("telefone");
+  // Removido controle manual de telefone; usando IMask com Controller
 
   const onSubmit = async (data: SpecificationFormData) => {
     setIsSubmitting(true);
@@ -91,10 +90,7 @@ export default function SpecificationModal({
     }
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const maskedValue = applyPhoneMask(e.target.value);
-    setValue("telefone", maskedValue);
-  };
+  // Máscara aplicada diretamente no input via IMaskInput
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -163,14 +159,21 @@ export default function SpecificationModal({
               >
                 Telefone *
               </Label>
-              <Input
-                id="telefone"
-                value={telefoneValue || ""}
-                onChange={handlePhoneChange}
-                placeholder="(11) 99999-9999"
-                type="tel"
-                maxLength={15}
-                className="focus:border-accent focus:ring-accent border-slate-300"
+              <Controller
+                name="telefone"
+                control={control}
+                render={({ field }) => (
+                  <IMaskInput
+                    id="telefone"
+                    mask={["(00) 0000-0000", "(00) 00000-0000"]}
+                    value={field.value as unknown as string}
+                    onAccept={(val: unknown) => field.onChange(String(val))}
+                    placeholder="(11) 99999-9999"
+                    type="tel"
+                    inputMode="numeric"
+                    className="focus:border-accent focus:ring-accent border-slate-300"
+                  />
+                )}
               />
               {errors.telefone && (
                 <p className="text-xs text-red-600">

@@ -1,5 +1,5 @@
 ---
-globs: *.tsx,*.css
+alwaysApply: false
 ---
 
 # Padrões de Estilização e Responsividade

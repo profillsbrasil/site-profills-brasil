@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>{{subject}}</title>
+
+    <style>
+      /* Resets básicos */
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+      }
+      * {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
+      table,
+      td {
+        mso-table-lspace: 0pt !important;
+        mso-table-rspace: 0pt !important;
+      }
+      table {
+        border-collapse: collapse !important;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+        outline: none;
+        text-decoration: none;
+        height: auto;
+        display: block;
+      }
+      a {
+        text-decoration: none;
+      }
+      /* Cores e estilos inspirados na Profills (verde 059669/10b981, cinzas) */
+      .bg {
+        background-color: #f5f5f5;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+      .header {
+        background: #1f2937;
+        color: #ffffff;
+        text-align: center;
+        padding: 28px 24px;
+      }
+      .h1 {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0;
+        color: #ffffff;
+      }
+      .preheader {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        font-size: 1px;
+        line-height: 1px;
+      }
+      .content {
+        padding: 28px 24px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #333333;
+      }
+      .section-title {
+        color: #059669;
+        font-weight: 700;
+        font-size: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e5e7eb;
+        margin: 0 0 16px 0;
+      }
+      .info {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 0 0 10px 0;
+      }
+      .label {
+        color: #374151;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .value {
+        color: #6b7280;
+      }
+      .highlight {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        border-radius: 12px;
+        text-align: center;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .highlight-title {
+        color: #059669;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+      }
+      .chip {
+        display: inline-block;
+        background: #059669;
+        color: #ffffff;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        margin: 2px;
+      }
+      .timestamp {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-align: center;
+        margin: 0 0 16px 0;
+      }
+      .project-details {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 12px;
+        padding: 16px;
+        margin: 16px 0;
+      }
+      .project-item {
+        margin-bottom: 12px;
+      }
+      .project-item:last-child {
+        margin-bottom: 0;
+      }
+      .project-label {
+        color: #059669;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+      .project-value {
+        color: #374151;
+        font-size: 14px;
+      }
+      .details-text {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+        border-radius: 8px;
+        padding: 16px;
+        font-style: italic;
+        line-height: 1.6;
+      }
+      .cta-section {
+        background: linear-gradient(135deg, #059669, #10b981);
+        color: #ffffff;
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        margin: 24px 0;
+      }
+      .cta-text {
+        margin: 0 0 16px 0;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .cta-button {
+        background: #ffffff !important;
+        color: #059669 !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+        padding: 12px 24px !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        border: none !important;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+        transition: all 0.2s ease;
+      }
+      .cta-button:hover {
+        background: #f3f4f6 !important;
+      }
+      .footer {
+        background: #374151;
+        color: #ffffff;
+        text-align: center;
+        font-size: 12px;
+        padding: 20px;
+      }
+      .footer-branding {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 12px;
+        gap: 8px;
+      }
+      .footer-logo {
+        width: 24px;
+        height: 24px;
+      }
+      .footer-company {
+        font-weight: 600;
+      }
+      .footer-link {
+        color: #10b981 !important;
+        text-decoration: none;
+      }
+      /* Mobile */
+      @media screen and (max-width: 600px) {
+        .content {
+          padding: 22px 18px;
+        }
+        .header {
+          padding: 22px 18px;
+        }
+        .h1 {
+          font-size: 20px;
+        }
+        .highlight {
+          padding: 16px;
+          margin: 16px 0;
+        }
+        .project-details {
+          padding: 12px;
+        }
+        .cta-section {
+          padding: 20px;
+        }
+      }
+      /* Outlook button fallback */
+      .mso-btn a {
+        color: #059669 !important;
+      }
+    </style>
+  </head>
+  <body class="bg">
+    <!-- Preheader (aparece no preview do inbox) -->
+    <div class="preheader">{{preheader}}</div>
+
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      class="bg"
+    >
+      <tr>
+        <td align="center" style="padding: 20px">
+          <table
+            role="presentation"
+            cellpadding="0"
+            cellspacing="0"
+            class="wrap"
+          >
+            <tr>
+              <td class="card">
+                <!-- Header -->
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td class="header">
+                      {{#if logoUrl}}
+                      <img
+                        src="{{logoUrl}}"
+                        width="250"
+                        alt="Logo Profills"
+                        style="margin: 0 auto 12px auto; display: block"
+                      />
+                      {{/if}}
+                      <h1 class="h1 fallback-font">{{saudacao}}</h1>
+                      <p
+                        style="
+                          margin: 8px 0 0;
+                          opacity: 0.9;
+                          font-family:
+                            &quot;Segoe UI&quot;, Tahoma, Geneva, Verdana,
+                            sans-serif;
+                          color: #ffffff;
+                        "
+                      >
+                        Sistema Profills - Máquinas Envasadoras
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Conteúdo -->
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td class="content">
+                      {{#if timestamp}}
+                      <div class="timestamp fallback-font">{{timestamp}}</div>
+                      {{/if}}
+
+                      <!-- Destaque para projeto de fábrica -->
+                      <div class="highlight">
+                        <p class="highlight-title fallback-font">
+                          Projeto de Fábrica Completa
+                        </p>
+                        <p style="margin: 0; color: #6b7280; font-size: 14px">
+                          Nova solicitação para montagem de fábrica
+                          personalizada
+                        </p>
+                      </div>
+
+                      <h2 class="section-title fallback-font">
+                        Dados de Contato
+                      </h2>
+                      <div class="info">
+                        <span class="label fallback-font">Nome</span>
+                        <span class="value">{{nome}}</span>
+                      </div>
+                      <div class="info">
+                        <span class="label fallback-font">E-mail</span>
+                        <span class="value">{{email}}</span>
+                      </div>
+                      {{#if telefone}}
+                      <div class="info">
+                        <span class="label fallback-font">Telefone</span>
+                        <span class="value">{{telefone}}</span>
+                      </div>
+                      {{/if}} {{#if empresa}}
+                      <div class="info">
+                        <span class="label fallback-font">Empresa</span>
+                        <span class="value">{{empresa}}</span>
+                      </div>
+                      {{/if}}
+
+                      <!-- Detalhes do Projeto -->
+                      <h2 class="section-title fallback-font">
+                        Detalhes do Projeto
+                      </h2>
+                      <div class="project-details">
+                        <div class="project-item">
+                          <div class="project-label">Tipo de Projeto</div>
+                          <div class="project-value">
+                            <span class="chip"
+                              >Montagem de Fábrica Completa</span
+                            >
+                          </div>
+                        </div>
+                        <div class="project-item">
+                          <div class="project-label">Serviços Inclusos</div>
+                          <div class="project-value">
+                            <span class="chip">Consultoria Técnica</span>
+                            <span class="chip">Projeto Personalizado</span>
+                            <span class="chip">Fabricação de Máquinas</span>
+                            <span class="chip">Instalação</span>
+                            <span class="chip">Treinamento</span>
+                            <span class="chip">Suporte Técnico</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Mensagem do Cliente -->
+                      {{#if mensagem}}
+                      <h2 class="section-title fallback-font">
+                        Descrição do Projeto
+                      </h2>
+                      <div class="details-text">{{mensagem}}</div>
+                      {{/if}}
+
+                      <!-- Call to Action -->
+                      <div class="cta-section">
+                        <p class="cta-text">
+                          <strong>Ação Necessária:</strong><br />
+                          Entre em contato com o cliente para agendar uma
+                          consultoria técnica e desenvolver o projeto
+                          personalizado da fábrica.
+                        </p>
+                        <!-- BOTÃO À PROVA DE OUTLOOK -->
+                        <!--[if mso]>
+                          <v:roundrect
+                            xmlns:v="urn:schemas-microsoft-com:vml"
+                            href="mailto:{{email}}"
+                            style="
+                              height: 44px;
+                              v-text-anchor: middle;
+                              width: 200px;
+                            "
+                            arcsize="18%"
+                            stroke="f"
+                            fillcolor="#ffffff"
+                          >
+                            <w:anchorlock />
+                            <center
+                              style="
+                                color: #059669;
+                                font-family:
+                                  Segoe UI,
+                                  Arial;
+                                font-size: 14px;
+                                font-weight: 700;
+                              "
+                            >
+                              📧 Responder Cliente
+                            </center>
+                          </v:roundrect>
+                        <![endif]-->
+                        <!--[if !mso]><!-- -->
+                        <table
+                          role="presentation"
+                          cellspacing="0"
+                          cellpadding="0"
+                          style="margin: 0 auto"
+                        >
+                          <tr>
+                            <td
+                              align="center"
+                              style="border-radius: 8px; background: #ffffff"
+                            >
+                              <a
+                                href="mailto:{{email}}"
+                                class="cta-button"
+                                style="
+                                  display: inline-block;
+                                  padding: 12px 24px;
+                                  font-family:
+                                    &quot;Segoe UI&quot;, Tahoma, Geneva,
+                                    Verdana, sans-serif;
+                                  font-size: 14px;
+                                  font-weight: 700;
+                                  color: #059669 !important;
+                                  text-decoration: none;
+                                  border: none;
+                                "
+                              >
+                                Responder Cliente
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                        <!--<![endif]-->
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Footer -->
+                <table role="presentation" width="100%">
+                  <tr>
+                    <td class="footer fallback-font">
+                      <p style="margin: 0 0 12px 0">
+                        Profills Brasil - Máquinas Envasadoras de Excelência
+                      </p>
+                      <p style="margin: 0; opacity: 0.8; font-size: 11px">
+                        Este e-mail foi gerado automaticamente pelo sistema
+                        Profills.<br />
+                        {{#if siteUrl}} Para mais informações, acesse:
+                        <a href="{{siteUrl}}" class="footer-link"
+                          >{{siteUrl}}</a
+                        >
+                        {{/if}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

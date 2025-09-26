@@ -36,6 +36,8 @@ import produtoViscoso from "@/lib/images/embalagensPequenas/liquido-viscoso.png"
 import produtoPo from "@/lib/images/embalagensPequenas/pos.png";
 import produtoSolido from "@/lib/images/embalagensPequenas/solidos.png";
 import { Drill } from "lucide-react";
+import { IMaskInput } from "react-imask";
+import { cn } from "@/lib/utils";
 
 const packagingOptions = [
   { id: "cartonada", name: "Cartonada", image: embalagemGabletop },
@@ -450,20 +452,29 @@ export default function MachineBuilder() {
                               >
                                 Telefone/WhatsApp
                               </Label>
-                              <Input
+                              <IMaskInput
                                 id="contato"
-                                type="text"
+                                mask={["(00) 0000-0000", "(00) 00000-0000"]}
                                 placeholder="(11) 99999-9999"
                                 value={contactForm.contato}
-                                onChange={(
-                                  e: React.ChangeEvent<HTMLInputElement>,
-                                ) =>
+                                onAccept={(value: unknown) =>
                                   handleContactFormChange(
                                     "contato",
-                                    e.target.value,
+                                    String(value),
                                   )
                                 }
-                                className="focus:ring-accent/50 h-10 border-slate-600 !bg-slate-800 text-sm text-white placeholder:text-slate-400 md:h-11 md:text-base"
+                                type="tel"
+                                inputMode="numeric"
+                                className={cn(
+                                  // base
+                                  "focus:ring-accent/50 h-10 w-full rounded-xs border border-slate-600 !bg-slate-800 px-3 text-sm text-white md:h-11 md:text-base",
+                                  "bg-slate-900/80 placeholder:text-slate-400",
+                                  "border-border/20",
+                                  // foco (ordem correta + ring com largura)
+                                  "focus:ring-accent/80 focus:!border-accent/80 focus:ring-0 focus:outline-none",
+                                  // acessibilidade (opcional, combina bem com shadcn)
+                                  "focus-visible:ring-accent/80 focus-visible:ring-0",
+                                )}
                               />
                             </div>
                           </div>

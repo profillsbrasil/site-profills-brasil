@@ -1,5 +1,5 @@
 ---
-globs: *form*.ts,*form*.tsx,*schema*.ts
+alwaysApply: false
 ---
 
 # Formulários e Validação
@@ -30,6 +30,28 @@ export const formSchema = z.object({
 const form = useForm<FormData>({
   resolver: zodResolver(formSchema),
 });
+```
+
+## Masks inputs
+
+- **Use a react-imask** Nao faca mask manualmente
+- **As masks precisam esta no padrao Brasileiro**
+- **Mantenha os styles do shadcn**
+
+```tsx
+import { IMaskInput } from "react-imask";
+import { Input } from "@/components/ui/input";
+
+export function ExemploField() {
+return (
+<IMaskInput
+mask="(00) 00000-0000"
+unmask={true}
+className={Input.className} **mantém estilo do ShadCN**
+placeholder="(51) 99999-9999"
+/>
+);
+}
 ```
 
 ## Padrões de UX

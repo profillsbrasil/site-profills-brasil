@@ -12,23 +12,14 @@ import { motion } from "framer-motion";
 import { ArrowRight, Building2, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { IMaskInput } from "react-imask";
 import { toast } from "sonner";
-import { z } from "zod";
-
-// Schema simplificado para o formulário da página Monte sua Fábrica
-const monteFabricaSchema = z.object({
-  nome: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
-  email: z.string().email("E-mail inválido"),
-  telefone: z.string().min(10, "Telefone deve ter pelo menos 10 dígitos"),
-  empresa: z.string().min(2, "Nome da empresa é obrigatório"),
-  mensagem: z.string().min(10, "Mensagem deve ter pelo menos 10 caracteres"),
-});
-
-// TODO: Tornar Funcional o envio do formulário
-// TODO: Melhorar o Botão de Solicitar Orçamento
-
-type MonteFabricaData = z.infer<typeof monteFabricaSchema>;
+import {
+  monteFabricaFormSchema,
+  type MonteFabricaFormData,
+} from "@/lib/schemas/monte-fabrica-form";
+import { cn } from "@/lib/utils";
 
 export default function MonteSuaFabrica() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,29 +29,47 @@ export default function MonteSuaFabrica() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<MonteFabricaData>({
-    resolver: zodResolver(monteFabricaSchema),
+    control,
+  } = useForm<MonteFabricaFormData>({
+    resolver: zodResolver(monteFabricaFormSchema),
   });
 
-  const onSubmit = async (data: MonteFabricaData) => {
+  const onSubmit = async (data: MonteFabricaFormData) => {
     setIsSubmitting(true);
     try {
-      // Simular envio - adaptar para sua API
-      console.log("Dados do formulário:", data);
+      console.log("Enviando dados do formulário:", data);
 
-      // Aqui você pode integrar com sua API existente ou criar uma nova
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch("/api/monte-fabrica", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Erro ao enviar solicitação");
+      }
+
+      console.log("✅ Solicitação enviada com sucesso:", result);
 
       toast.success("Solicitação enviada com sucesso!", {
         description:
-          "Entraremos em contato em breve para elaborar seu projeto.",
+          "Entraremos em contato em breve para elaborar seu projeto de fábrica personalizada.",
         duration: 5000,
       });
 
       reset();
     } catch (error) {
+      console.error("❌ Erro ao enviar solicitação:", error);
+
       toast.error("Erro ao enviar solicitação", {
-        description: "Tente novamente em alguns instantes.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Tente novamente em alguns instantes.",
         duration: 5000,
       });
     } finally {
@@ -175,7 +184,7 @@ export default function MonteSuaFabrica() {
                         />
                         {errors.nome && (
                           <p className="mt-1 text-xs text-red-400 md:text-sm">
-                            {errors.nome.message}
+                            {errors.nome?.message}
                           </p>
                         )}
                       </div>
@@ -196,7 +205,7 @@ export default function MonteSuaFabrica() {
                         />
                         {errors.empresa && (
                           <p className="mt-1 text-xs text-red-400 md:text-sm">
-                            {errors.empresa.message}
+                            {errors.empresa?.message}
                           </p>
                         )}
                       </div>
@@ -220,7 +229,7 @@ export default function MonteSuaFabrica() {
                         />
                         {errors.email && (
                           <p className="mt-1 text-xs text-red-400 md:text-sm">
-                            {errors.email.message}
+                            {errors.email?.message}
                           </p>
                         )}
                       </div>
@@ -233,15 +242,41 @@ export default function MonteSuaFabrica() {
                           <Phone className="h-3 w-3 md:h-4 md:w-4" />
                           Telefone
                         </Label>
-                        <Input
-                          id="telefone"
-                          {...register("telefone")}
-                          className="border-border/20 focus:ring-accent/80 placeholder:text-muted-foreground h-10 rounded-xs border !bg-slate-900/80 text-sm text-white md:h-11 md:text-base"
-                          placeholder="(11) 99999-9999"
+                        <Controller
+                          name="telefone"
+                          control={control}
+                          render={({ field }) => (
+                            <IMaskInput
+                              id="telefone"
+                              mask={["(00) 0000-0000", "(00) 00000-0000"]}
+                              value={field.value as unknown as string}
+                              onAccept={(val: unknown) =>
+                                field.onChange(String(val))
+                              }
+                              placeholder="(11) 99999-9999"
+                              type="tel"
+                              inputMode="numeric"
+                              className={cn(
+                                // base
+                                "h-10 w-full rounded-xs border px-3 text-sm text-white md:h-11 md:text-base",
+                                "placeholder:text-muted-foreground bg-slate-900/80",
+                                "border-border/20",
+                                // foco (ordem correta + ring com largura)
+                                "focus:ring-accent/80 focus:!border-accent/80 focus:ring-0 focus:outline-none",
+                                // acessibilidade (opcional, combina bem com shadcn)
+                                "focus-visible:ring-accent/80 focus-visible:ring-0",
+                                // erro
+                                errors.telefone
+                                  ? "border-red-500 focus:!border-red-500 focus:ring-red-500/30"
+                                  : "",
+                              )}
+                            />
+                          )}
                         />
+
                         {errors.telefone && (
                           <p className="mt-1 text-xs text-red-400 md:text-sm">
-                            {errors.telefone.message}
+                            {errors.telefone?.message}
                           </p>
                         )}
                       </div>
@@ -262,7 +297,7 @@ export default function MonteSuaFabrica() {
                       />
                       {errors.mensagem && (
                         <p className="mt-1 text-xs text-red-400 md:text-sm">
-                          {errors.mensagem.message}
+                          {errors.mensagem?.message}
                         </p>
                       )}
                     </div>
@@ -270,6 +305,7 @@ export default function MonteSuaFabrica() {
 
                   <Button
                     type="submit"
+                    onClick={handleSubmit(onSubmit)}
                     disabled={isSubmitting}
                     className="bg-accent hover:bg-accent/90 mt-4 w-full py-2.5 text-sm font-semibold text-white md:mt-6 md:py-3 md:text-base"
                   >
