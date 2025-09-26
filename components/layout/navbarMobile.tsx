@@ -241,11 +241,7 @@ export default function NavbarMobile() {
               </div>
 
               {/* Accordion para seções com múltiplas opções */}
-              <Accordion
-                type="multiple"
-                defaultValue={["maquinas"]}
-                className="w-full"
-              >
+              <Accordion type="multiple" className="w-full">
                 {/* Máquinas */}
                 <AccordionItem value="maquinas" className="border-border/20">
                   <AccordionTrigger className="hover:text-accent text-white">
