@@ -2,6 +2,7 @@ import type { MontarMaquinaFormData } from "@/lib/schemas/montar-maquina-form";
 import fs from "fs";
 import nodemailer from "nodemailer";
 import path from "path";
+import { logger } from "@/lib/utils/logger";
 
 export const createTransporter = () => {
   return nodemailer.createTransport({
@@ -94,13 +95,6 @@ export const createMontarMaquinaEmailTemplate = (
     siteUrl: siteUrl,
   };
 
-  console.log("📧 Dados do template de email Montar Máquina:", {
-    nome: templateData.nome,
-    email: templateData.email,
-    produto: templateData.produto,
-    embalagem: templateData.embalagem,
-  });
-
   return renderTemplate(htmlTemplate, templateData);
 };
 
@@ -140,13 +134,9 @@ Este e-mail foi gerado automaticamente pelo sistema Profills.
 
   try {
     const result = await transporter.sendMail(mailOptions);
-    console.log(
-      "✅ E-mail Montar Máquina enviado com sucesso:",
-      result.messageId,
-    );
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error("❌ Erro ao enviar e-mail Montar Máquina:", error);
+    logger.error("❌ Erro ao enviar e-mail Montar Máquina:", error);
     throw new Error("Falha no envio do e-mail");
   }
 };

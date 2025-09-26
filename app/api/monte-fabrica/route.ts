@@ -1,37 +1,19 @@
 import { sendMonteFabricaEmail } from "@/lib/emails/monte-fabrica/email-monte-fabrica";
 import { monteFabricaFormSchema } from "@/lib/schemas/monte-fabrica-form";
 import { NextRequest, NextResponse } from "next/server";
+import { logger } from "@/lib/utils/logger";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
-    // Validar os dados usando o schema
     const validatedData = monteFabricaFormSchema.parse(body);
-
-    console.log("=== NOVA SOLICITAÇÃO - MONTE SUA FÁBRICA ===");
-    console.log("Data/Hora:", new Date().toLocaleString("pt-BR"));
-    console.log("Dados da solicitação:", {
-      nome: validatedData.nome,
-      email: validatedData.email,
-      telefone: validatedData.telefone,
-      empresa: validatedData.empresa,
-      projeto: {
-        tipo: "Montagem de Fábrica Completa",
-        descricao: validatedData.mensagem,
-      },
-    });
 
     // Enviar e-mail com os dados do projeto
     try {
       await sendMonteFabricaEmail(validatedData);
-      // Log já é feito dentro da função sendMonteFabricaEmail
     } catch (emailError) {
-      console.error("❌ Erro no envio do e-mail:", emailError);
-      // Continuar mesmo se o e-mail falhar, mas registrar o erro
+      logger.error("❌ Erro no envio do e-mail:", emailError);
     }
-
-    console.log("===========================================");
 
     return NextResponse.json(
       {
@@ -45,7 +27,7 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("Erro ao processar solicitação Monte sua Fábrica:", error);
+    logger.error("Erro ao processar solicitação Monte sua Fábrica:", error);
 
     if (error instanceof Error && error.name === "ZodError") {
       return NextResponse.json(

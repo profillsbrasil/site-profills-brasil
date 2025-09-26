@@ -2,6 +2,7 @@ import type { SpecificationFormData } from "@/lib/schemas/specification-form";
 import fs from "fs";
 import nodemailer from "nodemailer";
 import path from "path";
+import { logger } from "@/lib/utils/logger";
 
 // Configuração do transporter do Nodemailer para Gmail
 export const createTransporter = () => {
@@ -100,14 +101,6 @@ export const createEmailTemplate = (data: SpecificationFormData) => {
     siteUrl: siteUrl,
   };
 
-  // Debug: Log dos dados do template (remover em produção se necessário)
-  console.log("📧 Dados do template de email:", {
-    maquinaNome: templateData.maquinaNome,
-    maquinaId: templateData.maquinaId,
-    urlMaquina: templateData.urlMaquina,
-    siteUrl: templateData.siteUrl,
-  });
-
   // Renderiza o template
   return renderTemplate(htmlTemplate, templateData);
 };
@@ -149,10 +142,9 @@ Este e-mail foi gerado automaticamente pelo sistema Profills.
 
   try {
     const result = await transporter.sendMail(mailOptions);
-    console.log("✅ E-mail enviado com sucesso:", result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error("❌ Erro ao enviar e-mail:", error);
+    logger.error("❌ Erro ao enviar e-mail:", error);
     throw new Error("Falha no envio do e-mail");
   }
 };

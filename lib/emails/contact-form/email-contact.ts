@@ -1,6 +1,7 @@
 import type { ContactFormData } from "@/lib/schemas/contact-form";
 import fs from "fs";
 import nodemailer from "nodemailer";
+import { logger } from "@/lib/utils/logger";
 import path from "path";
 
 // Configuração do transporter do Nodemailer para Gmail
@@ -22,8 +23,6 @@ const readEmailTemplate = () => {
   );
   return fs.readFileSync(templatePath, "utf-8");
 };
-
-// Função removida - CSS agora está inline no template HTML
 
 // Template engine melhorado para processar {{#if}} e {{#each}}
 const renderTemplate = (
@@ -157,15 +156,6 @@ export const createContactEmailTemplate = (data: ContactFormData) => {
     siteUrl: siteUrl,
   };
 
-  // Debug: Log dos dados do template (remover em produção se necessário)
-  console.log("📧 Dados do template de email de contato:", {
-    email: templateData.email,
-    material: templateData.material,
-    service: templateData.service,
-    finish: templateData.finish,
-    siteUrl: templateData.siteUrl,
-  });
-
   // Renderiza o template
   return renderTemplate(htmlTemplate, templateData);
 };
@@ -217,10 +207,9 @@ Este e-mail foi gerado automaticamente pelo sistema Profills.
 
   try {
     const result = await transporter.sendMail(mailOptions);
-    console.log("✅ E-mail de contato enviado com sucesso:", result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error("❌ Erro ao enviar e-mail de contato:", error);
+    logger.error("❌ Erro ao enviar e-mail de contato:", error);
     throw new Error("Falha no envio do e-mail");
   }
 };
