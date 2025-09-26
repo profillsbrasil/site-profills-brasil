@@ -58,11 +58,11 @@ export default function BeneficiosModelo() {
     <section className="w-full max-w-6xl py-10">
       <AnimatedContainer>
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900">
+          <h2 className="mb-4 text-2xl font-bold text-gray-900 md:text-3xl">
             Vantagens do{" "}
             <span className="text-[#2d62ef]">Modelo por Assinatura</span>
           </h2>
-          <p className="mx-auto max-w-3xl text-lg text-gray-600">
+          <p className="mx-auto max-w-3xl text-sm text-gray-600 md:text-lg">
             Uma nova forma de acessar tecnologia de ponta, reduzindo riscos e
             maximizando oportunidades para seu negócio
           </p>
@@ -74,14 +74,14 @@ export default function BeneficiosModelo() {
             return (
               <div
                 key={index}
-                className="group rounded-md border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div
                   className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full ${beneficio.color} transition-all duration-300 group-hover:scale-110`}
                 >
                   <IconComponent className="h-8 w-8" />
                 </div>
-                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                <h3 className="mb-3 text-lg font-semibold text-gray-900 md:text-xl">
                   {beneficio.title}
                 </h3>
                 <p className="text-gray-600">{beneficio.description}</p>
@@ -90,11 +90,11 @@ export default function BeneficiosModelo() {
           })}
         </div>
 
-        <div className="mt-12 rounded-md bg-slate-900 p-8 text-center text-white">
-          <h3 className="mb-4 text-2xl font-bold">
+        <div className="mt-12 rounded-xs bg-slate-900 p-8 text-center text-white">
+          <h3 className="mb-4 text-xl font-bold md:text-2xl">
             Pronto para Revolucionar seu Negócio?
           </h3>
-          <p className="mb-6 text-lg">
+          <p className="mb-6 text-sm md:text-lg">
             Junte-se à revolução do mercado de envase no Brasil com o modelo
             mais inovador e seguro do setor
           </p>

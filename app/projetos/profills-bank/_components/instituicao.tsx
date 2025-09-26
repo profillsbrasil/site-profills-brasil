@@ -3,21 +3,21 @@ export default function Instituicao() {
   return (
     <section
       aria-labelledby="titulo-regulacao"
-      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-10 py-16"
+      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-6 py-8 md:gap-10 md:py-16"
     >
       <Highlighter
         action="underline"
         color="#2d62ef"
         animationDuration={4000}
-        textColor="text-3xl font-bold text-center"
+        textColor="text-2xl font-bold text-center md:text-3xl"
       >
         <h2 id="titulo-regulacao">
           Instituição Financeira Digital Regulamentada
         </h2>
       </Highlighter>
 
-      <div className="flex w-full gap-10">
-        <div className="text-md flex w-1/2 flex-col gap-4 leading-relaxed">
+      <div className="flex w-full flex-col gap-6 md:flex-row md:gap-10">
+        <div className="flex w-full flex-col gap-4 text-sm leading-relaxed md:w-1/2 md:text-base">
           <p>
             A Profills Bank foi desenvolvida como uma{" "}
             <span className="text-accent font-semibold">
@@ -48,7 +48,7 @@ export default function Instituicao() {
           </p>
         </div>
 
-        <div className="text-md flex w-1/2 flex-col gap-4 leading-relaxed">
+        <div className="flex w-full flex-col gap-4 text-sm leading-relaxed md:w-1/2 md:text-base">
           <p>
             Sabemos que a{" "}
             <span className="text-accent font-semibold">
@@ -77,18 +77,18 @@ export default function Instituicao() {
       </div>
 
       {/* Impact Numbers */}
-      <div className="mt-8 grid w-full max-w-5xl grid-cols-3 gap-8">
-        <div className="flex flex-col items-center justify-center rounded-md border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm">
+      <div className="mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 md:mt-8 md:grid-cols-3 md:gap-8">
+        <div className="flex flex-col items-center justify-center rounded-xs border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm">
           <div className="mb-2 text-3xl font-bold text-[#2d62ef]">100%</div>
           <div className="text-gray-600">Digital</div>
         </div>
-        <div className="flex flex-col items-center justify-center rounded-md border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm">
+        <div className="flex flex-col items-center justify-center rounded-xs border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm">
           <div className="mb-2 text-3xl font-bold text-[#2d62ef]">
             B2B + B2C
           </div>
           <div className="text-gray-600">Atendimento</div>
         </div>
-        <div className="flex flex-col items-center justify-center rounded-md border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm">
+        <div className="flex flex-col items-center justify-center rounded-xs border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm">
           <div className="mb-2 text-3xl font-bold text-[#2d62ef]">DBaaS</div>
           <div className="text-gray-600">Tecnologia Própria</div>
         </div>

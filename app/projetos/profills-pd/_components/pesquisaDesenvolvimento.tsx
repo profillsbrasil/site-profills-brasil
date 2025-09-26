@@ -13,11 +13,11 @@ export default function PesquisaDesenvolvimento() {
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-4xl font-bold"
+          textColor="text-2xl font-bold md:text-4xl"
         >
           <h2 id="titulo-pesquisa">Pesquisa & Desenvolvimento</h2>
         </Highlighter>
-        <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-3xl text-sm text-gray-600 md:text-lg">
           Diversas práticas vêm sendo adotadas a fim de{" "}
           <span className="text-accent font-semibold">
             melhorar os processos, projetos e desenvolvimento dos equipamentos
@@ -27,9 +27,9 @@ export default function PesquisaDesenvolvimento() {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid w-full grid-cols-2 gap-8">
+      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-gray-100 bg-white p-8 shadow-lg backdrop-blur-xs">
+          <div className="h-full rounded-xs border border-gray-100 bg-white p-8 shadow-lg backdrop-blur-xs">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-[#2d62ef]/10 p-3">
                 <Brain className="h-8 w-8 text-[#2d62ef]" />
@@ -57,7 +57,7 @@ export default function PesquisaDesenvolvimento() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8 shadow-lg">
+          <div className="h-full rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8 shadow-lg">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-white/20 p-3">
                 <Target className="h-8 w-8 text-[#2d62ef]" />
@@ -87,9 +87,9 @@ export default function PesquisaDesenvolvimento() {
       </div>
 
       {/* Bottom Cards */}
-      <div className="grid w-full grid-cols-4 gap-6">
+      <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
         <AnimatedContainer>
-          <div className="rounded-md border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
+          <div className="rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
             <div className="mx-auto mb-4 w-fit rounded-full bg-[#2d62ef]/10 p-3">
               <Users className="h-8 w-8 text-[#2d62ef]" />
             </div>
@@ -101,7 +101,7 @@ export default function PesquisaDesenvolvimento() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="rounded-md border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
+          <div className="rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
             <div className="mx-auto mb-4 w-fit rounded-full bg-[#2d62ef]/10 p-3">
               <Lightbulb className="h-8 w-8 text-[#2d62ef]" />
             </div>
@@ -113,7 +113,7 @@ export default function PesquisaDesenvolvimento() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="rounded-md border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
+          <div className="rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
             <div className="mx-auto mb-4 w-fit rounded-full bg-[#2d62ef]/10 p-3">
               <Brain className="h-8 w-8 text-[#2d62ef]" />
             </div>
@@ -123,7 +123,7 @@ export default function PesquisaDesenvolvimento() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="rounded-md border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
+          <div className="rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg">
             <div className="mx-auto mb-4 w-fit rounded-full bg-[#2d62ef]/10 p-3">
               <Target className="h-8 w-8 text-[#2d62ef]" />
             </div>

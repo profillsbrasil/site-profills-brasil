@@ -41,14 +41,14 @@ export default function ImpactoEducacao() {
 
             {/* Statistics */}
             <div className="mt-8 grid grid-cols-2 gap-4">
-              <div className="rounded-md bg-red-50 p-4 text-center">
+              <div className="rounded-xs bg-red-50 p-4 text-center">
                 <Users className="mx-auto mb-2 h-8 w-8 text-red-600" />
                 <div className="text-2xl font-bold text-red-600">14-20M</div>
                 <div className="text-sm text-gray-600">
                   Desempregados no Brasil
                 </div>
               </div>
-              <div className="rounded-md bg-blue-50 p-4 text-center">
+              <div className="rounded-xs bg-blue-50 p-4 text-center">
                 <Search className="mx-auto mb-2 h-8 w-8 text-blue-600" />
                 <div className="text-2xl font-bold text-blue-600">73%</div>
                 <div className="text-sm text-gray-600">
@@ -60,7 +60,7 @@ export default function ImpactoEducacao() {
 
           {/* Right Content - Educational Impact */}
           <div className="grid gap-4 sm:grid-cols-1">
-            <div className="rounded-md border border-blue-500/30 bg-blue-50 p-6">
+            <div className="rounded-xs border border-blue-500/30 bg-blue-50 p-6">
               <div className="flex items-start space-x-4">
                 <TrendingUp className="mt-1 h-6 w-6 flex-shrink-0 text-blue-600" />
                 <div>
@@ -75,7 +75,7 @@ export default function ImpactoEducacao() {
               </div>
             </div>
 
-            <div className="rounded-md border border-green-500/30 bg-green-50 p-6">
+            <div className="rounded-xs border border-green-500/30 bg-green-50 p-6">
               <div className="flex items-start space-x-4">
                 <BarChart3 className="mt-1 h-6 w-6 flex-shrink-0 text-green-600" />
                 <div>
@@ -90,7 +90,7 @@ export default function ImpactoEducacao() {
               </div>
             </div>
 
-            <div className="rounded-md border border-purple-500/30 bg-purple-50 p-6">
+            <div className="rounded-xs border border-purple-500/30 bg-purple-50 p-6">
               <div className="flex items-start space-x-4">
                 <Users className="mt-1 h-6 w-6 flex-shrink-0 text-purple-600" />
                 <div>
@@ -105,7 +105,7 @@ export default function ImpactoEducacao() {
               </div>
             </div>
 
-            <div className="rounded-md border border-orange-500/30 bg-orange-50 p-6">
+            <div className="rounded-xs border border-orange-500/30 bg-orange-50 p-6">
               <div className="flex items-start space-x-4">
                 <AlertTriangle className="mt-1 h-6 w-6 flex-shrink-0 text-orange-600" />
                 <div>

@@ -35,18 +35,18 @@ const servicos = [
 
 export default function CarrosselServicos() {
   return (
-    <div className="flex h-96 w-full flex-row items-center justify-center gap-3 px-3">
+    <div className="scrollbar-hide flex h-48 w-full flex-row items-center justify-center gap-2 overflow-x-auto px-3 md:h-96 md:gap-3">
       {servicos.map((servico) => (
         <div
           key={servico.title}
-          className="relative flex w-1/6 flex-col items-center justify-center transition-all duration-300 hover:scale-[1.04] hover:shadow-lg hover:shadow-black/10"
+          className="relative flex min-w-24 flex-col items-center justify-center transition-all duration-300 hover:scale-[1.04] hover:shadow-lg hover:shadow-black/10 md:w-1/6 md:min-w-0"
         >
           <Image
             src={servico.imgServico}
             alt={servico.title}
-            className="h-96 w-full rounded-sm object-cover"
+            className="h-48 w-full rounded-xs object-cover md:h-96"
           />
-          <h3 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-xl font-semibold text-white">
+          <h3 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-sm font-semibold text-white md:text-xl">
             {servico.title}
           </h3>
         </div>

@@ -11,6 +11,8 @@ import { fetchAddressByCep } from "@/lib/utils/cep-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export function useContactForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -65,22 +67,46 @@ export function useContactForm() {
     const values = form.getValues();
 
     try {
+      let schema;
+      let fieldsToValidate: (keyof ContactFormData)[] = [];
+
       switch (step) {
         case 1:
-          step1Schema.parse(values);
+          schema = step1Schema;
+          fieldsToValidate = ["email", "phone", "cep"];
           break;
         case 2:
-          step2Schema.parse(values);
+          schema = step2Schema;
+          fieldsToValidate = ["number", "city", "state"];
           break;
         case 3:
-          step3Schema.parse(values);
+          schema = step3Schema;
+          fieldsToValidate = ["material", "service", "finish"];
           break;
         default:
           return false;
       }
+
+      // Valida o schema
+      schema.parse(values);
+
+      // Limpa erros dos campos da etapa atual
+      fieldsToValidate.forEach((field) => {
+        form.clearErrors(field);
+      });
+
       return true;
-    } catch {
-      // Os erros já estão sendo gerenciados pelo react-hook-form
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        // Define os erros específicos da etapa
+        error.issues.forEach((issue) => {
+          const fieldName = issue.path[0] as keyof ContactFormData;
+          form.setError(fieldName, {
+            type: "manual",
+            message: issue.message,
+          });
+        });
+      }
       return false;
     }
   };
@@ -90,6 +116,26 @@ export function useContactForm() {
     const isValid = await validateStep(currentStep);
     if (isValid && currentStep < 3) {
       setCurrentStep(currentStep + 1);
+    } else {
+      // Força a revalidação dos campos para mostrar erros
+      const fieldsToTrigger = getFieldsForStep(currentStep);
+      fieldsToTrigger.forEach((field) => {
+        form.trigger(field);
+      });
+    }
+  };
+
+  // Função auxiliar para obter campos de cada etapa
+  const getFieldsForStep = (step: number): (keyof ContactFormData)[] => {
+    switch (step) {
+      case 1:
+        return ["email", "phone", "cep"];
+      case 2:
+        return ["number", "city", "state"];
+      case 3:
+        return ["material", "service", "finish"];
+      default:
+        return [];
     }
   };
 
@@ -101,9 +147,47 @@ export function useContactForm() {
 
   // Envio do formulário
   const onSubmit = async (data: ContactFormData) => {
-    console.log("Dados do formulário:", data);
-    // TODO: Implementar envio de e-mail
-    // await sendContactEmail(data);
+    try {
+      console.log("Enviando dados do formulário:", data);
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Erro ao enviar solicitação");
+      }
+
+      console.log("✅ Solicitação enviada com sucesso:", result);
+
+      // Feedback visual de sucesso
+      toast.success("Solicitação enviada com sucesso!", {
+        description:
+          "Entraremos em contato em breve para elaborar seu orçamento personalizado.",
+        duration: 5000,
+      });
+
+      // Reset do formulário após sucesso
+      form.reset();
+      setCurrentStep(1);
+    } catch (error) {
+      console.error("❌ Erro ao enviar solicitação:", error);
+
+      // Feedback visual de erro
+      toast.error("Erro ao enviar solicitação", {
+        description:
+          error instanceof Error
+            ? error.message
+            : "Tente novamente em alguns instantes.",
+        duration: 5000,
+      });
+    }
   };
 
   return {

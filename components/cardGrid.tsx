@@ -1,25 +1,31 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { Cpu, Fingerprint, Zap } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
-import React from 'react';
+import { cn } from "@/lib/utils";
+import { Cpu, Fingerprint, Zap } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import React from "react";
 
 const features = [
   {
-    title: 'LINHA EMBALAGENS CARTONADAS',
+    title: "LINHA EMBALAGENS CARTONADAS",
     icon: Zap,
-    modelos: ['GT 300 - 70'],
+    modelos: ["GT 300 - 70"],
   },
   {
-    title: 'STAND-UP POUCH',
+    title: "STAND-UP POUCH",
     icon: Cpu,
-    modelos: ['TC 4BC MECÂNICA SPEED'],
+    modelos: ["TC 4BC MECÂNICA SPEED"],
   },
   {
-    title: 'LINHA TC 4S',
+    title: "LINHA TC 4S",
     icon: Fingerprint,
-    modelos: ['TC 4S 200 - 2', 'TC 4S 240 - 2', 'TC 4S 280 - 2', 'TC 4S 360 - 2', 'TC 4S - 2'],
+    modelos: [
+      "TC 4S 200 - 2",
+      "TC 4S 240 - 2",
+      "TC 4S 280 - 2",
+      "TC 4S 360 - 2",
+      "TC 4S - 2",
+    ],
   },
 ];
 
@@ -42,11 +48,15 @@ export default function CardGrid() {
 
 type ViewAnimationProps = {
   delay?: number;
-  className?: React.ComponentProps<typeof motion.div>['className'];
+  className?: React.ComponentProps<typeof motion.div>["className"];
   children: React.ReactNode;
 };
 
-function AnimatedContainer({ className, delay = 0.1, children }: ViewAnimationProps) {
+function AnimatedContainer({
+  className,
+  delay = 0.1,
+  children,
+}: ViewAnimationProps) {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
@@ -55,8 +65,8 @@ function AnimatedContainer({ className, delay = 0.1, children }: ViewAnimationPr
 
   return (
     <motion.div
-      initial={{ filter: 'blur(4px)', translateY: -8, opacity: 0 }}
-      whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
+      initial={{ filter: "blur(4px)", translateY: -8, opacity: 0 }}
+      whileInView={{ filter: "blur(0px)", translateY: 0, opacity: 1 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.8 }}
       className={className}
@@ -72,17 +82,21 @@ type FeatureCardProps = {
   modelos: string[];
 };
 
-export type FeatureCardPorps = React.ComponentProps<'div'> & {
+export type FeatureCardPorps = React.ComponentProps<"div"> & {
   feature: FeatureCardProps;
 };
 
-export function FeatureCard({ feature, className, ...props }: FeatureCardPorps) {
+export function FeatureCard({
+  feature,
+  className,
+  ...props
+}: FeatureCardPorps) {
   const p = genRandomPattern();
 
   return (
     <div
       className={cn(
-        'relative overflow-hidden p-6 border border-black border-dashed divide-x divide-y divide-dashed',
+        "relative divide-x divide-y divide-dashed overflow-hidden border border-dashed border-black p-6",
         className,
       )}
       {...props}
@@ -99,7 +113,11 @@ export function FeatureCard({ feature, className, ...props }: FeatureCardPorps) 
           />
         </div>
       </div>
-      <feature.icon className="text-foreground/75 size-6" strokeWidth={1} aria-hidden />
+      <feature.icon
+        className="text-foreground/75 size-6"
+        strokeWidth={1}
+        aria-hidden
+      />
       <h3 className="mt-10 text-sm md:text-base">{feature.title}</h3>
       <p className="text-muted-foreground relative z-20 mt-2 text-xs font-light">
         {feature.modelos.map((modelo) => (
@@ -117,7 +135,7 @@ export function GridPattern({
   y,
   squares,
   ...props
-}: React.ComponentProps<'svg'> & {
+}: React.ComponentProps<"svg"> & {
   width: number;
   height: number;
   x: string;
@@ -140,7 +158,12 @@ export function GridPattern({
           <path d={`M.5 ${height}V.5H${width}`} fill="none" />
         </pattern>
       </defs>
-      <rect width="100%" height="100%" strokeWidth={0} fill={`url(#${patternId})`} />
+      <rect
+        width="100%"
+        height="100%"
+        strokeWidth={0}
+        fill={`url(#${patternId})`}
+      />
       {squares && (
         <svg x={x} y={y} className="overflow-visible">
           {squares.map(([x, y], index) => (

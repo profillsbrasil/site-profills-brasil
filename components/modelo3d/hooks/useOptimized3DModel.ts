@@ -1,3 +1,4 @@
+import { ModelViewerElement } from "@google/model-viewer";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // Cache global para modelos 3D já carregados
@@ -15,8 +16,8 @@ export function useOptimized3DModel({
   threshold = 0.1,
   rootMargin = "50px",
 }: UseOptimized3DModelOptions) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const modelViewerRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const modelViewerRef = useRef<ModelViewerElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -45,6 +46,7 @@ export function useOptimized3DModel({
 
   // Intersection Observer para lazy loading inteligente
   useEffect(() => {
+    const observedElement = containerRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -64,13 +66,13 @@ export function useOptimized3DModel({
       { threshold, rootMargin },
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    if (observedElement) {
+      observer.observe(observedElement);
     }
 
     return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
+      if (observedElement) {
+        observer.unobserve(observedElement);
       }
       observer.disconnect();
     };
@@ -160,7 +162,7 @@ export function useOptimized3DModel({
   }, [src]);
 
   const handleModelError = useCallback(
-    (error: any) => {
+    (error: Error) => {
       console.error("Erro ao carregar modelo 3D:", error);
       modelCache.delete(src);
     },

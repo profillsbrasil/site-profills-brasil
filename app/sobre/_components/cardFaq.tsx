@@ -108,19 +108,22 @@ export const faqQuestoes: FAQ[] = [
 
 export default function CardFaq() {
   return (
-    <div id="faq" className="flex h-full max-w-7xl flex-col gap-8 py-10">
+    <div
+      id="faq"
+      className="flex h-full max-w-7xl flex-col gap-6 py-8 md:gap-8 md:py-10"
+    >
       <div className="flex w-full justify-center">
         <Highlighter
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-4xl font-bold"
+          textColor="text-2xl font-bold md:text-4xl"
         >
           FAQ - Perguntas Frequentes
         </Highlighter>
       </div>
-      <div className="flex w-full gap-5">
-        <div className="flex h-full w-1/2">
+      <div className="flex w-full flex-col gap-6 md:flex-row md:gap-5">
+        <div className="flex h-full w-full md:w-1/2">
           <Accordion
             type="single"
             collapsible
@@ -133,10 +136,10 @@ export default function CardFaq() {
                 value={`item-${index}`}
                 className="bg-background border-border border transition-all duration-300 hover:shadow-md"
               >
-                <AccordionTrigger className="hover:text-accent flex w-full border-b bg-slate-50 px-6 py-4 text-left text-lg font-semibold text-slate-900 transition-colors">
+                <AccordionTrigger className="hover:text-accent flex w-full border-b bg-slate-50 px-4 py-3 text-left text-base font-semibold text-slate-900 transition-colors md:px-6 md:py-4 md:text-lg">
                   {faq.pergunta}
                 </AccordionTrigger>
-                <AccordionContent className="bg-background flex w-full flex-col gap-4 px-6 pt-2 pb-6">
+                <AccordionContent className="bg-background flex w-full flex-col gap-4 px-4 pt-2 pb-4 md:px-6 md:pb-6">
                   <p className="leading-relaxed text-slate-700">
                     {faq.resposta}
                   </p>
@@ -163,22 +166,24 @@ export default function CardFaq() {
             ))}
           </Accordion>
         </div>
-        <div className="relative flex h-full w-1/2 flex-col items-center justify-center">
+        <div className="relative flex h-full w-full flex-col items-center justify-center md:w-1/2">
           <Image
             src={meninaSuporte}
             alt="Menina Suporte"
-            className="h-full w-full object-contain"
+            className="hidden h-3/4 w-full object-contain md:block md:h-full"
           />
-          <div className="flex w-full flex-col items-center justify-center gap-2 p-4">
-            <h3 className="text-lg font-semibold">Ainda está com dúvidas?</h3>
+          <div className="flex w-full flex-col items-center justify-center gap-2 p-3 md:p-4">
+            <h3 className="text-base font-semibold md:text-lg">
+              Ainda está com dúvidas?
+            </h3>
             <Link className="cursor-pointer" href="#">
               <Button
                 variant="outline"
                 size="lg"
-                className="!bg-background hover:border-accent group hover:bg-accent/10 hover:text-accent border-border rounded-sm px-8 py-4 font-semibold shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
+                className="!bg-background hover:border-accent group hover:bg-accent/10 hover:text-accent border-border w-full rounded-xs px-6 py-3 font-semibold shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md md:w-auto md:px-8 md:py-4"
               >
-                Entre em contato
-                <ArrowRight className="ml-2 h-6 w-6 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="text-sm md:text-base">Entre em contato</span>
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
               </Button>
             </Link>
           </div>

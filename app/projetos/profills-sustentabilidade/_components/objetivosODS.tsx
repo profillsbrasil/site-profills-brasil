@@ -50,12 +50,12 @@ export default function ObjetivosODS() {
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-ods">Objetivos do Desenvolvimento Sustentável</h2>
         </Highlighter>
         <div className="mx-auto mt-6 max-w-4xl">
-          <p className="mb-4 text-lg text-gray-600">
+          <p className="mb-4 text-sm text-gray-600 md:text-lg">
             A{" "}
             <span className="font-semibold text-gray-800">
               Organização das Nações Unidas
@@ -68,7 +68,7 @@ export default function ObjetivosODS() {
             o meio ambiente e garantir que todas as pessoas possam ter paz e
             prosperidade.
           </p>
-          <div className="flex items-center justify-center gap-3 rounded-md border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-100 p-4">
+          <div className="flex items-center justify-center gap-3 rounded-xs border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-100 p-4">
             <Target className="h-6 w-6 text-blue-600" />
             <p className="font-semibold text-blue-800">
               A Profills está engajada com os ODS e trabalha para contribuir com
@@ -80,13 +80,13 @@ export default function ObjetivosODS() {
 
       {/* ODS Grid - Simples e Limpo */}
       <div className="w-full">
-        <div className="grid grid-cols-6 justify-items-center gap-4">
+        <div className="grid grid-cols-3 justify-items-center gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4">
           {odsImages.map((ods, index) => (
             <div key={index + 1} className="flex items-center justify-center">
               <Image
                 src={ods}
                 alt={`ODS ${index + 1}`}
-                className="h-auto w-full rounded-md shadow-sm"
+                className="h-auto w-full rounded-xs shadow-sm"
               />
             </div>
           ))}
@@ -95,19 +95,19 @@ export default function ObjetivosODS() {
 
       {/* Estatísticas da Agenda 2030 */}
       <div className="w-full">
-        <div className="rounded-md border border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8">
+        <div className="rounded-xs border border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8">
           <div className="mb-8 text-center">
             <h3 className="mb-4 text-2xl font-bold text-gray-800">
               Agenda 2030 - Nosso Compromisso
             </h3>
-            <p className="mx-auto max-w-3xl text-lg text-gray-700">
+            <p className="mx-auto max-w-3xl text-sm text-gray-700 md:text-lg">
               Até 2030, trabalhamos para contribuir significativamente com os
               Objetivos do Desenvolvimento Sustentável através de nossas
               soluções inovadoras e impacto social.
             </p>
           </div>
 
-          <div className="grid grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-6">
             <div className="text-center">
               <div className="mb-3 text-3xl font-bold text-indigo-600">17</div>
               <div className="text-sm text-gray-600">Objetivos Globais</div>

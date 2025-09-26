@@ -6,28 +6,28 @@ export default function ProfillFabrica() {
   return (
     <section
       aria-labelledby="titulo-estrutura"
-      className="flex h-full max-w-7xl flex-row-reverse items-center justify-center gap-10 py-20"
+      className="flex h-full max-w-7xl flex-col items-center justify-center gap-6 py-12 md:flex-row-reverse md:gap-10 md:py-20"
     >
       <Image
         src={fabrica}
         alt="Fábrica da Profills: parque industrial com CNC, corte e dobra de precisão"
-        className="w-full rounded-sm lg:w-1/2"
-        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="h-48 w-full rounded-xs object-cover object-bottom md:h-auto md:w-1/2 md:object-contain"
+        sizes="(min-width: 768px) 50vw, 100vw"
         priority
       />
 
-      <div className="flex w-1/2 flex-col items-center gap-5">
+      <div className="flex w-full flex-col items-center gap-4 md:w-1/2 md:gap-5">
         <Highlighter
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-4xl font-bold"
+          textColor="text-2xl font-bold md:text-4xl"
         >
           <h2 id="titulo-estrutura">Conheça a Nossa Estrutura</h2>
         </Highlighter>
 
         <div className="flex flex-col gap-3 text-left leading-relaxed">
-          <p className="text-lg">
+          <p className="text-sm md:text-lg">
             Para garantir{" "}
             <span className="text-accent font-semibold">
               qualidade e inovação
@@ -41,7 +41,7 @@ export default function ProfillFabrica() {
             . Cerqueira César (SP).
           </p>
 
-          <p className="text-lg">
+          <p className="text-sm md:text-lg">
             Nosso{" "}
             <span className="text-accent font-semibold">
               parque industrial{" "}
@@ -55,7 +55,7 @@ export default function ProfillFabrica() {
             .
           </p>
 
-          <p className="text-lg">
+          <p className="text-sm md:text-lg">
             Produzimos internamente grande parte dos componentes e estruturas
             das máquinas, com controle de qualidade e{" "}
             <span className="text-accent font-semibold">
@@ -64,7 +64,7 @@ export default function ProfillFabrica() {
             .
           </p>
 
-          <ul className="list-disc pl-5 text-lg marker:text-[#2d62ef]">
+          <ul className="list-disc pl-5 text-sm marker:text-[#2d62ef] md:text-lg">
             <li>CNC de corte e dobra de alta precisão</li>
             <li>Usinagem e processos para aço inox e outros materiais</li>
             <li>Produção interna de componentes e estruturas</li>

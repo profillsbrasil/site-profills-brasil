@@ -13,11 +13,11 @@ export default function TecnologiaFavor() {
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-4xl font-bold"
+          textColor="text-2xl font-bold md:text-4xl"
         >
           <h2 id="titulo-tecnologia">Tecnologia a Nosso Favor</h2>
         </Highlighter>
-        <p className="mx-auto mt-4 max-w-4xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg">
           No campo da tecnologia, buscamos fazer a{" "}
           <span className="text-accent font-semibold">gestão dos recursos</span>{" "}
           a fim de criar as{" "}
@@ -32,7 +32,7 @@ export default function TecnologiaFavor() {
       <div className="relative w-full">
         {/* Connection Line */}
 
-        <div className="relative z-10 grid grid-cols-4 gap-8">
+        <div className="relative z-10 grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-8">
           <AnimatedContainer>
             <div className="group text-center">
               <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border-4 border-[#2d62ef] bg-white shadow-lg transition-all duration-300 group-hover:scale-110">
@@ -98,11 +98,11 @@ export default function TecnologiaFavor() {
       </div>
 
       {/* Resource Showcase */}
-      <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
         <AnimatedContainer>
-          <div className="rounded-md border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-8 shadow-lg backdrop-blur-xs transition-all duration-300 hover:shadow-xl">
+          <div className="rounded-xs border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-8 shadow-lg backdrop-blur-xs transition-all duration-300 hover:shadow-xl">
             <div className="mb-6 flex items-center gap-4">
-              <div className="rounded-md bg-[#2d62ef]/10 p-3">
+              <div className="rounded-xs bg-[#2d62ef]/10 p-3">
                 <Cpu className="h-8 w-8 text-[#2d62ef]" />
               </div>
               <h3 className="text-xl font-bold text-gray-800">Equipamentos</h3>
@@ -132,9 +132,9 @@ export default function TecnologiaFavor() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="rounded-md border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/5 to-blue-50 p-8 shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/5 to-blue-50 p-8 shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="mb-6 flex items-center gap-4">
-              <div className="rounded-md bg-[#2d62ef]/10 p-3">
+              <div className="rounded-xs bg-[#2d62ef]/10 p-3">
                 <Zap className="h-8 w-8 text-[#2d62ef]" />
               </div>
               <h3 className="text-xl font-bold text-gray-800">Softwares</h3>
@@ -163,9 +163,9 @@ export default function TecnologiaFavor() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="rounded-md border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-8 shadow-lg backdrop-blur-xs transition-all duration-300 hover:shadow-xl">
+          <div className="rounded-xs border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-8 shadow-lg backdrop-blur-xs transition-all duration-300 hover:shadow-xl">
             <div className="mb-6 flex items-center gap-4">
-              <div className="rounded-md bg-[#2d62ef]/10 p-3">
+              <div className="rounded-xs bg-[#2d62ef]/10 p-3">
                 <GraduationCap className="h-8 w-8 text-[#2d62ef]" />
               </div>
               <h3 className="text-xl font-bold text-gray-800">Equipe</h3>
@@ -196,7 +196,7 @@ export default function TecnologiaFavor() {
 
       {/* Final Statement */}
       <AnimatedContainer>
-        <div className="max-w-6xl rounded-md bg-slate-900 p-8 text-center text-white shadow-lg">
+        <div className="max-w-6xl rounded-xs bg-slate-900 p-8 text-center text-white shadow-lg">
           <h3 className="mb-4 text-2xl font-bold">Melhoria Contínua</h3>
           <p className="text-lg leading-relaxed">
             Visando o{" "}

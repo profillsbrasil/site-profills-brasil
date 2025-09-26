@@ -76,7 +76,7 @@ export default function MetodologiasEnsino() {
             return (
               <div
                 key={index}
-                className="group rounded-md border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div
                   className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full ${metodologia.color} transition-all duration-300 group-hover:scale-110`}

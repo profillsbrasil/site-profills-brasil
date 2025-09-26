@@ -13,18 +13,18 @@ export default function SolucaoERP() {
   return (
     <section
       aria-labelledby="titulo-solucao"
-      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-12 py-10"
+      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 py-8 md:gap-12 md:py-10"
     >
       <div className="text-center">
         <Highlighter
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-solucao">Solução ERP Completa</h2>
         </Highlighter>
-        <p className="mx-auto mt-4 max-w-4xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg">
           A solução inclui{" "}
           <span className="text-accent font-semibold">
             relatórios fáceis de compreender e gerar
@@ -39,7 +39,7 @@ export default function SolucaoERP() {
 
       {/* Dashboard Mockup */}
       <AnimatedContainer className="w-full">
-        <div className="rounded-md border border-gray-700 bg-gradient-to-br from-gray-900 to-gray-800 p-8 shadow-2xl">
+        <div className="rounded-xs border border-gray-700 bg-gradient-to-br from-gray-900 to-gray-800 p-8 shadow-2xl">
           <div className="mb-6 flex items-center gap-4">
             <div className="flex gap-2">
               <div className="h-3 w-3 rounded-full bg-red-500"></div>
@@ -51,10 +51,10 @@ export default function SolucaoERP() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
             {/* Left Column */}
             <div className="space-y-4">
-              <div className="rounded-md border border-gray-700 bg-gray-800 p-4">
+              <div className="rounded-xs border border-gray-700 bg-gray-800 p-4">
                 <div className="mb-3 flex items-center gap-3">
                   <FileText className="h-5 w-5 text-blue-400" />
                   <span className="text-sm font-medium text-white">
@@ -68,7 +68,7 @@ export default function SolucaoERP() {
                 </div>
               </div>
 
-              <div className="rounded-md border border-gray-700 bg-gray-800 p-4">
+              <div className="rounded-xs border border-gray-700 bg-gray-800 p-4">
                 <div className="mb-3 flex items-center gap-3">
                   <Database className="h-5 w-5 text-green-400" />
                   <span className="text-sm font-medium text-white">
@@ -85,7 +85,7 @@ export default function SolucaoERP() {
 
             {/* Center Column */}
             <div className="space-y-4">
-              <div className="rounded-md border border-gray-700 bg-gray-800 p-4">
+              <div className="rounded-xs border border-gray-700 bg-gray-800 p-4">
                 <div className="mb-3 flex items-center gap-3">
                   <TrendingUp className="h-5 w-5 text-purple-400" />
                   <span className="text-sm font-medium text-white">
@@ -101,7 +101,7 @@ export default function SolucaoERP() {
                 </div>
               </div>
 
-              <div className="rounded-md border border-gray-700 bg-gray-800 p-4">
+              <div className="rounded-xs border border-gray-700 bg-gray-800 p-4">
                 <div className="mb-3 flex items-center gap-3">
                   <Workflow className="h-5 w-5 text-orange-400" />
                   <span className="text-sm font-medium text-white">
@@ -124,7 +124,7 @@ export default function SolucaoERP() {
 
             {/* Right Column */}
             <div className="space-y-4">
-              <div className="rounded-md border border-gray-700 bg-gray-800 p-4">
+              <div className="rounded-xs border border-gray-700 bg-gray-800 p-4">
                 <div className="mb-3 flex items-center gap-3">
                   <Zap className="h-5 w-5 text-yellow-400" />
                   <span className="text-sm font-medium text-white">
@@ -149,7 +149,7 @@ export default function SolucaoERP() {
                 </div>
               </div>
 
-              <div className="rounded-md border border-gray-700 bg-gray-800 p-4">
+              <div className="rounded-xs border border-gray-700 bg-gray-800 p-4">
                 <div className="mb-3 flex items-center gap-3">
                   <Shield className="h-5 w-5 text-indigo-400" />
                   <span className="text-sm font-medium text-white">
@@ -171,10 +171,10 @@ export default function SolucaoERP() {
       </AnimatedContainer>
 
       {/* Core Benefits */}
-      <div className="grid w-full grid-cols-2 gap-8">
+      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-gray-100 bg-white p-6 shadow-lg backdrop-blur-xs">
-            <h3 className="mb-4 text-xl font-bold text-gray-800">
+          <div className="h-full rounded-xs border border-gray-100 bg-white p-6 shadow-lg backdrop-blur-xs">
+            <h3 className="mb-4 text-lg font-bold text-gray-800 md:text-xl">
               Melhor Fluxo de Informações
             </h3>
             <p className="mb-4 leading-relaxed text-gray-700">
@@ -210,8 +210,8 @@ export default function SolucaoERP() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-6">
-            <h3 className="mb-4 text-xl font-bold text-gray-800">
+          <div className="h-full rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-6">
+            <h3 className="mb-4 text-lg font-bold text-gray-800 md:text-xl">
               Gestão de Custos Inteligente
             </h3>
             <p className="mb-4 leading-relaxed text-gray-700">

@@ -6,9 +6,9 @@ import ProfillHistoria from "./_components/profillHistoria";
 import ProfillFabrica from "./_components/profillfabrica";
 export default function Sobre() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center py-10">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-8 md:py-10">
       <GridPattern />
-      <div className="flex h-screen w-full flex-col items-center justify-center">
+      <div className="flex min-h-screen w-full flex-col items-center justify-center md:h-screen">
         <MarqueeClientes />
         <CardsPerfil />
       </div>

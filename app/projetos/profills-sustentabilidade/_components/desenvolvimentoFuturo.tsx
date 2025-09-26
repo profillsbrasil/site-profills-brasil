@@ -13,11 +13,11 @@ export default function DesenvolvimentoFuturo() {
           action="underline"
           color="#8b5cf6"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-desenvolvimento">Desenvolvimento e Futuro</h2>
         </Highlighter>
-        <p className="mx-auto mt-4 max-w-4xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg">
           Para enfrentarmos os{" "}
           <span className="font-semibold text-purple-600">
             desafios ambientais, sociais e econômicos
@@ -29,8 +29,8 @@ export default function DesenvolvimentoFuturo() {
 
       {/* Pilares do Desenvolviment */}
       <AnimatedContainer className="w-full">
-        <div className="grid grid-cols-4 gap-6">
-          <div className="rounded-md border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-100 p-6 text-center">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+          <div className="rounded-xs border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-100 p-6 text-center">
             <div className="mb-4 flex justify-center">
               <div className="rounded-full bg-blue-500 p-3">
                 <Building2 className="h-8 w-8 text-white" />
@@ -42,7 +42,7 @@ export default function DesenvolvimentoFuturo() {
             <p className="text-sm text-gray-600">Através da educação</p>
           </div>
 
-          <div className="rounded-md border border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 p-6 text-center">
+          <div className="rounded-xs border border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 p-6 text-center">
             <div className="mb-4 flex justify-center">
               <div className="rounded-full bg-green-500 p-3">
                 <HandHeart className="h-8 w-8 text-white" />
@@ -54,7 +54,7 @@ export default function DesenvolvimentoFuturo() {
             <p className="text-sm text-gray-600">Proteção do alimento</p>
           </div>
 
-          <div className="rounded-md border border-purple-200 bg-gradient-to-br from-purple-50 to-violet-100 p-6 text-center">
+          <div className="rounded-xs border border-purple-200 bg-gradient-to-br from-purple-50 to-violet-100 p-6 text-center">
             <div className="mb-4 flex justify-center">
               <div className="rounded-full bg-purple-500 p-3">
                 <TrendingUp className="h-8 w-8 text-white" />
@@ -64,7 +64,7 @@ export default function DesenvolvimentoFuturo() {
             <p className="text-sm text-gray-600">Empregos e treinamentos</p>
           </div>
 
-          <div className="rounded-md border border-orange-200 bg-gradient-to-br from-orange-50 to-amber-100 p-6 text-center">
+          <div className="rounded-xs border border-orange-200 bg-gradient-to-br from-orange-50 to-amber-100 p-6 text-center">
             <div className="mb-4 flex justify-center">
               <div className="rounded-full bg-orange-500 p-3">
                 <Globe className="h-8 w-8 text-white" />
@@ -78,10 +78,10 @@ export default function DesenvolvimentoFuturo() {
         </div>
       </AnimatedContainer>
 
-      <div className="grid w-full grid-cols-2 gap-12">
+      <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
         {/* Grandes Corporações e Pequenos Produtores */}
         <AnimatedContainer>
-          <div className="rounded-md border border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-100 p-8">
+          <div className="rounded-xs border border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-100 p-8">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-indigo-500 p-3">
                 <Building2 className="h-8 w-8 text-white" />
@@ -104,7 +104,7 @@ export default function DesenvolvimentoFuturo() {
             </p>
 
             <div className="space-y-4">
-              <div className="rounded-md border border-indigo-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-indigo-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Agregação de Valor
                 </h4>
@@ -112,7 +112,7 @@ export default function DesenvolvimentoFuturo() {
                   Aumentamos o valor dos produtos através da tecnologia
                 </p>
               </div>
-              <div className="rounded-md border border-indigo-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-indigo-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Shelf Life Extendido
                 </h4>
@@ -120,7 +120,7 @@ export default function DesenvolvimentoFuturo() {
                   Embalagens que preservam por mais tempo
                 </p>
               </div>
-              <div className="rounded-md border border-indigo-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-indigo-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Conexão de Mercados
                 </h4>
@@ -134,7 +134,7 @@ export default function DesenvolvimentoFuturo() {
 
         {/* Expansão Internacional Sustentável */}
         <AnimatedContainer>
-          <div className="rounded-md border border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-100 p-8">
+          <div className="rounded-xs border border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-100 p-8">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-emerald-500 p-3">
                 <Globe className="h-8 w-8 text-white" />
@@ -154,7 +154,7 @@ export default function DesenvolvimentoFuturo() {
             </p>
 
             <div className="space-y-4">
-              <div className="rounded-md border border-emerald-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-emerald-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Melhorar Distribuição
                 </h4>
@@ -162,7 +162,7 @@ export default function DesenvolvimentoFuturo() {
                   Sistemas eficientes de distribuição de alimentos
                 </p>
               </div>
-              <div className="rounded-md border border-emerald-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-emerald-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Apoiar Produtores Locais
                 </h4>
@@ -170,7 +170,7 @@ export default function DesenvolvimentoFuturo() {
                   Fortalecimento da economia local
                 </p>
               </div>
-              <div className="rounded-md border border-emerald-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-emerald-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Gerar Empregos de Qualidade
                 </h4>

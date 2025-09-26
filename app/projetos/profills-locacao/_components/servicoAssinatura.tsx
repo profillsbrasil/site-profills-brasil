@@ -5,14 +5,14 @@ export default function ServicoAssinatura() {
   return (
     <section className="w-full max-w-6xl py-10">
       <AnimatedContainer>
-        <div className="grid w-full gap-8 lg:grid-cols-2">
+        <div className="grid w-full gap-8 md:grid-cols-2">
           {/* Left Content */}
           <div className="flex flex-col justify-center space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
               Sua Empresa Dispondo de um{" "}
               <span className="text-[#2d62ef]">Serviço por Assinatura</span>
             </h2>
-            <p className="text-lg leading-relaxed text-gray-700">
+            <p className="text-sm leading-relaxed text-gray-700 md:text-lg">
               Trata-se de{" "}
               <span className="font-semibold text-[#2d62ef]">
                 sucesso garantido
@@ -32,9 +32,9 @@ export default function ServicoAssinatura() {
 
           {/* Right Content - Benefits Grid */}
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="group rounded-md border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+            <div className="group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
               <Factory className="mb-4 h-12 w-12 text-[#2d62ef] transition-all duration-300 group-hover:scale-110" />
-              <h3 className="mb-2 text-xl font-semibold text-gray-900">
+              <h3 className="mb-2 text-lg font-semibold text-gray-900 md:text-xl">
                 Máquinas Confiáveis
               </h3>
               <p className="text-gray-600">
@@ -42,9 +42,9 @@ export default function ServicoAssinatura() {
               </p>
             </div>
 
-            <div className="group rounded-md border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+            <div className="group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
               <Users className="mb-4 h-12 w-12 text-[#2d62ef] transition-all duration-300 group-hover:scale-110" />
-              <h3 className="mb-2 text-xl font-semibold text-gray-900">
+              <h3 className="mb-2 text-lg font-semibold text-gray-900 md:text-xl">
                 Soluções Profills Hub
               </h3>
               <p className="text-gray-600">
@@ -52,9 +52,9 @@ export default function ServicoAssinatura() {
               </p>
             </div>
 
-            <div className="group rounded-md border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+            <div className="group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
               <BookOpen className="mb-4 h-12 w-12 text-[#2d62ef] transition-all duration-300 group-hover:scale-110" />
-              <h3 className="mb-2 text-xl font-semibold text-gray-900">
+              <h3 className="mb-2 text-lg font-semibold text-gray-900 md:text-xl">
                 Capacitação Incluída
               </h3>
               <p className="text-gray-600">
@@ -62,9 +62,9 @@ export default function ServicoAssinatura() {
               </p>
             </div>
 
-            <div className="group rounded-md border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+            <div className="group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
               <Shield className="mb-4 h-12 w-12 text-[#2d62ef] transition-all duration-300 group-hover:scale-110" />
-              <h3 className="mb-2 text-xl font-semibold text-gray-900">
+              <h3 className="mb-2 text-lg font-semibold text-gray-900 md:text-xl">
                 Redução de Riscos
               </h3>
               <p className="text-gray-600">

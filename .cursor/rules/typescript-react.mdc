@@ -1,5 +1,5 @@
 ---
-globs: *.ts,*.tsx
+alwaysApply: false
 ---
 
 # Padrões TypeScript e React

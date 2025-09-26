@@ -21,11 +21,11 @@ export default function SolucoesIntegradas() {
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-solucoes">Soluções Integradas</h2>
         </Highlighter>
-        <p className="mx-auto mt-4 max-w-4xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg">
           Nossa equipe de engenharia está preparada para{" "}
           <span className="text-accent font-semibold">projetar fábricas</span>,
           fornecendo{" "}
@@ -37,13 +37,13 @@ export default function SolucoesIntegradas() {
       </div>
 
       {/* Three Pillars */}
-      <div className="flex w-full gap-8">
+      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-gray-100 bg-white p-8 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+          <div className="h-full rounded-xs border border-gray-100 bg-white p-8 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
             <div className="mx-auto mb-6 w-fit rounded-full bg-blue-100 p-4">
               <Factory className="h-12 w-12 text-blue-600" />
             </div>
-            <h3 className="mb-4 text-xl font-bold text-gray-800">
+            <h3 className="mb-4 text-lg font-bold text-gray-800 md:text-xl">
               Engenharia de Fábricas
             </h3>
             <p className="mb-6 leading-relaxed text-gray-700">
@@ -81,11 +81,11 @@ export default function SolucoesIntegradas() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+          <div className="h-full rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
             <div className="mx-auto mb-6 w-fit rounded-full bg-[#2d62ef]/20 p-4">
               <Brain className="h-12 w-12 text-[#2d62ef]" />
             </div>
-            <h3 className="mb-4 text-xl font-bold text-gray-800">
+            <h3 className="mb-4 text-lg font-bold text-gray-800 md:text-xl">
               Know-how Especializado
             </h3>
             <p className="mb-6 leading-relaxed text-gray-700">
@@ -99,7 +99,7 @@ export default function SolucoesIntegradas() {
               </span>{" "}
               para fazer tudo funcionar.
             </p>
-            <div className="rounded-md bg-white/80 p-4 text-left">
+            <div className="rounded-xs bg-white/80 p-4 text-left">
               <h4 className="mb-2 text-center font-semibold text-gray-800">
                 Áreas de Especialização
               </h4>
@@ -114,11 +114,11 @@ export default function SolucoesIntegradas() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-gray-100 bg-white p-8 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
+          <div className="h-full rounded-xs border border-gray-100 bg-white p-8 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl">
             <div className="mx-auto mb-6 w-fit rounded-full bg-green-100 p-4">
               <BarChart3 className="h-12 w-12 text-green-600" />
             </div>
-            <h3 className="mb-4 text-xl font-bold text-gray-800">
+            <h3 className="mb-4 text-lg font-bold text-gray-800 md:text-xl">
               Inteligência de Mercado
             </h3>
             <p className="mb-6 leading-relaxed text-gray-700">
@@ -133,7 +133,7 @@ export default function SolucoesIntegradas() {
               em toda a nossa rede.
             </p>
             <div className="flex flex-col gap-3 text-left">
-              <div className="rounded-md bg-gray-50 p-3">
+              <div className="rounded-xs bg-gray-50 p-3">
                 <h5 className="mb-1 text-xs font-semibold text-gray-800">
                   Análise de Mercado
                 </h5>
@@ -141,7 +141,7 @@ export default function SolucoesIntegradas() {
                   Tendências e oportunidades
                 </p>
               </div>
-              <div className="rounded-md bg-gray-50 p-3">
+              <div className="rounded-xs bg-gray-50 p-3">
                 <h5 className="mb-1 text-xs font-semibold text-gray-800">
                   Decisões Estratégicas
                 </h5>
@@ -154,7 +154,7 @@ export default function SolucoesIntegradas() {
 
       {/* Connected Solutions */}
       <AnimatedContainer className="w-full">
-        <div className="relative overflow-hidden rounded-md bg-slate-900 p-10 text-white">
+        <div className="relative overflow-hidden rounded-xs bg-slate-900 p-10 text-white">
           <GridPattern />
           <div className="relative text-center">
             <h3 className="mb-4 text-3xl font-bold">Soluções Interligadas</h3>

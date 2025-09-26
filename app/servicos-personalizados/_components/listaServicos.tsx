@@ -39,38 +39,40 @@ const listaServicos = [
 
 export default function ListaServicos() {
   return (
-    <div className="flex w-full max-w-6xl flex-col items-center justify-center gap-5 py-10">
+    <div className="flex w-full max-w-6xl flex-col items-center justify-center gap-4 py-8 md:gap-5 md:py-10">
       <div className="flex w-full flex-col items-start justify-start">
         <Highlighter
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-3xl font-bold mb-2"
+          textColor="text-2xl font-bold mb-3 md:text-3xl md:mb-2"
         >
           O que podemos fazer?
         </Highlighter>
-        <p className="text-muted-foreground text-base">
+        <p className="text-muted-foreground text-sm md:text-base">
           Conheça alguns dos nossos serviços personalizados
         </p>
       </div>
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
         {listaServicos.map((servico) => (
           <div
             id={servico.id}
             key={servico.id}
-            className="bg-muted group z-10 flex cursor-pointer flex-col items-center justify-center gap-5 rounded-sm border border-black/10 p-5 shadow-xl shadow-black/10 transition-all duration-300 hover:bg-slate-50 hover:shadow-2xl"
+            className="bg-muted group z-10 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xs border border-black/10 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:bg-slate-50 hover:shadow-2xl md:gap-5 md:p-5"
           >
-            <div className="relative flex h-full w-full">
+            <div className="relative flex h-48 w-full md:h-full">
               <GridPattern />
               <Image
                 src={servico.image}
                 alt={servico.title}
-                className="z-10 h-full w-full rounded-sm object-cover transition-all duration-300"
+                className="z-10 h-full w-full rounded-xs object-fill transition-all duration-300 md:object-cover"
               />
             </div>
             <div className="flex flex-col items-start justify-start">
-              <h3 className="mb-2 text-2xl font-bold">{servico.title}</h3>
-              <p className="text-muted-foreground text-base">
+              <h3 className="mb-2 text-xl font-bold md:text-2xl">
+                {servico.title}
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed md:text-base">
                 {servico.description}
               </p>
             </div>

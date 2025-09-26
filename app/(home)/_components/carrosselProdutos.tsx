@@ -67,7 +67,7 @@ const produtos = [
 
 export default function carrosselProdutos() {
   return (
-    <div className="z-10 flex h-1/2 w-full max-w-6xl flex-col justify-center gap-5 py-5">
+    <div className="z-10 hidden h-1/2 w-full max-w-6xl flex-col justify-center gap-5 py-5 md:flex">
       <div className="flex flex-col gap-2">
         <Highlighter
           action="underline"
@@ -89,7 +89,7 @@ export default function carrosselProdutos() {
                 <Image
                   src={produto.imageProduct}
                   alt={produto.name}
-                  className="h-full w-full rounded-sm object-contain"
+                  className="h-full w-full rounded-xs object-contain"
                 />
               </CarouselItem>
             ))}

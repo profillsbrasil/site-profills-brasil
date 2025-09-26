@@ -1,6 +1,6 @@
 "use client";
 
-import { useOptimized3DModel } from "@/hooks/useOptimized3DModel";
+import { useOptimized3DModel } from "@/components/modelo3d/hooks/useOptimized3DModel";
 
 interface OptimizedEmbalagem3dProps {
   modelSrc?: string;
@@ -93,7 +93,7 @@ export function OptimizedEmbalagem3d({
                   <span className="text-sm">Carregando modelo 3D...</span>
                 </>
               ) : (
-                <div className="flex h-32 w-32 items-center justify-center rounded-sm bg-gradient-to-br from-slate-700 to-slate-800">
+                <div className="flex h-32 w-32 items-center justify-center rounded-xs bg-gradient-to-br from-slate-700 to-slate-800">
                   <span className="text-xs text-slate-400">Modelo 3D</span>
                 </div>
               )}

@@ -229,13 +229,13 @@ const listaClientes = [
 
 // Componente do card do cliente
 const ClienteCard = ({ cliente }: { cliente: (typeof listaClientes)[0] }) => (
-  <div className="group flex h-30 w-40 items-center justify-center py-1 transition-all duration-300 hover:scale-105">
+  <div className="group flex h-20 w-32 items-center justify-center py-1 transition-all duration-300 hover:scale-105 md:h-30 md:w-40">
     <Image
       src={cliente.image}
       alt={cliente.name}
-      width={150}
-      height={70}
-      className="relative z-10 h-full w-auto object-contain"
+      width={120}
+      height={60}
+      className="relative z-10 h-full w-auto object-contain md:w-auto"
     />
   </div>
 );
@@ -245,54 +245,31 @@ export default function MarqueeClientes() {
   const grupo2 = listaClientes.slice(17, 33);
 
   return (
-    <section className="relative flex h-1/3 w-full flex-col items-center justify-start overflow-hidden py-5">
+    <section className="relative flex h-auto w-full flex-col items-center justify-start overflow-hidden py-6 md:h-1/3">
       {/* Primeiro carrossel - direção normal */}
-      <div className="relative overflow-hidden">
-        <Marquee pauseOnHover className="[--duration:50s]">
+      <div className="relative w-full overflow-hidden">
+        <Marquee pauseOnHover className="[--duration:60s] md:[--duration:50s]">
           {grupo1.map((cliente) => (
             <ClienteCard key={cliente.id} cliente={cliente} />
           ))}
         </Marquee>
-        <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r to-transparent"></div>
-        <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l to-transparent"></div>
+        <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r to-transparent md:w-20"></div>
+        <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l to-transparent md:w-20"></div>
       </div>
 
       {/* Segundo carrossel - direção reversa */}
-      <div className="relative overflow-hidden">
-        <Marquee reverse pauseOnHover className="[--duration:50s]">
+      <div className="relative w-full overflow-hidden">
+        <Marquee
+          reverse
+          pauseOnHover
+          className="[--duration:60s] md:[--duration:50s]"
+        >
           {grupo2.map((cliente) => (
             <ClienteCard key={cliente.id} cliente={cliente} />
           ))}
         </Marquee>
-        <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r to-transparent"></div>
-        <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l to-transparent"></div>
-      </div>
-
-      {/* Grid estático para telas menores */}
-      <div className="block px-4 md:hidden">
-        <div className="mx-auto mt-12 grid max-w-sm grid-cols-2 gap-4">
-          {listaClientes.slice(0, 16).map((cliente) => (
-            <div
-              key={cliente.id}
-              className="flex h-20 items-center justify-center rounded-sm border border-slate-200 bg-white/80 p-3 shadow-md shadow-slate-900/5 backdrop-blur-sm transition-all duration-300 hover:border-blue-300 hover:shadow-lg"
-            >
-              <Image
-                src={cliente.image}
-                alt={cliente.name}
-                width={100}
-                height={50}
-                className="max-h-12 w-auto object-contain"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Indicador de mais clientes no mobile */}
-        <div className="mt-6 text-center">
-          <span className="inline-flex items-center justify-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
-            + {listaClientes.length - 16} outros clientes
-          </span>
-        </div>
+        <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r to-transparent md:w-20"></div>
+        <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l to-transparent md:w-20"></div>
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { ContactFormData } from "@/lib/schemas/contact-form";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 
 interface FormStep2Props {
@@ -13,6 +14,17 @@ interface FormStep2Props {
 }
 
 export function FormStep2({ control, errors }: FormStep2Props) {
+  const numberInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus no campo número quando o componente é montado
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      numberInputRef.current?.focus();
+    }, 300); // Pequeno delay para garantir que a animação termine
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -27,7 +39,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="w-full space-y-4 md:min-w-[450px]">
         {/* Rua */}
         <div className="space-y-2">
           <Label htmlFor="street">Rua/Logradouro</Label>
@@ -56,6 +68,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
               render={({ field }) => (
                 <Input
                   {...field}
+                  ref={numberInputRef}
                   id="number"
                   type="number"
                   placeholder="123"

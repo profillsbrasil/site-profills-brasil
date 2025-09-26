@@ -13,11 +13,11 @@ export default function Alimentacao() {
           action="underline"
           color="#f59e0b"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-alimentacao">Alimentação Consciente</h2>
         </Highlighter>
-        <p className="mx-auto mt-4 max-w-4xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg">
           Nosso comprometimento com o mundo é{" "}
           <span className="font-semibold text-orange-500">
             entregar alimentação segura, nutritiva e suficiente
@@ -26,10 +26,10 @@ export default function Alimentacao() {
         </p>
       </div>
 
-      <div className="grid w-full grid-cols-2 gap-12">
+      <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
         {/* Problema */}
         <AnimatedContainer>
-          <div className="rounded-md border border-red-200 bg-gradient-to-br from-red-50 to-pink-100 p-8">
+          <div className="rounded-xs border border-red-200 bg-gradient-to-br from-red-50 to-pink-100 p-8">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-red-500 p-3">
                 <Shield className="h-8 w-8 text-white" />
@@ -53,7 +53,7 @@ export default function Alimentacao() {
             </p>
 
             <div className="space-y-4">
-              <div className="rounded-md border border-red-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-red-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Manejo Inadequado
                 </h4>
@@ -61,7 +61,7 @@ export default function Alimentacao() {
                   Perdas ao longo da cadeia produtiva
                 </p>
               </div>
-              <div className="rounded-md border border-red-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-red-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">
                   Porções Incorretas
                 </h4>
@@ -75,7 +75,7 @@ export default function Alimentacao() {
 
         {/* Solução */}
         <AnimatedContainer>
-          <div className="rounded-md border border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-100 p-8">
+          <div className="rounded-xs border border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-100 p-8">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-orange-500 p-3">
                 <Package className="h-8 w-8 text-white" />
@@ -99,13 +99,13 @@ export default function Alimentacao() {
             </p>
 
             <div className="space-y-4">
-              <div className="rounded-md border border-orange-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-orange-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">Porção Correta</h4>
                 <p className="text-sm text-gray-600">
                   Nutrientes e valor energético balanceados
                 </p>
               </div>
-              <div className="rounded-md border border-orange-100 bg-white/80 p-4 backdrop-blur-sm">
+              <div className="rounded-xs border border-orange-100 bg-white/80 p-4 backdrop-blur-sm">
                 <h4 className="font-semibold text-gray-800">Valor Acessível</h4>
                 <p className="text-sm text-gray-600">
                   Alimentação de qualidade para todos
@@ -118,7 +118,7 @@ export default function Alimentacao() {
 
       {/* Impacto */}
       <AnimatedContainer className="w-full">
-        <div className="rounded-md border border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 p-8">
+        <div className="rounded-xs border border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 p-8">
           <div className="mb-8 text-center">
             <h3 className="mb-4 text-2xl font-bold text-gray-800">
               Nosso Impacto na Alimentação
@@ -134,7 +134,7 @@ export default function Alimentacao() {
             </p>
           </div>
 
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
             <div className="flex flex-col items-center text-center">
               <div className="mb-4 rounded-full bg-green-500 p-4">
                 <Target className="h-8 w-8 text-white" />

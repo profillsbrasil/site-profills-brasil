@@ -13,18 +13,18 @@ export default function CadeiaSuprimentos() {
   return (
     <section
       aria-labelledby="titulo-cadeia"
-      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-12 py-10"
+      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 py-8 md:gap-12 md:py-10"
     >
       <div className="text-center">
         <Highlighter
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-cadeia"> Conectando Mercados Globalmente</h2>
         </Highlighter>
-        <p className="mx-auto mt-4 max-w-4xl text-lg text-gray-600">
+        <p className="mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg">
           Desde nossa fundação, trabalhamos na{" "}
           <span className="text-accent font-semibold">
             cadeia de suprimentos brasileira
@@ -92,7 +92,7 @@ export default function CadeiaSuprimentos() {
       {/* Value Proposition */}
       <div className="grid w-full grid-cols-2 gap-8">
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-gray-100 bg-white p-8 shadow-lg backdrop-blur-sm">
+          <div className="h-full rounded-xs border border-gray-100 bg-white p-8 shadow-lg backdrop-blur-sm">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-[#2d62ef]/10 p-3 backdrop-blur-sm">
                 <Droplets className="h-8 w-8 text-[#2d62ef]" />
@@ -124,7 +124,7 @@ export default function CadeiaSuprimentos() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="h-full rounded-md border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8 backdrop-blur-sm">
+          <div className="h-full rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8 backdrop-blur-sm">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-[#2d62ef]/20 p-3 backdrop-blur-sm">
                 <Network className="h-8 w-8 text-[#2d62ef]" />
@@ -157,7 +157,7 @@ export default function CadeiaSuprimentos() {
 
       {/* Product Promise */}
       <AnimatedContainer className="w-full">
-        <div className="rounded-md bg-slate-900 p-8 text-center text-white shadow-xl">
+        <div className="rounded-xs bg-slate-900 p-8 text-center text-white shadow-xl">
           <h3 className="mb-4 text-2xl font-bold">Nossa Promessa Global</h3>
           <p className="mx-auto max-w-4xl text-lg leading-relaxed">
             Entregamos{" "}

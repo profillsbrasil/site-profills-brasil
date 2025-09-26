@@ -13,18 +13,18 @@ export default function BeneficiosGestao() {
   return (
     <section
       aria-labelledby="titulo-beneficios"
-      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-5 py-10"
+      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-4 py-8 md:gap-5 md:py-10"
     >
       <div className="text-center">
         <Highlighter
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-beneficios">Boas Práticas Incorporadas</h2>
         </Highlighter>
-        <p className="mx-auto mt-2 max-w-4xl text-lg text-gray-600">
+        <p className="mx-auto mt-2 max-w-4xl text-sm text-gray-600 md:text-lg">
           <span className="text-accent font-semibold">
             Boas práticas de negócios
           </span>{" "}
@@ -37,12 +37,12 @@ export default function BeneficiosGestao() {
       </div>
 
       {/* Benefits Grid */}
-      <div className="grid w-full grid-cols-2 gap-6 lg:grid-cols-3">
+      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
         <AnimatedContainer>
-          <div className="group relative overflow-hidden rounded-md border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="group relative overflow-hidden rounded-xs border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-gradient-to-br from-blue-100 to-blue-200 opacity-50"></div>
             <div className="relative">
-              <div className="mb-4 w-fit rounded-md bg-blue-100 p-3 transition-transform duration-300 group-hover:scale-110">
+              <div className="mb-4 w-fit rounded-xs bg-blue-100 p-3 transition-transform duration-300 group-hover:scale-110">
                 <Clock className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="mb-2 text-lg font-bold text-gray-800">
@@ -59,10 +59,10 @@ export default function BeneficiosGestao() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="group relative overflow-hidden rounded-md border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="group relative overflow-hidden rounded-xs border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-gradient-to-br from-green-100 to-green-200 opacity-50"></div>
             <div className="relative">
-              <div className="mb-4 w-fit rounded-md bg-green-100 p-3 transition-transform duration-300 group-hover:scale-110">
+              <div className="mb-4 w-fit rounded-xs bg-green-100 p-3 transition-transform duration-300 group-hover:scale-110">
                 <Shield className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="mb-2 text-lg font-bold text-gray-800">
@@ -81,10 +81,10 @@ export default function BeneficiosGestao() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="group relative overflow-hidden rounded-md border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="group relative overflow-hidden rounded-xs border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-gradient-to-br from-purple-100 to-purple-200 opacity-50"></div>
             <div className="relative">
-              <div className="mb-4 w-fit rounded-md bg-purple-100 p-3 transition-transform duration-300 group-hover:scale-110">
+              <div className="mb-4 w-fit rounded-xs bg-purple-100 p-3 transition-transform duration-300 group-hover:scale-110">
                 <Workflow className="h-8 w-8 text-purple-600" />
               </div>
               <h3 className="mb-2 text-lg font-bold text-gray-800">
@@ -101,10 +101,10 @@ export default function BeneficiosGestao() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="group relative overflow-hidden rounded-md border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="group relative overflow-hidden rounded-xs border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-gradient-to-br from-orange-100 to-orange-200 opacity-50"></div>
             <div className="relative">
-              <div className="mb-4 w-fit rounded-md bg-orange-100 p-3 transition-transform duration-300 group-hover:scale-110">
+              <div className="mb-4 w-fit rounded-xs bg-orange-100 p-3 transition-transform duration-300 group-hover:scale-110">
                 <UserCheck className="h-8 w-8 text-orange-600" />
               </div>
               <h3 className="mb-2 text-lg font-bold text-gray-800">
@@ -121,10 +121,10 @@ export default function BeneficiosGestao() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="group relative overflow-hidden rounded-md border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="group relative overflow-hidden rounded-xs border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-gradient-to-br from-red-100 to-red-200 opacity-50"></div>
             <div className="relative">
-              <div className="mb-4 w-fit rounded-md bg-red-100 p-3 transition-transform duration-300 group-hover:scale-110">
+              <div className="mb-4 w-fit rounded-xs bg-red-100 p-3 transition-transform duration-300 group-hover:scale-110">
                 <CheckCircle className="h-8 w-8 text-red-600" />
               </div>
               <h3 className="mb-2 text-lg font-bold text-gray-800">
@@ -139,10 +139,10 @@ export default function BeneficiosGestao() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="group relative overflow-hidden rounded-md border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+          <div className="group relative overflow-hidden rounded-xs border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
             <div className="absolute top-0 right-0 h-20 w-20 rounded-bl-full bg-gradient-to-br from-indigo-100 to-indigo-200 opacity-50"></div>
             <div className="relative">
-              <div className="mb-4 w-fit rounded-md bg-indigo-100 p-3 transition-transform duration-300 group-hover:scale-110">
+              <div className="mb-4 w-fit rounded-xs bg-indigo-100 p-3 transition-transform duration-300 group-hover:scale-110">
                 <BookOpen className="h-8 w-8 text-indigo-600" />
               </div>
               <h3 className="mb-2 text-lg font-bold text-gray-800">
@@ -169,7 +169,7 @@ export default function BeneficiosGestao() {
             {/* Connection line */}
             <div className="absolute top-8 right-0 left-0 h-0.5 bg-gradient-to-r from-transparent via-[#2d62ef] to-transparent"></div>
 
-            <div className="relative grid grid-cols-4 gap-4">
+            <div className="relative grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
               <div className="text-center">
                 <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#2d62ef] shadow-lg">
                   <span className="text-lg font-bold text-white">1</span>

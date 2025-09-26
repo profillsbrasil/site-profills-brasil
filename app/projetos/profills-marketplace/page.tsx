@@ -5,7 +5,7 @@ import SolucaoMarketplace from "./_components/solucaoMarketplace";
 
 export default function ProfillsMarketplace() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center py-16">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-8 md:py-16">
       <GridPattern />
 
       {/* Hero Section */}

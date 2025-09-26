@@ -34,7 +34,7 @@ export default function ContactForm() {
       // Última etapa - enviar formulário
       await handleSubmit(onSubmit)();
     } else {
-      // Próxima etapa
+      // Próxima etapa - validação será feita no nextStep
       await nextStep();
     }
   };
@@ -62,22 +62,22 @@ export default function ContactForm() {
   return (
     <div
       id="entre-em-contato"
-      className="flex w-full items-center justify-center"
+      className="flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-0"
     >
       {/* Imagem lateral */}
-      <div className="flex h-full min-h-[65vh] w-1/2 items-center justify-center">
+      <div className="flex h-48 w-full items-center justify-center md:h-full md:min-h-[65vh] md:w-1/2">
         <div className="flex h-full w-full">
           <Image
             src={corteLaser}
             alt="Corte Laser"
-            className="z-10 h-full w-full rounded-sm object-contain"
+            className="z-10 h-full w-full rounded-xs object-cover md:object-contain"
           />
         </div>
       </div>
 
       {/* Formulário */}
-      <div className="flex h-full min-h-[65vh] w-1/2 items-center justify-center">
-        <div className="mx-auto flex h-fit max-w-md flex-col items-center justify-center gap-10 rounded-sm">
+      <div className="flex h-full w-full items-center justify-center p-4 md:min-h-[65vh] md:w-1/2 md:p-0">
+        <div className="mx-auto flex h-fit w-full max-w-md flex-col items-center justify-center gap-6 rounded-xs md:gap-10">
           {/* Indicador de progresso */}
           <div className="relative">
             <ProgressIndicator currentStep={currentStep} />
@@ -130,7 +130,7 @@ export default function ContactForm() {
                   currentStep === 1 ? "w-full" : "flex-1",
                 )}
               >
-                <div className="flex items-center justify-center gap-2 text-sm font-semibold text-white">
+                <div className="flex w-full items-center justify-center gap-2 text-sm font-semibold text-white">
                   {currentStep === 3 && !isSubmitting && (
                     <motion.div
                       initial={{ scale: 0, opacity: 0 }}

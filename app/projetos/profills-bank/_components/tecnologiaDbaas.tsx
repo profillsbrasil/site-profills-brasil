@@ -3,19 +3,19 @@ export default function TecnologiaDbaas() {
   return (
     <section
       aria-labelledby="titulo-tecnologia"
-      className="flex h-full w-full max-w-6xl items-center justify-center gap-10 py-16"
+      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-6 py-8 md:flex-row md:gap-10 md:py-16"
     >
-      <div className="flex w-1/2 flex-col items-start gap-6">
+      <div className="flex w-full flex-col items-start gap-4 md:w-1/2 md:gap-6">
         <Highlighter
           action="underline"
           color="#2d62ef"
           animationDuration={4000}
-          textColor="text-3xl font-bold"
+          textColor="text-2xl font-bold md:text-3xl"
         >
           <h2 id="titulo-tecnologia">Tecnologia DBaaS</h2>
         </Highlighter>
 
-        <div className="flex flex-col gap-4 text-lg leading-relaxed">
+        <div className="flex flex-col gap-4 text-sm leading-relaxed md:text-lg">
           <p>
             A Profills Bank possui{" "}
             <span className="text-accent font-semibold">
@@ -41,7 +41,7 @@ export default function TecnologiaDbaas() {
           </p>
         </div>
 
-        <ul className="list-disc pl-5 text-lg marker:text-[#2d62ef]">
+        <ul className="list-disc pl-5 text-sm marker:text-[#2d62ef] md:text-lg">
           <li>Digital Banking as a Service (DBaaS)</li>
           <li>Tecnologia própria e inovadora</li>
           <li>Atuação em diversos segmentos</li>
@@ -49,12 +49,12 @@ export default function TecnologiaDbaas() {
         </ul>
       </div>
 
-      <div className="z-10 flex w-1/2 flex-col gap-6">
-        <div className="rounded-md border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8 shadow-lg">
-          <h3 className="mb-4 text-2xl font-bold text-[#2d62ef]">
+      <div className="z-10 flex w-full flex-col gap-4 md:w-1/2 md:gap-6">
+        <div className="rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-6 shadow-lg md:p-8">
+          <h3 className="mb-4 text-xl font-bold text-[#2d62ef] md:text-2xl">
             Nossa Missão
           </h3>
-          <p className="text-lg leading-relaxed">
+          <p className="text-sm leading-relaxed md:text-lg">
             Apresentar um{" "}
             <span className="text-accent font-semibold">
               serviço financeiro acessível
@@ -67,11 +67,11 @@ export default function TecnologiaDbaas() {
           </p>
         </div>
 
-        <div className="rounded-md border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-md">
-          <h4 className="mb-3 text-lg font-semibold text-gray-800 backdrop-blur-md">
+        <div className="rounded-xs border border-gray-200 bg-white p-4 shadow-lg backdrop-blur-md md:p-6">
+          <h4 className="mb-3 text-base font-semibold text-gray-800 backdrop-blur-md md:text-lg">
             Serviços Oferecidos
           </h4>
-          <ul className="space-y-2 text-gray-700">
+          <ul className="space-y-2 text-sm text-gray-700 md:text-base">
             <li className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-[#2d62ef]"></div>
               Gestão de contas de pagamentos

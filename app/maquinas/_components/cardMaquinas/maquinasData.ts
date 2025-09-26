@@ -93,7 +93,7 @@ export interface MaquinaData {
 export const maquinasData: MaquinaData[] = [
   {
     id: 1,
-    name: "TP 85",
+    name: "TP",
     imgMaquina: maquinaTp85,
     imgMaquinaClassName: "h-full w-full object-contain",
     imgEmbalagem: embalagemTp85,
@@ -109,21 +109,6 @@ export const maquinasData: MaquinaData[] = [
   },
   {
     id: 2,
-    name: "TP - 4 Vias",
-    imgMaquina: maquinaTp4Vias,
-    imgMaquinaClassName: "h-full w-full object-contain md:scale-120",
-    imgEmbalagem: embalagemTp4Vias,
-    imgEmbalagemClassName: "absolute right-3 bottom-0 h-1/2 w-1/2 object-cover",
-    descricao: "Envasadoras de sachês 4 Soldas",
-    about:
-      "Projetada para o envase simultâneo em quatro vias, é ideal para aumentar a produtividade em operações de médio e grande porte. Com capacidade para envase de líquidos, cremes ou pastas, destaca-se pela eficiência, precisão de dosagem e aproveitamento inteligente do espaço físico. Permite produção em paralelo, reduzindo o tempo de envase por lote e otimizando a linha de produção.",
-    unidadeMaxima: 6000,
-    categoria: "Envasadoras",
-    embalagensCompativeis: ["Sachê"],
-    cardSize: "normal",
-  },
-  {
-    id: 3,
     name: "TC4s - 1 Via",
     imgMaquina: maquinaTc4s1Via,
     imgMaquinaClassName: "h-full w-full object-contain",
@@ -138,7 +123,7 @@ export const maquinasData: MaquinaData[] = [
     cardSize: "normal",
   },
   {
-    id: 4,
+    id: 3,
     name: "TC4s - 2 Vias",
     imgMaquina: maquinaTc4s2Vias,
     imgMaquinaClassName: "h-full w-full object-contain",
@@ -154,7 +139,7 @@ export const maquinasData: MaquinaData[] = [
     cardSize: "normal",
   },
   {
-    id: 5,
+    id: 4,
     name: "TC4s - 3 Vias",
     imgMaquina: maquinaTc4s3Vias,
     imgMaquinaClassName: "h-full w-full object-cover",
@@ -168,6 +153,22 @@ export const maquinasData: MaquinaData[] = [
     embalagensCompativeis: ["Sachê"],
     cardSize: "normal",
   },
+  {
+    id: 5,
+    name: "TP - 4 Vias",
+    imgMaquina: maquinaTp4Vias,
+    imgMaquinaClassName: "h-full w-full object-contain md:scale-120",
+    imgEmbalagem: embalagemTp4Vias,
+    imgEmbalagemClassName: "absolute right-3 bottom-0 h-1/2 w-1/2 object-cover",
+    descricao: "Envasadoras de sachês 4 Soldas",
+    about:
+      "Projetada para o envase simultâneo em quatro vias, é ideal para aumentar a produtividade em operações de médio e grande porte. Com capacidade para envase de líquidos, cremes ou pastas, destaca-se pela eficiência, precisão de dosagem e aproveitamento inteligente do espaço físico. Permite produção em paralelo, reduzindo o tempo de envase por lote e otimizando a linha de produção.",
+    unidadeMaxima: 6000,
+    categoria: "Envasadoras",
+    embalagensCompativeis: ["Sachê"],
+    cardSize: "normal",
+  },
+
   {
     id: 6,
     name: "TC4s - 3 Vias - Formatado",
@@ -347,7 +348,7 @@ export const maquinasData: MaquinaData[] = [
   },
   {
     id: 17,
-    name: "Envasadora Rotativa para Frascos",
+    name: "Rotativa para Frascos",
     imgMaquina: maquinaRotativaParaFrascos,
     imgMaquinaClassName: "h-full w-full object-cover",
     imgEmbalagem: embalagemRotativaParaFrascos,

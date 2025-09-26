@@ -150,7 +150,7 @@ export function FormStep3({ control, errors }: FormStep3Props) {
         </div>
 
         {/* Detalhes */}
-        <div className="space-y-2">
+        <div className="w-full space-y-2 md:min-w-[450px]">
           <Label htmlFor="details">Detalhes Adicionais</Label>
           <Controller
             name="details"
