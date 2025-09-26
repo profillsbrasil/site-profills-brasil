@@ -259,12 +259,12 @@ export default function ScrollExpandMedia({
   // Se for mobile, renderiza versão simplificada sem animações de scroll
   if (isMobile) {
     return (
-      <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="relative min-h-[90vh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-3">
         {/* Pattern de fundo decorativo */}
         <GridPattern />
 
         {/* Layout mobile simplificado */}
-        <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center gap-16">
+        <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center gap-8">
           {/* Título principal */}
           <div className="mb-5 h-1/2 w-full text-center">
             <h1 className="from-accent via-accent/70 to-accent/50 bg-gradient-to-r bg-clip-text text-4xl leading-tight font-bold text-transparent">

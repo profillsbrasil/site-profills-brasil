@@ -34,7 +34,7 @@ export default function Home() {
 const HomeContent = () => {
   return (
     <div className="h-full w-full">
-      <div className="mx-auto flex h-full w-full flex-col items-center justify-center">
+      <div className="mx-auto flex h-full w-full flex-col items-center justify-center overflow-x-hidden">
         <GridPattern />
         <Gt3000 />
         <CtaMonteSuaFabrica />
