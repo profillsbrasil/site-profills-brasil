@@ -64,10 +64,10 @@ export default function CardGridSket() {
           <Button
             variant="outline"
             size="lg"
-            className="group border-border !bg-background hover:border-accent/30 hover:bg-accent/10 hover:text-accent z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] md:w-auto"
+            className="group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-black md:w-auto"
           >
             <span className="text-sm md:text-base">Ver catálogo completo</span>
-            <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
+            <ArrowRight className="group-hover:text-accent ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
           </Button>
         </Link>
       </AnimatedContainer>

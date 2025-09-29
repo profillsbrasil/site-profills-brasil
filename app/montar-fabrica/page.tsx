@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import imgFabricaCompleta from "@/lib/images/extras/FabricaRemderNew.png";
+import imgFabricaCompleta from "@/lib/images/extras/FabricaRemderNewB.png";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { ArrowRight, Building2, Mail, Phone, User } from "lucide-react";

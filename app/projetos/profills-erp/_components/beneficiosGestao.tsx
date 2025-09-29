@@ -158,61 +158,6 @@ export default function BeneficiosGestao() {
           </div>
         </AnimatedContainer>
       </div>
-
-      {/* Process Flow */}
-      <AnimatedContainer className="w-full">
-        <div className="p-8">
-          <h3 className="mb-8 text-center text-2xl font-bold text-gray-800">
-            Fluxo de Implementação
-          </h3>
-          <div className="relative">
-            {/* Connection line */}
-            <div className="absolute top-8 right-0 left-0 h-0.5 bg-gradient-to-r from-transparent via-[#2d62ef] to-transparent"></div>
-
-            <div className="relative grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-              <div className="text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#2d62ef] shadow-lg">
-                  <span className="text-lg font-bold text-white">1</span>
-                </div>
-                <h4 className="mb-1 font-semibold text-gray-800">Análise</h4>
-                <p className="text-xs text-gray-600">
-                  Identificação de necessidades
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#2d62ef] shadow-lg">
-                  <span className="text-lg font-bold text-white">2</span>
-                </div>
-                <h4 className="mb-1 font-semibold text-gray-800">
-                  Configuração
-                </h4>
-                <p className="text-xs text-gray-600">
-                  Personalização do sistema
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#2d62ef] shadow-lg">
-                  <span className="text-lg font-bold text-white">3</span>
-                </div>
-                <h4 className="mb-1 font-semibold text-gray-800">
-                  Treinamento
-                </h4>
-                <p className="text-xs text-gray-600">Capacitação da equipe</p>
-              </div>
-
-              <div className="text-center">
-                <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#2d62ef] shadow-lg">
-                  <span className="text-lg font-bold text-white">4</span>
-                </div>
-                <h4 className="mb-1 font-semibold text-gray-800">Go-Live</h4>
-                <p className="text-xs text-gray-600">Início das operações</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </AnimatedContainer>
     </section>
   );
 }

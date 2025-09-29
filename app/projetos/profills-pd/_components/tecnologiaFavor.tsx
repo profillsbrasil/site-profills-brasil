@@ -163,7 +163,7 @@ export default function TecnologiaFavor() {
         </AnimatedContainer>
 
         <AnimatedContainer>
-          <div className="rounded-xs border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-8 shadow-lg backdrop-blur-xs transition-all duration-300 hover:shadow-xl">
+          <div className="h-full rounded-xs border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-8 shadow-lg backdrop-blur-xs transition-all duration-300 hover:shadow-xl">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-xs bg-[#2d62ef]/10 p-3">
                 <GraduationCap className="h-8 w-8 text-[#2d62ef]" />
@@ -197,7 +197,9 @@ export default function TecnologiaFavor() {
       {/* Final Statement */}
       <AnimatedContainer>
         <div className="max-w-6xl rounded-xs bg-slate-900 p-8 text-center text-white shadow-lg">
-          <h3 className="mb-4 text-2xl font-bold">Melhoria Contínua</h3>
+          <h3 className="decoration-accent mb-4 text-2xl font-bold underline underline-offset-4">
+            Melhoria Contínua
+          </h3>
           <p className="text-lg leading-relaxed">
             Visando o{" "}
             <span className="font-semibold text-[#2d62ef]">

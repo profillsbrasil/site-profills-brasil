@@ -75,7 +75,7 @@ export default function Alimentacao() {
 
         {/* Solução */}
         <AnimatedContainer>
-          <div className="rounded-xs border border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-100 p-8">
+          <div className="h-full rounded-xs border border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-100 p-8">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-orange-500 p-3">
                 <Package className="h-8 w-8 text-white" />

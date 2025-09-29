@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function ServicosPersonalizados() {
   return (
-    <div className="flex w-full items-center justify-center px-4 pb-10">
+    <div className="flex w-full items-center justify-center px-4 pb-16">
       <div className="flex h-full w-full max-w-6xl flex-col gap-5 md:flex-row md:gap-5">
         <div className="flex h-64 w-full md:h-full md:w-1/2">
           <Image
@@ -26,7 +26,7 @@ export default function ServicosPersonalizados() {
             >
               Serviços Personalizados
             </Highlighter>
-            <div className="text-muted-foreground bg-background z-10 flex flex-col rounded-xs border border-dashed border-black/30 p-4 text-sm shadow-xl shadow-black/10 md:p-5 md:text-base">
+            <div className="text-muted-foreground bg-background z-10 flex flex-col rounded-xs border border-dashed border-black/30 p-4 text-sm shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-5 md:text-base">
               <p className="mb-3">
                 Além das máquinas envasadoras, oferecemos{" "}
                 <span className="text-accent font-bold">corte a laser</span> e{" "}
@@ -48,10 +48,10 @@ export default function ServicosPersonalizados() {
             <Button
               variant="outline"
               size="lg"
-              className="group border-border !bg-background hover:border-accent/30 hover:bg-accent/10 hover:text-accent z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] md:w-2/3"
+              className="group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-black md:w-2/3"
             >
               Envie sua solicitação
-              <ArrowRight className="ml-2 h-6 w-6 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="group-hover:text-accent ml-2 h-6 w-6 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </Link>
         </div>

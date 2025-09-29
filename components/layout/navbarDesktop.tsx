@@ -272,7 +272,7 @@ export default function NavbarDesktop() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Projetos</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <span className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <span className="grid w-[500px] gap-2 md:grid-cols-2">
                 {projetos.map((projeto) => (
                   <ListItem
                     key={projeto.title}
@@ -299,7 +299,7 @@ export default function NavbarDesktop() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Outros Serviços</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="grid w-[400px] grid-cols-2 gap-4">
+              <div className="grid w-[350px] grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
                   <NavigationMenuLink asChild>
                     <Link href="/servicos-personalizados">Corte a Laser</Link>

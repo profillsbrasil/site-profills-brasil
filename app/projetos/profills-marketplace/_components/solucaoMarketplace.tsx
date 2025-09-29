@@ -78,7 +78,7 @@ export default function SolucaoMarketplace() {
             return (
               <div
                 key={index}
-                className="group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group flex w-full flex-col items-center justify-center rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div
                   className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full ${solucao.color} transition-all duration-300 group-hover:scale-110`}
@@ -149,7 +149,7 @@ export default function SolucaoMarketplace() {
 
         {/* Call to Action */}
         <div className="mt-12 rounded-xs bg-slate-900 p-8 text-center text-white">
-          <h3 className="mb-4 text-xl font-bold md:text-2xl">
+          <h3 className="decoration-accent mb-4 text-xl font-bold underline underline-offset-4 md:text-2xl">
             Mais que Compra e Venda
           </h3>
           <p className="mb-6 text-sm md:text-lg">

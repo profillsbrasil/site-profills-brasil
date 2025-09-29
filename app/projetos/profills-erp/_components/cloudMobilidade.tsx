@@ -9,7 +9,7 @@ export default function CloudMobilidade() {
       {/* Final Call to Action */}
       <AnimatedContainer className="w-full">
         <div className="rounded-xs bg-slate-900 p-6 text-center text-white shadow-xl md:p-8">
-          <h3 className="mb-4 text-2xl font-bold md:text-3xl">
+          <h3 className="decoration-accent mb-4 text-2xl font-bold underline underline-offset-4 md:text-3xl">
             Controle Total do Seu Negócio
           </h3>
           <p className="mx-auto mb-6 max-w-4xl text-base leading-relaxed md:text-xl">
@@ -19,7 +19,7 @@ export default function CloudMobilidade() {
             </span>{" "}
             a qualquer momento, em qualquer lugar, através da internet.
           </p>
-          <div className="rounded-xs bg-white/20 p-4 backdrop-blur-sm md:p-6">
+          <div className="border-border/20 rounded-xs border bg-slate-900 p-4 backdrop-blur-sm md:p-6">
             <p className="text-base font-medium md:text-lg">
               Um sistema de gestão integrado permite que{" "}
               <span className="text-accent font-bold">

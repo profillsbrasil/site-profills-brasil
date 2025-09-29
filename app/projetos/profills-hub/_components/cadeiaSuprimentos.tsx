@@ -39,8 +39,8 @@ export default function CadeiaSuprimentos() {
 
       {/* Supply Chain Flow */}
       <AnimatedContainer className="w-full">
-        <div className="px-10 pb-5">
-          <div className="flex items-center justify-between">
+        <div className="px-4 pb-5 md:px-10">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
             <div className="text-center">
               <div className="mx-auto mb-4 w-fit rounded-full bg-orange-100 p-4 backdrop-blur-sm">
                 <Users className="h-10 w-10 text-orange-600" />
@@ -52,7 +52,7 @@ export default function CadeiaSuprimentos() {
                 Produtores individuais e empresas locais
               </p>
             </div>
-            <ArrowRight className="h-6 w-6 text-[#2d62ef]" />
+            <ArrowRight className="hidden h-6 w-6 text-[#2d62ef] md:block" />
 
             <div className="text-center">
               <div className="mx-auto mb-4 w-fit rounded-full bg-green-100 p-4 backdrop-blur-sm">
@@ -63,7 +63,7 @@ export default function CadeiaSuprimentos() {
                 Soluções de embalagem e processamento
               </p>
             </div>
-            <ArrowRight className="h-6 w-6 text-[#2d62ef]" />
+            <ArrowRight className="hidden h-6 w-6 text-[#2d62ef] md:block" />
 
             <div className="text-center">
               <div className="mx-auto mb-4 w-fit rounded-full bg-blue-100 p-4 backdrop-blur-sm">
@@ -74,7 +74,7 @@ export default function CadeiaSuprimentos() {
                 Rede global de distribuição
               </p>
             </div>
-            <ArrowRight className="h-6 w-6 text-[#2d62ef]" />
+            <ArrowRight className="hidden h-6 w-6 text-[#2d62ef] md:block" />
 
             <div className="text-center">
               <div className="mx-auto mb-4 w-fit rounded-full bg-purple-100 p-4 backdrop-blur-sm">
@@ -90,7 +90,7 @@ export default function CadeiaSuprimentos() {
       </AnimatedContainer>
 
       {/* Value Proposition */}
-      <div className="grid w-full grid-cols-2 gap-8">
+      <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2">
         <AnimatedContainer>
           <div className="h-full rounded-xs border border-gray-100 bg-white p-8 shadow-lg backdrop-blur-sm">
             <div className="mb-6 flex items-center gap-4">

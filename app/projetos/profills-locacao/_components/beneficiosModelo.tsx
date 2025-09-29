@@ -91,7 +91,7 @@ export default function BeneficiosModelo() {
         </div>
 
         <div className="mt-12 rounded-xs bg-slate-900 p-8 text-center text-white">
-          <h3 className="mb-4 text-xl font-bold md:text-2xl">
+          <h3 className="decoration-accent mb-4 text-xl font-bold underline underline-offset-4 md:text-2xl">
             Pronto para Revolucionar seu Negócio?
           </h3>
           <p className="mb-6 text-sm md:text-lg">

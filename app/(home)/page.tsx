@@ -37,12 +37,12 @@ const HomeContent = () => {
       <div className="mx-auto flex h-full w-full flex-col items-center justify-center overflow-x-hidden">
         <GridPattern />
         <Gt3000 />
+        <CtaAjudarEmpresa />
         <CtaMonteSuaFabrica />
         <MaquinasDestaque />
         <CarrosselProdutos />
         <ListaEmbalagens />
         <ServicosPersonalizados />
-        <CtaAjudarEmpresa />
       </div>
     </div>
   );
