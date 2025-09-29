@@ -102,17 +102,13 @@ export default function NavbarDesktop() {
       <NavigationMenuList className="flex h-full w-7xl items-center justify-center">
         <NavigationMenuItem className="h-full">
           <Link href="/">
-            <Image
-              src={logoProfills}
-              alt="Logo Profills"
-              className="h-full w-auto"
-            />
+            <Image src={logoProfills} alt="Logo Profills" className="h-full" />
           </Link>
         </NavigationMenuItem>
         <div className="flex h-full w-full items-center justify-center gap-2">
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href="/">Home</Link>
+              <Link href="/">Inicio</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
