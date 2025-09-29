@@ -217,11 +217,11 @@ const listaClientes = [
 
 // Componente do card do cliente
 const ClienteCard = ({ cliente }: { cliente: (typeof listaClientes)[0] }) => (
-  <div className="group flex h-20 w-32 items-center justify-center transition-all duration-300 hover:scale-105 md:h-30 md:w-40">
+  <div className="group flex h-20 w-32 items-center justify-center transition-all duration-300 hover:scale-105">
     <Image
       src={cliente.image}
       alt={cliente.name}
-      className="relative z-10 h-full w-full object-contain py-1"
+      className="z-10 h-full w-auto object-contain"
     />
   </div>
 );
@@ -233,7 +233,7 @@ export default function MarqueeClientes() {
   return (
     <section className="relative flex h-auto w-full flex-col items-center justify-start overflow-hidden py-6 md:h-1/3">
       {/* Primeiro carrossel - direção normal */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full">
         <Marquee pauseOnHover className="[--duration:60s] md:[--duration:50s]">
           {grupo1.map((cliente) => (
             <ClienteCard key={cliente.id} cliente={cliente} />
@@ -244,7 +244,7 @@ export default function MarqueeClientes() {
       </div>
 
       {/* Segundo carrossel - direção reversa */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full">
         <Marquee
           reverse
           pauseOnHover
