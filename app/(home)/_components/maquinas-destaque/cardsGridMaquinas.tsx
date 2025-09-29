@@ -64,10 +64,10 @@ export default function CardGridSket() {
           <Button
             variant="outline"
             size="lg"
-            className="group border-border !bg-background hover:border-accent/30 hover:bg-accent/10 hover:text-accent z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] md:w-auto"
+            className="group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-black md:w-auto"
           >
             <span className="text-sm md:text-base">Ver catálogo completo</span>
-            <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
+            <ArrowRight className="group-hover:text-accent ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
           </Button>
         </Link>
       </AnimatedContainer>
@@ -84,12 +84,12 @@ export function FeatureCard({
     <Link href={`/maquinas/${machine.id}`} className="block">
       <div
         className={cn(
-          "group bg-background relative z-10 flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xs border border-black/30 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
+          "group bg-background relative z-10 flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xs border border-black/30 shadow-black/10 drop-shadow-lg transition-all duration-300 hover:drop-shadow-sm",
           className,
         )}
         {...props}
       >
-        <Carousel className="relative flex-1">
+        <Carousel className="relative flex-1 group-hover:shadow-lg">
           <CarouselContent className="h-full">
             <CarouselItem className="flex items-center justify-center p-3 md:p-4">
               <div className="relative h-40 w-full md:h-56">
@@ -122,19 +122,17 @@ export function FeatureCard({
           <CarouselNext className="h-8 w-8 md:h-10 md:w-10" />
         </Carousel>
 
-        <div className="space-y-2 border-t p-3 md:space-y-3 md:p-4">
+        <div className="group-hover:bg-muted space-y-2 border-t border-black/30 p-3 md:space-y-3 md:px-4">
           <div className="flex items-center justify-start">
             <h3 className="text-sm font-semibold tracking-wide md:text-base">
               {machine.name}
             </h3>
           </div>
 
-          <p className="text-muted-foreground line-clamp-2 text-xs md:text-sm">
-            {machine.descricao}
-          </p>
+          <p className="line-clamp-2 text-xs md:text-sm">{machine.descricao}</p>
 
           {machine.unidadeMaxima && (
-            <div className="text-muted-foreground flex items-center gap-1 text-xs md:gap-2">
+            <div className="flex items-center gap-1 text-xs md:gap-2">
               <Zap className="text-accent h-3 w-3" />
               <span>
                 Até {machine.unidadeMaxima.toLocaleString("pt-BR")} un/h
@@ -142,7 +140,7 @@ export function FeatureCard({
             </div>
           )}
 
-          <div className="text-muted-foreground flex items-center gap-1 text-xs md:gap-2">
+          <div className="flex items-center gap-1 text-xs md:gap-2">
             <Package className="text-accent h-3 w-3" />
             <span className="line-clamp-1">
               {machine.embalagensCompativeis.join(", ")}

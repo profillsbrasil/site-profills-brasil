@@ -30,7 +30,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="space-y-6"
+      className="z-10 space-y-6"
     >
       <div className="space-y-2 text-center">
         <h2 className="text-3xl font-bold">Endereço</h2>
@@ -39,9 +39,9 @@ export function FormStep2({ control, errors }: FormStep2Props) {
         </p>
       </div>
 
-      <div className="w-full space-y-4 md:min-w-[450px]">
+      <div className="z-10 w-full space-y-4 md:min-w-[450px]">
         {/* Rua */}
-        <div className="space-y-2">
+        <div className="z-10 space-y-2">
           <Label htmlFor="street">Rua/Logradouro</Label>
           <Controller
             name="street"
@@ -52,7 +52,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
                 id="street"
                 placeholder="Rua das Flores"
                 disabled
-                className="!bg-muted"
+                className="!bg-muted text-muted-foreground disabled:opacity-80"
               />
             )}
           />
@@ -71,7 +71,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
                   ref={numberInputRef}
                   id="number"
                   type="number"
-                  placeholder="123"
+                  placeholder="Digite o número"
                   className={cn(
                     "!bg-muted",
                     errors.number
@@ -95,7 +95,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
                 <Input
                   {...field}
                   id="complement"
-                  placeholder="Apto 405 B"
+                  placeholder="Digite o complemento"
                   className="!bg-muted"
                 />
               )}
@@ -115,7 +115,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
                 id="neighborhood"
                 placeholder="Centro"
                 disabled
-                className="!bg-muted"
+                className="!bg-muted text-muted-foreground disabled:opacity-80"
               />
             )}
           />
@@ -135,7 +135,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
                   placeholder="São Paulo"
                   disabled
                   className={cn(
-                    "!bg-muted",
+                    "!bg-muted text-muted-foreground disabled:opacity-80",
                     errors.city
                       ? "border-red-500 focus-visible:ring-red-500/20"
                       : "",
@@ -160,7 +160,7 @@ export function FormStep2({ control, errors }: FormStep2Props) {
                   placeholder="SP"
                   disabled
                   className={cn(
-                    "!bg-muted",
+                    "!bg-muted text-muted-foreground disabled:opacity-80",
                     errors.state
                       ? "border-red-500 focus-visible:ring-red-500/20"
                       : "",

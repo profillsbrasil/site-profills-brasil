@@ -111,7 +111,7 @@ export default function ContactForm() {
                     type="button"
                     variant="outline"
                     onClick={prevStep}
-                    className="flex items-center gap-2 hover:text-slate-900"
+                    className="!bg-muted flex items-center gap-2 hover:scale-101 hover:text-slate-900"
                     disabled={isSubmitting}
                   >
                     <ArrowLeft size={16} />

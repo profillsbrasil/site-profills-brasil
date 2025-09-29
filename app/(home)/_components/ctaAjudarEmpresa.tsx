@@ -76,7 +76,7 @@ const cards = [
 
 export default function CtaAjudarEmpresa() {
   return (
-    <section className="relative z-10 px-4 py-5 md:py-10">
+    <section className="relative z-10 px-4 py-5">
       <div className="mx-auto max-w-6xl">
         {/* Header Section */}
         <div className="mb-8 flex flex-col items-center text-center">

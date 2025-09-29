@@ -168,7 +168,7 @@ const servicos = [
 export default function NavbarMobile() {
   return (
     <div className="border-border/10 fixed top-0 z-50 flex h-16 w-full border-b bg-slate-900 md:hidden">
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center pr-5">
         <Link
           href="/"
           className="flex h-full w-full items-center justify-center"
@@ -241,11 +241,7 @@ export default function NavbarMobile() {
               </div>
 
               {/* Accordion para seções com múltiplas opções */}
-              <Accordion
-                type="multiple"
-                defaultValue={["maquinas"]}
-                className="w-full"
-              >
+              <Accordion type="multiple" className="w-full">
                 {/* Máquinas */}
                 <AccordionItem value="maquinas" className="border-border/20">
                   <AccordionTrigger className="hover:text-accent text-white">

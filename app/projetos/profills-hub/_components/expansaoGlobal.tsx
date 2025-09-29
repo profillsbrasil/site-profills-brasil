@@ -92,7 +92,7 @@ export default function ExpansaoGlobal() {
 
         {/* Internacional */}
         <AnimatedContainer>
-          <div className="rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8">
+          <div className="h-full rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8">
             <div className="mb-6 flex items-center gap-4">
               <div className="rounded-full bg-[#2d62ef] p-3">
                 <Globe className="h-8 w-8 text-white" />
@@ -167,7 +167,7 @@ export default function ExpansaoGlobal() {
 
       {/* Impact Stats */}
       <AnimatedContainer className="w-full">
-        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
           <div className="rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-sm">
             <div className="mb-2 text-3xl font-bold text-[#2d62ef]">10+</div>
             <div className="text-gray-600">Anos de Experiência</div>
@@ -180,7 +180,7 @@ export default function ExpansaoGlobal() {
             <div className="mb-2 text-3xl font-bold text-[#2d62ef]">4</div>
             <div className="text-gray-600">Países Internacionais</div>
           </div>
-          <div className="rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md">
+          <div className="rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-sm">
             <div className="mb-2 text-3xl font-bold text-[#2d62ef]">3</div>
             <div className="text-gray-600">Continentes</div>
           </div>

@@ -45,7 +45,7 @@ export function FormStep3({ control, errors }: FormStep3Props) {
       className="space-y-6"
     >
       <div className="space-y-2 text-center">
-        <h2 className="text-3xl font-bold">Sua Ideia</h2>
+        <h2 className="text-3xl font-bold">Nos diga sua Ideia</h2>
         <p className="text-muted-foreground">
           Conte-nos sobre o projeto que você tem em mente
         </p>

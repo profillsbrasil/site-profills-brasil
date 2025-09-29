@@ -176,14 +176,15 @@ export default function CardFaq() {
             <h3 className="text-base font-semibold md:text-lg">
               Ainda está com dúvidas?
             </h3>
+            {/* TODO: Adicionar link whatsapp */}
             <Link className="cursor-pointer" href="#">
               <Button
                 variant="outline"
                 size="lg"
-                className="!bg-background hover:border-accent group hover:bg-accent/10 hover:text-accent border-border w-full rounded-xs px-6 py-3 font-semibold shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md md:w-auto md:px-8 md:py-4"
+                className="!bg-background hover:border-accent group hover:bg-accent/10 border-border w-full rounded-xs px-6 py-3 font-semibold shadow-sm transition-all duration-300 hover:scale-[1.02] hover:text-black hover:shadow-md md:w-auto md:px-8 md:py-4"
               >
                 <span className="text-sm md:text-base">Entre em contato</span>
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
+                <ArrowRight className="group-hover:text-accent ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6" />
               </Button>
             </Link>
           </div>

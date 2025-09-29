@@ -16,6 +16,7 @@ export default function Hero() {
           alt="Profills Hub - Expansão Global e Marketplace"
           className="z-10 h-full w-full rounded-xs object-contain shadow-xl"
           loading="eager"
+          priority
         />
       </div>
       <div className="flex h-full w-full flex-col items-center gap-6 md:gap-10">
@@ -58,7 +59,7 @@ export default function Hero() {
 
         {/* Features Cards */}
         <AnimatedContainer className="w-full">
-          <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
+          <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 md:gap-5">
             <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
               <Globe className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
               <div>

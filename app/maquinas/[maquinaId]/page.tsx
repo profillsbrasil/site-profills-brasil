@@ -24,7 +24,7 @@ export default async function Maquina({ params }: MaquinaPageProps) {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-900 pt-10 md:pt-10">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-900 py-20 md:py-10">
       <GridPattern />
       <div className="relative flex h-full w-full max-w-7xl flex-col-reverse items-center justify-center gap-0 text-white md:h-[83vh] md:flex-row md:gap-10">
         <div className="flex h-5/6 w-full flex-col items-center justify-center gap-5 md:w-1/2 md:gap-20">
@@ -33,7 +33,7 @@ export default async function Maquina({ params }: MaquinaPageProps) {
               action="underline"
               color="#2d62ef"
               animationDuration={maquina.unidadeMaxima}
-              textColor="z-10 text-3xl  mb-5 md:mb-8 font-bold tracking-wider text-white text-center md:text-left uppercase"
+              textColor="z-10 text-xl md:text-3xl  mb-5 md:mb-8 font-bold tracking-wider text-white text-center md:text-left uppercase"
             >
               {maquina.name}
             </Highlighter>

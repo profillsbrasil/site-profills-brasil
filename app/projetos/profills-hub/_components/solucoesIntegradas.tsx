@@ -2,6 +2,7 @@ import { AnimatedContainer } from "@/components/AnimatedContainer";
 import { GridPattern } from "@/components/layout/gridPatternBg";
 import { Highlighter } from "@/components/magicui/highlighter";
 import {
+  ArrowRightLeft,
   BarChart3,
   Brain,
   Factory,
@@ -14,7 +15,7 @@ export default function SolucoesIntegradas() {
   return (
     <section
       aria-labelledby="titulo-solucoes"
-      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-16 py-10"
+      className="flex h-full w-full max-w-6xl flex-col items-center justify-center gap-16 pt-10"
     >
       <div className="text-center">
         <Highlighter
@@ -133,7 +134,7 @@ export default function SolucoesIntegradas() {
               em toda a nossa rede.
             </p>
             <div className="flex flex-col gap-3 text-left">
-              <div className="rounded-xs bg-gray-50 p-3">
+              <div className="rounded-xs bg-green-50 p-3">
                 <h5 className="mb-1 text-xs font-semibold text-gray-800">
                   Análise de Mercado
                 </h5>
@@ -141,7 +142,7 @@ export default function SolucoesIntegradas() {
                   Tendências e oportunidades
                 </p>
               </div>
-              <div className="rounded-xs bg-gray-50 p-3">
+              <div className="rounded-xs bg-green-50 p-3">
                 <h5 className="mb-1 text-xs font-semibold text-gray-800">
                   Decisões Estratégicas
                 </h5>
@@ -154,53 +155,58 @@ export default function SolucoesIntegradas() {
 
       {/* Connected Solutions */}
       <AnimatedContainer className="w-full">
-        <div className="relative overflow-hidden rounded-xs bg-slate-900 p-10 text-white">
+        <div className="relative overflow-hidden rounded-xs bg-slate-900 p-6 text-white md:p-10">
           <GridPattern />
           <div className="relative text-center">
-            <h3 className="mb-4 text-3xl font-bold">Soluções Interligadas</h3>
-            <p className="mx-auto mb-8 max-w-3xl text-xl leading-relaxed">
+            <h3 className="decoration-accent md:text-3xls mb-4 text-2xl font-bold underline underline-offset-4">
+              Soluções Interligadas
+            </h3>
+            <p className="mx-auto mb-8 max-w-3xl text-sm leading-relaxed md:text-xl">
               Confira as{" "}
-              <span className="font-semibold text-[#2d62ef]">
+              <span className="text-accent font-semibold">
                 soluções interligadas
               </span>{" "}
               com as{" "}
-              <span className="font-bold text-yellow-300">
-                Máquinas Profills
-              </span>
-              .
+              <span className="text-accent font-bold">Máquinas Profills</span>.
             </p>
 
             {/* Integration Icons */}
-            <div className="mt-8 flex items-center justify-center gap-10">
+            <div className="mt-8 flex w-full flex-wrap items-center justify-center gap-5 md:gap-10">
               <div className="text-center">
-                <div className="mx-auto mb-2 w-fit rounded-full bg-white/20 p-3">
+                <div className="mx-auto mb-2 w-fit rounded-full bg-slate-700 p-3">
                   <Factory className="h-8 w-8 text-white" />
                 </div>
                 <span className="text-sm">Fábricas</span>
               </div>
 
-              <div className="text-2xl text-[#2d62ef]">⟷</div>
+              <div className="hidden text-2xl text-[#2d62ef] md:block">
+                <ArrowRightLeft className="h-8 w-8" />
+              </div>
 
               <div className="text-center">
-                <div className="mx-auto mb-2 w-fit rounded-full bg-white/20 p-3">
+                <div className="mx-auto mb-2 w-fit rounded-full bg-slate-700 p-3">
                   <Settings className="h-8 w-8 text-white" />
                 </div>
                 <span className="text-sm">Máquinas</span>
               </div>
 
-              <div className="text-2xl text-[#2d62ef]">⟷</div>
+              <div className="hidden text-[#2d62ef] md:block">
+                <ArrowRightLeft className="h-8 w-8" />
+              </div>
 
               <div className="text-center">
-                <div className="mx-auto mb-2 w-fit rounded-full bg-white/20 p-3">
+                <div className="mx-auto mb-2 w-fit rounded-full bg-slate-700 p-3">
                   <Brain className="h-8 w-8 text-white" />
                 </div>
                 <span className="text-sm">Know-how</span>
               </div>
 
-              <div className="text-2xl text-[#2d62ef]">⟷</div>
+              <div className="hidden text-[#2d62ef] md:block">
+                <ArrowRightLeft className="h-8 w-8" />
+              </div>
 
               <div className="text-center">
-                <div className="mx-auto mb-2 w-fit rounded-full bg-white/20 p-3">
+                <div className="mx-auto mb-2 w-fit rounded-full bg-slate-700 p-3">
                   <BarChart3 className="h-8 w-8 text-white" />
                 </div>
                 <span className="text-sm">Inteligência</span>

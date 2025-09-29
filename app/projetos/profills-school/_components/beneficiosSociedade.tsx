@@ -63,7 +63,7 @@ export default function BeneficiosSociedade() {
             return (
               <div
                 key={index}
-                className="group grid rounded-xl border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group grid rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div
                   className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full ${beneficio.color} transition-all duration-300 group-hover:scale-110`}
@@ -80,7 +80,7 @@ export default function BeneficiosSociedade() {
         </div>
 
         {/* Vision Section */}
-        <div className="mb-8 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-100 p-8">
+        <div className="mb-8 rounded-xs bg-gradient-to-br from-indigo-50 to-blue-100 p-8">
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="flex flex-col justify-center">
               <h3 className="mb-4 text-2xl font-bold text-gray-900">
@@ -161,7 +161,7 @@ export default function BeneficiosSociedade() {
         </div>
 
         {/* Einstein Quote */}
-        <div className="rounded-xl bg-slate-900 p-8 text-center text-white">
+        <div className="rounded-xs bg-slate-900 p-8 text-center text-white">
           <div className="bg-accent mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full text-slate-900">
             <Star className="h-8 w-8" />
           </div>

@@ -4,7 +4,6 @@ import Image from "next/image";
 import acaiAmazonas from "@/lib/images/logoClientes/acai-amazonas.png";
 import agropecuariaLopes from "@/lib/images/logoClientes/agropecuaria-lopes.png";
 import amazonPolpaEscrito from "@/lib/images/logoClientes/amazon-polpa-escrito.webp";
-import amazonPolpa from "@/lib/images/logoClientes/amazon-polpa.png";
 import ambev from "@/lib/images/logoClientes/ambev.png";
 import apimigot from "@/lib/images/logoClientes/apimigot.png";
 import arafruty from "@/lib/images/logoClientes/arafruty.jpg";
@@ -12,7 +11,7 @@ import bandolin from "@/lib/images/logoClientes/bandolin.png";
 import basecolMix from "@/lib/images/logoClientes/basecol-mix.png";
 import bonyAçaí from "@/lib/images/logoClientes/bony-acai.jpg";
 import botanicBrasil from "@/lib/images/logoClientes/botanic-brasil.png";
-import cVale from "@/lib/images/logoClientes/c-vale.jpg";
+import cVale from "@/lib/images/logoClientes/c-vale.png";
 import cliente from "@/lib/images/logoClientes/cliente.png";
 import confrariaDoSanduba from "@/lib/images/logoClientes/confraria-do-sanduba.jpg";
 import cosmeticosTigo from "@/lib/images/logoClientes/cosmeticos-tigo.jpg";
@@ -27,15 +26,14 @@ import fpLanches from "@/lib/images/logoClientes/fp-lanches.jpg";
 import frooty from "@/lib/images/logoClientes/frooty.png";
 import frutinho from "@/lib/images/logoClientes/frutinho.jpg";
 import ftwMelhor from "@/lib/images/logoClientes/ftw-melhor.jpg";
-import futinhoSorvetes from "@/lib/images/logoClientes/futinho-sorvetes.jpg";
-import gelauzinho from "@/lib/images/logoClientes/gelauzinho.jpg";
+import gelauzinho from "@/lib/images/logoClientes/gelauzinho.png";
 import geloTech from "@/lib/images/logoClientes/gelo-tech.jpg";
 import grupoMacunaima from "@/lib/images/logoClientes/grupo-macunaima.jpg";
 import guardia from "@/lib/images/logoClientes/guardia.webp";
-import hotDogExpressoMove from "@/lib/images/logoClientes/hot-dog-expresso-move.png";
+import hotDogExpressoMove from "@/lib/images/logoClientes/hot-dog-expresso2-move.png";
 import imperador from "@/lib/images/logoClientes/imperador.png";
 import jusitaLanches from "@/lib/images/logoClientes/jusita-lanches.jpg";
-import kls from "@/lib/images/logoClientes/kls.png";
+import kls from "@/lib/images/logoClientes/kls2.png";
 import lifeSucos from "@/lib/images/logoClientes/life-sucos.jpg";
 import lscMelhor from "@/lib/images/logoClientes/lsc-melhor.png";
 import maraPolpa from "@/lib/images/logoClientes/mara-polpa.png";
@@ -61,11 +59,6 @@ const listaClientes = [
     id: 2,
     name: "Agropecuária Lopes",
     image: agropecuariaLopes,
-  },
-  {
-    id: 3,
-    name: "Amazon Polpa",
-    image: amazonPolpa,
   },
   {
     id: 4,
@@ -134,11 +127,6 @@ const listaClientes = [
   { id: 24, name: "Frooty", image: frooty },
   { id: 25, name: "Frutinho", image: frutinho },
   { id: 26, name: "FTW", image: ftwMelhor },
-  {
-    id: 27,
-    name: "Futinho Sorvetes",
-    image: futinhoSorvetes,
-  },
   {
     id: 28,
     name: "Gelauzinho",
@@ -229,13 +217,11 @@ const listaClientes = [
 
 // Componente do card do cliente
 const ClienteCard = ({ cliente }: { cliente: (typeof listaClientes)[0] }) => (
-  <div className="group flex h-20 w-32 items-center justify-center py-1 transition-all duration-300 hover:scale-105 md:h-30 md:w-40">
+  <div className="group flex h-20 w-32 items-center justify-center transition-all duration-300 hover:scale-105">
     <Image
       src={cliente.image}
       alt={cliente.name}
-      width={120}
-      height={60}
-      className="relative z-10 h-full w-auto object-contain md:w-auto"
+      className="z-10 h-full w-auto object-contain"
     />
   </div>
 );
@@ -247,7 +233,7 @@ export default function MarqueeClientes() {
   return (
     <section className="relative flex h-auto w-full flex-col items-center justify-start overflow-hidden py-6 md:h-1/3">
       {/* Primeiro carrossel - direção normal */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full">
         <Marquee pauseOnHover className="[--duration:60s] md:[--duration:50s]">
           {grupo1.map((cliente) => (
             <ClienteCard key={cliente.id} cliente={cliente} />
@@ -258,7 +244,7 @@ export default function MarqueeClientes() {
       </div>
 
       {/* Segundo carrossel - direção reversa */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full">
         <Marquee
           reverse
           pauseOnHover

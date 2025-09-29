@@ -1,10 +1,12 @@
 "use client";
 
 import { GridPattern } from "@/components/layout/gridPatternBg";
+import NavbarDesktop from "@/components/layout/navbarDesktop";
 import { Highlighter } from "@/components/magicui/highlighter";
 import { CaixaHome3d } from "@/components/modelo3d/caixaHome3d";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { Minus, MinusCircle } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -255,38 +257,25 @@ export default function ScrollExpandMedia({
     };
   }, [scrollProgress, isMobile]);
 
-  // === VERSÃO MOBILE SIMPLIFICADA ===
-  // Se for mobile, renderiza versão simplificada sem animações de scroll
+  // ===  MOBILE  ===
+  // Se for mobile, renderiza versão simplificada sem animações de scroll.
   if (isMobile) {
     return (
-      <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="relative min-h-[90vh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-2">
         {/* Pattern de fundo decorativo */}
         <GridPattern />
 
         {/* Layout mobile simplificado */}
-        <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center gap-16">
+        <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center">
           {/* Título principal */}
-          <div className="mb-5 h-1/2 w-full text-center">
-            <h1 className="from-accent via-accent/70 to-accent/50 bg-gradient-to-r bg-clip-text text-4xl leading-tight font-bold text-transparent">
-              Máquinas e<br />
-              Peças para o <br /> Seu Negócio!
+          <div className="h-1/2 w-full text-center">
+            <h1 className="from-accent via-accent/70 to-accent/50 bg-gradient-to-r bg-clip-text text-3xl leading-tight font-bold text-transparent">
+              Soluções para o seu negócio!
             </h1>
-
-            {/* Slogan mobile */}
-            <p className="mt-4 text-xl text-white">
-              <Highlighter
-                action="underline"
-                color="#2d62ef"
-                animationDuration={4000}
-                textColor="text-white"
-              >
-                O futuro cabe aqui!
-              </Highlighter>
-            </p>
           </div>
 
           {/* Modelo 3D mobile */}
-          <div className="flex h-1/2 w-1/2 items-center justify-center">
+          <div className="mt-10 mb-8 flex h-1/2 w-1/2 items-center justify-center">
             <CaixaHome3d
               alt="Modelo 3D - Linha de Produtos Profills"
               modelSrc="/caixa-teste-3d.glb"
@@ -296,6 +285,17 @@ export default function ScrollExpandMedia({
               className="h-full w-full"
             />
           </div>
+          {/* Slogan mobile */}
+          <p className="text-xl text-white">
+            <Highlighter
+              action="underline"
+              color="#2d62ef"
+              animationDuration={4000}
+              textColor="text-white"
+            >
+              Embalando o Mundo!
+            </Highlighter>
+          </p>
         </div>
 
         {/* Conteúdo adicional mobile */}
@@ -307,7 +307,7 @@ export default function ScrollExpandMedia({
   }
 
   // === RENDERIZAÇÃO DO COMPONENTE DESKTOP ===
-  // Versão original com animações de scroll - mantida intacta para desktop
+  // Versão original com animações de scroll
 
   return (
     // Container principal com background dinâmico que transiciona de escuro para claro
@@ -378,21 +378,38 @@ export default function ScrollExpandMedia({
                       ease: "linear",
                     }}
                   >
-                    <h1 className="text-4xl leading-tight md:text-7xl md:leading-normal">
-                      Máquinas e<br />
-                      Peças para o <br /> Seu Negócio!
+                    <h1 className="text-5xl leading-tight select-none">
+                      Tudo Para Seu Negócio! <br />
                     </h1>
+                    <h2>Inovação a cada embalagem</h2>
+                    <div className="flex flex-col gap-1 pt-4">
+                      <p className="group flex w-full items-center gap-2 text-gray-300 hover:text-white">
+                        <Minus className="text-accent h-3 w-3" />
+                        Máquinas Evasadoreas
+                      </p>
+                      <p className="group flex items-center gap-2 text-gray-300 hover:text-white">
+                        <Minus className="text-accent h-3 w-3" />
+                        Peças
+                      </p>
+                      <p className="group flex items-center gap-2 text-gray-300 hover:text-white">
+                        <Minus className="text-accent h-3 w-3" />
+                        Consultoria e Suporte Técnico
+                      </p>
+                      <p className="group flex items-center gap-2 text-gray-300 hover:text-white">
+                        <Minus className="text-accent h-3 w-3" />E muito mais!
+                      </p>
+                    </div>
                   </motion.span>
 
                   {/* Slogan com destaque (visível apenas em desktop) */}
-                  <p className="relative bottom-0 mt-4 hidden w-full flex-col justify-end gap-2 text-xl text-white md:absolute md:mt-0 md:flex md:h-1/5 md:text-3xl">
+                  <p className="relative bottom-0 mt-0 flex h-1/5 w-full flex-col justify-end gap-2 text-xl text-white md:absolute md:text-3xl">
                     <Highlighter
                       action="underline"
                       color="#2d62ef"
                       animationDuration={4000}
-                      textColor="text-white"
+                      textColor="text-white select-none"
                     >
-                      O futuro cabe aqui!
+                      Embalando o Mundo!
                     </Highlighter>
                   </p>
                 </div>
