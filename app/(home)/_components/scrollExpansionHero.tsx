@@ -384,20 +384,19 @@ export default function ScrollExpandMedia({
                     <h2>Inovação a cada embalagem</h2>
                     <div className="flex flex-col gap-1 pt-4">
                       <p className="group flex w-full items-center gap-2 text-gray-300 hover:text-white">
-                        <Minus className="group-hover:text-accent h-3 w-3 text-gray-300" />
+                        <Minus className="text-accent h-3 w-3" />
                         Máquinas Evasadoreas
                       </p>
                       <p className="group flex items-center gap-2 text-gray-300 hover:text-white">
-                        <Minus className="group-hover:text-accent h-3 w-3 text-gray-300" />
+                        <Minus className="text-accent h-3 w-3" />
                         Peças
                       </p>
                       <p className="group flex items-center gap-2 text-gray-300 hover:text-white">
-                        <Minus className="group-hover:text-accent h-3 w-3 text-gray-300" />
+                        <Minus className="text-accent h-3 w-3" />
                         Consultoria e Suporte Técnico
                       </p>
                       <p className="group flex items-center gap-2 text-gray-300 hover:text-white">
-                        <Minus className="group-hover:text-accent h-3 w-3 text-gray-300" />
-                        E muito mais!
+                        <Minus className="text-accent h-3 w-3" />E muito mais!
                       </p>
                     </div>
                   </motion.span>
