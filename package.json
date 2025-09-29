@@ -7,6 +7,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "clear": "rm -rf node_modules && rm -rf .next && rm -rf .turbo && rm -rf pnpm-lock.yaml && rm -rf bun.lock && rm -rf bun.lockb && rm -rf package-lock.json && rm -rf yarn.lock "
   },
   "dependencies": {
@@ -49,6 +51,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.13",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^20.19.17",
     "@types/react": "^19.1.15",
     "@types/react-dom": "^19.1.9",

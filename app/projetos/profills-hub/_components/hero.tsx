@@ -1,91 +1,91 @@
-import { AnimatedContainer } from "@/components/AnimatedContainer";
-import { Highlighter } from "@/components/magicui/highlighter";
-import imgHub from "@/lib/images/projetos/HUB.jpg";
-import { Building2, Globe, MapPin, Zap } from "lucide-react";
-import Image from "next/image";
+import Image from 'next/image';
+
+import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { Highlighter } from '@/components/magicui/highlighter';
+import imgHub from '@/lib/images/projetos/HUB.jpg';
+
+import { Building2, Globe, MapPin, Zap } from 'lucide-react';
 
 export default function Hero() {
   return (
     <section
-      aria-labelledby="titulo-profills-hub"
-      className="flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0"
-    >
-      <div className="flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0">
+      aria-labelledby='titulo-profills-hub'
+      className='flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0'>
+      <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
         <Image
           src={imgHub}
-          alt="Profills Hub - Expansão Global e Marketplace"
-          className="z-10 h-full w-full rounded-xs object-contain shadow-xl"
-          loading="eager"
+          alt='Profills Hub - Expansão Global e Marketplace'
+          className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
+          loading='eager'
           priority
         />
       </div>
-      <div className="flex h-full w-full flex-col items-center gap-6 md:gap-10">
+      <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
-          action="underline"
-          color="#2d62ef"
+          action='underline'
+          color='#2d62ef'
           animationDuration={4000}
-          textColor="text-2xl font-bold md:text-4xl"
-        >
-          <h1 id="titulo-profills-hub">Profills Hub</h1>
+          textColor='text-2xl font-bold md:text-4xl'>
+          <h1 id='titulo-profills-hub'>Profills Hub</h1>
         </Highlighter>
 
-        <div className="flex flex-col gap-4 text-sm leading-relaxed md:text-lg">
+        <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
           <p>
-            À medida que nossas{" "}
-            <span className="text-accent font-semibold">
+            À medida que nossas{' '}
+            <span className='text-accent font-semibold'>
               operações e relacionamentos construídos nos últimos sete anos
-            </span>{" "}
+            </span>{' '}
             se consolidam, olhamos além das fronteiras brasileiras e começamos a
-            focar no{" "}
-            <span className="text-accent font-semibold">
+            focar no{' '}
+            <span className='text-accent font-semibold'>
               mercado internacional
             </span>
             .
           </p>
 
           <p>
-            Já contamos com uma{" "}
-            <span className="text-accent font-semibold">
+            Já contamos com uma{' '}
+            <span className='text-accent font-semibold'>
               estrutura em todo o Brasil
             </span>
-            , com filiais espalhadas pelo país, e{" "}
-            <span className="text-accent font-semibold">
+            , com filiais espalhadas pelo país, e{' '}
+            <span className='text-accent font-semibold'>
               preparamos filiais internacionalmente
-            </span>{" "}
+            </span>{' '}
             na Colômbia, República Dominicana, Estados Unidos e Emirados Árabes
             Unidos.
           </p>
         </div>
 
         {/* Features Cards */}
-        <AnimatedContainer className="w-full">
-          <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 md:gap-5">
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <Globe className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+        <AnimatedContainer className='w-full'>
+          <div className='grid w-full grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 md:gap-5'>
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <Globe className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">Expansão Global</h3>
-                <p className="text-xs text-gray-600">Presença mundial</p>
+                <h3 className='text-sm font-semibold'>Expansão Global</h3>
+                <p className='text-xs text-gray-600'>Presença mundial</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <MapPin className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <MapPin className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">Rede de Filiais</h3>
-                <p className="text-xs text-gray-600">Brasil + Internacional</p>
+                <h3 className='text-sm font-semibold'>Rede de Filiais</h3>
+                <p className='text-xs text-gray-600'>Brasil + Internacional</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <Building2 className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <Building2 className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">Cadeia Suprimentos</h3>
-                <p className="text-xs text-gray-600">Conexão de mercados</p>
+                <h3 className='text-sm font-semibold'>Cadeia Suprimentos</h3>
+                <p className='text-xs text-gray-600'>Conexão de mercados</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <Zap className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <Zap className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">Soluções Completas</h3>
-                <p className="text-xs text-gray-600">
+                <h3 className='text-sm font-semibold'>Soluções Completas</h3>
+                <p className='text-xs text-gray-600'>
                   Processamento + Engenharia
                 </p>
               </div>

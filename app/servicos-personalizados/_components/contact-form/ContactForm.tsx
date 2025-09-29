@@ -1,16 +1,18 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import corteLaser from "@/lib/images/extras/cortador.jpg";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { ArrowLeft, CircleCheck } from "lucide-react";
-import Image from "next/image";
-import { FormStep1 } from "./components/FormStep1";
-import { FormStep2 } from "./components/FormStep2";
-import { FormStep3 } from "./components/FormStep3";
-import { ProgressIndicator } from "./components/ProgressIndicator";
-import { useContactForm } from "./hooks/useContactForm";
+import Image from 'next/image';
+
+import { Button } from '@/components/ui/button';
+import corteLaser from '@/lib/images/extras/cortador.jpg';
+import { cn } from '@/lib/utils';
+
+import { FormStep1 } from './components/FormStep1';
+import { FormStep2 } from './components/FormStep2';
+import { FormStep3 } from './components/FormStep3';
+import { ProgressIndicator } from './components/ProgressIndicator';
+import { useContactForm } from './hooks/useContactForm';
+import { motion } from 'framer-motion';
+import { ArrowLeft, CircleCheck } from 'lucide-react';
 
 export default function ContactForm() {
   const {
@@ -20,13 +22,13 @@ export default function ContactForm() {
     handleCepComplete,
     nextStep,
     prevStep,
-    onSubmit,
+    onSubmit
   } = useContactForm();
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting }
   } = form;
 
   const handleContinue = async () => {
@@ -61,59 +63,55 @@ export default function ContactForm() {
 
   return (
     <div
-      id="entre-em-contato"
-      className="flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-0"
-    >
+      id='entre-em-contato'
+      className='flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-0'>
       {/* Imagem lateral */}
-      <div className="flex h-48 w-full items-center justify-center md:h-full md:min-h-[65vh] md:w-1/2">
-        <div className="flex h-full w-full">
+      <div className='flex h-48 w-full items-center justify-center md:h-full md:min-h-[65vh] md:w-1/2'>
+        <div className='flex h-full w-full'>
           <Image
             src={corteLaser}
-            alt="Corte Laser"
-            className="z-10 h-full w-full rounded-xs object-cover md:object-contain"
+            alt='Corte Laser'
+            className='z-10 h-full w-full rounded-xs object-cover md:object-contain'
           />
         </div>
       </div>
 
       {/* Formulário */}
-      <div className="flex h-full w-full items-center justify-center p-4 md:min-h-[65vh] md:w-1/2 md:p-0">
-        <div className="mx-auto flex h-fit w-full max-w-md flex-col items-center justify-center gap-6 rounded-xs md:gap-10">
+      <div className='flex h-full w-full items-center justify-center p-4 md:min-h-[65vh] md:w-1/2 md:p-0'>
+        <div className='mx-auto flex h-fit w-full max-w-md flex-col items-center justify-center gap-6 rounded-xs md:gap-10'>
           {/* Indicador de progresso */}
-          <div className="relative">
+          <div className='relative'>
             <ProgressIndicator currentStep={currentStep} />
           </div>
 
           {/* Etapas do formulário */}
-          <div className="w-full">{getCurrentStepComponent()}</div>
+          <div className='w-full'>{getCurrentStepComponent()}</div>
 
           {/* Botões de navegação */}
-          <div className="w-full">
+          <div className='w-full'>
             <motion.div
-              className="flex items-center gap-3"
+              className='flex items-center gap-3'
               animate={{
-                justifyContent: currentStep === 1 ? "center" : "space-between",
-              }}
-            >
+                justifyContent: currentStep === 1 ? 'center' : 'space-between'
+              }}>
               {/* Botão Voltar */}
               {currentStep > 1 && (
                 <motion.div
                   initial={{ opacity: 0, width: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, width: "auto", scale: 1 }}
+                  animate={{ opacity: 1, width: 'auto', scale: 1 }}
                   transition={{
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 400,
                     damping: 15,
                     mass: 0.8,
-                    duration: 0.6,
-                  }}
-                >
+                    duration: 0.6
+                  }}>
                   <Button
-                    type="button"
-                    variant="outline"
+                    type='button'
+                    variant='outline'
                     onClick={prevStep}
-                    className="!bg-muted flex items-center gap-2 hover:scale-101 hover:text-slate-900"
-                    disabled={isSubmitting}
-                  >
+                    className='!bg-muted flex items-center gap-2 hover:scale-101 hover:text-slate-900'
+                    disabled={isSubmitting}>
                     <ArrowLeft size={16} />
                     Voltar
                   </Button>
@@ -122,34 +120,32 @@ export default function ContactForm() {
 
               {/* Botão Continuar/Finalizar */}
               <Button
-                type="button"
+                type='button'
                 onClick={handleContinue}
                 disabled={isSubmitting || isLoadingCep}
                 className={cn(
-                  "bg-slate-900 text-white transition-colors hover:bg-slate-800",
-                  currentStep === 1 ? "w-full" : "flex-1",
-                )}
-              >
-                <div className="flex w-full items-center justify-center gap-2 text-sm font-semibold text-white">
+                  'bg-slate-900 text-white transition-colors hover:bg-slate-800',
+                  currentStep === 1 ? 'w-full' : 'flex-1'
+                )}>
+                <div className='flex w-full items-center justify-center gap-2 text-sm font-semibold text-white'>
                   {currentStep === 3 && !isSubmitting && (
                     <motion.div
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{
-                        type: "spring",
+                        type: 'spring',
                         stiffness: 500,
                         damping: 15,
-                        mass: 0.5,
-                      }}
-                    >
+                        mass: 0.5
+                      }}>
                       <CircleCheck size={16} />
                     </motion.div>
                   )}
                   {isSubmitting
-                    ? "Enviando..."
+                    ? 'Enviando...'
                     : currentStep === 3
-                      ? "Finalizar"
-                      : "Continuar"}
+                      ? 'Finalizar'
+                      : 'Continuar'}
                 </div>
               </Button>
             </motion.div>

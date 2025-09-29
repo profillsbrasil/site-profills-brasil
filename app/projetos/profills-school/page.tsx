@@ -1,12 +1,13 @@
-import { GridPattern } from "@/components/layout/gridPatternBg";
-import BeneficiosSociedade from "./_components/beneficiosSociedade";
-import Hero from "./_components/hero";
-import ImpactoEducacao from "./_components/impactoEducacao";
-import MetodologiasEnsino from "./_components/metodologiasEnsino";
+import { GridPattern } from '@/components/layout/gridPatternBg';
+
+import BeneficiosSociedade from './_components/beneficiosSociedade';
+import Hero from './_components/hero';
+import ImpactoEducacao from './_components/impactoEducacao';
+import MetodologiasEnsino from './_components/metodologiasEnsino';
 
 export default function ProfillsSchool() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-16">
+    <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-16'>
       <GridPattern />
 
       {/* Hero Section */}

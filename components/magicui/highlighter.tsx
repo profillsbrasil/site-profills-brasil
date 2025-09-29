@@ -1,18 +1,19 @@
-"use client";
+'use client';
 
-import { useInView } from "framer-motion";
-import type React from "react";
-import { useEffect, useRef } from "react";
-import { annotate } from "rough-notation";
+import type React from 'react';
+import { useEffect, useRef } from 'react';
+
+import { useInView } from 'framer-motion';
+import { annotate } from 'rough-notation';
 
 type AnnotationAction =
-  | "highlight"
-  | "underline"
-  | "box"
-  | "circle"
-  | "strike-through"
-  | "crossed-off"
-  | "bracket";
+  | 'highlight'
+  | 'underline'
+  | 'box'
+  | 'circle'
+  | 'strike-through'
+  | 'crossed-off'
+  | 'bracket';
 
 interface HighlighterProps {
   children: React.ReactNode;
@@ -29,20 +30,20 @@ interface HighlighterProps {
 
 export function Highlighter({
   children,
-  action = "highlight",
-  color = "#ffd1dc",
+  action = 'highlight',
+  color = '#ffd1dc',
   strokeWidth = 1.5,
   animationDuration = 600,
   iterations = 2,
   padding = 2,
   multiline = true,
   isView = true,
-  textColor = "text-white",
+  textColor = 'text-white'
 }: HighlighterProps) {
   const elementRef = useRef<HTMLSpanElement>(null);
   const isInView = useInView(elementRef, {
     once: true,
-    margin: "-10%",
+    margin: '-10%'
   });
 
   // Wait for element to be in view before showing animation if isView is enabled
@@ -61,7 +62,7 @@ export function Highlighter({
       animationDuration,
       iterations,
       padding,
-      multiline,
+      multiline
     });
 
     annotation.show();
@@ -79,14 +80,13 @@ export function Highlighter({
     animationDuration,
     iterations,
     padding,
-    multiline,
+    multiline
   ]);
 
   return (
     <span
       ref={elementRef}
-      className={`relative inline-block w-fit bg-transparent ${textColor}`}
-    >
+      className={`relative inline-block w-fit bg-transparent ${textColor}`}>
       {children}
     </span>
   );

@@ -1,28 +1,29 @@
-import { AnimatedContainer } from "@/components/AnimatedContainer";
-import imgBank from "@/lib/images/projetos/Bank.jpg";
-import { Building2, CreditCard, Globe, Shield } from "lucide-react";
-import Image from "next/image";
+import Image from 'next/image';
+
+import { AnimatedContainer } from '@/components/AnimatedContainer';
+import imgBank from '@/lib/images/projetos/Bank.jpg';
+
+import { Building2, CreditCard, Globe, Shield } from 'lucide-react';
 
 export default function Hero() {
   return (
     <section
-      aria-labelledby="titulo-profills-bank"
-      className="flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0"
-    >
-      <div className="flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0">
+      aria-labelledby='titulo-profills-bank'
+      className='flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0'>
+      <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
         <Image
           src={imgBank}
-          loading="eager"
-          alt="Profills Bank - Soluções Financeiras Digitais"
-          className="z-10 h-full w-full rounded-xs object-contain shadow-xl"
+          loading='eager'
+          alt='Profills Bank - Soluções Financeiras Digitais'
+          className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
         />
       </div>
-      <div className="flex h-full w-full flex-col items-center gap-6 md:gap-10">
-        <div className="flex flex-col gap-4 text-sm leading-relaxed md:text-lg">
+      <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
+        <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
           <p>
-            A <span className="text-accent font-semibold">Profills Bank</span> é
-            uma empresa privada que atua na comercialização de{" "}
-            <span className="text-accent font-semibold">
+            A <span className='text-accent font-semibold'>Profills Bank</span> é
+            uma empresa privada que atua na comercialização de{' '}
+            <span className='text-accent font-semibold'>
               serviços financeiros digitais
             </span>
             , buscando ser mais acessível em relação aos serviços bancários
@@ -30,13 +31,13 @@ export default function Hero() {
           </p>
 
           <p>
-            Atuamos como{" "}
-            <span className="text-accent font-semibold">
+            Atuamos como{' '}
+            <span className='text-accent font-semibold'>
               intermediadora com parceiros homologados
-            </span>{" "}
+            </span>{' '}
             perante o Banco Central, fornecendo sistemas e serviços financeiros
-            para a{" "}
-            <span className="text-accent font-semibold">
+            para a{' '}
+            <span className='text-accent font-semibold'>
               gestão de contas de pagamentos
             </span>
             .
@@ -44,34 +45,34 @@ export default function Hero() {
         </div>
 
         {/* Features Cards */}
-        <AnimatedContainer className="w-full">
-          <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <Shield className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+        <AnimatedContainer className='w-full'>
+          <div className='grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-5'>
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <Shield className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">Segurança</h3>
-                <p className="text-xs text-gray-600">Proteção de dados</p>
+                <h3 className='text-sm font-semibold'>Segurança</h3>
+                <p className='text-xs text-gray-600'>Proteção de dados</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <Globe className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <Globe className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">Digital</h3>
-                <p className="text-xs text-gray-600">Banco 100% digital</p>
+                <h3 className='text-sm font-semibold'>Digital</h3>
+                <p className='text-xs text-gray-600'>Banco 100% digital</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <CreditCard className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <CreditCard className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">Pagamentos</h3>
-                <p className="text-xs text-gray-600">Gestão completa</p>
+                <h3 className='text-sm font-semibold'>Pagamentos</h3>
+                <p className='text-xs text-gray-600'>Gestão completa</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md">
-              <Building2 className="h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105" />
+            <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
+              <Building2 className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
               <div>
-                <h3 className="text-sm font-semibold">B2B & B2C</h3>
-                <p className="text-xs text-gray-600">Empresas e pessoas</p>
+                <h3 className='text-sm font-semibold'>B2B & B2C</h3>
+                <p className='text-xs text-gray-600'>Empresas e pessoas</p>
               </div>
             </div>
           </div>

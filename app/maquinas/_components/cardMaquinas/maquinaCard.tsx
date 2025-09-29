@@ -1,7 +1,10 @@
-import { AnimatedContainer } from "@/components/AnimatedContainer";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { MaquinaData } from "./maquinasData";
+import { useEffect, useState } from 'react';
+
+import Image from 'next/image';
+
+import { AnimatedContainer } from '@/components/AnimatedContainer';
+
+import { MaquinaData } from './maquinasData';
 
 interface MaquinaCardProps {
   maquina: MaquinaData;
@@ -12,7 +15,7 @@ interface MaquinaCardProps {
 export default function MaquinaCard({
   maquina,
   index,
-  filtersApplied = false,
+  filtersApplied = false
 }: MaquinaCardProps) {
   // Padronização: todos os cards com mesmas dimensões externas
   // e mesma proporção de conteúdo/rodapé para evitar desalinhamentos
@@ -32,43 +35,41 @@ export default function MaquinaCard({
   return (
     <AnimatedContainer
       delay={animationDelay}
-      trigger={filtersApplied ? "mount" : "inView"} // Usa "mount" quando filtros aplicados da URL
+      trigger={filtersApplied ? 'mount' : 'inView'} // Usa "mount" quando filtros aplicados da URL
       once={!filtersApplied} // Permite reanimação quando filtros mudam
       amount={0.1} // Dispara quando 10% do elemento está visível
-      className={`border-border/20 group hover:border-accent/30 flex h-[28rem] w-full flex-col overflow-hidden rounded-xs border bg-slate-900 text-white md:h-[32rem]`}
-    >
+      className={`border-border/20 group hover:border-accent/30 flex h-[28rem] w-full flex-col overflow-hidden rounded-xs border bg-slate-900 text-white md:h-[32rem]`}>
       <div className={`relative h-[86%] w-full px-2`}>
         <Image
           src={maquina.imgMaquina}
-          alt="Máquina"
+          alt='Máquina'
           width={400}
           height={300}
-          loading={"eager"} // Primeiras 9 imagens carregam imediatamente
+          loading={'eager'} // Primeiras 9 imagens carregam imediatamente
           onLoad={() => setImgLoaded(true)}
           className={`${
-            maquina.imgMaquinaClassName || "h-full w-full object-contain"
-          } transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+            maquina.imgMaquinaClassName || 'h-full w-full object-contain'
+          } transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
         <Image
           src={maquina.imgEmbalagem}
-          alt="Embalagem"
+          alt='Embalagem'
           width={200}
           height={150}
-          loading={"eager"} // Primeiras 9 imagens carregam imediatamente
+          loading={'eager'} // Primeiras 9 imagens carregam imediatamente
           onLoad={() => setPkgLoaded(true)}
           className={`${
             maquina.imgEmbalagemClassName ||
-            "absolute right-3 bottom-0 h-1/2 w-1/2 object-cover"
-          } transition-opacity duration-300 ${pkgLoaded ? "opacity-100" : "opacity-0"}`}
+            'absolute right-3 bottom-0 h-1/2 w-1/2 object-cover'
+          } transition-opacity duration-300 ${pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
       </div>
       <div
-        className={`flex h-[14%] w-full flex-col items-center justify-center bg-slate-800`}
-      >
-        <h1 className="group-hover:text-accent text-base font-bold md:text-lg">
+        className={`flex h-[14%] w-full flex-col items-center justify-center bg-slate-800`}>
+        <h1 className='group-hover:text-accent text-base font-bold md:text-lg'>
           {maquina.name}
         </h1>
-        <p className="text-xs font-light md:text-sm">{maquina.descricao}</p>
+        <p className='text-xs font-light md:text-sm'>{maquina.descricao}</p>
       </div>
     </AnimatedContainer>
   );

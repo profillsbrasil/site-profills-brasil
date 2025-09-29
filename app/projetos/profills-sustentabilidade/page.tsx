@@ -1,13 +1,14 @@
-import { GridPattern } from "@/components/layout/gridPatternBg";
-import Alimentacao from "./_components/alimentacao";
-import DesenvolvimentoFuturo from "./_components/desenvolvimentoFuturo";
-import Educacao from "./_components/educacao";
-import Hero from "./_components/hero";
-import ObjetivosODS from "./_components/objetivosODS";
+import { GridPattern } from '@/components/layout/gridPatternBg';
+
+import Alimentacao from './_components/alimentacao';
+import DesenvolvimentoFuturo from './_components/desenvolvimentoFuturo';
+import Educacao from './_components/educacao';
+import Hero from './_components/hero';
+import ObjetivosODS from './_components/objetivosODS';
 
 export default function ProfillsSustentabilidade() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 pt-16">
+    <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 pt-16'>
       <GridPattern />
 
       {/* Hero Section */}

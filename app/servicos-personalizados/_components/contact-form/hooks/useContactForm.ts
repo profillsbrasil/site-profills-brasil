@@ -1,18 +1,20 @@
-"use client";
+'use client';
+
+import { useState } from 'react';
 
 import {
+  type ContactFormData,
   contactFormSchema,
   step1Schema,
   step2Schema,
-  step3Schema,
-  type ContactFormData,
-} from "@/lib/schemas/contact-form";
-import { fetchAddressByCep } from "@/lib/utils/cep-utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+  step3Schema
+} from '@/lib/schemas/contact-form';
+import { fetchAddressByCep } from '@/lib/utils/cep-utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 export function useContactForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -20,41 +22,40 @@ export function useContactForm() {
 
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      email: "",
-      phone: "",
-      cep: "",
-      number: "",
-      complement: "",
-      city: "",
-      state: "",
-      material: "",
-      service: "",
-      finish: "",
-      details: "",
-    },
+      email: '',
+      phone: '',
+      cep: '',
+      number: '',
+      complement: '',
+      city: '',
+      state: '',
+      material: '',
+      service: '',
+      finish: '',
+      details: ''
+    }
   });
 
   // Função para buscar CEP
   const handleCepComplete = async (cep: string) => {
-    if (cep.replace(/\D/g, "").length === 8) {
+    if (cep.replace(/\D/g, '').length === 8) {
       setIsLoadingCep(true);
       try {
         const data = await fetchAddressByCep(cep);
         if (data) {
-          form.setValue("street", data.logradouro);
-          form.setValue("neighborhood", data.bairro);
-          form.setValue("city", data.localidade);
-          form.setValue("state", data.uf);
+          form.setValue('street', data.logradouro);
+          form.setValue('neighborhood', data.bairro);
+          form.setValue('city', data.localidade);
+          form.setValue('state', data.uf);
 
           // Limpa erro de CEP se existir
-          form.clearErrors("cep");
+          form.clearErrors('cep');
         }
       } catch (error) {
-        form.setError("cep", {
-          message:
-            error instanceof Error ? error.message : "Erro ao buscar CEP",
+        form.setError('cep', {
+          message: error instanceof Error ? error.message : 'Erro ao buscar CEP'
         });
       } finally {
         setIsLoadingCep(false);
@@ -73,15 +74,15 @@ export function useContactForm() {
       switch (step) {
         case 1:
           schema = step1Schema;
-          fieldsToValidate = ["email", "phone", "cep"];
+          fieldsToValidate = ['email', 'phone', 'cep'];
           break;
         case 2:
           schema = step2Schema;
-          fieldsToValidate = ["number", "city", "state"];
+          fieldsToValidate = ['number', 'city', 'state'];
           break;
         case 3:
           schema = step3Schema;
-          fieldsToValidate = ["material", "service", "finish"];
+          fieldsToValidate = ['material', 'service', 'finish'];
           break;
         default:
           return false;
@@ -102,8 +103,8 @@ export function useContactForm() {
         error.issues.forEach((issue) => {
           const fieldName = issue.path[0] as keyof ContactFormData;
           form.setError(fieldName, {
-            type: "manual",
-            message: issue.message,
+            type: 'manual',
+            message: issue.message
           });
         });
       }
@@ -129,11 +130,11 @@ export function useContactForm() {
   const getFieldsForStep = (step: number): (keyof ContactFormData)[] => {
     switch (step) {
       case 1:
-        return ["email", "phone", "cep"];
+        return ['email', 'phone', 'cep'];
       case 2:
-        return ["number", "city", "state"];
+        return ['number', 'city', 'state'];
       case 3:
-        return ["material", "service", "finish"];
+        return ['material', 'service', 'finish'];
       default:
         return [];
     }
@@ -148,44 +149,44 @@ export function useContactForm() {
   // Envio do formulário
   const onSubmit = async (data: ContactFormData) => {
     try {
-      console.log("Enviando dados do formulário:", data);
+      console.log('Enviando dados do formulário:', data);
 
-      const response = await fetch("/api/contact", {
-        method: "POST",
+      const response = await fetch('/api/contact', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "Erro ao enviar solicitação");
+        throw new Error(result.message || 'Erro ao enviar solicitação');
       }
 
-      console.log("✅ Solicitação enviada com sucesso:", result);
+      console.log('✅ Solicitação enviada com sucesso:', result);
 
       // Feedback visual de sucesso
-      toast.success("Solicitação enviada com sucesso!", {
+      toast.success('Solicitação enviada com sucesso!', {
         description:
-          "Entraremos em contato em breve para elaborar seu orçamento personalizado.",
-        duration: 5000,
+          'Entraremos em contato em breve para elaborar seu orçamento personalizado.',
+        duration: 5000
       });
 
       // Reset do formulário após sucesso
       form.reset();
       setCurrentStep(1);
     } catch (error) {
-      console.error("❌ Erro ao enviar solicitação:", error);
+      console.error('❌ Erro ao enviar solicitação:', error);
 
       // Feedback visual de erro
-      toast.error("Erro ao enviar solicitação", {
+      toast.error('Erro ao enviar solicitação', {
         description:
           error instanceof Error
             ? error.message
-            : "Tente novamente em alguns instantes.",
-        duration: 5000,
+            : 'Tente novamente em alguns instantes.',
+        duration: 5000
       });
     }
   };
@@ -198,6 +199,6 @@ export function useContactForm() {
     validateStep,
     nextStep,
     prevStep,
-    onSubmit,
+    onSubmit
   };
 }

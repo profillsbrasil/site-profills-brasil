@@ -16,25 +16,25 @@ export interface ViaCepResponse {
  * Busca endereço através do CEP usando a API do ViaCEP
  */
 export async function fetchAddressByCep(
-  cep: string,
+  cep: string
 ): Promise<ViaCepResponse | null> {
-  const cleanCep = cep.replace(/\D/g, "");
+  const cleanCep = cep.replace(/\D/g, '');
 
   if (cleanCep.length !== 8) {
-    throw new Error("CEP deve ter 8 dígitos");
+    throw new Error('CEP deve ter 8 dígitos');
   }
 
   try {
     const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`);
 
     if (!response.ok) {
-      throw new Error("Erro ao buscar CEP");
+      throw new Error('Erro ao buscar CEP');
     }
 
     const data: ViaCepResponse = await response.json();
 
     if (data.erro) {
-      throw new Error("CEP não encontrado");
+      throw new Error('CEP não encontrado');
     }
 
     return data;
@@ -42,7 +42,7 @@ export async function fetchAddressByCep(
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error("Erro ao buscar CEP");
+    throw new Error('Erro ao buscar CEP');
   }
 }
 
@@ -50,7 +50,7 @@ export async function fetchAddressByCep(
  * Formata CEP para o padrão brasileiro (00000-000)
  */
 export function formatCep(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = value.replace(/\D/g, '');
   return digits.replace(/(\d{5})(\d{0,3})/, (_, first, second) => {
     if (second) {
       return `${first}-${second}`;

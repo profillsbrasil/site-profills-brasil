@@ -1,12 +1,13 @@
-import { GridPattern } from "@/components/layout/gridPatternBg";
-import BeneficiosGestao from "./_components/beneficiosGestao";
-import CloudMobilidade from "./_components/cloudMobilidade";
-import Hero from "./_components/hero";
-import SolucaoERP from "./_components/solucaoERP";
+import { GridPattern } from '@/components/layout/gridPatternBg';
+
+import BeneficiosGestao from './_components/beneficiosGestao';
+import CloudMobilidade from './_components/cloudMobilidade';
+import Hero from './_components/hero';
+import SolucaoERP from './_components/solucaoERP';
 
 export default function ProfillsERP() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-16">
+    <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-16'>
       <GridPattern />
 
       {/* Hero Section */}

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
 import React, {
   ReactNode,
   createContext,
   useCallback,
-  useContext,
-} from "react";
+  useContext
+} from 'react';
 
 // Context para compartilhar configurações globais dos modelos 3D
 interface ModelViewer3DContextType {
@@ -15,7 +15,7 @@ interface ModelViewer3DContextType {
 }
 
 const ModelViewer3DContext = createContext<ModelViewer3DContextType | null>(
-  null,
+  null
 );
 
 interface ModelViewer3DProviderProps {
@@ -27,7 +27,7 @@ interface ModelViewer3DProviderProps {
 export function ModelViewer3DProvider({
   children,
   maxCacheSize = 5,
-  preloadImportantModels = [],
+  preloadImportantModels = []
 }: ModelViewer3DProviderProps) {
   // Cache global de modelos estável entre renders
   const modelCacheRef = React.useRef<Map<string, boolean>>(new Map());
@@ -38,8 +38,8 @@ export function ModelViewer3DProvider({
 
       try {
         // Pré-carrega o modelo sem renderizar
-        const link = document.createElement("link");
-        link.rel = "prefetch";
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
         link.href = src;
         document.head.appendChild(link);
 
@@ -59,10 +59,10 @@ export function ModelViewer3DProvider({
           }
         }, 5000);
       } catch (error) {
-        console.warn("Erro ao pré-carregar modelo:", error);
+        console.warn('Erro ao pré-carregar modelo:', error);
       }
     },
-    [maxCacheSize],
+    [maxCacheSize]
   );
 
   const isModelCached = useCallback((src: string) => {
@@ -87,7 +87,7 @@ export function ModelViewer3DProvider({
   const value = {
     preloadModel,
     isModelCached,
-    clearModelCache,
+    clearModelCache
   };
 
   return (
@@ -101,7 +101,7 @@ export function useModelViewer3D() {
   const context = useContext(ModelViewer3DContext);
   if (!context) {
     throw new Error(
-      "useModelViewer3D deve ser usado dentro de ModelViewer3DProvider",
+      'useModelViewer3D deve ser usado dentro de ModelViewer3DProvider'
     );
   }
   return context;
@@ -111,13 +111,13 @@ export function useModelViewer3D() {
 export function useModelPerformanceMonitor() {
   const logPerformance = useCallback(
     (modelSrc: string, action: string, duration?: number) => {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         console.log(
-          `[3D Performance] ${action} - ${modelSrc}${duration ? ` (${duration}ms)` : ""}`,
+          `[3D Performance] ${action} - ${modelSrc}${duration ? ` (${duration}ms)` : ''}`
         );
       }
     },
-    [],
+    []
   );
 
   const measureLoadTime = useCallback(
@@ -127,14 +127,14 @@ export function useModelPerformanceMonitor() {
       return () => {
         const endTime = performance.now();
         const duration = Math.round(endTime - startTime);
-        logPerformance(modelSrc, "Carregamento concluído", duration);
+        logPerformance(modelSrc, 'Carregamento concluído', duration);
       };
     },
-    [logPerformance],
+    [logPerformance]
   );
 
   return {
     logPerformance,
-    measureLoadTime,
+    measureLoadTime
   };
 }

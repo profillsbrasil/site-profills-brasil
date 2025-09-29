@@ -1,5 +1,6 @@
 // types/model-viewer.d.ts
-import type React from "react";
+import type React from 'react';
+
 declare global {
   interface ModelViewerElement extends HTMLElement {
     // Props/propriedades como propriedades JS (algumas chaveiam atributos)
@@ -7,13 +8,13 @@ declare global {
     iosSrc?: string; // iOS Quick Look (.usdz)
     alt?: string;
     poster?: string;
-    loading?: "lazy" | "eager";
-    reveal?: "auto" | "interaction" | "manual";
+    loading?: 'lazy' | 'eager';
+    reveal?: 'auto' | 'interaction' | 'manual';
 
     ar?: boolean;
-    arModes?: "webxr scene-viewer quick-look" | string; // space-separated
-    arScale?: "auto" | "fixed";
-    arPlacement?: "floor" | "wall";
+    arModes?: 'webxr scene-viewer quick-look' | string; // space-separated
+    arScale?: 'auto' | 'fixed';
+    arPlacement?: 'floor' | 'wall';
     disableAr?: boolean;
 
     cameraControls?: boolean;
@@ -33,15 +34,15 @@ declare global {
     disableZoom?: boolean;
     disablePan?: boolean;
 
-    environmentImage?: "neutral" | string; // HDR/EXR/etc
+    environmentImage?: 'neutral' | string; // HDR/EXR/etc
     skyboxImage?: string; // imagem 360
     exposure?: number | string;
     shadowIntensity?: number | string;
     shadowSoftness?: number | string;
-    toneMapping?: "neutral" | "aces" | "reinhard" | "linsrgb" | string;
+    toneMapping?: 'neutral' | 'aces' | 'reinhard' | 'linsrgb' | string;
 
-    interactionPrompt?: "auto" | "none" | "when-focused";
-    interactionPromptStyle?: "basic" | "wiggle";
+    interactionPrompt?: 'auto' | 'none' | 'when-focused';
+    interactionPromptStyle?: 'basic' | 'wiggle';
 
     // Animação/variantes
     animationName?: string; // nome da animação GLTF
@@ -75,49 +76,49 @@ declare global {
   interface ModelViewerAttributes extends MVBaseProps {
     // Atributos refletidos (versão JSX/React das props acima)
     src?: string;
-    "ios-src"?: string;
+    'ios-src'?: string;
     alt?: string;
     poster?: string;
-    loading?: "lazy" | "eager";
-    reveal?: "auto" | "interaction" | "manual";
+    loading?: 'lazy' | 'eager';
+    reveal?: 'auto' | 'interaction' | 'manual';
 
     ar?: boolean;
-    "ar-modes"?: "webxr scene-viewer quick-look" | string;
-    "ar-scale"?: "auto" | "fixed";
-    "ar-placement"?: "floor" | "wall";
-    "disable-ar"?: boolean;
+    'ar-modes'?: 'webxr scene-viewer quick-look' | string;
+    'ar-scale'?: 'auto' | 'fixed';
+    'ar-placement'?: 'floor' | 'wall';
+    'disable-ar'?: boolean;
 
-    "camera-controls"?: boolean;
-    "camera-orbit"?: string;
-    "min-camera-orbit"?: string;
-    "max-camera-orbit"?: string;
-    "camera-target"?: string;
-    "field-of-view"?: string;
-    "min-field-of-view"?: string;
-    "max-field-of-view"?: string;
-    "interpolation-decay"?: number | string;
+    'camera-controls'?: boolean;
+    'camera-orbit'?: string;
+    'min-camera-orbit'?: string;
+    'max-camera-orbit'?: string;
+    'camera-target'?: string;
+    'field-of-view'?: string;
+    'min-field-of-view'?: string;
+    'max-field-of-view'?: string;
+    'interpolation-decay'?: number | string;
 
-    "auto-rotate"?: boolean;
-    "auto-rotate-delay"?: number | string;
-    "rotation-per-second"?: string;
+    'auto-rotate'?: boolean;
+    'auto-rotate-delay'?: number | string;
+    'rotation-per-second'?: string;
 
-    "disable-zoom"?: boolean;
-    "disable-pan"?: boolean;
+    'disable-zoom'?: boolean;
+    'disable-pan'?: boolean;
 
-    "environment-image"?: "neutral" | string;
-    "skybox-image"?: string;
+    'environment-image'?: 'neutral' | string;
+    'skybox-image'?: string;
     exposure?: number | string;
-    "shadow-intensity"?: number | string;
-    "shadow-softness"?: number | string;
-    "tone-mapping"?: "neutral" | "aces" | "reinhard" | "linsrgb" | string;
+    'shadow-intensity'?: number | string;
+    'shadow-softness'?: number | string;
+    'tone-mapping'?: 'neutral' | 'aces' | 'reinhard' | 'linsrgb' | string;
 
-    "interaction-prompt"?: "auto" | "none" | "when-focused";
-    "interaction-prompt-style"?: "basic" | "wiggle";
+    'interaction-prompt'?: 'auto' | 'none' | 'when-focused';
+    'interaction-prompt-style'?: 'basic' | 'wiggle';
 
-    "animation-name"?: string;
-    "animation-crossfade-duration"?: number | string;
+    'animation-name'?: string;
+    'animation-crossfade-duration'?: number | string;
     autoplay?: boolean;
-    "variant-name"?: string;
+    'variant-name'?: string;
     orientation?: string;
     scale?: string;
 
@@ -133,7 +134,7 @@ declare global {
 
   namespace JSX {
     interface IntrinsicElements {
-      "model-viewer": ModelViewerAttributes;
+      'model-viewer': ModelViewerAttributes;
     }
   }
 }

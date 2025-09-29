@@ -1,4 +1,5 @@
-import { AnimatedContainer } from "@/components/AnimatedContainer";
+import { AnimatedContainer } from '@/components/AnimatedContainer';
+
 import {
   CreditCard,
   Globe,
@@ -7,64 +8,64 @@ import {
   Smartphone,
   Star,
   Truck,
-  Users,
-} from "lucide-react";
+  Users
+} from 'lucide-react';
 
 export default function SolucaoMarketplace() {
   const solucoes = [
     {
       icon: Globe,
-      title: "Inserção Digital",
+      title: 'Inserção Digital',
       description:
-        "Levar empreendedores e empresas para o mercado digital com facilidade",
-      color: "bg-blue-100 text-blue-600",
+        'Levar empreendedores e empresas para o mercado digital com facilidade',
+      color: 'bg-blue-100 text-blue-600'
     },
     {
       icon: Shield,
-      title: "Segurança Total",
+      title: 'Segurança Total',
       description:
-        "Transações seguras com o auxílio do Profills Bank em questões financeiras",
-      color: "bg-green-100 text-green-600",
+        'Transações seguras com o auxílio do Profills Bank em questões financeiras',
+      color: 'bg-green-100 text-green-600'
     },
     {
       icon: Smartphone,
-      title: "Mobile Commerce",
+      title: 'Mobile Commerce',
       description:
-        "Compras pelo celular ou computador de forma totalmente intuitiva",
-      color: "bg-purple-100 text-purple-600",
+        'Compras pelo celular ou computador de forma totalmente intuitiva',
+      color: 'bg-purple-100 text-purple-600'
     },
     {
       icon: Truck,
-      title: "Logística Integrada",
+      title: 'Logística Integrada',
       description:
-        "Processo completo incluindo logística e entrega no prazo estipulado",
-      color: "bg-orange-100 text-orange-600",
+        'Processo completo incluindo logística e entrega no prazo estipulado',
+      color: 'bg-orange-100 text-orange-600'
     },
     {
       icon: Users,
-      title: "Hub de Negócios",
+      title: 'Hub de Negócios',
       description:
-        "Conexões e parcerias estratégicas entre produtores, distribuidores e consumidores",
-      color: "bg-indigo-100 text-indigo-600",
+        'Conexões e parcerias estratégicas entre produtores, distribuidores e consumidores',
+      color: 'bg-indigo-100 text-indigo-600'
     },
     {
       icon: Star,
-      title: "Melhores Fornecedores",
+      title: 'Melhores Fornecedores',
       description:
-        "Carteira vasta de clientes permite agregar os melhores do mercado",
-      color: "bg-red-100 text-red-600",
-    },
+        'Carteira vasta de clientes permite agregar os melhores do mercado',
+      color: 'bg-red-100 text-red-600'
+    }
   ];
 
   return (
-    <section className="w-full max-w-6xl pt-5 pb-10">
+    <section className='w-full max-w-6xl pt-5 pb-10'>
       <AnimatedContainer>
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 text-2xl font-bold text-gray-900 md:text-3xl">
-            A Solução:{" "}
-            <span className="text-[#2d62ef]">Profills Marketplace</span>
+        <div className='mb-12 text-center'>
+          <h2 className='mb-4 text-2xl font-bold text-gray-900 md:text-3xl'>
+            A Solução:{' '}
+            <span className='text-[#2d62ef]'>Profills Marketplace</span>
           </h2>
-          <p className="mx-auto max-w-3xl text-sm text-gray-600 md:text-lg">
+          <p className='mx-auto max-w-3xl text-sm text-gray-600 md:text-lg'>
             Os marketplaces favorecem tanto o vendedor quanto o comprador,
             diminuindo as distâncias, inserindo empreendedores no mercado
             digital e agregando comodidade, segurança e facilidade
@@ -72,75 +73,73 @@ export default function SolucaoMarketplace() {
         </div>
 
         {/* Benefits Grid */}
-        <div className="mb-12 grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <div className='mb-12 grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3'>
           {solucoes.map((solucao, index) => {
             const IconComponent = solucao.icon;
             return (
               <div
                 key={index}
-                className="group flex w-full flex-col items-center justify-center rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
+                className='group flex w-full flex-col items-center justify-center rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl'>
                 <div
-                  className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full ${solucao.color} transition-all duration-300 group-hover:scale-110`}
-                >
-                  <IconComponent className="h-8 w-8" />
+                  className={`mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full ${solucao.color} transition-all duration-300 group-hover:scale-110`}>
+                  <IconComponent className='h-8 w-8' />
                 </div>
-                <h3 className="mb-3 text-lg font-semibold text-gray-900 md:text-xl">
+                <h3 className='mb-3 text-lg font-semibold text-gray-900 md:text-xl'>
                   {solucao.title}
                 </h3>
-                <p className="text-gray-600">{solucao.description}</p>
+                <p className='text-gray-600'>{solucao.description}</p>
               </div>
             );
           })}
         </div>
 
         {/* Process Flow */}
-        <div className="p-8">
-          <h3 className="mb-8 text-center text-xl font-bold text-gray-900 md:text-2xl">
+        <div className='p-8'>
+          <h3 className='mb-8 text-center text-xl font-bold text-gray-900 md:text-2xl'>
             Como Funciona o Marketplace
           </h3>
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-white">
-                <Package className="h-8 w-8" />
+          <div className='grid grid-cols-2 gap-6 md:grid-cols-4'>
+            <div className='text-center'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-white'>
+                <Package className='h-8 w-8' />
               </div>
-              <h4 className="mb-2 text-sm font-semibold text-gray-900 md:text-base">
+              <h4 className='mb-2 text-sm font-semibold text-gray-900 md:text-base'>
                 Encontre Produtos
               </h4>
-              <p className="text-xs text-gray-600 md:text-sm">
+              <p className='text-xs text-gray-600 md:text-sm'>
                 Produtores dos mais diversos nichos em uma plataforma única
               </p>
             </div>
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-600 text-white">
-                <CreditCard className="h-8 w-8" />
+            <div className='text-center'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-600 text-white'>
+                <CreditCard className='h-8 w-8' />
               </div>
-              <h4 className="mb-2 text-sm font-semibold text-gray-900 md:text-base">
+              <h4 className='mb-2 text-sm font-semibold text-gray-900 md:text-base'>
                 Compre Seguro
               </h4>
-              <p className="text-xs text-gray-600 md:text-sm">
+              <p className='text-xs text-gray-600 md:text-sm'>
                 Transações protegidas pelo Profills Bank com total segurança
               </p>
             </div>
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-600 text-white">
-                <Truck className="h-8 w-8" />
+            <div className='text-center'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-600 text-white'>
+                <Truck className='h-8 w-8' />
               </div>
-              <h4 className="mb-2 text-sm font-semibold text-gray-900 md:text-base">
+              <h4 className='mb-2 text-sm font-semibold text-gray-900 md:text-base'>
                 Receba em Casa
               </h4>
-              <p className="text-xs text-gray-600 md:text-sm">
+              <p className='text-xs text-gray-600 md:text-sm'>
                 Logística integrada garante entrega no prazo estipulado
               </p>
             </div>
-            <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange-600 text-white">
-                <Users className="h-8 w-8" />
+            <div className='text-center'>
+              <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange-600 text-white'>
+                <Users className='h-8 w-8' />
               </div>
-              <h4 className="mb-2 text-sm font-semibold text-gray-900 md:text-base">
+              <h4 className='mb-2 text-sm font-semibold text-gray-900 md:text-base'>
                 Construa Parcerias
               </h4>
-              <p className="text-xs text-gray-600 md:text-sm">
+              <p className='text-xs text-gray-600 md:text-sm'>
                 Conexões estratégicas que constituem um hub de negócios
               </p>
             </div>
@@ -148,11 +147,11 @@ export default function SolucaoMarketplace() {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 rounded-xs bg-slate-900 p-8 text-center text-white">
-          <h3 className="decoration-accent mb-4 text-xl font-bold underline underline-offset-4 md:text-2xl">
+        <div className='mt-12 rounded-xs bg-slate-900 p-8 text-center text-white'>
+          <h3 className='decoration-accent mb-4 text-xl font-bold underline underline-offset-4 md:text-2xl'>
             Mais que Compra e Venda
           </h3>
-          <p className="mb-6 text-sm md:text-lg">
+          <p className='mb-6 text-sm md:text-lg'>
             Profills Marketplace envolve conexões e parcerias estratégicas que
             constituirão um hub de negócios, ligando produtores locais,
             distribuidores, consumidores e comércios

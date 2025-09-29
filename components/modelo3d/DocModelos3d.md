@@ -66,14 +66,13 @@ import { OptimizedEmbalagem3d } from "@/components/modelo3d/optimizedEmbalagem3d
 
 ```tsx
 // No layout principal ou página
-import { ModelViewer3DProvider } from "@/components/modelo3d/modelViewer3DManager";
+import { ModelViewer3DProvider } from '@/components/modelo3d/modelViewer3DManager';
 
 function App() {
   return (
     <ModelViewer3DProvider
       maxCacheSize={10}
-      preloadImportantModels={["/models/destaque.glb"]}
-    >
+      preloadImportantModels={['/models/destaque.glb']}>
       {/* Sua aplicação */}
     </ModelViewer3DProvider>
   );
@@ -114,11 +113,11 @@ cp meu-modelo.glb public/models/
 // Em listaEmbalagens.tsx
 const listaDeEmbalagens = [
   {
-    title: "Novo Produto",
-    description: "Descrição do produto",
-    modelSrc: "/models/novo-produto.glb", // ✅ Novo modelo
-    cameraOrbit: "40deg 75deg 105%", // ✅ Configurar câmera
-  },
+    title: 'Novo Produto',
+    description: 'Descrição do produto',
+    modelSrc: '/models/novo-produto.glb', // ✅ Novo modelo
+    cameraOrbit: '40deg 75deg 105%' // ✅ Configurar câmera
+  }
   // ... outros itens
 ];
 ```
@@ -156,12 +155,13 @@ const listaDeEmbalagens = [
 
 ```tsx
 // ❌ ANTES
-import { Embalagem3d } from "@/components/modelo3d/embalagem3d";
+import { Embalagem3d } from '@/components/modelo3d/embalagem3d';
+// ✅ DEPOIS
+import { OptimizedEmbalagem3d } from '@/components/modelo3d/optimizedEmbalagem3d';
+
 <Embalagem3d />;
 
-// ✅ DEPOIS
-import { OptimizedEmbalagem3d } from "@/components/modelo3d/optimizedEmbalagem3d";
-<OptimizedEmbalagem3d modelSrc="/caixa-teste-3d.glb" />;
+<OptimizedEmbalagem3d modelSrc='/caixa-teste-3d.glb' />;
 ```
 
 ### Benefícios Imediatos:

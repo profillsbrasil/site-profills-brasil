@@ -1,5 +1,6 @@
-import { ModelViewerElement } from "@google/model-viewer";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { ModelViewerElement } from '@google/model-viewer';
 
 // Cache global para modelos 3D já carregados
 const modelCache = new Map<string, boolean>();
@@ -14,7 +15,7 @@ interface UseOptimized3DModelOptions {
 export function useOptimized3DModel({
   src,
   threshold = 0.1,
-  rootMargin = "50px",
+  rootMargin = '50px'
 }: UseOptimized3DModelOptions) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const modelViewerRef = useRef<ModelViewerElement | null>(null);
@@ -63,7 +64,7 @@ export function useOptimized3DModel({
           }
         });
       },
-      { threshold, rootMargin },
+      { threshold, rootMargin }
     );
 
     if (observedElement) {
@@ -84,14 +85,14 @@ export function useOptimized3DModel({
 
     const loadModelViewer = async () => {
       try {
-        if (!modelCache.get("model-viewer-library")) {
-          await import("@google/model-viewer");
-          modelCache.set("model-viewer-library", true);
+        if (!modelCache.get('model-viewer-library')) {
+          await import('@google/model-viewer');
+          modelCache.set('model-viewer-library', true);
         }
         setIsLoaded(true);
         setHasBeenLoaded(true);
       } catch (error) {
-        console.error("Erro ao carregar model-viewer:", error);
+        console.error('Erro ao carregar model-viewer:', error);
       }
     };
 
@@ -103,11 +104,11 @@ export function useOptimized3DModel({
     if (!isLoaded) return;
 
     // Só adiciona os estilos uma vez
-    const styleId = "model-viewer-optimized-styles";
+    const styleId = 'model-viewer-optimized-styles';
     let style = document.getElementById(styleId);
 
     if (!style) {
-      style = document.createElement("style");
+      style = document.createElement('style');
       style.id = styleId;
       style.textContent = `
         model-viewer::part(default-progress-bar) {
@@ -143,7 +144,7 @@ export function useOptimized3DModel({
       // Só remove os estilos se não há mais instâncias
       const totalInstances = Array.from(modelViewerInstances.values()).reduce(
         (sum, count) => sum + count,
-        0,
+        0
       );
       if (totalInstances === 0) {
         const existingStyle = document.getElementById(styleId);
@@ -163,10 +164,10 @@ export function useOptimized3DModel({
 
   const handleModelError = useCallback(
     (error: Error) => {
-      console.error("Erro ao carregar modelo 3D:", error);
+      console.error('Erro ao carregar modelo 3D:', error);
       modelCache.delete(src);
     },
-    [src],
+    [src]
   );
 
   return {
@@ -177,6 +178,6 @@ export function useOptimized3DModel({
     shouldRender: shouldRender || hasBeenLoaded, // Sempre renderiza se já foi carregado uma vez
     hasBeenLoaded,
     handleModelLoad,
-    handleModelError,
+    handleModelError
   };
 }

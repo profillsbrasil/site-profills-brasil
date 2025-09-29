@@ -6,7 +6,7 @@
  * Aplica máscara de telefone brasileiro
  */
 export function applyPhoneMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = value.replace(/\D/g, '');
 
   if (digits.length <= 10) {
     // Formato: (11) 1234-5678
@@ -22,8 +22,8 @@ export function applyPhoneMask(value: string): string {
         if (ddd) {
           return `(${ddd}`;
         }
-        return "";
-      },
+        return '';
+      }
     );
   } else {
     // Formato: (11) 91234-5678
@@ -39,8 +39,8 @@ export function applyPhoneMask(value: string): string {
         if (ddd) {
           return `(${ddd}`;
         }
-        return "";
-      },
+        return '';
+      }
     );
   }
 }
@@ -49,7 +49,7 @@ export function applyPhoneMask(value: string): string {
  * Aplica máscara de CEP
  */
 export function applyCepMask(value: string): string {
-  const digits = value.replace(/\D/g, "");
+  const digits = value.replace(/\D/g, '');
   return digits.replace(/(\d{5})(\d{0,3})/, (_, first, second) => {
     if (second) {
       return `${first}-${second}`;
@@ -62,7 +62,7 @@ export function applyCepMask(value: string): string {
  * Remove todos os caracteres não numéricos
  */
 export function removeNonDigits(value: string): string {
-  return value.replace(/\D/g, "");
+  return value.replace(/\D/g, '');
 }
 
 /**

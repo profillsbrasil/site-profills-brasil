@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ContactFormData } from "@/lib/schemas/contact-form";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
-import { Control, Controller, FieldErrors } from "react-hook-form";
+import { useEffect, useRef } from 'react';
+
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ContactFormData } from '@/lib/schemas/contact-form';
+import { cn } from '@/lib/utils';
+
+import { motion } from 'framer-motion';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 
 interface FormStep2Props {
   control: Control<ContactFormData>;
@@ -30,73 +32,72 @@ export function FormStep2({ control, errors }: FormStep2Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="z-10 space-y-6"
-    >
-      <div className="space-y-2 text-center">
-        <h2 className="text-3xl font-bold">Endereço</h2>
-        <p className="text-muted-foreground">
+      className='z-10 space-y-6'>
+      <div className='space-y-2 text-center'>
+        <h2 className='text-3xl font-bold'>Endereço</h2>
+        <p className='text-muted-foreground'>
           Complete os dados do seu endereço
         </p>
       </div>
 
-      <div className="z-10 w-full space-y-4 md:min-w-[450px]">
+      <div className='z-10 w-full space-y-4 md:min-w-[450px]'>
         {/* Rua */}
-        <div className="z-10 space-y-2">
-          <Label htmlFor="street">Rua/Logradouro</Label>
+        <div className='z-10 space-y-2'>
+          <Label htmlFor='street'>Rua/Logradouro</Label>
           <Controller
-            name="street"
+            name='street'
             control={control}
             render={({ field }) => (
               <Input
                 {...field}
-                id="street"
-                placeholder="Rua das Flores"
+                id='street'
+                placeholder='Rua das Flores'
                 disabled
-                className="!bg-muted text-muted-foreground disabled:opacity-80"
+                className='!bg-muted text-muted-foreground disabled:opacity-80'
               />
             )}
           />
         </div>
 
         {/* Número e Complemento */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="number">Número *</Label>
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='space-y-2'>
+            <Label htmlFor='number'>Número *</Label>
             <Controller
-              name="number"
+              name='number'
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
                   ref={numberInputRef}
-                  id="number"
-                  type="number"
-                  placeholder="Digite o número"
+                  id='number'
+                  type='number'
+                  placeholder='Digite o número'
                   className={cn(
-                    "!bg-muted",
+                    '!bg-muted',
                     errors.number
-                      ? "border-red-500 focus-visible:ring-red-500/20"
-                      : "",
+                      ? 'border-red-500 focus-visible:ring-red-500/20'
+                      : ''
                   )}
                 />
               )}
             />
             {errors.number && (
-              <p className="text-sm text-red-500">{errors.number.message}</p>
+              <p className='text-sm text-red-500'>{errors.number.message}</p>
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="complement">Complemento</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='complement'>Complemento</Label>
             <Controller
-              name="complement"
+              name='complement'
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
-                  id="complement"
-                  placeholder="Digite o complemento"
-                  className="!bg-muted"
+                  id='complement'
+                  placeholder='Digite o complemento'
+                  className='!bg-muted'
                 />
               )}
             />
@@ -104,72 +105,72 @@ export function FormStep2({ control, errors }: FormStep2Props) {
         </div>
 
         {/* Bairro */}
-        <div className="space-y-2">
-          <Label htmlFor="neighborhood">Bairro</Label>
+        <div className='space-y-2'>
+          <Label htmlFor='neighborhood'>Bairro</Label>
           <Controller
-            name="neighborhood"
+            name='neighborhood'
             control={control}
             render={({ field }) => (
               <Input
                 {...field}
-                id="neighborhood"
-                placeholder="Centro"
+                id='neighborhood'
+                placeholder='Centro'
                 disabled
-                className="!bg-muted text-muted-foreground disabled:opacity-80"
+                className='!bg-muted text-muted-foreground disabled:opacity-80'
               />
             )}
           />
         </div>
 
         {/* Cidade e Estado */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="city">Cidade *</Label>
+        <div className='grid grid-cols-2 gap-4'>
+          <div className='space-y-2'>
+            <Label htmlFor='city'>Cidade *</Label>
             <Controller
-              name="city"
+              name='city'
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
-                  id="city"
-                  placeholder="São Paulo"
+                  id='city'
+                  placeholder='São Paulo'
                   disabled
                   className={cn(
-                    "!bg-muted text-muted-foreground disabled:opacity-80",
+                    '!bg-muted text-muted-foreground disabled:opacity-80',
                     errors.city
-                      ? "border-red-500 focus-visible:ring-red-500/20"
-                      : "",
+                      ? 'border-red-500 focus-visible:ring-red-500/20'
+                      : ''
                   )}
                 />
               )}
             />
             {errors.city && (
-              <p className="text-sm text-red-500">{errors.city.message}</p>
+              <p className='text-sm text-red-500'>{errors.city.message}</p>
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="state">Estado *</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='state'>Estado *</Label>
             <Controller
-              name="state"
+              name='state'
               control={control}
               render={({ field }) => (
                 <Input
                   {...field}
-                  id="state"
-                  placeholder="SP"
+                  id='state'
+                  placeholder='SP'
                   disabled
                   className={cn(
-                    "!bg-muted text-muted-foreground disabled:opacity-80",
+                    '!bg-muted text-muted-foreground disabled:opacity-80',
                     errors.state
-                      ? "border-red-500 focus-visible:ring-red-500/20"
-                      : "",
+                      ? 'border-red-500 focus-visible:ring-red-500/20'
+                      : ''
                   )}
                 />
               )}
             />
             {errors.state && (
-              <p className="text-sm text-red-500">{errors.state.message}</p>
+              <p className='text-sm text-red-500'>{errors.state.message}</p>
             )}
           </div>
         </div>
