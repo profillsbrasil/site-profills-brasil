@@ -12,13 +12,13 @@ import {
 } from 'react';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
-import NavbarDesktop from '@/components/layout/navbarDesktop';
 import { Highlighter } from '@/components/magicui/highlighter';
 import { CaixaHome3d } from '@/components/modelo3d/caixaHome3d';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Minus, MinusCircle } from 'lucide-react';
+import { Minus } from 'lucide-react';
 
+// TODO: Scroll para o do meio esta muito lento
 interface ScrollExpandMediaProps {
   children?: ReactNode;
 }
