@@ -12,11 +12,10 @@ import {
 } from 'react';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
-import { Highlighter } from '@/components/magicui/highlighter';
 import { CaixaHome3d } from '@/components/modelo3d/caixaHome3d';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Minus } from 'lucide-react';
+import { CircleCheckBig } from 'lucide-react';
 
 // TODO: Scroll para o do meio esta muito lento
 interface ScrollExpandMediaProps {
@@ -262,21 +261,38 @@ export default function ScrollExpandMedia({
   // Se for mobile, renderiza versão simplificada sem animações de scroll.
   if (isMobile) {
     return (
-      <div className='relative min-h-[90vh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-2'>
+      <div className='relative min-h-[90vh] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 '>
         {/* Pattern de fundo decorativo */}
         <GridPattern />
 
         {/* Layout mobile simplificado */}
         <div className='relative z-10 flex min-h-screen w-full flex-col items-center justify-center'>
           {/* Título principal */}
-          <div className='h-1/2 w-full text-center'>
-            <h1 className='from-accent via-accent/70 to-accent/50 bg-gradient-to-r bg-clip-text text-3xl leading-tight font-bold text-transparent'>
+          <div className='h-1/2 w-full flex flex-col items-center justify-center'>
+            <h1 className='text-center from-accent via-accent/70 to-accent/50 bg-linear-to-r bg-clip-text text-3xl leading-tight font-bold text-transparent'>
               Soluções para o seu negócio!
             </h1>
+            <div className='flex flex-col  gap-1 pt-4'>
+              <p className='group flex w-full items-center gap-3 text-gray-300 hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
+                Máquinas Evasadoreas
+              </p>
+              <p className='group flex items-center gap-3  text-gray-300 hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
+                Peças
+              </p>
+              <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
+                Consultoria e Suporte Técnico
+              </p>
+              <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
+              </p>
+            </div>
           </div>
 
           {/* Modelo 3D mobile */}
-          <div className='mt-10 mb-8 flex h-1/2 w-1/2 items-center justify-center'>
+          <div className='mt-13 flex h-1/2 w-1/2 items-center justify-center'>
             <CaixaHome3d
               alt='Modelo 3D - Linha de Produtos Profills'
               modelSrc='/caixa-teste-3d.glb'
@@ -287,7 +303,7 @@ export default function ScrollExpandMedia({
             />
           </div>
           {/* Slogan mobile */}
-          <p className='text-xl text-white'>
+          {/* <p className='text-xl text-white'>
             <Highlighter
               action='underline'
               color='#2d62ef'
@@ -295,7 +311,7 @@ export default function ScrollExpandMedia({
               textColor='text-white'>
               Embalando o Mundo!
             </Highlighter>
-          </p>
+          </p> */}
         </div>
 
         {/* Conteúdo adicional mobile */}
@@ -365,7 +381,7 @@ export default function ScrollExpandMedia({
                 <div className='relative flex h-full w-full flex-col justify-center font-bold'>
                   {/* Título principal com gradiente animado */}
                   <motion.span
-                    className='from-accent via-accent/70 to-accent/50 w-full bg-gradient-to-r bg-clip-text text-transparent'
+                    className='from-accent via-accent/70 to-accent/50 w-full bg-linear-to-r bg-clip-text text-transparent'
                     animate={{
                       backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
                     }}
@@ -379,26 +395,27 @@ export default function ScrollExpandMedia({
                     </h1>
                     <h2>Inovação a cada embalagem</h2>
                     <div className='flex flex-col gap-1 pt-4'>
-                      <p className='group flex w-full items-center gap-2 text-gray-300 hover:text-white'>
-                        <Minus className='text-accent h-3 w-3' />
+                      <p className='group flex w-full items-center gap-3 text-gray-300 hover:text-white'>
+                        <CircleCheckBig className='text-accent h-5 w-5' />
                         Máquinas Evasadoreas
                       </p>
-                      <p className='group flex items-center gap-2 text-gray-300 hover:text-white'>
-                        <Minus className='text-accent h-3 w-3' />
+                      <p className='group flex items-center gap-3  text-gray-300 hover:text-white'>
+                        <CircleCheckBig className='text-accent h-5 w-5' />
                         Peças
                       </p>
-                      <p className='group flex items-center gap-2 text-gray-300 hover:text-white'>
-                        <Minus className='text-accent h-3 w-3' />
+                      <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
+                        <CircleCheckBig className='text-accent h-5 w-5' />
                         Consultoria e Suporte Técnico
                       </p>
-                      <p className='group flex items-center gap-2 text-gray-300 hover:text-white'>
-                        <Minus className='text-accent h-3 w-3' />E muito mais!
+                      <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
+                        <CircleCheckBig className='text-accent h-5 w-5' />E
+                        muito mais!
                       </p>
                     </div>
                   </motion.span>
 
                   {/* Slogan com destaque (visível apenas em desktop) */}
-                  <p className='relative bottom-0 mt-0 flex h-1/5 w-full flex-col justify-end gap-2 text-xl text-white md:absolute md:text-3xl'>
+                  {/* <p className='relative bottom-0 mt-0 flex h-1/5 w-full flex-col justify-end gap-2 text-xl text-white md:absolute md:text-3xl'>
                     <Highlighter
                       action='underline'
                       color='#2d62ef'
@@ -406,7 +423,7 @@ export default function ScrollExpandMedia({
                       textColor='text-white select-none'>
                       Embalando o Mundo!
                     </Highlighter>
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </motion.div>
@@ -421,12 +438,11 @@ export default function ScrollExpandMedia({
               transition={springTransition}>
               {/* Vídeo que reproduz quando fica visível */}
               <video
-                src='/videos/video.mp4'
-                autoPlay={visualCalculations.centerImageOpacity > 0.3}
+                src='/videos/videoCurto.mp4'
+                autoPlay={true}
                 loop
                 muted
-                playsInline
-                className='relative h-full max-h-[75vh] w-full max-w-[70vw] rounded-md object-cover pt-5'
+                className='relative h-full max-h-[65vh] w-full max-w-[70vw] rounded-md object-cover pt-5'
                 style={{
                   willChange:
                     visualCalculations.centerImageOpacity > 0.3
@@ -448,7 +464,7 @@ export default function ScrollExpandMedia({
               <div className='relative flex h-full w-full items-center justify-center md:min-h-[60vh]'>
                 {/* Efeito glow animado ao redor do modelo */}
                 <motion.div
-                  className='absolute -inset-1 h-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 blur-3xl md:min-h-[90vh]'
+                  className='absolute -inset-1 h-full bg-linear-to-r from-blue-500/20 to-cyan-500/20 blur-3xl md:min-h-[90vh]'
                   animate={{
                     opacity: [0.3, 0.6, 0.3]
                   }}
