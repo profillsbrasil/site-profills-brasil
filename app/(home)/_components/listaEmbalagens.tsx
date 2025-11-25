@@ -4,53 +4,77 @@ import { OptimizedEmbalagem3d } from '@/components/modelo3d/optimizedEmbalagem3d
 
 const listaDeEmbalagens = [
   {
-    title: 'Gable Top',
+    title: '3 Soldas Duplo',
     description:
       'Sustentável, prática e ideal para diferentes tipos de produtos.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/gable-top.glb"
+    modelSrc: '/embalagens-3d/3-soldas-duplo.glb', // Futuramente: "/models/gable-top.glb"
     cameraOrbit: '40deg 75deg 100%'
   },
   {
-    title: 'Stand-Up Pouch',
+    title: 'Bisnaga',
     description:
       'Resistente, versátil e com múltiplas opções de personalização.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/stand-up-pouch.glb"
+    modelSrc: '/embalagens-3d/bisnaga.glb', // Futuramente: "/models/stand-up-pouch.glb"
     cameraOrbit: '30deg 80deg 100%'
   },
   {
-    title: 'Especiais',
+    title: 'Fardo',
     description: 'Formatos exclusivos criados sob medida para o seu negócio.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/especiais.glb"
+    modelSrc: '/embalagens-3d/fardo.glb', // Futuramente: "/models/especiais.glb"
     cameraOrbit: '50deg 70deg 100%'
   },
   {
-    title: 'Sache',
+    title: 'Flowpack',
     description: 'Prático, seguro e disponível na versão 4 soldas Profills.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/sache.glb"
+    modelSrc: '/embalagens-3d/flowpack.glb', // Futuramente: "/models/sache.glb"
     cameraOrbit: '20deg 85deg 100%'
   },
   {
-    title: 'Garrafas',
+    title: 'Frascos Tubulares',
     description: 'Diversos tamanhos, perfeitas para o envase de líquidos.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/garrafas.glb"
+    modelSrc: '/embalagens-3d/frascos-tubulares.glb', // Futuramente: "/models/garrafas.glb"
     cameraOrbit: '45deg 75deg 100%'
   },
   {
-    title: 'Frascos',
+    title: 'Galão',
     description: 'Seguros e resistentes, ideais para armazenar fluidos.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/frascos.glb"
+    modelSrc: '/embalagens-3d/galao.glb', // Futuramente: "/models/frascos.glb"
     cameraOrbit: '35deg 80deg 100%'
   },
   {
-    title: 'Fardo',
+    title: 'Garrafa',
     description: 'Flexível e eficiente para agrupar produtos embalados.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/fardo.glb"
+    modelSrc: '/embalagens-3d/garrafas-02.glb', // Futuramente: "/models/fardo.glb"
     cameraOrbit: '60deg 65deg 100%'
   },
   {
-    title: 'Potes',
+    title: 'Pote',
     description: 'Praticidade no envase e consumo de alimentos variados.',
-    modelSrc: '/caixa-teste-3d.glb', // Futuramente: "/models/potes.glb"
+    modelSrc: '/embalagens-3d/pote02.glb', // Futuramente: "/models/potes.glb"
+    cameraOrbit: '25deg 85deg 100%'
+  },
+  {
+    title: 'Pouch',
+    description: 'Praticidade no envase e consumo de alimentos variados.',
+    modelSrc: '/embalagens-3d/pouch.glb', // Futuramente: "/models/potes.glb"
+    cameraOrbit: '25deg 85deg 100%'
+  },
+  {
+    title: 'Sache 4 Soldas',
+    description: 'Praticidade no envase e consumo de alimentos variados.',
+    modelSrc: '/embalagens-3d/sache-4-soldas.glb', // Futuramente: "/models/potes.glb"
+    cameraOrbit: '25deg 85deg 100%'
+  },
+  {
+    title: 'Sache Especial',
+    description: 'Praticidade no envase e consumo de alimentos variados.',
+    modelSrc: '/embalagens-3d/sache-especial.glb', // Futuramente: "/models/potes.glb"
+    cameraOrbit: '25deg 85deg 100%'
+  },
+  {
+    title: 'UHT',
+    description: 'Praticidade no envase e consumo de alimentos variados.',
+    modelSrc: '/embalagens-3d/uht.glb', // Futuramente: "/models/potes.glb"
     cameraOrbit: '25deg 85deg 100%'
   }
 ];
