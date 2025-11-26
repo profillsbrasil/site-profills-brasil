@@ -50,7 +50,7 @@ const listaDeEmbalagens = [
     title: 'Pote',
     description: 'Estrutura rígida para alimentos, grãos, cremes e pastas.',
     modelSrc: '/embalagens-3d/pote02.glb',
-    cameraOrbit: '23deg 88deg 100%'
+    cameraOrbit: '270deg 40deg 100%'
   },
   {
     title: 'Pouch',
@@ -89,7 +89,20 @@ const listaDeEmbalagens = [
     title: 'Stick',
     description: 'Formato estreito para porções individuais de pó ou líquidos.',
     modelSrc: '/embalagens-3d/stick.glb',
-    cameraOrbit: '21deg 81deg 100%'
+    cameraOrbit: '20deg 120deg 100%'
+  },
+  {
+    title: 'Gable Top',
+    description:
+      'Embalagem do tipo gable top, ideal para leite, sucos e bebidas.',
+    modelSrc: '/embalagens-3d/gable-top.glb',
+    cameraOrbit: '45deg 75deg 100%'
+  },
+  {
+    title: 'Lata de Tinta',
+    description: 'Lata de tinta para embalagem de tinta.',
+    modelSrc: '/embalagens-3d/lata-tinta.glb',
+    cameraOrbit: '190deg 66deg 100%'
   }
 ];
 
