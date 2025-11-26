@@ -5,77 +5,91 @@ import { OptimizedEmbalagem3d } from '@/components/modelo3d/optimizedEmbalagem3d
 const listaDeEmbalagens = [
   {
     title: '3 Soldas Duplo',
-    description:
-      'Sustentável, prática e ideal para diferentes tipos de produtos.',
-    modelSrc: '/embalagens-3d/3-soldas-duplo.glb', // Futuramente: "/models/gable-top.glb"
-    cameraOrbit: '40deg 75deg 100%'
+    description: 'Embalagem plana, estável e ideal para doses por porção.',
+    modelSrc: '/embalagens-3d/3-soldas-duplo.glb',
+    cameraOrbit: '38deg 72deg 100%'
   },
   {
     title: 'Bisnaga',
-    description:
-      'Resistente, versátil e com múltiplas opções de personalização.',
-    modelSrc: '/embalagens-3d/bisnaga.glb', // Futuramente: "/models/stand-up-pouch.glb"
-    cameraOrbit: '30deg 80deg 100%'
+    description: 'Formato maleável, perfeito para cremes, pastas e géis.',
+    modelSrc: '/embalagens-3d/bisnaga.glb',
+    cameraOrbit: '28deg 78deg 100%'
   },
   {
     title: 'Fardo',
-    description: 'Formatos exclusivos criados sob medida para o seu negócio.',
-    modelSrc: '/embalagens-3d/fardo.glb', // Futuramente: "/models/especiais.glb"
-    cameraOrbit: '50deg 70deg 100%'
+    description: 'Conjunto agrupado para transporte e exposição em varejo.',
+    modelSrc: '/embalagens-3d/fardo.glb',
+    cameraOrbit: '52deg 68deg 100%'
   },
   {
     title: 'Flowpack',
-    description: 'Prático, seguro e disponível na versão 4 soldas Profills.',
-    modelSrc: '/embalagens-3d/flowpack.glb', // Futuramente: "/models/sache.glb"
-    cameraOrbit: '20deg 85deg 100%'
+    description: 'Invólucro contínuo, ideal para snacks e produtos unitários.',
+    modelSrc: '/embalagens-3d/flowpack.glb',
+    cameraOrbit: '18deg 82deg 100%'
   },
   {
     title: 'Frascos Tubulares',
-    description: 'Diversos tamanhos, perfeitas para o envase de líquidos.',
-    modelSrc: '/embalagens-3d/frascos-tubulares.glb', // Futuramente: "/models/garrafas.glb"
-    cameraOrbit: '45deg 75deg 100%'
+    description:
+      'Formato alongado, excelente para shampoos, cosméticos e líquidos.',
+    modelSrc: '/embalagens-3d/frascos-tubulares.glb',
+    cameraOrbit: '43deg 77deg 100%'
   },
   {
     title: 'Galão',
-    description: 'Seguros e resistentes, ideais para armazenar fluidos.',
-    modelSrc: '/embalagens-3d/galao.glb', // Futuramente: "/models/frascos.glb"
-    cameraOrbit: '35deg 80deg 100%'
+    description: 'Volume ampliado para químicos, óleos e soluções líquidas.',
+    modelSrc: '/embalagens-3d/galao.glb',
+    cameraOrbit: '33deg 83deg 100%'
   },
   {
     title: 'Garrafa',
-    description: 'Flexível e eficiente para agrupar produtos embalados.',
-    modelSrc: '/embalagens-3d/garrafas-02.glb', // Futuramente: "/models/fardo.glb"
-    cameraOrbit: '60deg 65deg 100%'
+    description: 'Indicada para bebidas, lácteos e líquidos de consumo diário.',
+    modelSrc: '/embalagens-3d/garrafas-02.glb',
+    cameraOrbit: '57deg 70deg 100%'
   },
   {
     title: 'Pote',
-    description: 'Praticidade no envase e consumo de alimentos variados.',
-    modelSrc: '/embalagens-3d/pote02.glb', // Futuramente: "/models/potes.glb"
-    cameraOrbit: '25deg 85deg 100%'
+    description: 'Estrutura rígida para alimentos, grãos, cremes e pastas.',
+    modelSrc: '/embalagens-3d/pote02.glb',
+    cameraOrbit: '23deg 88deg 100%'
   },
   {
     title: 'Pouch',
-    description: 'Praticidade no envase e consumo de alimentos variados.',
-    modelSrc: '/embalagens-3d/pouch.glb', // Futuramente: "/models/potes.glb"
-    cameraOrbit: '25deg 85deg 100%'
+    description: 'Embalagem flexível tipo stand-up para alimentos e líquidos.',
+    modelSrc: '/embalagens-3d/pouch.glb',
+    cameraOrbit: '27deg 80deg 100%'
   },
   {
     title: 'Sache 4 Soldas',
-    description: 'Praticidade no envase e consumo de alimentos variados.',
-    modelSrc: '/embalagens-3d/sache-4-soldas.glb', // Futuramente: "/models/potes.glb"
-    cameraOrbit: '25deg 85deg 100%'
+    description:
+      'Sache retangular para doses individuais de produtos secos ou líquidos.',
+    modelSrc: '/embalagens-3d/sache-4-soldas.glb',
+    cameraOrbit: '32deg 86deg 100%'
   },
   {
     title: 'Sache Especial',
-    description: 'Praticidade no envase e consumo de alimentos variados.',
-    modelSrc: '/embalagens-3d/sache-especial.glb', // Futuramente: "/models/potes.glb"
-    cameraOrbit: '25deg 85deg 100%'
+    description:
+      'Formato diferenciado para ações promocionais e linhas premium.',
+    modelSrc: '/embalagens-3d/sache-especial.glb',
+    cameraOrbit: '41deg 74deg 100%'
   },
   {
     title: 'UHT',
-    description: 'Praticidade no envase e consumo de alimentos variados.',
-    modelSrc: '/embalagens-3d/uht.glb', // Futuramente: "/models/potes.glb"
-    cameraOrbit: '25deg 85deg 100%'
+    description: 'Caixa cartonada para leite, sucos e bebidas esterilizadas.',
+    modelSrc: '/embalagens-3d/uht.glb',
+    cameraOrbit: '36deg 79deg 100%'
+  },
+  {
+    title: 'Sache Saco',
+    description:
+      'Bolsa flexível maior, ideal para refis e embalagens econômicas.',
+    modelSrc: '/embalagens-3d/sache-saco.glb',
+    cameraOrbit: '29deg 84deg 100%'
+  },
+  {
+    title: 'Stick',
+    description: 'Formato estreito para porções individuais de pó ou líquidos.',
+    modelSrc: '/embalagens-3d/stick.glb',
+    cameraOrbit: '21deg 81deg 100%'
   }
 ];
 
