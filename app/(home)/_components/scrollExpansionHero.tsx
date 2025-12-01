@@ -293,7 +293,7 @@ export default function ScrollExpandMedia({
           </div>
 
           {/* Modelo 3D mobile */}
-          <div className='mt-13 flex h-1/2 w-1/2 items-center justify-center '>
+          <div className=' flex h-1/2 w-1/2 items-center justify-center '>
             <CaixaHome3d
               alt='Modelo 3D - Linha de Produtos Profills'
               modelSrc='/caixa-teste-3d.glb'
