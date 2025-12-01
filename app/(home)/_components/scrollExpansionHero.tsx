@@ -12,6 +12,7 @@ import {
 } from 'react';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { GridPatternMobile } from '@/components/layout/gridPatternBgMobile';
 import { CaixaHome3d } from '@/components/modelo3d/caixaHome3d';
 
 import { AnimatePresence, motion } from 'framer-motion';
@@ -73,7 +74,7 @@ export default function ScrollExpandMedia({
       } else if (!mediaFullyExpanded) {
         // Durante animação, intercepta scroll para controlar progresso
         e.preventDefault();
-        const scrollDelta = e.deltaY * 0.0008; // Fator de sensibilidade
+        const scrollDelta = e.deltaY * 0.0015; // Fator de sensibilidade aumentado para scroll mais natural
         const newProgress = Math.min(
           Math.max(scrollProgress + scrollDelta, 0),
           1
@@ -261,45 +262,45 @@ export default function ScrollExpandMedia({
   // Se for mobile, renderiza versão simplificada sem animações de scroll.
   if (isMobile) {
     return (
-      <div className='relative min-h-[90vh] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 '>
+      <div className='relative min-h-[calc(100vh-5rem)] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 '>
         {/* Pattern de fundo decorativo */}
-        <GridPattern />
+        <GridPatternMobile />
 
         {/* Layout mobile simplificado */}
         <div className='relative z-10 flex min-h-screen w-full flex-col items-center justify-center'>
           {/* Título principal */}
           <div className='h-1/2 w-full flex flex-col items-center justify-center'>
-            <h1 className='text-center from-accent via-accent/70 to-accent/50 bg-linear-to-r bg-clip-text text-3xl leading-tight font-bold text-transparent'>
+            <h1 className='text-center font-bold bg-linear-to-r  bg-clip-text text-4xl leading-tight text-accent'>
               Soluções para o seu negócio!
             </h1>
             <div className='flex flex-col  gap-1 pt-4'>
-              <p className='group flex w-full items-center gap-3 text-gray-300 hover:text-white'>
-                <CircleCheckBig className='text-accent h-5 w-5' />
+              <p className='group flex w-full items-center gap-3 font-semibold  hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5 ' />
                 Máquinas Evasadoreas
               </p>
-              <p className='group flex items-center gap-3  text-gray-300 hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Peças
               </p>
-              <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Consultoria e Suporte Técnico
               </p>
-              <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
               </p>
             </div>
           </div>
 
           {/* Modelo 3D mobile */}
-          <div className='mt-13 flex h-1/2 w-1/2 items-center justify-center'>
+          <div className='mt-13 flex h-1/2 w-1/2 items-center justify-center '>
             <CaixaHome3d
               alt='Modelo 3D - Linha de Produtos Profills'
               modelSrc='/caixa-teste-3d.glb'
               cameraOrbit='40deg 75deg 105%'
               autoRotate={true}
               isMobile={true}
-              className='h-full w-full'
+              className='h-full w-full '
             />
           </div>
           {/* Slogan mobile */}
