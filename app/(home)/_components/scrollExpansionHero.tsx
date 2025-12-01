@@ -262,7 +262,7 @@ export default function ScrollExpandMedia({
   // Se for mobile, renderiza versão simplificada sem animações de scroll.
   if (isMobile) {
     return (
-      <div className='relative min-h-[calc(100vh-5rem)] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 '>
+      <div className='relative min-h-[calc(100vh-5rem)] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900  '>
         {/* Pattern de fundo decorativo */}
         <GridPatternMobile />
 
@@ -303,16 +303,6 @@ export default function ScrollExpandMedia({
               className='h-full w-full '
             />
           </div>
-          {/* Slogan mobile */}
-          {/* <p className='text-xl text-white'>
-            <Highlighter
-              action='underline'
-              color='#2d62ef'
-              animationDuration={4000}
-              textColor='text-white'>
-              Embalando o Mundo!
-            </Highlighter>
-          </p> */}
         </div>
 
         {/* Conteúdo adicional mobile */}
@@ -414,17 +404,6 @@ export default function ScrollExpandMedia({
                       </p>
                     </div>
                   </motion.span>
-
-                  {/* Slogan com destaque (visível apenas em desktop) */}
-                  {/* <p className='relative bottom-0 mt-0 flex h-1/5 w-full flex-col justify-end gap-2 text-xl text-white md:absolute md:text-3xl'>
-                    <Highlighter
-                      action='underline'
-                      color='#2d62ef'
-                      animationDuration={4000}
-                      textColor='text-white select-none'>
-                      Embalando o Mundo!
-                    </Highlighter>
-                  </p> */}
                 </div>
               </div>
             </motion.div>
@@ -443,7 +422,7 @@ export default function ScrollExpandMedia({
                 autoPlay={true}
                 loop
                 muted
-                className='relative h-full max-h-[65vh] w-full max-w-[70vw] rounded-md object-cover pt-5'
+                className='relative h-full max-h-[65vh] w-full max-w-[70vw]  object-cover pt-5'
                 style={{
                   willChange:
                     visualCalculations.centerImageOpacity > 0.3
