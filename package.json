@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
+    "test:model3d": "node --test --experimental-strip-types tests/model3d/*.test.ts",
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

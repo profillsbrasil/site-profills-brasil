@@ -2,8 +2,6 @@
 
 import {
   type ReactNode,
-  type TouchEvent,
-  type WheelEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -18,231 +16,224 @@ import { CaixaHome3d } from '@/components/modelo3d/caixaHome3d';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CircleCheckBig } from 'lucide-react';
 
-// TODO: Scroll para o do meio esta muito lento
 interface ScrollExpandMediaProps {
   children?: ReactNode;
 }
 
+const EXPANSION_PROGRESS_THRESHOLD = 0.9;
+const CONTENT_HIDE_PROGRESS_THRESHOLD = 0.3;
+const VIDEO_MOUNT_PROGRESS_THRESHOLD = 0.12;
+const WHEEL_SENSITIVITY = 0.0015;
+
+const clampProgress = (value: number) => Math.min(1, Math.max(0, value));
+
 export default function ScrollExpandMedia({
   children
 }: ScrollExpandMediaProps) {
-  // === ESTADOS DE CONTROLE DA ANIMAÇÃO ===
-  const [scrollProgress, setScrollProgress] = useState(0); // Progresso da animação (0-1)
-  const [showContent, setShowContent] = useState(false); // Controla quando mostrar conteúdo expandido
-  const [mediaFullyExpanded, setMediaFullyExpanded] = useState(false); // Flag para liberar scroll normal
-  const [touchStartY, setTouchStartY] = useState(0); // Posição inicial do touch para gestos mobile
-  const [isMobile, setIsMobile] = useState(false); // Detecta se é dispositivo mobile
-  const animationFrameId = useRef<number | null>(null); // Ref para cancelar animações em progresso
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showContent, setShowContent] = useState(false);
+  const [mediaFullyExpanded, setMediaFullyExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [shouldRenderCenterVideo, setShouldRenderCenterVideo] = useState(false);
 
-  // === CONFIGURAÇÕES DE ANIMAÇÃO ===
+  const scrollProgressRef = useRef(0);
+  const touchStartYRef = useRef<number | null>(null);
+  const mediaFullyExpandedRef = useRef(false);
+  const showContentRef = useRef(false);
+  const shouldRenderCenterVideoRef = useRef(false);
+  const animationFrameId = useRef<number | null>(null);
+  const queuedProgressRef = useRef<number | null>(null);
+
   const springTransition = {
     type: 'spring' as const,
     stiffness: 100,
     damping: 20
   };
 
-  // === FUNÇÕES DE CONTROLE DE ANIMAÇÃO ===
+  const updateScrollProgress = useCallback((nextProgress: number) => {
+    queuedProgressRef.current = clampProgress(nextProgress);
 
-  // Atualiza o progresso da animação usando RequestAnimationFrame para suavidade
-  const updateScrollProgress = useCallback((newProgress: number) => {
-    if (animationFrameId.current) {
-      cancelAnimationFrame(animationFrameId.current);
+    if (animationFrameId.current !== null) {
+      return;
     }
 
     animationFrameId.current = requestAnimationFrame(() => {
-      setScrollProgress(newProgress);
+      animationFrameId.current = null;
 
-      // Transições de estado baseadas no progresso
-      if (newProgress >= 0.9) {
-        setMediaFullyExpanded(true); // Libera scroll normal da página
-        setShowContent(true); // Mostra conteúdo expandido
-      } else if (newProgress < 0.3) {
-        setShowContent(false); // Esconde conteúdo quando voltando
+      const committedProgress =
+        queuedProgressRef.current ?? scrollProgressRef.current;
+      queuedProgressRef.current = null;
+
+      scrollProgressRef.current = committedProgress;
+      setScrollProgress(committedProgress);
+
+      if (committedProgress >= EXPANSION_PROGRESS_THRESHOLD) {
+        if (!mediaFullyExpandedRef.current) {
+          mediaFullyExpandedRef.current = true;
+          setMediaFullyExpanded(true);
+        }
+        if (!showContentRef.current) {
+          showContentRef.current = true;
+          setShowContent(true);
+        }
+      } else {
+        if (mediaFullyExpandedRef.current) {
+          mediaFullyExpandedRef.current = false;
+          setMediaFullyExpanded(false);
+        }
+        if (
+          showContentRef.current &&
+          committedProgress < CONTENT_HIDE_PROGRESS_THRESHOLD
+        ) {
+          showContentRef.current = false;
+          setShowContent(false);
+        }
+      }
+
+      if (
+        !shouldRenderCenterVideoRef.current &&
+        committedProgress >= VIDEO_MOUNT_PROGRESS_THRESHOLD
+      ) {
+        shouldRenderCenterVideoRef.current = true;
+        setShouldRenderCenterVideo(true);
       }
     });
   }, []);
 
-  // === HANDLERS DE INTERAÇÃO ===
-
-  // Manipula scroll do mouse/trackpad durante a animação
   const handleWheel = useCallback(
-    (e: WheelEvent) => {
-      // Se expandido e scroll para cima no topo, volta para animação
-      if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
+    (event: globalThis.WheelEvent) => {
+      if (
+        mediaFullyExpandedRef.current &&
+        event.deltaY < 0 &&
+        window.scrollY <= 5
+      ) {
+        event.preventDefault();
+        mediaFullyExpandedRef.current = false;
         setMediaFullyExpanded(false);
-        e.preventDefault();
-      } else if (!mediaFullyExpanded) {
-        // Durante animação, intercepta scroll para controlar progresso
-        e.preventDefault();
-        const scrollDelta = e.deltaY * 0.0015; // Fator de sensibilidade aumentado para scroll mais natural
-        const newProgress = Math.min(
-          Math.max(scrollProgress + scrollDelta, 0),
-          1
-        );
-
-        if (animationFrameId.current) {
-          cancelAnimationFrame(animationFrameId.current);
-        }
-        animationFrameId.current = requestAnimationFrame(() => {
-          updateScrollProgress(newProgress);
-        });
+      } else if (!mediaFullyExpandedRef.current) {
+        event.preventDefault();
+        const scrollDelta = event.deltaY * WHEEL_SENSITIVITY;
+        updateScrollProgress(scrollProgressRef.current + scrollDelta);
       }
     },
-    [scrollProgress, mediaFullyExpanded, updateScrollProgress]
+    [updateScrollProgress]
   );
 
-  // Captura posição inicial do toque mobile
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    setTouchStartY(e.touches[0].clientY);
+  const handleTouchStart = useCallback((event: globalThis.TouchEvent) => {
+    touchStartYRef.current = event.touches[0]?.clientY ?? null;
   }, []);
 
-  // Processa gestos de swipe mobile para controlar animação
   const handleTouchMove = useCallback(
-    (e: TouchEvent) => {
-      if (!touchStartY) return;
+    (event: globalThis.TouchEvent) => {
+      if (touchStartYRef.current === null) return;
 
-      const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
+      const touchY = event.touches[0]?.clientY;
+      if (typeof touchY !== 'number') return;
 
-      // Se expandido e swipe para baixo, volta para animação
-      if (mediaFullyExpanded && deltaY < -30 && window.scrollY <= 5) {
+      const deltaY = touchStartYRef.current - touchY;
+
+      if (
+        mediaFullyExpandedRef.current &&
+        deltaY < -30 &&
+        window.scrollY <= 5
+      ) {
+        event.preventDefault();
+        mediaFullyExpandedRef.current = false;
         setMediaFullyExpanded(false);
-        e.preventDefault();
-      } else if (!mediaFullyExpanded) {
-        // Durante animação, converte swipe em progresso
-        e.preventDefault();
-        // Fatores de sensibilidade diferentes para mobile/desktop e direções
+      } else if (!mediaFullyExpandedRef.current) {
+        event.preventDefault();
         const scrollFactor =
           deltaY < 0 ? (isMobile ? 0.004 : 0.006) : isMobile ? 0.003 : 0.004;
-        const scrollDelta = deltaY * scrollFactor;
-        const newProgress = Math.min(
-          Math.max(scrollProgress + scrollDelta, 0),
-          1
-        );
 
-        if (animationFrameId.current) {
-          cancelAnimationFrame(animationFrameId.current);
-        }
-        animationFrameId.current = requestAnimationFrame(() => {
-          updateScrollProgress(newProgress);
-        });
-        setTouchStartY(touchY); // Atualiza posição para movimento contínuo
+        updateScrollProgress(scrollProgressRef.current + deltaY * scrollFactor);
+        touchStartYRef.current = touchY;
       }
     },
-    [
-      scrollProgress,
-      mediaFullyExpanded,
-      touchStartY,
-      updateScrollProgress,
-      isMobile
-    ]
+    [isMobile, updateScrollProgress]
   );
 
-  // Limpa estado do touch ao finalizar gesto
   const handleTouchEnd = useCallback(() => {
-    setTouchStartY(0);
+    touchStartYRef.current = null;
   }, []);
 
-  // Bloqueia scroll da página durante animação
-  const handleScroll = useCallback(() => {
-    if (!mediaFullyExpanded) {
-      window.scrollTo(0, 0); // Força scroll para o topo
-    }
-  }, [mediaFullyExpanded]);
-
-  // === SETUP DE EVENT LISTENERS ===
-
-  // Configura todos os listeners de interação (wheel, touch, scroll) - APENAS NO DESKTOP
-  useEffect(() => {
-    // Se for mobile, não adiciona os listeners que interceptam scroll
-    if (isMobile) return;
-
-    const wheelHandler = handleWheel as unknown as EventListener;
-    const touchStartHandler = handleTouchStart as unknown as EventListener;
-    const touchMoveHandler = handleTouchMove as unknown as EventListener;
-    const touchEndHandler = handleTouchEnd as EventListener;
-    const scrollHandler = handleScroll as EventListener;
-
-    // passive: false permite preventDefault para interceptar eventos
-    window.addEventListener('wheel', wheelHandler, { passive: false });
-    window.addEventListener('scroll', scrollHandler, { passive: true });
-    window.addEventListener('touchstart', touchStartHandler, {
-      passive: false
-    });
-    window.addEventListener('touchmove', touchMoveHandler, { passive: false });
-    window.addEventListener('touchend', touchEndHandler, { passive: true });
-
-    return () => {
-      // Cleanup: remove todos os listeners
-      window.removeEventListener('wheel', wheelHandler);
-      window.removeEventListener('scroll', scrollHandler);
-      window.removeEventListener('touchstart', touchStartHandler);
-      window.removeEventListener('touchmove', touchMoveHandler);
-      window.removeEventListener('touchend', touchEndHandler);
-
-      // Cancela animações pendentes
-      if (animationFrameId.current) {
+  useEffect(
+    () => () => {
+      if (animationFrameId.current !== null) {
         cancelAnimationFrame(animationFrameId.current);
       }
-    };
-  }, [
-    handleWheel,
-    handleTouchStart,
-    handleTouchMove,
-    handleTouchEnd,
-    handleScroll,
-    isMobile // Adiciona isMobile como dependência
-  ]);
+    },
+    []
+  );
 
-  // Detecta mudanças de tamanho de tela para ajustar comportamento mobile/desktop
   useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768); // Breakpoint md: do Tailwind
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const updateIsMobile = () => {
+      setIsMobile(mediaQuery.matches);
     };
 
-    checkIfMobile(); // Executa na montagem
-    window.addEventListener('resize', checkIfMobile);
+    updateIsMobile();
+    mediaQuery.addEventListener('change', updateIsMobile);
 
-    return () => window.removeEventListener('resize', checkIfMobile);
+    return () => mediaQuery.removeEventListener('change', updateIsMobile);
   }, []);
 
-  // Inicialização: reseta estados para garantir estado limpo
   useEffect(() => {
-    setScrollProgress(0);
-    setShowContent(false);
-    setMediaFullyExpanded(false);
-  }, []);
+    if (isMobile) return;
 
-  // === CÁLCULOS VISUAIS DA ANIMAÇÃO ===
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-  // Otimiza cálculos complexos que dependem do progresso da animação
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [handleTouchEnd, handleTouchMove, handleTouchStart, handleWheel, isMobile]);
+
+  useEffect(() => {
+    if (isMobile) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previousOverscrollBehaviorY = document.body.style.overscrollBehaviorY;
+
+    if (!mediaFullyExpanded) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.overscrollBehaviorY = 'contain';
+      if (window.scrollY !== 0) {
+        window.scrollTo(0, 0);
+      }
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.overscrollBehaviorY = previousOverscrollBehaviorY;
+    };
+  }, [mediaFullyExpanded, isMobile]);
+
   const visualCalculations = useMemo(() => {
-    // Movimento horizontal dos cards laterais (mobile usa menor distância)
     const leftCardTranslateX = scrollProgress * (isMobile ? -150 : -300);
     const rightCardTranslateX = scrollProgress * (isMobile ? 150 : 300);
 
-    // Opacidade do vídeo central (aparece com delay, mobile aparece um pouco antes)
     const centerImageOpacity = Math.max(
       0,
       Math.min(1, (scrollProgress - (isMobile ? 0.15 : 0.2)) * 2)
     );
 
-    // Opacidade dos cards laterais (desaparecem conforme animação avança)
     const cardsOpacity = Math.max(
       0,
       1 - scrollProgress * (isMobile ? 1.2 : 1.5)
     );
 
-    // Escala do vídeo central (cresce durante a animação)
     const centerImageScale = (isMobile ? 0.9 : 0.8) + scrollProgress * 0.4;
 
-    // Transição suave do background baseada na opacidade da imagem central
     const backgroundTransition = Math.min(
       1,
       Math.max(0, (centerImageOpacity - 0.1) / 0.8)
     );
 
-    // Função de easing suave (smoothstep) para transições mais naturais
     const easeTransition =
       backgroundTransition *
       backgroundTransition *
@@ -258,54 +249,49 @@ export default function ScrollExpandMedia({
     };
   }, [scrollProgress, isMobile]);
 
-  // ===  MOBILE  ===
-  // Se for mobile, renderiza versão simplificada sem animações de scroll.
   if (isMobile) {
     return (
-      <div className='relative min-h-[calc(100vh-5rem)] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900  '>
-        {/* Pattern de fundo decorativo */}
+      <div className='relative min-h-[calc(100vh-5rem)] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900'>
         <GridPatternMobile />
 
-        {/* Layout mobile simplificado */}
         <div className='relative z-10 flex min-h-screen w-full flex-col items-center justify-center'>
-          {/* Título principal */}
           <div className='h-1/2 w-full flex flex-col items-center justify-center'>
-            <h1 className='text-center font-bold bg-linear-to-r  bg-clip-text text-4xl leading-tight text-accent'>
+            <h1 className='text-center font-bold bg-linear-to-r bg-clip-text text-4xl leading-tight text-accent'>
               Soluções para o seu negócio!
             </h1>
-            <div className='flex flex-col  gap-1 pt-4'>
-              <p className='group flex w-full items-center gap-3 font-semibold  hover:text-white'>
-                <CircleCheckBig className='text-accent h-5 w-5 ' />
+            <div className='flex flex-col gap-1 pt-4'>
+              <p className='group flex w-full items-center gap-3 font-semibold hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
                 Máquinas Evasadoreas
               </p>
-              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Peças
               </p>
-              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Consultoria e Suporte Técnico
               </p>
-              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
               </p>
             </div>
           </div>
 
-          {/* Modelo 3D mobile */}
-          <div className=' flex h-1/2 w-1/2 items-center justify-center '>
+          <div className='flex h-1/2 w-1/2 items-center justify-center'>
             <CaixaHome3d
               alt='Modelo 3D - Linha de Produtos Profills'
               modelSrc='/caixa-teste-3d.glb'
               cameraOrbit='40deg 75deg 105%'
               autoRotate={true}
               isMobile={true}
-              className='h-full w-full '
+              fallbackLabel='Linha de Produtos Profills'
+              posterSrc='/images/caixinha-profills.png'
+              className='h-full w-full'
             />
           </div>
         </div>
 
-        {/* Conteúdo adicional mobile */}
         <section className='relative z-20 min-h-screen bg-white pt-8'>
           {children}
         </section>
@@ -313,11 +299,7 @@ export default function ScrollExpandMedia({
     );
   }
 
-  // === RENDERIZAÇÃO DO COMPONENTE DESKTOP ===
-  // Versão original com animações de scroll
-
   return (
-    // Container principal com background dinâmico que transiciona de escuro para claro
     <div
       className='relative min-h-screen transition-colors duration-1000'
       style={{
@@ -325,10 +307,8 @@ export default function ScrollExpandMedia({
           23 + visualCalculations.easeTransition * 232
         }, ${42 + visualCalculations.easeTransition * 213})`
       }}>
-      {/* Pattern de fundo decorativo */}
       <GridPattern />
 
-      {/* Overlay com gradiente que desaparece durante a animação */}
       <motion.div
         className='absolute inset-0 z-0'
         initial={{ opacity: 0 }}
@@ -354,12 +334,9 @@ export default function ScrollExpandMedia({
         />
       </motion.div>
 
-      {/* Layout principal da animação */}
       <div className='relative z-10 flex min-h-screen w-full items-center justify-center overflow-hidden'>
         <div className='w-full flex-1 px-4 md:px-0'>
-          {/* Container responsivo: mobile empilhado, desktop lado a lado */}
           <div className='relative mx-auto flex h-full w-full max-w-[95vw] flex-col items-center justify-center gap-4 md:max-w-[70vw] md:flex-row md:items-start md:gap-0'>
-            {/* CARD ESQUERDO: Texto principal e slogan */}
             <motion.div
               className='relative flex h-full w-full flex-col items-center justify-between md:h-[85vh] md:w-1/2'
               style={{
@@ -367,10 +344,8 @@ export default function ScrollExpandMedia({
                 opacity: visualCalculations.cardsOpacity
               }}
               transition={springTransition}>
-              {/* Container do texto */}
               <div className='flex h-full w-full items-center justify-center text-center md:text-left'>
                 <div className='relative flex h-full w-full flex-col justify-center font-bold'>
-                  {/* Título principal com gradiente animado */}
                   <motion.span
                     className='from-accent via-accent/70 to-accent/50 w-full bg-linear-to-r bg-clip-text text-transparent'
                     animate={{
@@ -390,7 +365,7 @@ export default function ScrollExpandMedia({
                         <CircleCheckBig className='text-accent h-5 w-5' />
                         Máquinas Evasadoreas
                       </p>
-                      <p className='group flex items-center gap-3  text-gray-300 hover:text-white'>
+                      <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
                         <CircleCheckBig className='text-accent h-5 w-5' />
                         Peças
                       </p>
@@ -399,8 +374,7 @@ export default function ScrollExpandMedia({
                         Consultoria e Suporte Técnico
                       </p>
                       <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
-                        <CircleCheckBig className='text-accent h-5 w-5' />E
-                        muito mais!
+                        <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
                       </p>
                     </div>
                   </motion.span>
@@ -408,7 +382,6 @@ export default function ScrollExpandMedia({
               </div>
             </motion.div>
 
-            {/* VÍDEO CENTRAL: Aparece durante a animação de scroll */}
             <motion.div
               className='absolute inset-0 flex items-center justify-center'
               style={{
@@ -416,23 +389,25 @@ export default function ScrollExpandMedia({
                 scale: visualCalculations.centerImageScale
               }}
               transition={springTransition}>
-              {/* Vídeo que reproduz quando fica visível */}
-              <video
-                src='/videos/videoCurto.mp4'
-                autoPlay={true}
-                loop
-                muted
-                className='relative h-full max-h-[65vh] w-full max-w-[70vw]  object-cover pt-5'
-                style={{
-                  willChange:
-                    visualCalculations.centerImageOpacity > 0.3
-                      ? 'transform'
-                      : 'auto'
-                }}
-              />
+              {shouldRenderCenterVideo && (
+                <video
+                  src='/videos/videoCurto.mp4'
+                  autoPlay={true}
+                  loop
+                  muted
+                  playsInline
+                  preload='metadata'
+                  className='relative h-full max-h-[65vh] w-full max-w-[70vw] object-cover pt-5'
+                  style={{
+                    willChange:
+                      visualCalculations.centerImageOpacity > 0.3
+                        ? 'transform'
+                        : 'auto'
+                  }}
+                />
+              )}
             </motion.div>
 
-            {/* CARD DIREITO: Modelo 3D com efeitos visuais */}
             <motion.div
               className='relative flex w-full flex-col items-center justify-center md:w-1/2 md:items-end'
               style={{
@@ -440,9 +415,7 @@ export default function ScrollExpandMedia({
                 opacity: visualCalculations.cardsOpacity
               }}
               transition={springTransition}>
-              {/* Container do modelo 3D */}
               <div className='relative flex h-full w-full items-center justify-center md:min-h-[60vh]'>
-                {/* Efeito glow animado ao redor do modelo */}
                 <motion.div
                   className='absolute -inset-1 h-full bg-linear-to-r from-blue-500/20 to-cyan-500/20 blur-3xl md:min-h-[90vh]'
                   animate={{
@@ -456,13 +429,14 @@ export default function ScrollExpandMedia({
                   }}
                 />
 
-                {/* Componente do modelo 3D otimizado para mobile/desktop */}
                 <CaixaHome3d
                   alt='Modelo 3D - Linha de Produtos Profills'
                   modelSrc='/caixa-teste-3d.glb'
                   cameraOrbit='40deg 75deg 105%'
                   autoRotate={true}
                   isMobile={isMobile}
+                  fallbackLabel='Linha de Produtos Profills'
+                  posterSrc='/images/caixinha-profills.png'
                   className='relative mt-4 flex h-full w-1/2 items-center justify-center overflow-hidden transition-opacity duration-200 md:mt-10 md:h-[85vh]'
                 />
               </div>
@@ -471,11 +445,10 @@ export default function ScrollExpandMedia({
         </div>
       </div>
 
-      {/* SEÇÃO EXPANDIDA: Conteúdo adicional que aparece após animação completa */}
       <AnimatePresence>
         {showContent && (
           <section className='relative z-20 min-h-screen bg-white'>
-            {children} {/* Conteúdo passado via props */}
+            {children}
           </section>
         )}
       </AnimatePresence>

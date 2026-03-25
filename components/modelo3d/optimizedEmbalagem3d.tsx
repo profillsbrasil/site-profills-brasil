@@ -1,5 +1,8 @@
 'use client';
 
+import { memo, type CSSProperties, type ReactNode } from 'react';
+
+import { Model3DFallback } from '@/components/modelo3d/model3dFallback';
 import { useOptimized3DModel } from '@/components/modelo3d/hooks/useOptimized3DModel';
 
 interface OptimizedEmbalagem3dProps {
@@ -8,43 +11,70 @@ interface OptimizedEmbalagem3dProps {
   className?: string;
   autoRotate?: boolean;
   cameraOrbit?: string;
-  placeholder?: React.ReactNode;
+  placeholder?: ReactNode;
+  priority?: boolean;
+  fallbackLabel?: string;
+  posterSrc?: string;
 }
 
-export function OptimizedEmbalagem3d({
+function OptimizedEmbalagem3dComponent({
   modelSrc = '/caixa-teste-3d.glb',
   alt = 'Modelo 3D - Embalagem',
   className = '',
   autoRotate = true,
   cameraOrbit = '40deg 75deg 105%',
-  placeholder
+  placeholder,
+  priority = false,
+  fallbackLabel = 'Modelo de embalagem',
+  posterSrc
 }: OptimizedEmbalagem3dProps) {
   const {
     containerRef,
+    fallbackReason,
     modelViewerRef,
-    isVisible,
-    isLoaded,
-    shouldRender,
     hasBeenLoaded,
+    isLoaded,
+    isVisible,
+    renderMode,
+    shouldRender,
     handleModelLoad,
     handleModelError
   } = useOptimized3DModel({
     src: modelSrc,
     threshold: 0.1,
-    rootMargin: '100px'
+    rootMargin: priority ? '200px' : '100px',
+    eagerLoad: priority,
+    mountDelayMs: priority ? 0 : 100
   });
+
+  const fallbackSubtitle =
+    fallbackReason === 'unsupported-webgl'
+      ? '3D indisponível neste navegador.'
+      : fallbackReason === 'webglcontextlost'
+        ? 'Prévia estática ativada para preservar estabilidade.'
+        : hasBeenLoaded
+          ? 'Prévia estática para reduzir custo de renderização.'
+          : 'Carregamento sob demanda quando o card entra na tela.';
+  const modelViewerStyle: CSSProperties & Record<'--poster-color', string> = {
+    '--poster-color': 'transparent',
+    backgroundColor: 'transparent',
+    height: '250px',
+    minHeight: '250px',
+    opacity: isVisible ? 1 : 0.3,
+    pointerEvents: isVisible ? 'auto' : 'none',
+    width: '100%'
+  };
 
   return (
     <div
       ref={containerRef}
       className={`flex h-full w-full items-center justify-center ${className}`}>
-      {/* Model-viewer: Uma vez carregado, sempre renderizado mas com visibilidade controlada */}
       {shouldRender && isLoaded && (
-        // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
         <model-viewer
           ref={modelViewerRef}
           src={modelSrc}
           alt={alt}
+          poster={posterSrc}
           camera-controls
           camera-orbit={cameraOrbit}
           min-camera-orbit='auto auto 50%'
@@ -57,47 +87,31 @@ export function OptimizedEmbalagem3d({
           shadow-intensity='1'
           exposure='1'
           interaction-prompt='none'
-          loading='lazy'
+          loading={priority ? 'eager' : 'lazy'}
           reveal='auto'
           onLoad={handleModelLoad}
           onError={handleModelError}
-          style={{
-            width: '100%',
-            height: '250px',
-            minHeight: '250px',
-            backgroundColor: 'transparent',
-            '--poster-color': 'transparent',
-            opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
-            pointerEvents: isVisible ? 'auto' : 'none' // Desabilita interação quando não visível
-          }}
+          style={modelViewerStyle}
           className={`transition-all duration-300 ${
             isVisible ? 'hover:scale-[1.02]' : ''
           }`}>
-          {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
         </model-viewer>
       )}
 
-      {/* Placeholder: Só mostra se o modelo nunca foi carregado */}
-      {(!shouldRender || !isLoaded) && (
-        <div
-          className='flex h-full w-full items-center justify-center'
-          style={{ minHeight: '250px' }}>
-          {placeholder || (
-            <div className='text-muted-foreground flex flex-col items-center justify-center space-y-2'>
-              {isVisible && !hasBeenLoaded ? (
-                <>
-                  <div className='h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent'></div>
-                  <span className='text-sm'>Carregando modelo 3D...</span>
-                </>
-              ) : (
-                <div className='flex h-32 w-32 items-center justify-center rounded-xs bg-gradient-to-br from-slate-700 to-slate-800'>
-                  <span className='text-xs text-slate-400'>Modelo 3D</span>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+      {!shouldRender &&
+        (placeholder || (
+          <Model3DFallback
+            className='rounded-none border-0'
+            imageSrc={posterSrc}
+            label={fallbackLabel}
+            loading={renderMode === 'poster' && isVisible && !hasBeenLoaded}
+            subtitle={fallbackSubtitle}
+            minHeight={250}
+          />
+        ))}
     </div>
   );
 }
+
+export const OptimizedEmbalagem3d = memo(OptimizedEmbalagem3dComponent);
+OptimizedEmbalagem3d.displayName = 'OptimizedEmbalagem3d';

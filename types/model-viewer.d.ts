@@ -1,7 +1,16 @@
 // types/model-viewer.d.ts
-import type React from 'react';
+import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 
 declare global {
+  interface ModelViewerErrorDetail {
+    sourceError?: Event;
+    type?: string;
+  }
+
+  type ModelViewerErrorEvent =
+    | Event
+    | CustomEvent<ModelViewerErrorDetail>;
+
   interface ModelViewerElement extends HTMLElement {
     // Props/propriedades como propriedades JS (algumas chaveiam atributos)
     src?: string;
@@ -60,7 +69,7 @@ declare global {
 
     // Eventos (como propriedades)
     onLoad?: (ev: Event) => void;
-    onError?: (ev: Event) => void;
+    onError?: (ev: ModelViewerErrorEvent) => void;
     onModelVisibility?: (ev: Event) => void;
     onCameraChange?: (ev: Event) => void;
     onArStatus?: (ev: Event) => void;
@@ -68,8 +77,8 @@ declare global {
     onPause?: (ev: Event) => void;
   }
 
-  type MVBaseProps = React.DetailedHTMLProps<
-    React.HTMLAttributes<ModelViewerElement>,
+  type MVBaseProps = DetailedHTMLProps<
+    HTMLAttributes<ModelViewerElement>,
     ModelViewerElement
   >;
 
@@ -124,7 +133,7 @@ declare global {
 
     // Eventos (versão React onX)
     onLoad?: (ev: Event) => void;
-    onError?: (ev: Event) => void;
+    onError?: (ev: ModelViewerErrorEvent) => void;
     onModelVisibility?: (ev: Event) => void;
     onCameraChange?: (ev: Event) => void;
     onArStatus?: (ev: Event) => void;
@@ -135,6 +144,14 @@ declare global {
   namespace JSX {
     interface IntrinsicElements {
       'model-viewer': ModelViewerAttributes;
+    }
+  }
+
+  namespace React {
+    namespace JSX {
+      interface IntrinsicElements {
+        'model-viewer': ModelViewerAttributes;
+      }
     }
   }
 }

@@ -1,5 +1,14 @@
 'use client';
 
+import {
+  memo,
+  type CSSProperties,
+  type ReactNode,
+  useEffect,
+  useState
+} from 'react';
+
+import { Model3DFallback } from '@/components/modelo3d/model3dFallback';
 import { useOptimized3DModel } from '@/components/modelo3d/hooks/useOptimized3DModel';
 
 interface CaixaHome3dProps {
@@ -8,45 +17,141 @@ interface CaixaHome3dProps {
   className?: string;
   autoRotate?: boolean;
   cameraOrbit?: string;
-  placeholder?: React.ReactNode;
+  placeholder?: ReactNode;
   isMobile?: boolean;
+  priority?: boolean;
+  mountDelayMs?: number;
+  posterSrc?: string;
+  fallbackLabel?: string;
+  deferUntilInteraction?: boolean;
 }
 
-export function CaixaHome3d({
+function CaixaHome3dComponent({
   modelSrc = '/caixa-teste-3d.glb',
   alt = 'Modelo 3D - Embalagem',
   className = '',
   autoRotate = true,
   cameraOrbit = '40deg 75deg 105%',
   placeholder,
-  isMobile = false
+  isMobile = false,
+  priority = false,
+  mountDelayMs = priority ? 0 : 100,
+  posterSrc = '/images/caixinha-profills.png',
+  fallbackLabel = 'Linha de Produtos Profills',
+  deferUntilInteraction = false
 }: CaixaHome3dProps) {
   const {
     containerRef,
+    fallbackReason,
     modelViewerRef,
-    isVisible,
-    isLoaded,
-    shouldRender,
     hasBeenLoaded,
+    isLoaded,
+    isVisible,
+    renderMode,
+    shouldRender,
     handleModelLoad,
     handleModelError
   } = useOptimized3DModel({
     src: modelSrc,
     threshold: 0.1,
-    rootMargin: '100px'
+    rootMargin: priority ? '200px' : '100px',
+    mountDelayMs,
+    eagerLoad: priority
   });
+
+  const [hasDismissedPoster, setHasDismissedPoster] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(!deferUntilInteraction);
+
+  useEffect(() => {
+    if (!deferUntilInteraction) return;
+
+    const unlock = () => {
+      setHasInteracted(true);
+    };
+
+    window.addEventListener('mouseover', unlock, { once: true });
+    window.addEventListener('touchmove', unlock, {
+      once: true,
+      passive: true
+    });
+    window.addEventListener('scroll', unlock, {
+      once: true,
+      passive: true
+    });
+    window.addEventListener('keydown', unlock, { once: true });
+
+    return () => {
+      window.removeEventListener('mouseover', unlock);
+      window.removeEventListener('touchmove', unlock);
+      window.removeEventListener('scroll', unlock);
+      window.removeEventListener('keydown', unlock);
+    };
+  }, [deferUntilInteraction]);
+
+  useEffect(() => {
+    if (!shouldRender) {
+      setHasDismissedPoster(false);
+    }
+  }, [shouldRender]);
+
+  useEffect(() => {
+    if (
+      posterSrc === undefined ||
+      !shouldRender ||
+      !isLoaded ||
+      hasDismissedPoster ||
+      (deferUntilInteraction && !hasInteracted) ||
+      modelViewerRef.current === null
+    ) {
+      return;
+    }
+
+    const revealTimeout = window.setTimeout(() => {
+      modelViewerRef.current?.dismissPoster();
+      setHasDismissedPoster(true);
+    }, 120);
+
+    return () => {
+      window.clearTimeout(revealTimeout);
+    };
+  }, [
+    deferUntilInteraction,
+    hasDismissedPoster,
+    hasInteracted,
+    isLoaded,
+    modelViewerRef,
+    posterSrc,
+    shouldRender
+  ]);
+
+  const fallbackSubtitle =
+    fallbackReason === 'unsupported-webgl'
+      ? 'A visualização 3D não está disponível neste navegador.'
+      : fallbackReason === 'webglcontextlost'
+        ? 'O navegador perdeu o contexto 3D. Exibindo prévia estática.'
+        : hasBeenLoaded
+          ? 'Prévia estática carregada para preservar a performance.'
+          : 'A caixa 3D é carregada quando entra na área visível.';
+  const modelViewerStyle: CSSProperties & Record<'--poster-color', string> = {
+    '--poster-color': 'transparent',
+    backgroundColor: 'transparent',
+    height: '100%',
+    minHeight: isMobile ? '400px' : '600px',
+    opacity: isVisible ? 1 : 0.3,
+    pointerEvents: isVisible ? 'auto' : 'none',
+    width: '100%'
+  };
 
   return (
     <div
       ref={containerRef}
       className={`flex h-full w-full items-center justify-center ${className}`}>
-      {/* Model-viewer: Uma vez carregado, sempre renderizado mas com visibilidade controlada */}
       {shouldRender && isLoaded && (
-        // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
         <model-viewer
           ref={modelViewerRef}
           src={modelSrc}
           alt={alt}
+          poster={posterSrc}
           camera-controls
           camera-orbit={cameraOrbit}
           min-camera-orbit='auto auto 50%'
@@ -59,43 +164,30 @@ export function CaixaHome3d({
           shadow-intensity='1'
           exposure='1'
           interaction-prompt='none'
-          loading='lazy'
-          reveal='auto'
+          loading={priority ? 'eager' : 'lazy'}
+          reveal={posterSrc ? 'manual' : 'auto'}
           onLoad={handleModelLoad}
           onError={handleModelError}
-          style={{
-            width: '100%',
-            height: '100%',
-            minHeight: isMobile ? '400px' : '600px',
-            backgroundColor: 'transparent',
-            '--poster-color': 'transparent',
-            opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
-            pointerEvents: isVisible ? 'auto' : 'none' // Desabilita interação quando não visível
-          }}
+          style={modelViewerStyle}
           className={`transition-all duration-300 ${
             isVisible && !isMobile ? 'hover:scale-[1.02]' : ''
           }`}>
-          {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
         </model-viewer>
       )}
 
-      {/* Placeholder: Só mostra se o modelo nunca foi carregado */}
-      {(!shouldRender || !isLoaded) && (
-        <div
-          className='flex h-full w-full items-center justify-center'
-          style={{ minHeight: isMobile ? '200px' : '250px' }}>
-          {placeholder || (
-            <div className='text-muted-foreground flex flex-col items-center justify-center space-y-2'>
-              {isVisible && !hasBeenLoaded ? (
-                <>
-                  <div className='h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent'></div>
-                  <span className='text-sm'>Carregando modelo 3D...</span>
-                </>
-              ) : null}
-            </div>
-          )}
-        </div>
-      )}
+      {!shouldRender &&
+        (placeholder || (
+          <Model3DFallback
+            imageSrc={posterSrc}
+            label={fallbackLabel}
+            loading={renderMode === 'poster' && isVisible && !hasBeenLoaded}
+            subtitle={fallbackSubtitle}
+            minHeight={isMobile ? 400 : 600}
+          />
+        ))}
     </div>
   );
 }
+
+export const CaixaHome3d = memo(CaixaHome3dComponent);
+CaixaHome3d.displayName = 'CaixaHome3d';
