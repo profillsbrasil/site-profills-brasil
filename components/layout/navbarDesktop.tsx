@@ -111,8 +111,8 @@ export default function NavbarDesktop() {
       skipDelayDuration={500}
       className={`fixed top-0 z-50 hidden h-16 min-w-full border-b md:flex transition-all duration-300 ${
         scrolled
-          ? 'backdrop-blur-xl bg-slate-900/80 border-white/10 shadow-lg'
-          : 'bg-slate-900 border-border/10'
+          ? 'bg-secondary/95 backdrop-blur-md border-secondary-foreground/10 shadow-lg shadow-black/20'
+          : 'bg-secondary border-secondary-foreground/5'
       }`}>
       <NavigationMenuList className='flex h-full w-7xl items-center justify-center'>
         <NavigationMenuItem className='h-full'>
@@ -372,7 +372,7 @@ function ListItem({
               {title}
             </div>
             {children && (
-              <p className='line-clamp-1 text-sm leading-tight text-white group-hover:text-white'>
+              <p className='line-clamp-1 text-sm leading-tight text-secondary-foreground/70 group-hover:text-secondary-foreground'>
                 {children}
               </p>
             )}

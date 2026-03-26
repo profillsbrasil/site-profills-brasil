@@ -58,19 +58,19 @@ function MobileHero({ children }: { children?: ReactNode }) {
           </TextAnimate>
           <BlurFade delay={0.2} inView>
             <div className='flex flex-col gap-1 pt-4'>
-              <p className='group flex w-full items-center gap-3 font-semibold hover:text-white'>
+              <p className='group flex w-full items-center gap-3 font-semibold hover:text-secondary-foreground'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Máquinas Envasadoras
               </p>
-              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-secondary-foreground'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Peças
               </p>
-              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-secondary-foreground'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Consultoria e Suporte Técnico
               </p>
-              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-secondary-foreground'>
                 <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
               </p>
             </div>
@@ -131,7 +131,7 @@ function DesktopHero({ children }: { children?: ReactNode }) {
   if (shouldReduceMotion) {
     return (
       <>
-        <section className='relative flex min-h-screen items-center justify-center bg-slate-900'>
+        <section className='relative flex min-h-screen items-center justify-center bg-secondary'>
           <GridPattern />
           <div className='relative z-10 mx-auto max-w-[70vw]'>
             <HeroTextContent />
@@ -147,7 +147,7 @@ function DesktopHero({ children }: { children?: ReactNode }) {
       <section ref={heroRef} className='relative h-[300vh]'>
         <div className='sticky top-0 h-screen overflow-hidden pt-16'>
           {/* Background escuro base */}
-          <div className='absolute inset-0 bg-slate-900' />
+          <div className='absolute inset-0 bg-secondary' />
 
           {/* Background claro (crossfade) */}
           <motion.div
@@ -216,24 +216,24 @@ function DesktopHero({ children }: { children?: ReactNode }) {
 function HeroTextContent() {
   return (
     <div className='relative flex h-full w-full flex-col justify-center font-bold'>
-      <h1 className='text-5xl leading-tight text-white select-none'>
+      <h1 className='text-4xl leading-tight tracking-tight text-secondary-foreground select-none md:text-5xl'>
         Tudo Para Seu Negócio!
       </h1>
-      <h2 className='text-accent'>Inovação a cada embalagem</h2>
+      <h2 className='mt-1 text-lg text-accent md:text-xl'>Inovação a cada embalagem</h2>
       <div className='flex flex-col gap-1 pt-4'>
-        <p className='group flex w-full items-center gap-3 text-slate-300 hover:text-white'>
+        <p className='group flex w-full items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
           <CircleCheckBig className='text-accent h-5 w-5' />
           Máquinas Envasadoras
         </p>
-        <p className='group flex items-center gap-3 text-slate-300 hover:text-white'>
+        <p className='group flex items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
           <CircleCheckBig className='text-accent h-5 w-5' />
           Peças
         </p>
-        <p className='group flex items-center gap-3 text-slate-300 hover:text-white'>
+        <p className='group flex items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
           <CircleCheckBig className='text-accent h-5 w-5' />
           Consultoria e Suporte Técnico
         </p>
-        <p className='group flex items-center gap-3 text-slate-300 hover:text-white'>
+        <p className='group flex items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
           <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
         </p>
       </div>

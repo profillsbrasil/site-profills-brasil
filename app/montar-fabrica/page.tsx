@@ -93,7 +93,7 @@ export default function MonteSuaFabrica() {
               action='underline'
               
               animationDuration={4000}
-              textColor='text-xl font-bold tracking-wider text-white uppercase md:text-4xl'>
+              textColor='text-2xl font-bold tracking-wider text-white uppercase md:text-3xl'>
               Monte sua Fábrica
             </Highlighter>
           </h1>

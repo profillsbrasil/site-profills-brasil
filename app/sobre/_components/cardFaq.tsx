@@ -120,8 +120,8 @@ export default function CardFaq() {
           action='underline'
           
           animationDuration={4000}
-          textColor='text-2xl font-bold md:text-4xl'>
-          FAQ - Perguntas Frequentes
+          textColor='text-2xl font-bold md:text-3xl'>
+          Perguntas Frequentes
         </Highlighter>
       </div>
       <div className='flex w-full flex-col gap-6 md:flex-row md:gap-5'>
@@ -136,23 +136,23 @@ export default function CardFaq() {
                 key={index}
                 value={`item-${index}`}
                 className='bg-background border-border border transition-all duration-300 hover:shadow-md'>
-                <AccordionTrigger className='hover:text-accent flex w-full border-b bg-slate-50 px-4 py-3 text-left text-base font-semibold text-slate-900 transition-colors md:px-6 md:py-4 md:text-lg'>
+                <AccordionTrigger className='hover:text-accent flex w-full border-b bg-muted px-4 py-3 text-left text-base font-semibold text-foreground transition-colors md:px-6 md:py-4 md:text-lg'>
                   {faq.pergunta}
                 </AccordionTrigger>
                 <AccordionContent className='bg-background flex w-full flex-col gap-4 px-4 pt-2 pb-4 md:px-6 md:pb-6'>
-                  <p className='leading-relaxed text-slate-700'>
+                  <p className='leading-relaxed text-muted-foreground'>
                     {faq.resposta}
                   </p>
                   {faq.topicos && faq.topicos.length > 0 && (
                     <div className='flex flex-col gap-2'>
-                      <h4 className='text-sm font-medium text-slate-800'>
+                      <h4 className='text-sm font-medium text-foreground'>
                         Principais pontos:
                       </h4>
                       <ul className='space-y-1'>
                         {faq.topicos.map((topico, topicoIndex) => (
                           <li
                             key={topicoIndex}
-                            className='flex items-start gap-2 text-sm text-slate-600'>
+                            className='flex items-start gap-2 text-sm text-muted-foreground'>
                             <span className='bg-accent mt-2 inline-block h-1 w-1 flex-shrink-0 rounded-full' />
                             {topico}
                           </li>
@@ -173,7 +173,7 @@ export default function CardFaq() {
           />
           <div className='flex w-full flex-col items-center justify-center gap-2 p-3 md:p-4'>
             <h3 className='text-base font-semibold md:text-lg'>
-              Ainda está com dúvidas?
+              Não encontrou o que precisa?
             </h3>
             {/* TODO: Adicionar link whatsapp */}
             <Link className='cursor-pointer' href='#'>
@@ -181,7 +181,7 @@ export default function CardFaq() {
                 variant='outline'
                 size='lg'
                 className='!bg-background hover:border-accent group hover:bg-accent/10 border-border w-full rounded-xs px-6 py-3 font-semibold shadow-sm transition-all duration-300 hover:scale-[1.02] hover:text-black hover:shadow-md md:w-auto md:px-8 md:py-4'>
-                <span className='text-sm md:text-base'>Entre em contato</span>
+                <span className='text-sm md:text-base'>Fale com nossa equipe</span>
                 <ArrowRight className='group-hover:text-accent ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6' />
               </Button>
             </Link>

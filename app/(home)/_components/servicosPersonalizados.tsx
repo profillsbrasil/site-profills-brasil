@@ -44,8 +44,8 @@ export default function ServicosPersonalizados() {
             <Button
               variant='outline'
               size='lg'
-              className='group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-black md:w-2/3'>
-              Envie sua solicitação
+              className='group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-foreground md:w-2/3'>
+              Solicitar orçamento
               <ArrowRight className='group-hover:text-accent ml-2 h-6 w-6 transition-transform duration-300 group-hover:translate-x-1' />
             </Button>
           </Link>

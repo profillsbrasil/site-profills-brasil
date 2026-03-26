@@ -149,7 +149,7 @@ export default function Footer() {
         </div>
 
         <BlurFade delay={0.5} inView>
-          <div className='pt-6 md:pt-10'>
+          <div className='mt-8 border-t border-secondary-foreground/10 pt-8 md:mt-12 md:pt-10'>
             <div className='mb-6 text-center md:mb-8'>
               <h3 className='mb-2 text-base font-semibold text-secondary-foreground md:text-lg'>
                 Conecte-se conosco

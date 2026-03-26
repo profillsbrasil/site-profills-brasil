@@ -75,10 +75,10 @@ const cards = [
 
 export default function CtaAjudarEmpresa() {
   return (
-    <section className='relative z-10 px-4 py-10'>
+    <section className='relative z-10 px-4 py-16 md:py-24'>
       <div className='mx-auto max-w-6xl'>
         {/* Header Section */}
-        <div className='mb-8 flex flex-col items-center text-center'>
+        <div className='mb-10 flex flex-col items-center text-center md:mb-14'>
           <h2 className='mb-4 flex flex-col gap-1 text-2xl leading-tight font-bold md:flex-row md:gap-2 md:text-3xl'>
             <TextAnimate animation='blurInUp' by='word' as='span' once startOnView className='text-2xl font-bold md:text-3xl'>
               Como podemos
@@ -98,7 +98,7 @@ export default function CtaAjudarEmpresa() {
         </div>
 
         {/* Benefits Cards */}
-        <div className='mb-5 grid grid-cols-1 gap-5 md:grid-cols-3'>
+        <div className='mb-12 grid grid-cols-1 gap-5 md:mb-16 md:grid-cols-3'>
             {cards.map((card, index) => (
               <BlurFade key={index} delay={0.1 + index * 0.1} inView>
                 <div className='group relative flex flex-col overflow-hidden rounded-xs bg-secondary text-secondary-foreground shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
@@ -121,17 +121,16 @@ export default function CtaAjudarEmpresa() {
             ))}
           </div>
 
-        <div className='w-full max-w-6xl pb-2'>
-          <div className='mb-6 text-center'>
-            <p className='text-muted-foreground text-sm md:text-base'>
-              Acreditamos que a qualidade começa na escolha dos melhores
-              componentes
+        <div className='w-full max-w-6xl'>
+          <div className='mb-8 text-center'>
+            <h3 className='text-foreground text-xl font-semibold md:text-2xl'>
+              As melhores marcas do mercado
+            </h3>
+            <p className='text-muted-foreground mt-2 text-sm md:text-base'>
+              A qualidade começa na escolha dos melhores componentes
             </p>
-            <h2 className='text-muted-foreground text-xl font-semibold md:text-2xl'>
-              Por isto usamos as melhores marcas!
-            </h2>
           </div>
-          <div className='grid grid-cols-4 gap-3 md:flex md:w-full md:gap-4'>
+          <div className='grid grid-cols-4 gap-4 md:flex md:w-full md:items-center md:justify-center md:gap-6'>
             {fornecedores.map((fornecedor) => (
               <div
                 key={fornecedor.alt}

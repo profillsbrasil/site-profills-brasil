@@ -11,7 +11,6 @@ import {
 } from '@/app/maquinas/_components/cardMaquinas/maquinasData';
 import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { Button } from '@/components/ui/button';
-import { ShineBorder } from '@/components/ui/shine-border';
 import {
   Carousel,
   CarouselContent,
@@ -67,10 +66,9 @@ export default function CardGridSket() {
           <Button
             variant='outline'
             size='lg'
-            className='group relative overflow-hidden border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-black md:w-auto'>
+            className='group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-foreground md:w-auto'>
             <span className='text-sm md:text-base'>Ver catálogo completo</span>
             <ArrowRight className='group-hover:text-accent ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6' />
-            <ShineBorder shineColor={['#2d62ef', '#1e4bd4']} />
           </Button>
         </Link>
       </AnimatedContainer>

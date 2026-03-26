@@ -65,7 +65,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle = cva(
-  'group inline-flex h-9 w-max border border-transparent items-center justify-center rounded-xs bg-transparent px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 hover:text-white focus:bg-slate-800 focus:text-white disabled:pointer-events-none disabled:opacity-50 data-[state=open]:hover:bg-slate-800 data-[state=open]:text-white data-[state=open]:focus:bg-slate-800 data-[state=open]:bg-slate-800/50 focus-visible:ring-slate-600/50 outline-none transition-all duration-200 focus-visible:ring-[3px] focus-visible:outline-1'
+  'group inline-flex h-9 w-max border border-transparent items-center justify-center rounded-xs bg-transparent px-4 py-2 text-sm font-medium text-secondary-foreground hover:bg-secondary-foreground/10 hover:text-secondary-foreground focus:bg-secondary-foreground/10 focus:text-secondary-foreground disabled:pointer-events-none disabled:opacity-50 data-[state=open]:hover:bg-secondary-foreground/10 data-[state=open]:text-secondary-foreground data-[state=open]:focus:bg-secondary-foreground/10 data-[state=open]:bg-secondary-foreground/5 focus-visible:ring-secondary-foreground/20 outline-none transition-all duration-200 focus-visible:ring-[3px] focus-visible:outline-1'
 );
 
 function NavigationMenuTrigger({
@@ -80,7 +80,7 @@ function NavigationMenuTrigger({
       {...props}>
       {children}{' '}
       <ChevronDownIcon
-        className='relative top-[1px] ml-1 size-3 text-white transition duration-300 group-data-[state=open]:rotate-180'
+        className='relative top-[1px] ml-1 size-3 text-secondary-foreground transition duration-300 group-data-[state=open]:rotate-180'
         aria-hidden='true'
       />
     </NavigationMenuPrimitive.Trigger>
@@ -96,7 +96,7 @@ function NavigationMenuContent({
       data-slot='navigation-menu-content'
       className={cn(
         'data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 top-0 left-0 w-full p-3 pr-3.5 md:absolute md:w-auto',
-        'group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:top-full group-data-[viewport=false]/navigation-menu:mt-1.5 group-data-[viewport=false]/navigation-menu:overflow-hidden group-data-[viewport=false]/navigation-menu:rounded-xs group-data-[viewport=false]/navigation-menu:border group-data-[viewport=false]/navigation-menu:border-slate-700 group-data-[viewport=false]/navigation-menu:bg-slate-900 group-data-[viewport=false]/navigation-menu:text-white group-data-[viewport=false]/navigation-menu:shadow-xl group-data-[viewport=false]/navigation-menu:duration-200 **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none',
+        'group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:top-full group-data-[viewport=false]/navigation-menu:mt-1.5 group-data-[viewport=false]/navigation-menu:overflow-hidden group-data-[viewport=false]/navigation-menu:rounded-xs group-data-[viewport=false]/navigation-menu:border group-data-[viewport=false]/navigation-menu:border-secondary-foreground/15 group-data-[viewport=false]/navigation-menu:bg-secondary group-data-[viewport=false]/navigation-menu:text-secondary-foreground group-data-[viewport=false]/navigation-menu:shadow-xl group-data-[viewport=false]/navigation-menu:duration-200 **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none',
         className
       )}
       {...props}
@@ -116,7 +116,7 @@ function NavigationMenuViewport({
       <NavigationMenuPrimitive.Viewport
         data-slot='navigation-menu-viewport'
         className={cn(
-          'origin-top-center data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-xs border border-slate-700 bg-slate-900 text-white shadow-xl md:w-[var(--radix-navigation-menu-viewport-width)]',
+          'origin-top-center data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-xs border border-secondary-foreground/15 bg-secondary text-secondary-foreground shadow-xl md:w-[var(--radix-navigation-menu-viewport-width)]',
           className
         )}
         {...props}
@@ -133,7 +133,7 @@ function NavigationMenuLink({
     <NavigationMenuPrimitive.Link
       data-slot='navigation-menu-link'
       className={cn(
-        "flex h-full w-full flex-col gap-1 rounded-xs px-3 py-2 text-sm text-white transition-all duration-200 outline-none hover:bg-slate-800 hover:text-white focus:bg-slate-800 focus:text-white focus-visible:ring-[3px] focus-visible:ring-slate-600/50 focus-visible:outline-1 data-[active=true]:bg-slate-800/50 data-[active=true]:text-white data-[active=true]:hover:bg-slate-800 data-[active=true]:focus:bg-slate-800 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-white",
+        "flex h-full w-full flex-col gap-1 rounded-xs px-3 py-2 text-sm text-secondary-foreground transition-all duration-200 outline-none hover:bg-secondary-foreground/10 hover:text-secondary-foreground focus:bg-secondary-foreground/10 focus:text-secondary-foreground focus-visible:ring-[3px] focus-visible:ring-secondary-foreground/20 focus-visible:outline-1 data-[active=true]:bg-secondary-foreground/5 data-[active=true]:text-secondary-foreground data-[active=true]:hover:bg-secondary-foreground/10 data-[active=true]:focus:bg-secondary-foreground/10 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-secondary-foreground",
         className
       )}
       {...props}
@@ -153,7 +153,7 @@ function NavigationMenuIndicator({
         className
       )}
       {...props}>
-      <div className='relative top-[60%] h-2 w-2 rotate-45 rounded-xs bg-slate-700 shadow-xl' />
+      <div className='relative top-[60%] h-2 w-2 rotate-45 rounded-xs bg-secondary-foreground/15 shadow-xl' />
     </NavigationMenuPrimitive.Indicator>
   );
 }
