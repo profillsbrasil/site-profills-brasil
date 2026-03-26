@@ -11,9 +11,9 @@ import { ArrowRight } from 'lucide-react';
 
 export default function CtaMonteSuaFabrica() {
   return (
-    <div className='flex w-full items-center justify-center px-4 py-10'>
-      <BlurFade delay={0.1} inView>
-        <div className='relative flex h-full min-h-80 w-full max-w-6xl flex-col items-center justify-center gap-4 rounded-xs bg-secondary p-6 md:min-h-96 md:gap-5 md:p-8'>
+    <div className='mx-auto w-full max-w-6xl px-4 py-10'>
+      <BlurFade delay={0.1} inView className='w-full'>
+        <div className='relative flex h-full min-h-80 w-full flex-col items-center justify-center gap-4 rounded-xs bg-secondary p-6 md:min-h-96 md:gap-5 md:p-8'>
           <GridPattern />
           <Image
             src={CollabBro}

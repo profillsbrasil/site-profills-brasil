@@ -170,7 +170,7 @@ export default function NavbarDesktop() {
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          <NavigationMenuItem className='hidden'>
             <NavigationMenuTrigger>Peças</NavigationMenuTrigger>
             <NavigationMenuContent>
               <div className='grid h-full w-[500px] grid-cols-[1fr_1fr] gap-2'>
@@ -284,7 +284,7 @@ export default function NavbarDesktop() {
             <NavigationMenuTrigger>Projetos</NavigationMenuTrigger>
             <NavigationMenuContent>
               <span className='grid w-[500px] gap-2 md:grid-cols-2'>
-                {projetos.slice(0, 4).map((projeto) => (
+                {projetos.map((projeto) => (
                   <ListItem
                     key={projeto.title}
                     title={projeto.title}
@@ -293,13 +293,6 @@ export default function NavbarDesktop() {
                     {projeto.description}
                   </ListItem>
                 ))}
-                <NavigationMenuLink asChild>
-                  <Link
-                    href='/projetos/profills-pd'
-                    className='col-span-2 flex items-center justify-center py-2 text-sm font-medium text-accent hover:text-accent/80'>
-                    Ver todos os projetos
-                  </Link>
-                </NavigationMenuLink>
               </span>
             </NavigationMenuContent>
           </NavigationMenuItem>

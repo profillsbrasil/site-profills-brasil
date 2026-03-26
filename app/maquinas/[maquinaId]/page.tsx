@@ -91,7 +91,7 @@ function ProducaoMaxima({
   return (
     <div
       className={cn(
-        'border-border/30 flex flex-col items-center justify-center border-x border-b border-dashed bg-slate-900 px-5 py-2 md:border',
+        'border-border/30 flex flex-col items-center justify-center border-x border-b border-dashed bg-secondary px-5 py-2 md:border',
         className
       )}>
       <div className='flex items-center justify-center gap-2'>
@@ -100,7 +100,7 @@ function ProducaoMaxima({
           value={maquina.unidadeMaxima || 0}
           startValue={Math.floor((maquina.unidadeMaxima || 0) * 0.5)}
           decimalPlaces={0}
-          className='text-2xl font-bold md:text-4xl'
+          className='text-2xl font-bold text-secondary-foreground md:text-4xl'
         />
       </div>
       <p className='text-muted text-xl font-light tracking-wide italic'>

@@ -100,8 +100,8 @@ export default function CtaAjudarEmpresa() {
         {/* Benefits Cards */}
         <div className='mb-12 grid grid-cols-1 gap-5 md:mb-16 md:grid-cols-3'>
             {cards.map((card, index) => (
-              <BlurFade key={index} delay={0.1 + index * 0.1} inView>
-                <div className='group relative flex flex-col overflow-hidden rounded-xs bg-secondary text-secondary-foreground shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
+              <BlurFade key={index} delay={0.1 + index * 0.1} inView className='h-full'>
+                <div className='group relative flex h-full flex-col overflow-hidden rounded-xs bg-secondary text-secondary-foreground shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
                   <GridPattern />
                   <div className='relative p-6 transition-all duration-300'>
                     <div className='mb-4 flex items-start gap-4'>

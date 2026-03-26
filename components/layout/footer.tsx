@@ -120,8 +120,8 @@ export default function Footer() {
 
         <div className='grid gap-4 md:grid-cols-3 md:gap-6'>
           {contacts.map((contact, index) => (
-            <BlurFade key={contact.title} delay={0.2 + index * 0.1} inView>
-              <div className='group rounded-xs border border-secondary-foreground/10 bg-secondary-foreground/5 p-4 transition-colors duration-300 hover:border-accent/20 hover:bg-secondary-foreground/8 md:p-6'>
+            <BlurFade key={contact.title} delay={0.2 + index * 0.1} inView className='h-full'>
+              <div className='group h-full rounded-xs border border-secondary-foreground/10 bg-secondary-foreground/5 p-4 transition-colors duration-300 hover:border-accent/20 hover:bg-secondary-foreground/8 md:p-6'>
                 <div className='mb-3 flex items-center gap-3 md:mb-4'>
                   <div className='flex h-9 w-9 items-center justify-center rounded-xs bg-accent/10 md:h-10 md:w-10'>
                     <contact.icon className='h-4 w-4 text-accent md:h-5 md:w-5' />

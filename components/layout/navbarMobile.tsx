@@ -279,8 +279,8 @@ export default function NavbarMobile() {
                   </AccordionContent>
                 </AccordionItem>
 
-                {/* Peças */}
-                <AccordionItem value='pecas' className='border-secondary-foreground/10'>
+                {/* Peças - oculto até integração com sistema externo */}
+                <AccordionItem value='pecas' className='hidden border-secondary-foreground/10'>
                   <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
                     <div className='flex items-center'>
                       <Archive className='text-accent mr-2 size-5' />
