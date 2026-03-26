@@ -58,7 +58,7 @@ const row = diferenciaisDaGt3000.slice(0, diferenciaisDaGt3000.length);
 
 export default function Gt3000() {
   return (
-    <section className='z-20 flex h-full w-full flex-col items-center justify-center gap-6 px-4 pb-10 md:gap-8'>
+    <section className='z-20 flex h-full w-full flex-col items-center justify-center gap-6 px-4 py-10 md:gap-8'>
       <div className='relative flex h-full w-full max-w-7xl flex-col items-center justify-center'>
         <div className='mb-6 flex flex-col items-center justify-center text-center md:mb-8'>
           <div className='flex flex-col items-center justify-center gap-1 md:flex-row md:gap-2'>
@@ -112,7 +112,7 @@ const MarqueeCard = ({
   description: string;
 }) => {
   return (
-    <div className='hover:bg-muted bg-background relative z-10 h-full w-52 cursor-pointer overflow-hidden rounded-xs border border-dashed border-black/40 p-3 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:w-64 md:p-4'>
+    <div className='hover:bg-muted bg-background relative z-10 h-full w-52 cursor-pointer overflow-hidden rounded-xs border border-black/30 p-3 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:w-64 md:p-4'>
       <div className='flex flex-row items-center gap-2'>
         <IconCard className='h-5 w-5 text-slate-900 md:h-6 md:w-6' />
         <div className='flex flex-col'>

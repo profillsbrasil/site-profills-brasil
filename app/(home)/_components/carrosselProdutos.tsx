@@ -22,7 +22,7 @@ import Autoplay from 'embla-carousel-autoplay';
 const produtos = [
   {
     id: 1,
-    name: 'Caixa de Marcearia',
+    name: 'Caixa de Mercearia',
     imageProduct: caixaMarcearia
   },
   {

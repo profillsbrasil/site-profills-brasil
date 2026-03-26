@@ -27,7 +27,7 @@ export default function ServicosPersonalizados() {
               textColor='text-2xl font-bold mb-4 text-center md:text-3xl md:mb-5'>
               Serviços Personalizados
             </Highlighter>
-            <div className='text-muted-foreground bg-background z-10 flex flex-col rounded-xs border border-dashed border-black/30 p-4 text-sm shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-5 md:text-base'>
+            <div className='text-muted-foreground bg-background z-10 flex flex-col rounded-xs border border-black/30 p-4 text-sm shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-5 md:text-base'>
               <p className='mb-3'>
                 Além das máquinas envasadoras, oferecemos{' '}
                 <span className='text-accent font-bold'>corte a laser</span> e{' '}

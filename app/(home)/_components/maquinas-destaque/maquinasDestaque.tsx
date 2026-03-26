@@ -4,7 +4,7 @@ import CardGridSket from './cardsGridMaquinas';
 
 export default function MaquinasDestaque() {
   return (
-    <div className='mx-auto flex w-full flex-col items-center justify-center gap-4 px-4 py-5 md:gap-5'>
+    <div className='mx-auto flex w-full flex-col items-center justify-center gap-4 px-4 py-10 md:gap-5'>
       <div className='w-full max-w-6xl'>
         <Highlighter
           action='underline'

@@ -78,7 +78,7 @@ const cards = [
 
 export default function CtaAjudarEmpresa() {
   return (
-    <section className='relative z-10 px-4 py-5'>
+    <section className='relative z-10 px-4 py-10'>
       <div className='mx-auto max-w-6xl'>
         {/* Header Section */}
         <div className='mb-8 flex flex-col items-center text-center'>
@@ -132,7 +132,7 @@ export default function CtaAjudarEmpresa() {
         <div className='w-full max-w-6xl pb-2'>
           <div className='mb-6 text-center'>
             <p className='text-muted-foreground text-sm md:text-base'>
-              Acreditamo que a qualidade comeca na escolha dos melhores
+              Acreditamos que a qualidade começa na escolha dos melhores
               componentes
             </p>
             <h2 className='text-muted-foreground text-xl font-semibold md:text-2xl'>

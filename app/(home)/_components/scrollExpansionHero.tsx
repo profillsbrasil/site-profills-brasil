@@ -262,7 +262,7 @@ export default function ScrollExpandMedia({
   // Se for mobile, renderiza versão simplificada sem animações de scroll.
   if (isMobile) {
     return (
-      <div className='relative min-h-[calc(100vh-5rem)] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900  '>
+      <div className='relative min-h-[calc(100vh-5rem)] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900'>
         {/* Pattern de fundo decorativo */}
         <GridPatternMobile />
 
@@ -270,30 +270,30 @@ export default function ScrollExpandMedia({
         <div className='relative z-10 flex min-h-screen w-full flex-col items-center justify-center'>
           {/* Título principal */}
           <div className='h-1/2 w-full flex flex-col items-center justify-center'>
-            <h1 className='text-center font-bold bg-linear-to-r  bg-clip-text text-4xl leading-tight text-accent'>
+            <h1 className='text-center font-bold bg-linear-to-r bg-clip-text text-4xl leading-tight text-accent'>
               Soluções para o seu negócio!
             </h1>
-            <div className='flex flex-col  gap-1 pt-4'>
-              <p className='group flex w-full items-center gap-3 font-semibold  hover:text-white'>
-                <CircleCheckBig className='text-accent h-5 w-5 ' />
-                Máquinas Evasadoreas
+            <div className='flex flex-col gap-1 pt-4'>
+              <p className='group flex w-full items-center gap-3 font-semibold hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
+                Máquinas Envasadoras
               </p>
-              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Peças
               </p>
-              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />
                 Consultoria e Suporte Técnico
               </p>
-              <p className='group flex items-center gap-3 font-semibold   hover:text-white'>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
                 <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
               </p>
             </div>
           </div>
 
           {/* Modelo 3D mobile */}
-          <div className=' flex h-1/2 w-1/2 items-center justify-center '>
+          <div className='flex h-1/2 w-1/2 items-center justify-center'>
             <CaixaHome3d
               alt='Modelo 3D - Linha de Produtos Profills'
               modelSrc='/caixa-teste-3d.glb'
@@ -388,9 +388,9 @@ export default function ScrollExpandMedia({
                     <div className='flex flex-col gap-1 pt-4'>
                       <p className='group flex w-full items-center gap-3 text-gray-300 hover:text-white'>
                         <CircleCheckBig className='text-accent h-5 w-5' />
-                        Máquinas Evasadoreas
+                        Máquinas Envasadoras
                       </p>
-                      <p className='group flex items-center gap-3  text-gray-300 hover:text-white'>
+                      <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
                         <CircleCheckBig className='text-accent h-5 w-5' />
                         Peças
                       </p>
