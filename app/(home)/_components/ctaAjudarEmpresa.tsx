@@ -2,7 +2,6 @@ import Image from 'next/image';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Highlighter } from '@/components/magicui/highlighter';
-import { Badge } from '@/components/ui/badge';
 import { BlurFade } from '@/components/ui/blur-fade';
 import { TextAnimate } from '@/components/ui/text-animate';
 import logoAutonics from '@/lib/images/fornecedores/Autonics.png';
@@ -58,22 +57,19 @@ const cards = [
     title: 'Conformidade garantida',
     description:
       'Adequação da operação a um processo de envase higiênico, nos padrões da Anvisa, impedindo o contato do produto com micro-organismos.',
-    icon: <Shield className='h-5 w-5 text-white' />,
-    badge: 'Conformidade garantida'
+    icon: <Shield className='h-5 w-5 text-accent-foreground' />
   },
   {
     title: 'Otimização de tempo',
     description:
       'Tempo para dedicar-se a outras áreas do seu negócio, a exemplo das vendas e abertura de novos mercados.',
-    icon: <Clock className='h-5 w-5 text-white' />,
-    badge: 'Mais produtividade'
+    icon: <Clock className='h-5 w-5 text-accent-foreground' />
   },
   {
     title: 'Automatização completa',
     description:
       'Automatização do processo de envase, evitando desperdícios, otimizando a produção com aumento em volume de envase.',
-    icon: <Settings className='h-5 w-5 text-white' />,
-    badge: 'Retorno de investimento'
+    icon: <Settings className='h-5 w-5 text-accent-foreground' />
   }
 ];
 
@@ -89,7 +85,7 @@ export default function CtaAjudarEmpresa() {
             </TextAnimate>
             <Highlighter
               action='underline'
-              color='#2d62ef'
+              
               animationDuration={4000}
               textColor='text-2xl font-bold text-accent md:text-3xl'>
               ajudar sua empresa?
@@ -105,26 +101,20 @@ export default function CtaAjudarEmpresa() {
         <div className='mb-5 grid grid-cols-1 gap-5 md:grid-cols-3'>
             {cards.map((card, index) => (
               <BlurFade key={index} delay={0.1 + index * 0.1} inView>
-                <div
-                  className='group relative flex flex-col overflow-hidden rounded-xs bg-slate-900 text-white shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
+                <div className='group relative flex flex-col overflow-hidden rounded-xs bg-secondary text-secondary-foreground shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
                   <GridPattern />
                   <div className='relative p-6 transition-all duration-300'>
                     <div className='mb-4 flex items-start gap-4'>
-                      <div className='rounded-xs border border-white/30 bg-slate-900 p-3 transition-transform duration-300 group-hover:scale-105'>
+                      <div className='rounded-xs bg-accent/10 p-3 transition-transform duration-300 group-hover:scale-105'>
                         {card.icon}
                       </div>
                       <div className='flex-1'>
-                        <h3 className='mb-2 text-base font-semibold'>
+                        <h3 className='text-base font-semibold'>
                           {card.title}
                         </h3>
-                        <Badge
-                          variant='outline'
-                          className='border border-white/30 bg-slate-900 px-3 py-1 text-xs font-medium text-white'>
-                          {card.badge}
-                        </Badge>
                       </div>
                     </div>
-                    <p className='text-sm leading-relaxed'>{card.description}</p>
+                    <p className='text-sm leading-relaxed text-secondary-foreground/70'>{card.description}</p>
                   </div>
                 </div>
               </BlurFade>
@@ -149,6 +139,7 @@ export default function CtaAjudarEmpresa() {
                 <Image
                   src={fornecedor.logo}
                   alt={fornecedor.alt}
+                  sizes='(max-width: 768px) 25vw, 12vw'
                   className='h-full w-full object-contain'
                 />
               </div>

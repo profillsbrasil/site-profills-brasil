@@ -192,16 +192,6 @@ function DesktopHero({ children }: { children?: ReactNode }) {
                 className='pointer-events-none relative flex h-full w-1/2 flex-col items-end justify-center'
                 style={{ x: rightX, opacity: cardsOpacity, visibility: cardsHidden ? 'hidden' : 'visible' }}>
                 <div className='relative flex h-full w-full items-center justify-center'>
-                  <motion.div
-                    className='absolute -inset-1 h-full bg-linear-to-r from-blue-500/20 to-cyan-500/20 blur-3xl'
-                    animate={{ opacity: [0.3, 0.6, 0.3] }}
-                    transition={{
-                      duration: 3,
-                      repeat: 3,
-                      ease: 'easeInOut',
-                      delay: 1.5
-                    }}
-                  />
                   <CaixaHome3d
                     alt='Modelo 3D - Linha de Produtos Profills'
                     modelSrc='/caixa-teste-3d.glb'
@@ -226,29 +216,27 @@ function DesktopHero({ children }: { children?: ReactNode }) {
 function HeroTextContent() {
   return (
     <div className='relative flex h-full w-full flex-col justify-center font-bold'>
-      <span className='from-accent via-accent/70 to-accent/50 w-full bg-linear-to-r bg-clip-text text-transparent'>
-        <h1 className='text-5xl leading-tight select-none'>
-          Tudo Para Seu Negócio!
-        </h1>
-        <h2>Inovação a cada embalagem</h2>
-        <div className='flex flex-col gap-1 pt-4'>
-          <p className='group flex w-full items-center gap-3 text-gray-300 hover:text-white'>
-            <CircleCheckBig className='text-accent h-5 w-5' />
-            Máquinas Envasadoras
-          </p>
-          <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
-            <CircleCheckBig className='text-accent h-5 w-5' />
-            Peças
-          </p>
-          <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
-            <CircleCheckBig className='text-accent h-5 w-5' />
-            Consultoria e Suporte Técnico
-          </p>
-          <p className='group flex items-center gap-3 text-gray-300 hover:text-white'>
-            <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
-          </p>
-        </div>
-      </span>
+      <h1 className='text-5xl leading-tight text-white select-none'>
+        Tudo Para Seu Negócio!
+      </h1>
+      <h2 className='text-accent'>Inovação a cada embalagem</h2>
+      <div className='flex flex-col gap-1 pt-4'>
+        <p className='group flex w-full items-center gap-3 text-slate-300 hover:text-white'>
+          <CircleCheckBig className='text-accent h-5 w-5' />
+          Máquinas Envasadoras
+        </p>
+        <p className='group flex items-center gap-3 text-slate-300 hover:text-white'>
+          <CircleCheckBig className='text-accent h-5 w-5' />
+          Peças
+        </p>
+        <p className='group flex items-center gap-3 text-slate-300 hover:text-white'>
+          <CircleCheckBig className='text-accent h-5 w-5' />
+          Consultoria e Suporte Técnico
+        </p>
+        <p className='group flex items-center gap-3 text-slate-300 hover:text-white'>
+          <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
+        </p>
+      </div>
     </div>
   );
 }

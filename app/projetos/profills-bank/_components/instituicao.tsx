@@ -8,7 +8,7 @@ export default function Instituicao() {
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-6 py-8 md:gap-10 md:py-16'>
       <Highlighter
         action='underline'
-        color='#2d62ef'
+        
         animationDuration={4000}
         textColor='text-2xl font-bold text-center md:text-3xl'>
         <h2 id='titulo-regulacao'>

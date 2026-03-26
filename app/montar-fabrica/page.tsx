@@ -91,7 +91,7 @@ export default function MonteSuaFabrica() {
           <h1 className='text-center'>
             <Highlighter
               action='underline'
-              color='#2d62ef'
+              
               animationDuration={4000}
               textColor='text-xl font-bold tracking-wider text-white uppercase md:text-4xl'>
               Monte sua Fábrica

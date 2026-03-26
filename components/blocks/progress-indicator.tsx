@@ -25,6 +25,8 @@ const ProgressIndicator = () => {
     }
   };
 
+  const progressScale = step === 1 ? 0.25 : step === 2 ? 0.625 : 1;
+
   return (
     <div className='flex flex-col items-center justify-center gap-8'>
       <div className='relative flex items-center gap-6'>
@@ -32,54 +34,42 @@ const ProgressIndicator = () => {
           <div
             key={dot}
             className={cn(
-              'relative z-10 h-2 w-2 rounded-full',
-              dot <= step ? 'bg-white' : 'bg-gray-300'
+              'relative z-10 h-3 w-3 rounded-full',
+              dot <= step ? 'bg-secondary-foreground' : 'bg-muted'
             )}
           />
         ))}
 
-        {/* Green progress overlay */}
         <motion.div
-          initial={{ width: '12px', height: '24px', x: 0 }}
-          animate={{
-            width: step === 1 ? '24px' : step === 2 ? '60px' : '96px',
-            x: 0
-          }}
-          className='absolute -top-[8px] -left-[8px] h-3 -translate-y-1/2 rounded-full bg-green-500'
+          initial={{ scaleX: 0.125 }}
+          animate={{ scaleX: progressScale }}
+          style={{ transformOrigin: 'left' }}
+          className='absolute -top-[8px] -left-[8px] h-3 w-[96px] -translate-y-1/2 rounded-full bg-accent'
           transition={{
             type: 'spring',
             stiffness: 300,
             damping: 20,
-            mass: 0.8,
-            bounce: 0.25,
-            duration: 0.6
+            mass: 0.8
           }}
         />
       </div>
 
-      {/* Buttons container */}
       <div className='w-full max-w-sm'>
-        <motion.div
-          className='flex items-center gap-1'
-          animate={{
-            justifyContent: isExpanded ? 'stretch' : 'space-between'
-          }}>
+        <div className={cn('flex items-center gap-1', !isExpanded && 'justify-between')}>
           {!isExpanded && (
             <motion.button
-              initial={{ opacity: 0, width: 0, scale: 0.8 }}
-              animate={{ opacity: 1, width: '64px', scale: 1 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{
                 type: 'spring',
                 stiffness: 400,
                 damping: 15,
                 mass: 0.8,
-                bounce: 0.25,
-                duration: 0.6,
                 opacity: { duration: 0.2 }
               }}
               onClick={handleBack}
-              className='flex w-16 flex-1 items-center justify-center rounded-full bg-gray-100 px-4 py-3 text-sm font-semibold text-black transition-colors hover:border hover:bg-gray-50'>
-              Back
+              className='flex w-16 items-center justify-center rounded-full bg-muted px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted/80'>
+              Voltar
             </motion.button>
           )}
           <motion.button
@@ -88,7 +78,7 @@ const ProgressIndicator = () => {
               flex: isExpanded ? 1 : 'inherit'
             }}
             className={cn(
-              'w-56 flex-1 rounded-full bg-slate-900 px-4 py-3 text-white transition-colors',
+              'w-56 flex-1 rounded-full bg-primary px-4 py-3 text-primary-foreground transition-colors',
               !isExpanded && 'w-44'
             )}>
             <div className='flex items-center justify-center gap-2 text-sm font-[600]'>
@@ -100,16 +90,15 @@ const ProgressIndicator = () => {
                     type: 'spring',
                     stiffness: 500,
                     damping: 15,
-                    mass: 0.5,
-                    bounce: 0.4
+                    mass: 0.5
                   }}>
                   <CircleCheck size={16} />
                 </motion.div>
               )}
-              {step === 3 ? 'Finish' : 'Continue'}
+              {step === 3 ? 'Finalizar' : 'Continuar'}
             </div>
           </motion.button>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

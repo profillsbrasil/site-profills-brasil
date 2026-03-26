@@ -69,7 +69,7 @@ export default function Gt3000() {
             </TextAnimate>
             <Highlighter
               action='underline'
-              color='#2d62ef'
+              
               animationDuration={4000}
               textColor='text-2xl font-bold mb-1 md:text-3xl md:mb-2'>
               GT-3000
@@ -83,6 +83,7 @@ export default function Gt3000() {
         <BlurFade delay={0.2} inView>
           <Image
             src={imageGt3000}
+            sizes='(max-width: 768px) 100vw, 80vw'
             className='h-48 w-full rounded-xs object-contain md:h-96 md:object-cover'
             alt='GT-3000'
           />
@@ -120,9 +121,9 @@ const MarqueeCard = ({
       <div className='flex flex-row items-center gap-2'>
         <IconCard className='h-5 w-5 text-slate-900 md:h-6 md:w-6' />
         <div className='flex flex-col'>
-          <figcaption className='text-xs font-medium md:text-sm'>
+          <span className='text-xs font-medium md:text-sm'>
             {title}
-          </figcaption>
+          </span>
         </div>
       </div>
       <blockquote className='mt-2 text-xs leading-relaxed md:text-sm'>

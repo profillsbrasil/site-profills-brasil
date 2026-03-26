@@ -28,10 +28,22 @@ interface HighlighterProps {
   textColor?: string;
 }
 
+function resolveColor(color: string): string {
+  if (typeof window === 'undefined') return color;
+  if (color.startsWith('var(')) {
+    const varName = color.slice(4, -1).trim();
+    const resolved = getComputedStyle(document.documentElement)
+      .getPropertyValue(varName)
+      .trim();
+    return resolved || color;
+  }
+  return color;
+}
+
 export function Highlighter({
   children,
   action = 'highlight',
-  color = '#ffd1dc',
+  color = 'var(--accent)',
   strokeWidth = 1.5,
   animationDuration = 600,
   iterations = 2,
@@ -55,9 +67,11 @@ export function Highlighter({
     const element = elementRef.current;
     if (!element) return;
 
+    const resolvedColor = resolveColor(color);
+
     const annotation = annotate(element, {
       type: action,
-      color,
+      color: resolvedColor,
       strokeWidth,
       animationDuration,
       iterations,

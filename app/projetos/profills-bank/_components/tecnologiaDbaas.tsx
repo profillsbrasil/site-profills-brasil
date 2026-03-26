@@ -10,7 +10,7 @@ export default function TecnologiaDbaas() {
         <div className='flex w-full flex-col items-start gap-4 md:w-1/2 md:gap-6'>
           <Highlighter
           action='underline'
-          color='#2d62ef'
+          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-3xl'>
           <h2 id='titulo-tecnologia'>Tecnologia DBaaS</h2>

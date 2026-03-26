@@ -44,7 +44,7 @@ export default function ListaServicos() {
       <div className='flex w-full flex-col items-start justify-start'>
         <Highlighter
           action='underline'
-          color='#2d62ef'
+          
           animationDuration={4000}
           textColor='text-2xl font-bold mb-3 md:text-3xl md:mb-2'>
           O que podemos fazer?

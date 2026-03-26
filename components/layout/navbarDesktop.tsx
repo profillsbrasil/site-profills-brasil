@@ -25,6 +25,7 @@ import {
   Calendar,
   Cloud,
   Droplets,
+  ExternalLink,
   Globe,
   GraduationCap,
   Landmark,
@@ -179,40 +180,45 @@ export default function NavbarDesktop() {
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/sensores'
                         target='_blank'
-                        className='w-full text-left'>
-                        Sensores
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Sensores <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/resistencias'
                         target='_blank'
-                        className='w-full text-left'>
-                        Resistência
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Resistência <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/atuadores'
                         target='_blank'
-                        className='w-full text-left'>
-                        Atuadores
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Atuadores <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/silenciadores'
                         target='_blank'
-                        className='w-full text-left'>
-                        Silenciadores
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Silenciadores <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/corte'
                         target='_blank'
-                        className='w-full text-left'>
-                        Laminas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Laminas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                   </div>
@@ -221,40 +227,45 @@ export default function NavbarDesktop() {
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/valvulas'
                         target='_blank'
-                        className='w-full text-left'>
-                        Válvulas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Válvulas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/molas'
                         target='_blank'
-                        className='w-full text-left'>
-                        Molas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Molas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
                         target='_blank'
-                        className='w-full text-left'>
-                        Selagem
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Selagem <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
                         target='_blank'
-                        className='w-full text-left'>
-                        Fitas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Fitas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/conexoes-pneumaticas'
                         target='_blank'
-                        className='w-full text-left'>
-                        Conexões
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Conexões <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                   </div>
@@ -273,7 +284,7 @@ export default function NavbarDesktop() {
             <NavigationMenuTrigger>Projetos</NavigationMenuTrigger>
             <NavigationMenuContent>
               <span className='grid w-[500px] gap-2 md:grid-cols-2'>
-                {projetos.map((projeto) => (
+                {projetos.slice(0, 4).map((projeto) => (
                   <ListItem
                     key={projeto.title}
                     title={projeto.title}
@@ -282,6 +293,13 @@ export default function NavbarDesktop() {
                     {projeto.description}
                   </ListItem>
                 ))}
+                <NavigationMenuLink asChild>
+                  <Link
+                    href='/projetos/profills-pd'
+                    className='col-span-2 flex items-center justify-center py-2 text-sm font-medium text-accent hover:text-accent/80'>
+                    Ver todos os projetos
+                  </Link>
+                </NavigationMenuLink>
               </span>
             </NavigationMenuContent>
           </NavigationMenuItem>

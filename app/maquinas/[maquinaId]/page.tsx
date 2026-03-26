@@ -34,7 +34,7 @@ export default async function Maquina({ params }: MaquinaPageProps) {
           <div className='relative flex h-1/2 flex-col items-center justify-center px-4 md:items-start md:px-0'>
             <Highlighter
               action='underline'
-              color='#2d62ef'
+              
               animationDuration={maquina.unidadeMaxima}
               textColor='z-10 text-xl md:text-3xl  mb-5 md:mb-8 font-bold tracking-wider text-white text-center md:text-left uppercase'>
               {maquina.name}

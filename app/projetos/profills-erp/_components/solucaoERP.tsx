@@ -20,7 +20,7 @@ export default function SolucaoERP() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            color='#2d62ef'
+            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-3xl'>
             <h2 id='titulo-solucao'>Solução ERP Completa</h2>

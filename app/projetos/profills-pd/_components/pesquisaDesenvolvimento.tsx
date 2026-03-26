@@ -13,7 +13,7 @@ export default function PesquisaDesenvolvimento() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            color='#2d62ef'
+            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-4xl'>
             <h2 id='titulo-pesquisa'>Pesquisa & Desenvolvimento</h2>

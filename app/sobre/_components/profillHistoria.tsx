@@ -27,7 +27,7 @@ export default function ProfillHistoria() {
       <div className='flex w-full flex-col items-center gap-4 md:w-1/2 md:gap-5'>
         <Highlighter
           action='underline'
-          color='#2d62ef'
+          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h2 id='titulo-historia'>Nossa História</h2>

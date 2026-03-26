@@ -118,7 +118,7 @@ export default function CardFaq() {
       <div className='flex w-full justify-center'>
         <Highlighter
           action='underline'
-          color='#2d62ef'
+          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           FAQ - Perguntas Frequentes

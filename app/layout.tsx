@@ -49,10 +49,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} h-full w-full overflow-x-hidden antialiased`}
         suppressHydrationWarning>
+        <a
+          href='#main-content'
+          className='sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-slate-900 focus:shadow-lg'>
+          Pular para o conteúdo
+        </a>
         <NavbarDesktop />
         <NavbarMobile />
         <Toaster richColors />
-        <main className='relative h-full w-full'>{children}</main>
+        <main id='main-content' className='relative h-full w-full'>{children}</main>
         <Footer />
       </body>
     </html>

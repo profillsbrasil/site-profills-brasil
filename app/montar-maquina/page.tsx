@@ -152,7 +152,7 @@ export default function MachineBuilder() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            color='#2d62ef'
+            
             animationDuration={4000}
             textColor='mb-3 text-2xl font-bold text-white md:mb-4 md:text-5xl'>
             Monte sua Máquina
