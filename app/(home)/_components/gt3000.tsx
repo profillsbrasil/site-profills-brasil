@@ -2,6 +2,8 @@ import Image from 'next/image';
 
 import { Highlighter } from '@/components/magicui/highlighter';
 import { Marquee } from '@/components/magicui/marquee';
+import { BlurFade } from '@/components/ui/blur-fade';
+import { TextAnimate } from '@/components/ui/text-animate';
 import imageGt3000 from '@/public/images/gt3000.png';
 
 import type { LucideIcon } from 'lucide-react';
@@ -62,9 +64,9 @@ export default function Gt3000() {
       <div className='relative flex h-full w-full max-w-7xl flex-col items-center justify-center'>
         <div className='mb-6 flex flex-col items-center justify-center text-center md:mb-8'>
           <div className='flex flex-col items-center justify-center gap-1 md:flex-row md:gap-2'>
-            <h2 className='mb-1 text-2xl font-bold md:mb-2 md:text-3xl'>
+            <TextAnimate animation='blurInUp' by='word' as='h2' once startOnView className='mb-1 text-2xl font-bold md:mb-2 md:text-3xl'>
               Linha de Produção
-            </h2>
+            </TextAnimate>
             <Highlighter
               action='underline'
               color='#2d62ef'
@@ -78,11 +80,13 @@ export default function Gt3000() {
           </p>
         </div>
 
-        <Image
-          src={imageGt3000}
-          className='h-48 w-full rounded-xs object-contain md:h-96 md:object-cover'
-          alt='GT-3000'
-        />
+        <BlurFade delay={0.2} inView>
+          <Image
+            src={imageGt3000}
+            className='h-48 w-full rounded-xs object-contain md:h-96 md:object-cover'
+            alt='GT-3000'
+          />
+        </BlurFade>
       </div>
       <div className='z-20 container mx-auto w-full'>
         <div className='relative flex w-full flex-col items-center justify-center overflow-hidden'>

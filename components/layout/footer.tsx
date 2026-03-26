@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import logoProfills from '@/public/logo-branco.png';
 
+import { BlurFade } from '@/components/ui/blur-fade';
+
 import { GridPattern } from './gridPatternBg';
 import {
   Facebook,
@@ -20,35 +22,38 @@ export default function Footer() {
       <GridPattern />
 
       <div className='relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-14'>
-        <div className='mb-6 text-center md:mb-8'>
-          <Link
-            href='/'
-            aria-label='Profills Brasil'
-            className='group mb-6 inline-block md:mb-8'>
-            <div className='relative'>
-              <Image
-                src={logoProfills}
-                alt='Logo Profills'
-                className='mx-auto h-12 w-auto transition-transform duration-300 md:h-16'
-              />
+        <BlurFade delay={0.1} inView>
+          <div className='mb-6 text-center md:mb-8'>
+            <Link
+              href='/'
+              aria-label='Profills Brasil'
+              className='group mb-6 inline-block md:mb-8'>
+              <div className='relative'>
+                <Image
+                  src={logoProfills}
+                  alt='Logo Profills'
+                  className='mx-auto h-12 w-auto transition-transform duration-300 md:h-16'
+                />
+              </div>
+            </Link>
+            <div className='mx-auto max-w-3xl'>
+              <p className='text-sm leading-relaxed font-medium text-slate-300 md:text-lg'>
+                A Profills é uma empresa jovem e arrojada, que produz{' '}
+                <span className='text-accent font-semibold'>
+                  Máquinas Envasadoras
+                </span>{' '}
+                para produtos líquidos, pastosos e sólidos.
+              </p>
+              <p className='mt-2 text-xs text-slate-400 md:text-base'>
+                Utilizando tecnologia de ponta e os melhores componentes.
+              </p>
             </div>
-          </Link>
-          <div className='mx-auto max-w-3xl'>
-            <p className='text-sm leading-relaxed font-medium text-slate-300 md:text-lg'>
-              A Profills é uma empresa jovem e arrojada, que produz{' '}
-              <span className='text-accent font-semibold'>
-                Máquinas Envasadoras
-              </span>{' '}
-              para produtos líquidos, pastosos e sólidos.
-            </p>
-            <p className='mt-2 text-xs text-slate-400 md:text-base'>
-              Utilizando tecnologia de ponta e os melhores componentes.
-            </p>
           </div>
-        </div>
+        </BlurFade>
 
         <div className='grid gap-4 md:grid-cols-3 md:gap-8'>
           {/* Sales/Parts */}
+          <BlurFade delay={0.2} inView>
           <div className='group relative'>
             <div className='absolute inset-0 rounded-xs bg-gradient-to-br from-cyan-500/20 to-blue-600/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100' />
             <div className='relative rounded-xs border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 md:p-8'>
@@ -78,8 +83,10 @@ export default function Footer() {
               </div>
             </div>
           </div>
+          </BlurFade>
 
           {/* Support and Technical Assistance */}
+          <BlurFade delay={0.3} inView>
           <div className='group relative h-full'>
             <div className='absolute inset-0 h-full rounded-xs bg-gradient-to-br from-orange-500/20 to-red-600/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100' />
             <div className='relative h-full rounded-xs border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/30 hover:shadow-2xl hover:shadow-orange-500/10 md:p-8'>
@@ -101,8 +108,10 @@ export default function Footer() {
               </div>
             </div>
           </div>
+          </BlurFade>
 
           {/* Purchases (Suppliers) */}
+          <BlurFade delay={0.4} inView>
           <div className='group relative'>
             <div className='absolute inset-0 rounded-xs bg-gradient-to-br from-emerald-500/20 to-teal-600/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100' />
             <div className='relative rounded-xs border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/10 md:p-8'>
@@ -132,8 +141,10 @@ export default function Footer() {
               </div>
             </div>
           </div>
+          </BlurFade>
         </div>
 
+        <BlurFade delay={0.5} inView>
         <div className='pt-6 md:pt-10'>
           <div className='mb-6 text-center md:mb-8'>
             <h3 className='mb-2 text-base font-semibold text-white md:text-lg'>
@@ -183,6 +194,7 @@ export default function Footer() {
             ))}
           </div>
         </div>
+        </BlurFade>
       </div>
     </footer>
   );

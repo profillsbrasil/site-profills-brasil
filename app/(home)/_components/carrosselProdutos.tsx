@@ -6,7 +6,7 @@ import {
   CarouselContent,
   CarouselItem
 } from '@/components/carouselHome';
-import { Highlighter } from '@/components/magicui/highlighter';
+import { TextAnimate } from '@/components/ui/text-animate';
 import caixaTintaDerramando from '@/lib/images/carousel/caixa-tinta-derramando.jpg';
 import caixaCha from '@/lib/images/carousel/cha.jpg';
 import caixaCloro from '@/lib/images/carousel/cloro-piscina.jpg';
@@ -71,13 +71,9 @@ export default function carrosselProdutos() {
   return (
     <div className='z-10 hidden h-1/2 w-full max-w-6xl flex-col justify-center gap-5 py-5 md:flex'>
       <div className='flex flex-col gap-2'>
-        <Highlighter
-          action='underline'
-          color='#2d62ef'
-          animationDuration={4000}
-          textColor='text-3xl font-bold mb-2'>
+        <TextAnimate animation='blurInUp' by='word' as='h2' once startOnView className='text-3xl font-bold mb-2'>
           Inovação e Praticidade
-        </Highlighter>
+        </TextAnimate>
         <p className='text-muted-foreground text-base'>
           Diversos produtos já aproveitam as vantagens das embalagens Gable-Top
         </p>

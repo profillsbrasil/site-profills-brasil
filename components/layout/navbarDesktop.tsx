@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -93,12 +94,25 @@ const projetos: {
 ];
 
 export default function NavbarDesktop() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <NavigationMenu
       viewport={false}
       delayDuration={0}
       skipDelayDuration={500}
-      className='border-border/10 fixed top-0 z-50 hidden h-16 min-w-full border-b bg-slate-900 md:flex'>
+      className={`fixed top-0 z-50 hidden h-16 min-w-full border-b md:flex transition-all duration-300 ${
+        scrolled
+          ? 'backdrop-blur-xl bg-slate-900/80 border-white/10 shadow-lg'
+          : 'bg-slate-900 border-border/10'
+      }`}>
       <NavigationMenuList className='flex h-full w-7xl items-center justify-center'>
         <NavigationMenuItem className='h-full'>
           <Link href='/'>

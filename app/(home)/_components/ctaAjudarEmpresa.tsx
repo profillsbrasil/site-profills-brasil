@@ -1,9 +1,10 @@
 import Image from 'next/image';
 
-import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Highlighter } from '@/components/magicui/highlighter';
 import { Badge } from '@/components/ui/badge';
+import { BlurFade } from '@/components/ui/blur-fade';
+import { TextAnimate } from '@/components/ui/text-animate';
 import logoAutonics from '@/lib/images/fornecedores/Autonics.png';
 import logoFesto from '@/lib/images/fornecedores/Festo.png';
 import logoNetzsch from '@/lib/images/fornecedores/Netzsch.png';
@@ -83,7 +84,9 @@ export default function CtaAjudarEmpresa() {
         {/* Header Section */}
         <div className='mb-8 flex flex-col items-center text-center'>
           <h2 className='mb-4 flex flex-col gap-1 text-2xl leading-tight font-bold md:flex-row md:gap-2 md:text-3xl'>
-            <span>Como podemos</span>
+            <TextAnimate animation='blurInUp' by='word' as='span' once startOnView className='text-2xl font-bold md:text-3xl'>
+              Como podemos
+            </TextAnimate>
             <Highlighter
               action='underline'
               color='#2d62ef'
@@ -99,35 +102,34 @@ export default function CtaAjudarEmpresa() {
         </div>
 
         {/* Benefits Cards */}
-        <AnimatedContainer delay={0.3}>
-          <div className='mb-5 grid grid-cols-1 gap-5 md:grid-cols-3'>
+        <div className='mb-5 grid grid-cols-1 gap-5 md:grid-cols-3'>
             {cards.map((card, index) => (
-              <div
-                key={index}
-                className='group relative flex flex-col overflow-hidden rounded-xs bg-slate-900 text-white shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
-                <GridPattern />
-                <div className='relative p-6 transition-all duration-300'>
-                  <div className='mb-4 flex items-start gap-4'>
-                    <div className='rounded-xs border border-white/30 bg-slate-900 p-3 transition-transform duration-300 group-hover:scale-105'>
-                      {card.icon}
+              <BlurFade key={index} delay={0.1 + index * 0.1} inView>
+                <div
+                  className='group relative flex flex-col overflow-hidden rounded-xs bg-slate-900 text-white shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
+                  <GridPattern />
+                  <div className='relative p-6 transition-all duration-300'>
+                    <div className='mb-4 flex items-start gap-4'>
+                      <div className='rounded-xs border border-white/30 bg-slate-900 p-3 transition-transform duration-300 group-hover:scale-105'>
+                        {card.icon}
+                      </div>
+                      <div className='flex-1'>
+                        <h3 className='mb-2 text-base font-semibold'>
+                          {card.title}
+                        </h3>
+                        <Badge
+                          variant='outline'
+                          className='border border-white/30 bg-slate-900 px-3 py-1 text-xs font-medium text-white'>
+                          {card.badge}
+                        </Badge>
+                      </div>
                     </div>
-                    <div className='flex-1'>
-                      <h3 className='mb-2 text-base font-semibold'>
-                        {card.title}
-                      </h3>
-                      <Badge
-                        variant='outline'
-                        className='border border-white/30 bg-slate-900 px-3 py-1 text-xs font-medium text-white'>
-                        {card.badge}
-                      </Badge>
-                    </div>
+                    <p className='text-sm leading-relaxed'>{card.description}</p>
                   </div>
-                  <p className='text-sm leading-relaxed'>{card.description}</p>
                 </div>
-              </div>
+              </BlurFade>
             ))}
           </div>
-        </AnimatedContainer>
 
         <div className='w-full max-w-6xl pb-2'>
           <div className='mb-6 text-center'>

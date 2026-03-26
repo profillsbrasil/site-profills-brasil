@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { Highlighter } from '@/components/magicui/highlighter';
 import { OptimizedEmbalagem3d } from '@/components/modelo3d/optimizedEmbalagem3d';
+import { TextAnimate } from '@/components/ui/text-animate';
 
 const listaDeEmbalagens = [
   {
@@ -112,13 +112,9 @@ export default function ListaEmbalagens() {
       <div className='mx-auto max-w-6xl'>
         {/* Header Section */}
         <div className='items-left mb-6 flex flex-col text-left md:mb-5'>
-          <Highlighter
-            action='underline'
-            color='#2d62ef'
-            animationDuration={4000}
-            textColor='text-2xl mb-3 flex gap-2 leading-tight font-bold md:text-3xl md:mb-2'>
+          <TextAnimate animation='blurInUp' by='word' as='h2' once startOnView className='text-2xl mb-3 flex gap-2 leading-tight font-bold md:text-3xl md:mb-2'>
             Nossas Embalagens
-          </Highlighter>
+          </TextAnimate>
 
           <p className='text-muted-foreground text-sm leading-relaxed md:text-base'>
             Soluções para todos os tipos de produtos
@@ -131,7 +127,7 @@ export default function ListaEmbalagens() {
             {listaDeEmbalagens.map((card, index) => (
               <div
                 key={index}
-                className='group bg-background hover:bg-muted flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xs border border-black/30 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl'>
+                className='group bg-background hover:bg-muted flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xs border border-black/30 shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl'>
                 <div className='relative'>
                   <div className='bg-background rounded-xs p-3 group-hover:shadow-md group-hover:shadow-black/10 md:p-5'>
                     <OptimizedEmbalagem3d

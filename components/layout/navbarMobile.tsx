@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { BlurFade } from '@/components/ui/blur-fade';
 import {
   Accordion,
   AccordionContent,
@@ -203,41 +204,50 @@ export default function NavbarMobile() {
             <div className='flex-1 overflow-y-auto p-4'>
               {/* Links principais */}
               <div className='mb-6'>
-                <DrawerClose asChild>
-                  <Link
-                    href='/'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <Home className='text-accent mr-2 size-5' />
-                    Home
-                  </Link>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Link
-                    href='/sobre'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <User className='text-accent mr-2 size-5' />
-                    Sobre
-                  </Link>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Link
-                    href='/montar-fabrica'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <Building className='text-accent mr-2 size-5' />
-                    Monte a sua fábrica
-                  </Link>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Link
-                    href='/montar-maquina'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <Wrench className='text-accent mr-2 size-5' />
-                    Monte a sua máquina
-                  </Link>
-                </DrawerClose>
+                <BlurFade delay={0.05} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/'
+                      className='hover:text-accent flex items-center border-l-2 border-transparent py-3 text-white transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <Home className='text-accent mr-2 size-5' />
+                      Home
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
+                <BlurFade delay={0.1} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/sobre'
+                      className='hover:text-accent flex items-center border-l-2 border-transparent py-3 text-white transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <User className='text-accent mr-2 size-5' />
+                      Sobre
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
+                <BlurFade delay={0.15} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/montar-fabrica'
+                      className='hover:text-accent flex items-center border-l-2 border-transparent py-3 text-white transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <Building className='text-accent mr-2 size-5' />
+                      Monte a sua fábrica
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
+                <BlurFade delay={0.2} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/montar-maquina'
+                      className='hover:text-accent flex items-center border-l-2 border-transparent py-3 text-white transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <Wrench className='text-accent mr-2 size-5' />
+                      Monte a sua máquina
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
               </div>
 
               {/* Accordion para seções com múltiplas opções */}
+              <BlurFade delay={0.25} direction="right">
               <Accordion type='multiple' className='w-full'>
                 {/* Máquinas */}
                 <AccordionItem value='maquinas' className='border-border/20'>
@@ -354,7 +364,9 @@ export default function NavbarMobile() {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
+              </BlurFade>
             </div>
+            <BlurFade delay={0.3} direction="up">
             <DrawerFooter className='flex flex-row items-center justify-center gap-3'>
               {[
                 {
@@ -394,6 +406,7 @@ export default function NavbarMobile() {
                 </Link>
               ))}
             </DrawerFooter>
+            </BlurFade>
           </DrawerContent>
         </Drawer>
       </div>
