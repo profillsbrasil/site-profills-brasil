@@ -1,5 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 import {
@@ -17,24 +18,26 @@ export default function SolucoesIntegradas() {
     <section
       aria-labelledby='titulo-solucoes'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-16 pt-10'>
-      <div className='text-center'>
-        <Highlighter
-          action='underline'
-          color='#2d62ef'
-          animationDuration={4000}
-          textColor='text-2xl font-bold md:text-3xl'>
-          <h2 id='titulo-solucoes'>Soluções Integradas</h2>
-        </Highlighter>
-        <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
-          Nossa equipe de engenharia está preparada para{' '}
-          <span className='text-accent font-semibold'>projetar fábricas</span>,
-          fornecendo{' '}
-          <span className='text-accent font-semibold'>
-            soluções completas em processamento de alimentos
-          </span>
-          .
-        </p>
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='text-center'>
+          <Highlighter
+            action='underline'
+            color='#2d62ef'
+            animationDuration={4000}
+            textColor='text-2xl font-bold md:text-3xl'>
+            <h2 id='titulo-solucoes'>Soluções Integradas</h2>
+          </Highlighter>
+          <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
+            Nossa equipe de engenharia está preparada para{' '}
+            <span className='text-accent font-semibold'>projetar fábricas</span>,
+            fornecendo{' '}
+            <span className='text-accent font-semibold'>
+              soluções completas em processamento de alimentos
+            </span>
+            .
+          </p>
+        </div>
+      </BlurFade>
 
       {/* Three Pillars */}
       <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-3 md:gap-8'>

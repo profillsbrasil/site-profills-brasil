@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Button } from '@/components/ui/button';
+import { TextAnimate } from '@/components/ui/text-animate';
 
 import CardMaquina from './_components/cardMaquinas/cardMaquina';
 import {
@@ -102,6 +103,15 @@ function MaquinasContent() {
   return (
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-900 py-10'>
       <GridPattern />
+      <TextAnimate
+        animation='blurInUp'
+        by='word'
+        as='h1'
+        once
+        startOnView
+        className='z-10 pt-20 pb-4 text-2xl font-bold text-white md:pt-24 md:text-3xl'>
+        Nossas Máquinas
+      </TextAnimate>
       {/* Navegação superior - visível em desktop */}
       <div className='sticky top-16 left-0 z-20 hidden h-14 w-full items-center justify-center gap-3 bg-slate-900 py-2 text-white md:flex'>
         <GridPattern />

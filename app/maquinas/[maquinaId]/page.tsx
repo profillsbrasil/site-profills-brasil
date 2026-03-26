@@ -4,15 +4,16 @@ import { notFound } from 'next/navigation';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Highlighter } from '@/components/magicui/highlighter';
 import { NumberTicker } from '@/components/magicui/number-ticker';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { cn } from '@/lib/utils';
 
 import { maquinasData } from '../_components/cardMaquinas/maquinasData';
 import SpecificationModal from './_components/specificationModal';
 
 interface MaquinaPageProps {
-  params: {
+  params: Promise<{
     maquinaId: string;
-  };
+  }>;
 }
 
 export default async function Maquina({ params }: MaquinaPageProps) {
@@ -29,7 +30,7 @@ export default async function Maquina({ params }: MaquinaPageProps) {
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-900 py-20 md:py-10'>
       <GridPattern />
       <div className='relative flex h-full w-full max-w-7xl flex-col-reverse items-center justify-center gap-0 text-white md:h-[83vh] md:flex-row md:gap-10'>
-        <div className='flex h-5/6 w-full flex-col items-center justify-center gap-5 md:w-1/2 md:gap-20'>
+        <BlurFade delay={0.1} inView className='flex h-5/6 w-full flex-col items-center justify-center gap-5 md:w-1/2 md:gap-20'>
           <div className='relative flex h-1/2 flex-col items-center justify-center px-4 md:items-start md:px-0'>
             <Highlighter
               action='underline'
@@ -62,20 +63,20 @@ export default async function Maquina({ params }: MaquinaPageProps) {
               />
             </div>
           </div>
-        </div>
-        <div className='flex h-full w-full md:w-1/2'>
+        </BlurFade>
+        <BlurFade delay={0.2} inView className='flex h-full w-full md:w-1/2'>
           <Image
             src={maquina.imgMaquina}
             alt='Máquina'
             className='h-full w-full object-contain'
           />
-        </div>
+        </BlurFade>
       </div>
-      <div className='flex h-1/6 w-full justify-center'>
+      <BlurFade delay={0.3} inView className='flex h-1/6 w-full justify-center'>
         <div className='z-10'>
           <SpecificationModal maquina={maquina} />
         </div>
-      </div>
+      </BlurFade>
     </div>
   );
 }

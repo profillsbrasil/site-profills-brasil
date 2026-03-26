@@ -1,4 +1,5 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 import { Building, Flag, Globe, MapPin } from 'lucide-react';
@@ -8,22 +9,24 @@ export default function ExpansaoGlobal() {
     <section
       aria-labelledby='titulo-expansao'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 py-10'>
-      <div className='text-center'>
-        <Highlighter
-          action='underline'
-          color='#2d62ef'
-          animationDuration={4000}
-          textColor='text-2xl font-bold md:text-3xl'>
-          <h2 id='titulo-expansao'>Expansão Global</h2>
-        </Highlighter>
-        <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
-          Uma estrutura consolidada no Brasil que se expande para{' '}
-          <span className='text-accent font-semibold'>
-            mercados internacionais estratégicos
-          </span>
-          .
-        </p>
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='text-center'>
+          <Highlighter
+            action='underline'
+            color='#2d62ef'
+            animationDuration={4000}
+            textColor='text-2xl font-bold md:text-3xl'>
+            <h2 id='titulo-expansao'>Expansão Global</h2>
+          </Highlighter>
+          <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
+            Uma estrutura consolidada no Brasil que se expande para{' '}
+            <span className='text-accent font-semibold'>
+              mercados internacionais estratégicos
+            </span>
+            .
+          </p>
+        </div>
+      </BlurFade>
 
       {/* Map-like Layout */}
       <div className='grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12'>

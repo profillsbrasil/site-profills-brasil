@@ -1,3 +1,4 @@
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 export default function TecnologiaDbaas() {
@@ -5,8 +6,9 @@ export default function TecnologiaDbaas() {
     <section
       aria-labelledby='titulo-tecnologia'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-6 py-8 md:flex-row md:gap-10 md:py-16'>
-      <div className='flex w-full flex-col items-start gap-4 md:w-1/2 md:gap-6'>
-        <Highlighter
+      <BlurFade delay={0.1} inView>
+        <div className='flex w-full flex-col items-start gap-4 md:w-1/2 md:gap-6'>
+          <Highlighter
           action='underline'
           color='#2d62ef'
           animationDuration={4000}
@@ -40,15 +42,17 @@ export default function TecnologiaDbaas() {
           </p>
         </div>
 
-        <ul className='list-disc pl-5 text-sm marker:text-[#2d62ef] md:text-lg'>
-          <li>Digital Banking as a Service (DBaaS)</li>
-          <li>Tecnologia própria e inovadora</li>
-          <li>Atuação em diversos segmentos</li>
-          <li>Foco em experiência e conectividade</li>
-        </ul>
-      </div>
+          <ul className='list-disc pl-5 text-sm marker:text-[#2d62ef] md:text-lg'>
+            <li>Digital Banking as a Service (DBaaS)</li>
+            <li>Tecnologia própria e inovadora</li>
+            <li>Atuação em diversos segmentos</li>
+            <li>Foco em experiência e conectividade</li>
+          </ul>
+        </div>
+      </BlurFade>
 
-      <div className='z-10 flex w-full flex-col gap-4 md:w-1/2 md:gap-6'>
+      <BlurFade delay={0.2} inView>
+        <div className='z-10 flex w-full flex-col gap-4 md:w-1/2 md:gap-6'>
         <div className='rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-6 shadow-lg md:p-8'>
           <h3 className='mb-4 text-xl font-bold text-[#2d62ef] md:text-2xl'>
             Nossa Missão
@@ -87,9 +91,10 @@ export default function TecnologiaDbaas() {
               <div className='h-2 w-2 rounded-full bg-[#2d62ef]'></div>
               Soluções para pequenas empresas
             </li>
-          </ul>
+            </ul>
+          </div>
         </div>
-      </div>
+      </BlurFade>
     </section>
   );
 }

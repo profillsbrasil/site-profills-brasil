@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 import imgMarketplace from '@/lib/images/projetos/marketplace.jpg';
 
@@ -11,14 +12,16 @@ export default function Hero() {
     <section
       aria-labelledby='titulo-profills-marketplace'
       className='flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0'>
-      <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
-        <Image
-          src={imgMarketplace}
-          alt='Profills Marketplace - Conexão Digital de Negócios'
-          className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
-          loading='eager'
-        />
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
+          <Image
+            src={imgMarketplace}
+            alt='Profills Marketplace - Conexão Digital de Negócios'
+            className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
+            loading='eager'
+          />
+        </div>
+      </BlurFade>
 
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
@@ -29,9 +32,10 @@ export default function Hero() {
           <h1 id='titulo-profills-marketplace'>Profills Marketplace</h1>
         </Highlighter>
 
-        <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
-          <p>
-            A Profills vê nesse mercado uma{' '}
+        <BlurFade delay={0.2} inView>
+          <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
+            <p>
+              A Profills vê nesse mercado uma{' '}
             <span className='text-accent font-semibold'>
               oportunidade de colaborar
             </span>{' '}
@@ -52,9 +56,10 @@ export default function Hero() {
             <span className='text-accent font-semibold'>
               melhores fornecedores e produtores
             </span>{' '}
-            dos mais diversos nichos.
-          </p>
-        </div>
+              dos mais diversos nichos.
+            </p>
+          </div>
+        </BlurFade>
 
         {/* Features Cards */}
         <AnimatedContainer className='w-full'>

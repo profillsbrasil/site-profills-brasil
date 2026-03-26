@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import {
   Accordion,
   AccordionContent,
@@ -124,7 +125,7 @@ export default function CardFaq() {
         </Highlighter>
       </div>
       <div className='flex w-full flex-col gap-6 md:flex-row md:gap-5'>
-        <div className='flex h-full w-full md:w-1/2'>
+        <BlurFade delay={0.1} inView className='flex h-full w-full md:w-1/2'>
           <Accordion
             type='single'
             collapsible
@@ -163,8 +164,8 @@ export default function CardFaq() {
               </AccordionItem>
             ))}
           </Accordion>
-        </div>
-        <div className='relative flex h-full w-full flex-col items-center justify-center md:w-1/2'>
+        </BlurFade>
+        <BlurFade delay={0.2} inView className='relative flex h-full w-full flex-col items-center justify-center md:w-1/2'>
           <Image
             src={meninaSuporte}
             alt='Menina Suporte'
@@ -185,7 +186,7 @@ export default function CardFaq() {
               </Button>
             </Link>
           </div>
-        </div>
+        </BlurFade>
       </div>
     </div>
   );

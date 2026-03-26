@@ -5,6 +5,8 @@ import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { GridPatternMobile } from '@/components/layout/gridPatternBgMobile';
 import { CaixaHome3d } from '@/components/modelo3d/caixaHome3d';
+import { BlurFade } from '@/components/ui/blur-fade';
+import { TextAnimate } from '@/components/ui/text-animate';
 
 import {
   motion,
@@ -45,38 +47,48 @@ function MobileHero({ children }: { children?: ReactNode }) {
 
       <div className='relative z-10 flex min-h-screen w-full flex-col items-center justify-center'>
         <div className='flex h-1/2 w-full flex-col items-center justify-center'>
-          <h1 className='text-center text-4xl font-bold leading-tight text-accent'>
+          <TextAnimate
+            animation='blurInUp'
+            by='word'
+            as='h1'
+            once
+            startOnView
+            className='text-center text-4xl font-bold leading-tight text-accent'>
             Soluções para o seu negócio!
-          </h1>
-          <div className='flex flex-col gap-1 pt-4'>
-            <p className='group flex w-full items-center gap-3 font-semibold hover:text-white'>
-              <CircleCheckBig className='text-accent h-5 w-5' />
-              Máquinas Envasadoras
-            </p>
-            <p className='group flex items-center gap-3 font-semibold hover:text-white'>
-              <CircleCheckBig className='text-accent h-5 w-5' />
-              Peças
-            </p>
-            <p className='group flex items-center gap-3 font-semibold hover:text-white'>
-              <CircleCheckBig className='text-accent h-5 w-5' />
-              Consultoria e Suporte Técnico
-            </p>
-            <p className='group flex items-center gap-3 font-semibold hover:text-white'>
-              <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
-            </p>
-          </div>
+          </TextAnimate>
+          <BlurFade delay={0.2} inView>
+            <div className='flex flex-col gap-1 pt-4'>
+              <p className='group flex w-full items-center gap-3 font-semibold hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
+                Máquinas Envasadoras
+              </p>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
+                Peças
+              </p>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />
+                Consultoria e Suporte Técnico
+              </p>
+              <p className='group flex items-center gap-3 font-semibold hover:text-white'>
+                <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
+              </p>
+            </div>
+          </BlurFade>
         </div>
 
-        <div className='flex h-1/2 w-1/2 items-center justify-center'>
-          <CaixaHome3d
-            alt='Modelo 3D - Linha de Produtos Profills'
-            modelSrc='/caixa-teste-3d.glb'
-            cameraOrbit='40deg 75deg 105%'
-            autoRotate={true}
-            isMobile={true}
-            className='h-full w-full'
-          />
-        </div>
+        <BlurFade delay={0.4} inView>
+          <div className='flex h-1/2 w-1/2 items-center justify-center'>
+            <CaixaHome3d
+              alt='Modelo 3D - Linha de Produtos Profills'
+              modelSrc='/caixa-teste-3d.glb'
+              cameraOrbit='40deg 75deg 105%'
+              autoRotate={true}
+              isMobile={true}
+              className='h-full w-full'
+            />
+          </div>
+        </BlurFade>
       </div>
 
       <section className='relative z-20 min-h-screen bg-white pt-8'>
@@ -185,7 +197,7 @@ function DesktopHero({ children }: { children?: ReactNode }) {
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
                     transition={{
                       duration: 3,
-                      repeat: Number.POSITIVE_INFINITY,
+                      repeat: 3,
                       ease: 'easeInOut',
                       delay: 1.5
                     }}

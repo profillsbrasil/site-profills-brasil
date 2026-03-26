@@ -1,3 +1,4 @@
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 export default function Instituicao() {
@@ -15,7 +16,8 @@ export default function Instituicao() {
         </h2>
       </Highlighter>
 
-      <div className='flex w-full flex-col gap-6 md:flex-row md:gap-10'>
+      <BlurFade delay={0.1} inView>
+        <div className='flex w-full flex-col gap-6 md:flex-row md:gap-10'>
         <div className='flex w-full flex-col gap-4 text-sm leading-relaxed md:w-1/2 md:text-base'>
           <p>
             A Profills Bank foi desenvolvida como uma{' '}
@@ -72,11 +74,13 @@ export default function Instituicao() {
             </span>
             , se comparado às instituições tradicionais.
           </p>
+          </div>
         </div>
-      </div>
+      </BlurFade>
 
       {/* Impact Numbers */}
-      <div className='mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 md:mt-8 md:grid-cols-3 md:gap-8'>
+      <BlurFade delay={0.2} inView>
+        <div className='mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 md:mt-8 md:grid-cols-3 md:gap-8'>
         <div className='flex flex-col items-center justify-center rounded-xs border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm'>
           <div className='mb-2 text-3xl font-bold text-[#2d62ef]'>100%</div>
           <div className='text-gray-600'>Digital</div>
@@ -90,8 +94,9 @@ export default function Instituicao() {
         <div className='flex flex-col items-center justify-center rounded-xs border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm'>
           <div className='mb-2 text-3xl font-bold text-[#2d62ef]'>DBaaS</div>
           <div className='text-gray-600'>Tecnologia Própria</div>
+          </div>
         </div>
-      </div>
+      </BlurFade>
     </section>
   );
 }

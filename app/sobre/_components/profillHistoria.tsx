@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { Globe } from '@/components/magicui/globe';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import logo from '@/public/logo.png';
 
 export default function ProfillHistoria() {
@@ -32,62 +33,64 @@ export default function ProfillHistoria() {
           <h2 id='titulo-historia'>Nossa História</h2>
         </Highlighter>
 
-        <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
-          <p>
-            Desde a fundação em Curitiba (PR), há mais de uma década, a{' '}
-            <span className='text-accent font-semibold'>Profills</span>{' '}
-            desenvolve{' '}
-            <span className='text-accent font-semibold'>
-              máquinas envasadoras
-            </span>{' '}
-            para produtos líquidos, pastosos e sólidos. Nascemos para oferecer
-            soluções modernas de envase em um mercado que exigia{' '}
-            <span className='text-accent font-semibold'>
-              fornecedores especializados
-            </span>{' '}
-            no Brasil e no exterior.
-          </p>
+        <BlurFade delay={0.1} inView>
+          <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
+            <p>
+              Desde a fundação em Curitiba (PR), há mais de uma década, a{' '}
+              <span className='text-accent font-semibold'>Profills</span>{' '}
+              desenvolve{' '}
+              <span className='text-accent font-semibold'>
+                máquinas envasadoras
+              </span>{' '}
+              para produtos líquidos, pastosos e sólidos. Nascemos para oferecer
+              soluções modernas de envase em um mercado que exigia{' '}
+              <span className='text-accent font-semibold'>
+                fornecedores especializados
+              </span>{' '}
+              no Brasil e no exterior.
+            </p>
 
-          <p>
-            Ao longo dos anos, tornamo-nos{' '}
-            <span className='text-accent font-semibold'>
-              referência nacional
-            </span>{' '}
-            pela qualidade dos equipamentos e pela{' '}
-            <span className='text-accent font-semibold'>
-              proximidade com o cliente
-            </span>
-            . Com engenharia e P&amp;D próprios,{' '}
-            <span className='text-accent font-semibold'>
-              antecipamos tendências
-            </span>{' '}
-            em embalagens e automação, elevando eficiência, higiene e
-            conformidade nas linhas de envase.
-          </p>
+            <p>
+              Ao longo dos anos, tornamo-nos{' '}
+              <span className='text-accent font-semibold'>
+                referência nacional
+              </span>{' '}
+              pela qualidade dos equipamentos e pela{' '}
+              <span className='text-accent font-semibold'>
+                proximidade com o cliente
+              </span>
+              . Com engenharia e P&amp;D próprios,{' '}
+              <span className='text-accent font-semibold'>
+                antecipamos tendências
+              </span>{' '}
+              em embalagens e automação, elevando eficiência, higiene e
+              conformidade nas linhas de envase.
+            </p>
 
-          <p>
-            Nossa trajetória é sustentada por{' '}
-            <span className='text-accent font-semibold'>fábrica própria</span> —
-            com unidade em Cerqueira César (SP) — e por uma cultura de melhoria
-            contínua. Produção interna, testes rigorosos e padronização garantem
-            <span className='text-accent font-semibold'>
-              {' '}
-              entregas confiáveis
-            </span>{' '}
-            e{' '}
-            <span className='text-accent font-semibold'>
-              resultados consistentes
-            </span>{' '}
-            em diferentes segmentos.
-          </p>
+            <p>
+              Nossa trajetória é sustentada por{' '}
+              <span className='text-accent font-semibold'>fábrica própria</span> —
+              com unidade em Cerqueira César (SP) — e por uma cultura de melhoria
+              contínua. Produção interna, testes rigorosos e padronização garantem
+              <span className='text-accent font-semibold'>
+                {' '}
+                entregas confiáveis
+              </span>{' '}
+              e{' '}
+              <span className='text-accent font-semibold'>
+                resultados consistentes
+              </span>{' '}
+              em diferentes segmentos.
+            </p>
 
-          <ul className='mt-2 flex list-disc flex-col gap-1 pl-8 marker:text-[#2d62ef]'>
-            <li> Inovação aplicada ao dia a dia da produção</li>
-            <li> Qualidade e padronização em série</li>
-            <li> Projetos sob medida para cada produto</li>
-            <li> Suporte técnico próximo e contínuo</li>
-          </ul>
-        </div>
+            <ul className='mt-2 flex list-disc flex-col gap-1 pl-8 marker:text-[#2d62ef]'>
+              <li> Inovação aplicada ao dia a dia da produção</li>
+              <li> Qualidade e padronização em série</li>
+              <li> Projetos sob medida para cada produto</li>
+              <li> Suporte técnico próximo e contínuo</li>
+            </ul>
+          </div>
+        </BlurFade>
       </div>
     </section>
   );

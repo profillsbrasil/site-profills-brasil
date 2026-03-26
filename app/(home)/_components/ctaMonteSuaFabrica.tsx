@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { BlurFade } from '@/components/ui/blur-fade';
+import { ShineBorder } from '@/components/ui/shine-border';
 import { Button } from '@/components/ui/button';
 import { TextAnimate } from '@/components/ui/text-animate';
 import CollabBro from '@/lib/images/extras/Collab-bro.png';
@@ -31,9 +32,10 @@ export default function CtaMonteSuaFabrica() {
           <Link className='z-30 cursor-pointer' href='/montar-fabrica'>
             <Button
               size='lg'
-              className='group border-border !bg-background hover:border-accent/30 group hover:bg-accent z-10 w-full rounded-xs border font-semibold text-black shadow-md transition-all duration-300 hover:scale-[1.02] md:w-auto'>
+              className='group relative overflow-hidden border-border !bg-background hover:border-accent/30 group hover:bg-accent z-10 w-full rounded-xs border font-semibold text-black shadow-md transition-all duration-300 hover:scale-[1.02] md:w-auto'>
               <span className='text-sm md:text-base'>Monte sua fábrica</span>
               <ArrowRight className='group-hover:text-accent ml-2 h-5 w-5 text-black transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6' />
+              <ShineBorder shineColor={['#2d62ef', '#ffffff', '#1e4bd4']} />
             </Button>
           </Link>
         </div>

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 import imgErp from '@/lib/images/projetos/ERP.jpg';
 
@@ -11,14 +12,16 @@ export default function Hero() {
     <section
       aria-labelledby='titulo-profills-erp'
       className='flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0'>
-      <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
-        <Image
-          src={imgErp}
-          loading='eager'
-          alt='Profills ERP - Gestão Integrada em Nuvem'
-          className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
-        />
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
+          <Image
+            src={imgErp}
+            loading='eager'
+            alt='Profills ERP - Gestão Integrada em Nuvem'
+            className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
+          />
+        </div>
+      </BlurFade>
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
@@ -28,9 +31,10 @@ export default function Hero() {
           <h1 id='titulo-profills-erp'>Profills ERP</h1>
         </Highlighter>
 
-        <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
-          <p>
-            As pequenas empresas no Brasil{' '}
+        <BlurFade delay={0.2} inView>
+          <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
+            <p>
+              As pequenas empresas no Brasil{' '}
             <span className='text-accent font-semibold'>
               carecem de inclusão digital
             </span>
@@ -49,9 +53,10 @@ export default function Hero() {
             </span>
             , permitindo que os negócios sejam executados{' '}
             <span className='text-accent font-semibold'>sem esforço</span>: o{' '}
-            <span className='text-accent font-semibold'>Profills ERP</span>.
-          </p>
-        </div>
+              <span className='text-accent font-semibold'>Profills ERP</span>.
+            </p>
+          </div>
+        </BlurFade>
 
         {/* Features Cards */}
         <AnimatedContainer className='w-full'>

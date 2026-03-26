@@ -1,4 +1,5 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 import { Brain, Lightbulb, Target, Users } from 'lucide-react';
@@ -8,22 +9,24 @@ export default function PesquisaDesenvolvimento() {
     <section
       aria-labelledby='titulo-pesquisa'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-12 py-20'>
-      <div className='text-center'>
-        <Highlighter
-          action='underline'
-          color='#2d62ef'
-          animationDuration={4000}
-          textColor='text-2xl font-bold md:text-4xl'>
-          <h2 id='titulo-pesquisa'>Pesquisa & Desenvolvimento</h2>
-        </Highlighter>
-        <p className='mx-auto mt-4 max-w-3xl text-sm text-gray-600 md:text-lg'>
-          Diversas práticas vêm sendo adotadas a fim de{' '}
-          <span className='text-accent font-semibold'>
-            melhorar os processos, projetos e desenvolvimento dos equipamentos
-          </span>
-          .
-        </p>
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='text-center'>
+          <Highlighter
+            action='underline'
+            color='#2d62ef'
+            animationDuration={4000}
+            textColor='text-2xl font-bold md:text-4xl'>
+            <h2 id='titulo-pesquisa'>Pesquisa & Desenvolvimento</h2>
+          </Highlighter>
+          <p className='mx-auto mt-4 max-w-3xl text-sm text-gray-600 md:text-lg'>
+            Diversas práticas vêm sendo adotadas a fim de{' '}
+            <span className='text-accent font-semibold'>
+              melhorar os processos, projetos e desenvolvimento dos equipamentos
+            </span>
+            .
+          </p>
+        </div>
+      </BlurFade>
 
       {/* Main Content Grid */}
       <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-8'>
