@@ -1,4 +1,5 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 import {
@@ -15,26 +16,28 @@ export default function CadeiaSuprimentos() {
     <section
       aria-labelledby='titulo-cadeia'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 py-8 md:gap-12 md:py-10'>
-      <div className='text-center'>
-        <Highlighter
-          action='underline'
-          color='#2d62ef'
-          animationDuration={4000}
-          textColor='text-2xl font-bold md:text-3xl'>
-          <h2 id='titulo-cadeia'> Conectando Mercados Globalmente</h2>
-        </Highlighter>
-        <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
-          Desde nossa fundação, trabalhamos na{' '}
-          <span className='text-accent font-semibold'>
-            cadeia de suprimentos brasileira
-          </span>
-          , conectando pequenas empresas aos{' '}
-          <span className='text-accent font-semibold'>
-            maiores players do mercado
-          </span>
-          .
-        </p>
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='text-center'>
+          <Highlighter
+            action='underline'
+            
+            animationDuration={4000}
+            textColor='text-2xl font-bold md:text-3xl'>
+            <h2 id='titulo-cadeia'> Conectando Mercados Globalmente</h2>
+          </Highlighter>
+          <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
+            Desde nossa fundação, trabalhamos na{' '}
+            <span className='text-accent font-semibold'>
+              cadeia de suprimentos brasileira
+            </span>
+            , conectando pequenas empresas aos{' '}
+            <span className='text-accent font-semibold'>
+              maiores players do mercado
+            </span>
+            .
+          </p>
+        </div>
+      </BlurFade>
 
       {/* Supply Chain Flow */}
       <AnimatedContainer className='w-full'>

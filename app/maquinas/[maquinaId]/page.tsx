@@ -4,15 +4,16 @@ import { notFound } from 'next/navigation';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Highlighter } from '@/components/magicui/highlighter';
 import { NumberTicker } from '@/components/magicui/number-ticker';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { cn } from '@/lib/utils';
 
 import { maquinasData } from '../_components/cardMaquinas/maquinasData';
 import SpecificationModal from './_components/specificationModal';
 
 interface MaquinaPageProps {
-  params: {
+  params: Promise<{
     maquinaId: string;
-  };
+  }>;
 }
 
 export default async function Maquina({ params }: MaquinaPageProps) {
@@ -29,11 +30,11 @@ export default async function Maquina({ params }: MaquinaPageProps) {
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-900 py-20 md:py-10'>
       <GridPattern />
       <div className='relative flex h-full w-full max-w-7xl flex-col-reverse items-center justify-center gap-0 text-white md:h-[83vh] md:flex-row md:gap-10'>
-        <div className='flex h-5/6 w-full flex-col items-center justify-center gap-5 md:w-1/2 md:gap-20'>
+        <BlurFade delay={0.1} inView className='flex h-5/6 w-full flex-col items-center justify-center gap-5 md:w-1/2 md:gap-20'>
           <div className='relative flex h-1/2 flex-col items-center justify-center px-4 md:items-start md:px-0'>
             <Highlighter
               action='underline'
-              color='#2d62ef'
+              
               animationDuration={maquina.unidadeMaxima}
               textColor='z-10 text-xl md:text-3xl  mb-5 md:mb-8 font-bold tracking-wider text-white text-center md:text-left uppercase'>
               {maquina.name}
@@ -62,20 +63,20 @@ export default async function Maquina({ params }: MaquinaPageProps) {
               />
             </div>
           </div>
-        </div>
-        <div className='flex h-full w-full md:w-1/2'>
+        </BlurFade>
+        <BlurFade delay={0.2} inView className='flex h-full w-full md:w-1/2'>
           <Image
             src={maquina.imgMaquina}
             alt='Máquina'
             className='h-full w-full object-contain'
           />
-        </div>
+        </BlurFade>
       </div>
-      <div className='flex h-1/6 w-full justify-center'>
+      <BlurFade delay={0.3} inView className='flex h-1/6 w-full justify-center'>
         <div className='z-10'>
           <SpecificationModal maquina={maquina} />
         </div>
-      </div>
+      </BlurFade>
     </div>
   );
 }
@@ -90,7 +91,7 @@ function ProducaoMaxima({
   return (
     <div
       className={cn(
-        'border-border/30 flex flex-col items-center justify-center border-x border-b border-dashed bg-slate-900 px-5 py-2 md:border',
+        'border-border/30 flex flex-col items-center justify-center border-x border-b border-dashed bg-secondary px-5 py-2 md:border',
         className
       )}>
       <div className='flex items-center justify-center gap-2'>
@@ -99,7 +100,7 @@ function ProducaoMaxima({
           value={maquina.unidadeMaxima || 0}
           startValue={Math.floor((maquina.unidadeMaxima || 0) * 0.5)}
           decimalPlaces={0}
-          className='text-2xl font-bold md:text-4xl'
+          className='text-2xl font-bold text-secondary-foreground md:text-4xl'
         />
       </div>
       <p className='text-muted text-xl font-light tracking-wide italic'>

@@ -2,6 +2,8 @@ import Image from 'next/image';
 
 import { Highlighter } from '@/components/magicui/highlighter';
 import { Marquee } from '@/components/magicui/marquee';
+import { BlurFade } from '@/components/ui/blur-fade';
+import { TextAnimate } from '@/components/ui/text-animate';
 import imageGt3000 from '@/public/images/gt3000.png';
 
 import type { LucideIcon } from 'lucide-react';
@@ -58,16 +60,16 @@ const row = diferenciaisDaGt3000.slice(0, diferenciaisDaGt3000.length);
 
 export default function Gt3000() {
   return (
-    <section className='z-20 flex h-full w-full flex-col items-center justify-center gap-6 px-4 pb-10 md:gap-8'>
+    <section className='z-20 flex h-full w-full flex-col items-center justify-center gap-8 px-4 py-16 md:gap-12 md:py-24'>
       <div className='relative flex h-full w-full max-w-7xl flex-col items-center justify-center'>
         <div className='mb-6 flex flex-col items-center justify-center text-center md:mb-8'>
           <div className='flex flex-col items-center justify-center gap-1 md:flex-row md:gap-2'>
-            <h2 className='mb-1 text-2xl font-bold md:mb-2 md:text-3xl'>
+            <TextAnimate animation='blurInUp' by='word' as='h2' once startOnView className='mb-1 text-2xl font-bold md:mb-2 md:text-3xl'>
               Linha de Produção
-            </h2>
+            </TextAnimate>
             <Highlighter
               action='underline'
-              color='#2d62ef'
+              
               animationDuration={4000}
               textColor='text-2xl font-bold mb-1 md:text-3xl md:mb-2'>
               GT-3000
@@ -78,11 +80,14 @@ export default function Gt3000() {
           </p>
         </div>
 
-        <Image
-          src={imageGt3000}
-          className='h-48 w-full rounded-xs object-contain md:h-96 md:object-cover'
-          alt='GT-3000'
-        />
+        <BlurFade delay={0.2} inView>
+          <Image
+            src={imageGt3000}
+            sizes='(max-width: 768px) 100vw, 80vw'
+            className='h-48 w-full rounded-xs object-contain md:h-96 md:object-cover'
+            alt='GT-3000'
+          />
+        </BlurFade>
       </div>
       <div className='z-20 container mx-auto w-full'>
         <div className='relative flex w-full flex-col items-center justify-center overflow-hidden'>
@@ -112,18 +117,18 @@ const MarqueeCard = ({
   description: string;
 }) => {
   return (
-    <div className='hover:bg-muted bg-background relative z-10 h-full w-52 cursor-pointer overflow-hidden rounded-xs border border-dashed border-black/40 p-3 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:w-64 md:p-4'>
-      <div className='flex flex-row items-center gap-2'>
-        <IconCard className='h-5 w-5 text-slate-900 md:h-6 md:w-6' />
-        <div className='flex flex-col'>
-          <figcaption className='text-xs font-medium md:text-sm'>
-            {title}
-          </figcaption>
+    <div className='hover:bg-muted bg-background relative z-10 h-full w-52 cursor-pointer overflow-hidden rounded-xs border border-border p-4 shadow-md transition-all duration-300 hover:shadow-lg md:w-64 md:p-5'>
+      <div className='mb-3 flex items-center gap-3'>
+        <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-xs bg-accent/10 md:h-9 md:w-9'>
+          <IconCard className='h-4 w-4 text-foreground md:h-5 md:w-5' />
         </div>
+        <span className='text-xs font-semibold md:text-sm'>
+          {title}
+        </span>
       </div>
-      <blockquote className='mt-2 text-xs leading-relaxed md:text-sm'>
+      <p className='text-muted-foreground text-xs leading-relaxed md:text-sm'>
         {description}
-      </blockquote>
+      </p>
     </div>
   );
 };

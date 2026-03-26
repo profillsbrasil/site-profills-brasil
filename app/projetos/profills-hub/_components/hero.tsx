@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 import imgHub from '@/lib/images/projetos/HUB.jpg';
 
@@ -11,27 +12,30 @@ export default function Hero() {
     <section
       aria-labelledby='titulo-profills-hub'
       className='flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0'>
-      <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
-        <Image
-          src={imgHub}
-          alt='Profills Hub - Expansão Global e Marketplace'
-          className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
-          loading='eager'
-          priority
-        />
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
+          <Image
+            src={imgHub}
+            alt='Profills Hub - Expansão Global e Marketplace'
+            className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
+            loading='eager'
+            priority
+          />
+        </div>
+      </BlurFade>
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
-          color='#2d62ef'
+          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h1 id='titulo-profills-hub'>Profills Hub</h1>
         </Highlighter>
 
-        <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
-          <p>
-            À medida que nossas{' '}
+        <BlurFade delay={0.2} inView>
+          <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
+            <p>
+              À medida que nossas{' '}
             <span className='text-accent font-semibold'>
               operações e relacionamentos construídos nos últimos sete anos
             </span>{' '}
@@ -53,9 +57,10 @@ export default function Hero() {
               preparamos filiais internacionalmente
             </span>{' '}
             na Colômbia, República Dominicana, Estados Unidos e Emirados Árabes
-            Unidos.
-          </p>
-        </div>
+              Unidos.
+            </p>
+          </div>
+        </BlurFade>
 
         {/* Features Cards */}
         <AnimatedContainer className='w-full'>

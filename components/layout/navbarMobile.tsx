@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { BlurFade } from '@/components/ui/blur-fade';
 import {
   Accordion,
   AccordionContent,
@@ -169,7 +170,7 @@ const servicos = [
 
 export default function NavbarMobile() {
   return (
-    <div className='border-border/10 fixed top-0 z-50 flex h-16 w-full border-b bg-slate-900 md:hidden'>
+    <div className='fixed top-0 z-50 flex h-16 w-full border-b border-secondary-foreground/5 bg-secondary md:hidden'>
       <div className='flex h-full w-full items-center justify-center pr-5'>
         <Link
           href='/'
@@ -185,13 +186,15 @@ export default function NavbarMobile() {
       <div className='absolute top-1/2 right-4 -translate-y-1/2'>
         <Drawer direction='right'>
           <DrawerTrigger asChild>
-            <button className='flex h-10 w-10 items-center justify-center rounded-md bg-slate-800 text-white transition-colors hover:bg-slate-700'>
+            <button
+              aria-label='Abrir menu de navegação'
+              className='flex h-11 w-11 items-center justify-center rounded-md bg-secondary-foreground/10 text-secondary-foreground transition-colors hover:bg-secondary-foreground/20'>
               <Menu className='h-6 w-6' />
             </button>
           </DrawerTrigger>
-          <DrawerContent className='h-full w-80 border-l border-slate-700 bg-slate-900'>
-            <DrawerHeader className='border-border/20 border-b pb-4'>
-              <DrawerTitle className='flex items-center justify-center text-xl font-bold text-white'>
+          <DrawerContent className='h-full w-80 border-l border-secondary-foreground/10 bg-secondary'>
+            <DrawerHeader className='border-b border-secondary-foreground/10 pb-4'>
+              <DrawerTitle className='flex items-center justify-center text-xl font-bold text-secondary-foreground'>
                 <Image
                   src={logoProfills}
                   alt='Logo Profills'
@@ -203,45 +206,54 @@ export default function NavbarMobile() {
             <div className='flex-1 overflow-y-auto p-4'>
               {/* Links principais */}
               <div className='mb-6'>
-                <DrawerClose asChild>
-                  <Link
-                    href='/'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <Home className='text-accent mr-2 size-5' />
-                    Home
-                  </Link>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Link
-                    href='/sobre'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <User className='text-accent mr-2 size-5' />
-                    Sobre
-                  </Link>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Link
-                    href='/montar-fabrica'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <Building className='text-accent mr-2 size-5' />
-                    Monte a sua fábrica
-                  </Link>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Link
-                    href='/montar-maquina'
-                    className='hover:text-accent flex items-center py-3 text-white transition-colors'>
-                    <Wrench className='text-accent mr-2 size-5' />
-                    Monte a sua máquina
-                  </Link>
-                </DrawerClose>
+                <BlurFade delay={0.05} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/'
+                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <Home className='text-accent mr-2 size-5' />
+                      Home
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
+                <BlurFade delay={0.1} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/sobre'
+                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <User className='text-accent mr-2 size-5' />
+                      Sobre
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
+                <BlurFade delay={0.15} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/montar-fabrica'
+                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <Building className='text-accent mr-2 size-5' />
+                      Monte a sua fábrica
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
+                <BlurFade delay={0.2} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/montar-maquina'
+                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <Wrench className='text-accent mr-2 size-5' />
+                      Monte a sua máquina
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
               </div>
 
               {/* Accordion para seções com múltiplas opções */}
+              <BlurFade delay={0.25} direction="right">
               <Accordion type='multiple' className='w-full'>
                 {/* Máquinas */}
-                <AccordionItem value='maquinas' className='border-border/20'>
-                  <AccordionTrigger className='hover:text-accent text-white'>
+                <AccordionItem value='maquinas' className='border-secondary-foreground/10'>
+                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
                     <div className='flex items-center'>
                       <Package className='text-accent mr-2 size-5' />
                       Máquinas
@@ -252,7 +264,7 @@ export default function NavbarMobile() {
                       {maquinas.map((maquina) => (
                         <div
                           key={maquina.title}
-                          className='hover:text-accent flex items-center py-2 text-slate-300 transition-colors'>
+                          className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
                           <DrawerClose asChild>
                             <Link
                               href={maquina.href}
@@ -267,9 +279,9 @@ export default function NavbarMobile() {
                   </AccordionContent>
                 </AccordionItem>
 
-                {/* Peças */}
-                <AccordionItem value='pecas' className='border-border/20'>
-                  <AccordionTrigger className='hover:text-accent text-white'>
+                {/* Peças - oculto até integração com sistema externo */}
+                <AccordionItem value='pecas' className='hidden border-secondary-foreground/10'>
+                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
                     <div className='flex items-center'>
                       <Archive className='text-accent mr-2 size-5' />
                       Peças
@@ -280,7 +292,7 @@ export default function NavbarMobile() {
                       {pecas.map((peca) => (
                         <div
                           key={peca.title}
-                          className='hover:text-accent flex items-center py-2 text-slate-300 transition-colors'>
+                          className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
                           <DrawerClose asChild>
                             <Link
                               href={peca.href}
@@ -296,8 +308,8 @@ export default function NavbarMobile() {
                 </AccordionItem>
 
                 {/* Projetos */}
-                <AccordionItem value='projetos' className='border-border/20'>
-                  <AccordionTrigger className='hover:text-accent text-white'>
+                <AccordionItem value='projetos' className='border-secondary-foreground/10'>
+                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
                     <div className='flex items-center'>
                       <Brain className='text-accent mr-2 size-5' />
                       Projetos
@@ -308,7 +320,7 @@ export default function NavbarMobile() {
                       {projetos.map((projeto) => (
                         <div
                           key={projeto.title}
-                          className='hover:text-accent flex items-start py-2 text-slate-300 transition-colors'>
+                          className='hover:text-accent flex items-start py-3 text-secondary-foreground/70 transition-colors'>
                           <DrawerClose asChild>
                             <Link
                               href={projeto.href}
@@ -328,8 +340,8 @@ export default function NavbarMobile() {
                 </AccordionItem>
 
                 {/* Outros Serviços */}
-                <AccordionItem value='servicos' className='border-border/20'>
-                  <AccordionTrigger className='hover:text-accent text-white'>
+                <AccordionItem value='servicos' className='border-secondary-foreground/10'>
+                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
                     <div className='flex items-center'>
                       <Layers className='text-accent mr-2 size-5' />
                       Outros Serviços
@@ -340,7 +352,7 @@ export default function NavbarMobile() {
                       {servicos.map((servico) => (
                         <div
                           key={servico.title}
-                          className='hover:text-accent flex items-center py-2 text-slate-300 transition-colors'>
+                          className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
                           <DrawerClose asChild>
                             <Link
                               href={servico.href}
@@ -354,46 +366,44 @@ export default function NavbarMobile() {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
+              </BlurFade>
             </div>
+            <BlurFade delay={0.3} direction="up">
             <DrawerFooter className='flex flex-row items-center justify-center gap-3'>
               {[
                 {
                   href: 'https://www.facebook.com/profillsbrasil/',
                   icon: Facebook,
-                  label: 'Facebook',
-                  color: 'text-blue-500 '
+                  label: 'Facebook'
                 },
                 {
                   href: 'https://www.instagram.com/profillsdobrasil/',
                   icon: Instagram,
-                  label: 'Instagram',
-                  color: 'text-pink-500 '
+                  label: 'Instagram'
                 },
                 {
                   href: 'https://www.linkedin.com/company/profillsdobrasil/',
                   icon: Linkedin,
-                  label: 'LinkedIn',
-                  color: 'text-blue-400 '
+                  label: 'LinkedIn'
                 },
                 {
                   href: 'https://www.youtube.com/channel/UCQhaNOzqbkYnZlknSd79zEw',
                   icon: Youtube,
-                  label: 'YouTube',
-                  color: 'text-red-500 '
+                  label: 'YouTube'
                 }
-              ].map(({ href, icon: Icon, label, color }) => (
+              ].map(({ href, icon: Icon, label }) => (
                 <Link
                   key={label}
                   href={href}
                   target='_blank'
                   rel='noopener noreferrer'
                   aria-label={label}
-                  className={`group relative rounded-xs border border-slate-700/50 bg-slate-800/30 p-3 backdrop-blur-sm ${color} transition-all duration-300 hover:scale-110 hover:border-slate-600/50 hover:shadow-lg md:p-4`}>
-                  <Icon className='h-5 w-5 md:h-6 md:w-6' />
-                  <div className='absolute inset-0 rounded-xs bg-gradient-to-br from-white/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+                  className='rounded-xs border border-secondary-foreground/10 p-3 text-secondary-foreground/40 transition-all duration-300 hover:border-accent/30 hover:text-accent'>
+                  <Icon className='h-5 w-5' />
                 </Link>
               ))}
             </DrawerFooter>
+            </BlurFade>
           </DrawerContent>
         </Drawer>
       </div>

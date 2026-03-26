@@ -152,9 +152,9 @@ export default function MachineBuilder() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            color='#2d62ef'
+            
             animationDuration={4000}
-            textColor='mb-3 text-2xl font-bold text-white md:mb-4 md:text-5xl'>
+            textColor='mb-3 text-2xl font-bold text-white md:mb-4 md:text-3xl'>
             Monte sua Máquina
           </Highlighter>{' '}
         </div>
@@ -164,7 +164,7 @@ export default function MachineBuilder() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className='pb-6 text-center md:pb-12'>
-          <p className='mx-auto max-w-3xl text-sm text-pretty text-slate-300 md:text-xl'>
+          <p className='mx-auto max-w-3xl text-sm text-pretty text-secondary-foreground/70 md:text-base'>
             Preencha os dados abaixo e descubra qual a máquina ideal para o seu
             produto.
           </p>

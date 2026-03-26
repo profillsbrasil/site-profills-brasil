@@ -1,4 +1,5 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 import { BookOpen, Brain, Globe, Users } from 'lucide-react';
@@ -8,23 +9,25 @@ export default function Educacao() {
     <section
       aria-labelledby='titulo-educacao'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 py-5'>
-      <div className='text-center'>
-        <Highlighter
-          action='underline'
-          color='#3b82f6'
-          animationDuration={4000}
-          textColor='text-2xl font-bold md:text-3xl'>
-          <h2 id='titulo-educacao'>Educação para o Futuro</h2>
-        </Highlighter>
-        <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
-          Acreditamos que a{' '}
-          <span className='font-semibold text-blue-600'>
-            educação é a base de uma sociedade promissora
-          </span>
-          , por isso nos comprometemos em promover o crescimento e
-          desenvolvimento para todos.
-        </p>
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='text-center'>
+          <Highlighter
+            action='underline'
+            color='#3b82f6'
+            animationDuration={4000}
+            textColor='text-2xl font-bold md:text-3xl'>
+            <h2 id='titulo-educacao'>Educação para o Futuro</h2>
+          </Highlighter>
+          <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
+            Acreditamos que a{' '}
+            <span className='font-semibold text-blue-600'>
+              educação é a base de uma sociedade promissora
+            </span>
+            , por isso nos comprometemos em promover o crescimento e
+            desenvolvimento para todos.
+          </p>
+        </div>
+      </BlurFade>
 
       <div className='grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-10'>
         {/* Nossa Filosofia */}

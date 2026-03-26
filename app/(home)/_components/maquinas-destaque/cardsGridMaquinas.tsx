@@ -66,7 +66,7 @@ export default function CardGridSket() {
           <Button
             variant='outline'
             size='lg'
-            className='group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-black md:w-auto'>
+            className='group border-border !bg-background hover:border-accent/30 z-10 w-full rounded-xs border font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] hover:text-foreground md:w-auto'>
             <span className='text-sm md:text-base'>Ver catálogo completo</span>
             <ArrowRight className='group-hover:text-accent ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6' />
           </Button>
@@ -118,8 +118,8 @@ export function FeatureCard({
               </div>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious className='h-8 w-8 md:h-10 md:w-10' />
-          <CarouselNext className='h-8 w-8 md:h-10 md:w-10' />
+          <CarouselPrevious className='h-10 w-10 md:h-10 md:w-10' />
+          <CarouselNext className='h-10 w-10 md:h-10 md:w-10' />
         </Carousel>
 
         <div className='group-hover:bg-muted space-y-2 border-t border-black/30 p-3 md:space-y-3 md:px-4'>

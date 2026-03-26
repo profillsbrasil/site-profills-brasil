@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 import imgOds1 from '@/lib/images/projetos/sustentavel/1.png';
 import imgOds2 from '@/lib/images/projetos/sustentavel/2.png';
@@ -46,16 +47,17 @@ export default function ObjetivosODS() {
     <section
       aria-labelledby='titulo-ods'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-12 py-10'>
-      <div className='text-center'>
-        <Highlighter
-          action='underline'
-          color='#2d62ef'
-          animationDuration={4000}
-          textColor='text-2xl font-bold md:text-3xl'>
-          <h2 id='titulo-ods'>Objetivos do Desenvolvimento Sustentável</h2>
-        </Highlighter>
-        <div className='mx-auto mt-6 max-w-4xl'>
-          <p className='mb-4 text-sm text-gray-600 md:text-lg'>
+      <BlurFade delay={0.1} inView>
+        <div className='text-center'>
+          <Highlighter
+            action='underline'
+            
+            animationDuration={4000}
+            textColor='text-2xl font-bold md:text-3xl'>
+            <h2 id='titulo-ods'>Objetivos do Desenvolvimento Sustentável</h2>
+          </Highlighter>
+          <div className='mx-auto mt-6 max-w-4xl'>
+            <p className='mb-4 text-sm text-gray-600 md:text-lg'>
             A{' '}
             <span className='font-semibold text-gray-800'>
               Organização das Nações Unidas
@@ -74,12 +76,14 @@ export default function ObjetivosODS() {
               A Profills está engajada com os ODS e trabalha para contribuir com
               a Agenda 2030 no Brasil e no mundo.
             </p>
+            </div>
           </div>
         </div>
-      </div>
+      </BlurFade>
 
       {/* ODS Grid - Simples e Limpo */}
-      <div className='w-full'>
+      <BlurFade delay={0.2} inView>
+        <div className='w-full'>
         <div className='grid grid-cols-3 justify-items-center gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4'>
           {odsImages.map((ods, index) => (
             <div key={index + 1} className='flex items-center justify-center'>
@@ -90,11 +94,13 @@ export default function ObjetivosODS() {
               />
             </div>
           ))}
+          </div>
         </div>
-      </div>
+      </BlurFade>
 
       {/* Estatísticas da Agenda 2030 */}
-      <div className='w-full'>
+      <BlurFade delay={0.3} inView>
+        <div className='w-full'>
         <div className='rounded-xs border border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8'>
           <div className='mb-8 text-center'>
             <h3 className='mb-4 text-2xl font-bold text-gray-800'>
@@ -135,8 +141,9 @@ export default function ObjetivosODS() {
               </div>
             </div>
           </div>
+          </div>
         </div>
-      </div>
+      </BlurFade>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,6 +25,7 @@ import {
   Calendar,
   Cloud,
   Droplets,
+  ExternalLink,
   Globe,
   GraduationCap,
   Landmark,
@@ -93,12 +95,25 @@ const projetos: {
 ];
 
 export default function NavbarDesktop() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <NavigationMenu
       viewport={false}
       delayDuration={0}
       skipDelayDuration={500}
-      className='border-border/10 fixed top-0 z-50 hidden h-16 min-w-full border-b bg-slate-900 md:flex'>
+      className={`fixed top-0 z-50 hidden h-16 min-w-full border-b md:flex transition-all duration-300 ${
+        scrolled
+          ? 'bg-secondary/95 backdrop-blur-md border-secondary-foreground/10 shadow-lg shadow-black/20'
+          : 'bg-secondary border-secondary-foreground/5'
+      }`}>
       <NavigationMenuList className='flex h-full w-7xl items-center justify-center'>
         <NavigationMenuItem className='h-full'>
           <Link href='/'>
@@ -155,7 +170,7 @@ export default function NavbarDesktop() {
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          <NavigationMenuItem className='hidden'>
             <NavigationMenuTrigger>Peças</NavigationMenuTrigger>
             <NavigationMenuContent>
               <div className='grid h-full w-[500px] grid-cols-[1fr_1fr] gap-2'>
@@ -165,40 +180,45 @@ export default function NavbarDesktop() {
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/sensores'
                         target='_blank'
-                        className='w-full text-left'>
-                        Sensores
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Sensores <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/resistencias'
                         target='_blank'
-                        className='w-full text-left'>
-                        Resistência
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Resistência <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/atuadores'
                         target='_blank'
-                        className='w-full text-left'>
-                        Atuadores
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Atuadores <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/silenciadores'
                         target='_blank'
-                        className='w-full text-left'>
-                        Silenciadores
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Silenciadores <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/corte'
                         target='_blank'
-                        className='w-full text-left'>
-                        Laminas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Laminas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                   </div>
@@ -207,40 +227,45 @@ export default function NavbarDesktop() {
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/valvulas'
                         target='_blank'
-                        className='w-full text-left'>
-                        Válvulas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Válvulas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/molas'
                         target='_blank'
-                        className='w-full text-left'>
-                        Molas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Molas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
                         target='_blank'
-                        className='w-full text-left'>
-                        Selagem
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Selagem <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
                         target='_blank'
-                        className='w-full text-left'>
-                        Fitas
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Fitas <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
                         href='https://profillsbrasil.lojaintegrada.com.br/conexoes-pneumaticas'
                         target='_blank'
-                        className='w-full text-left'>
-                        Conexões
+                        rel='noopener noreferrer'
+                        className='flex w-full items-center gap-1 text-left'>
+                        Conexões <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                   </div>
@@ -340,7 +365,7 @@ function ListItem({
               {title}
             </div>
             {children && (
-              <p className='line-clamp-1 text-sm leading-tight text-white group-hover:text-white'>
+              <p className='line-clamp-1 text-sm leading-tight text-secondary-foreground/70 group-hover:text-secondary-foreground'>
                 {children}
               </p>
             )}

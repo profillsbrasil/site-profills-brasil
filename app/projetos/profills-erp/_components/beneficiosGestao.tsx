@@ -1,4 +1,5 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
 
 import {
@@ -15,25 +16,27 @@ export default function BeneficiosGestao() {
     <section
       aria-labelledby='titulo-beneficios'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-4 py-8 md:gap-5 md:py-10'>
-      <div className='text-center'>
-        <Highlighter
-          action='underline'
-          color='#2d62ef'
-          animationDuration={4000}
-          textColor='text-2xl font-bold md:text-3xl'>
-          <h2 id='titulo-beneficios'>Boas Práticas Incorporadas</h2>
-        </Highlighter>
-        <p className='mx-auto mt-2 max-w-4xl text-sm text-gray-600 md:text-lg'>
-          <span className='text-accent font-semibold'>
-            Boas práticas de negócios
-          </span>{' '}
-          serão incorporadas através do{' '}
-          <span className='text-accent font-semibold'>
-            fluxo de trabalho fixado ao ERP
-          </span>
-          .
-        </p>
-      </div>
+      <BlurFade delay={0.1} inView>
+        <div className='text-center'>
+          <Highlighter
+            action='underline'
+            
+            animationDuration={4000}
+            textColor='text-2xl font-bold md:text-3xl'>
+            <h2 id='titulo-beneficios'>Boas Práticas Incorporadas</h2>
+          </Highlighter>
+          <p className='mx-auto mt-2 max-w-4xl text-sm text-gray-600 md:text-lg'>
+            <span className='text-accent font-semibold'>
+              Boas práticas de negócios
+            </span>{' '}
+            serão incorporadas através do{' '}
+            <span className='text-accent font-semibold'>
+              fluxo de trabalho fixado ao ERP
+            </span>
+            .
+          </p>
+        </div>
+      </BlurFade>
 
       {/* Benefits Grid */}
       <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3'>
