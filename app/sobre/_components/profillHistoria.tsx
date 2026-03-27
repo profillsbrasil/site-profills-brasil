@@ -1,7 +1,14 @@
+'use client';
+
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
-import { Globe } from '@/components/magicui/globe';
 import { Highlighter } from '@/components/magicui/highlighter';
+
+const Globe = dynamic(
+  () => import('@/components/magicui/globe').then((m) => ({ default: m.Globe })),
+  { ssr: false }
+);
 import { BlurFade } from '@/components/ui/blur-fade';
 import logo from '@/public/logo.png';
 

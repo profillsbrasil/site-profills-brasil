@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { GridPattern } from '@/components/layout/gridPatternBg';
 
 import CarrosselProdutos from './_components/carrosselProdutos';
@@ -14,16 +12,6 @@ import ScrollExpandMedia from './_components/scrollExpansionHero';
 import ServicosPersonalizados from './_components/servicosPersonalizados';
 
 export default function Home() {
-  useEffect(() => {
-    // Reset suave da página
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // Evento de reset personalizado.
-    const resetEvent = new CustomEvent('resetSection', {
-      detail: { timestamp: Date.now() }
-    });
-    window.dispatchEvent(resetEvent);
-  }, []);
   return (
     <div className='relative h-full w-full'>
       <ScrollExpandMedia>

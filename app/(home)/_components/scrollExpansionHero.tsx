@@ -2,11 +2,24 @@
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { GridPatternMobile } from '@/components/layout/gridPatternBgMobile';
-import { CaixaHome3d } from '@/components/modelo3d/caixaHome3d';
 import { BlurFade } from '@/components/ui/blur-fade';
 import { TextAnimate } from '@/components/ui/text-animate';
+
+const CaixaHome3d = dynamic(
+  () => import('@/components/modelo3d/caixaHome3d').then((m) => ({ default: m.CaixaHome3d })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className='flex h-full w-full items-center justify-center' style={{ minHeight: '250px' }}>
+        <div className='h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent' />
+      </div>
+    ),
+  }
+);
 
 import {
   motion,
@@ -182,7 +195,7 @@ function DesktopHero({ children }: { children?: ReactNode }) {
                   loop
                   muted
                   playsInline
-                  preload='auto'
+                  preload='metadata'
                   className='h-full max-h-[65vh] w-full max-w-[70vw] object-cover'
                 />
               </motion.div>

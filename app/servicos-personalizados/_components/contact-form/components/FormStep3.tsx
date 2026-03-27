@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ContactFormData } from '@/lib/schemas/contact-form';
 import { cn } from '@/lib/utils';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 
 interface FormStep3Props {

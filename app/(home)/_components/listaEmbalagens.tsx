@@ -1,6 +1,17 @@
+'use client';
+
+import dynamic from 'next/dynamic';
+
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { OptimizedEmbalagem3d } from '@/components/modelo3d/optimizedEmbalagem3d';
 import { TextAnimate } from '@/components/ui/text-animate';
+
+const OptimizedEmbalagem3d = dynamic(
+  () => import('@/components/modelo3d/optimizedEmbalagem3d').then((m) => ({ default: m.OptimizedEmbalagem3d })),
+  {
+    ssr: false,
+    loading: () => <div style={{ minHeight: '150px' }} />,
+  }
+);
 
 const listaDeEmbalagens = [
   {

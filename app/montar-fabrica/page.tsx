@@ -18,7 +18,7 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ArrowRight, Building2, Mail, Phone, User } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';

@@ -36,7 +36,7 @@ import {
   getBestMachineRecommendation,
   initialContactFormData
 } from './_components/combinacaoMaquinas';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Drill } from 'lucide-react';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';

@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 interface ProgressIndicatorProps {
   currentStep: number;

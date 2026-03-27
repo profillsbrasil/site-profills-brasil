@@ -13,12 +13,12 @@ const GLOBE_CONFIG: COBEOptions = {
   width: 800,
   height: 800,
   onRender: () => {},
-  devicePixelRatio: 2,
+  devicePixelRatio: Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 2, 1.5),
   phi: 0,
   theta: 0.3,
   dark: 0,
   diffuse: 0.4,
-  mapSamples: 16000,
+  mapSamples: 12000,
   mapBrightness: 1.2,
   baseColor: [1, 1, 1],
   markerColor: [0, 0, 0.5],
@@ -47,8 +47,10 @@ export function Globe({
   const phiRef = useRef(0);
   const widthRef = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
+  const isVisibleRef = useRef(true);
 
   const r = useMotionValue(0);
   const rs = useSpring(r, {
@@ -72,6 +74,18 @@ export function Globe({
     }
   };
 
+  // Pause rendering when globe is off-screen
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const onResize = () => {
       if (canvasRef.current) {
@@ -87,6 +101,7 @@ export function Globe({
       width: widthRef.current * 2,
       height: widthRef.current * 2,
       onRender: (state) => {
+        if (!isVisibleRef.current) return;
         if (!pointerInteracting.current) phiRef.current += 0.005;
         state.phi = phiRef.current + rs.get();
         state.width = widthRef.current * 2;
@@ -103,6 +118,7 @@ export function Globe({
 
   return (
     <div
+      ref={containerRef}
       className={cn(
         'absolute inset-0 mx-auto aspect-[1/1] w-full max-w-[600px]',
         className

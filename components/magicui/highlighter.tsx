@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useEffect, useRef } from 'react';
 
-import { useInView } from 'framer-motion';
+import { useInView } from 'motion/react';
 import { annotate } from 'rough-notation';
 
 type AnnotationAction =
