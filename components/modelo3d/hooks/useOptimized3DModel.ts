@@ -7,12 +7,14 @@ const modelCache = new Map<string, boolean>();
 const modelViewerInstances = new Map<string, number>();
 
 interface UseOptimized3DModelOptions {
+  eager?: boolean;
   src: string;
   threshold?: number;
   rootMargin?: string;
 }
 
 export function useOptimized3DModel({
+  eager = false,
   src,
   threshold = 0.1,
   rootMargin = '50px'
@@ -48,6 +50,17 @@ export function useOptimized3DModel({
   // Intersection Observer para lazy loading inteligente
   useEffect(() => {
     const observedElement = containerRef.current;
+    const isLayoutVisible = observedElement
+      ? observedElement.getClientRects().length > 0
+      : false;
+
+    if (eager && isLayoutVisible) {
+      setIsVisible(true);
+      if (!hasBeenLoaded) {
+        setShouldRender(true);
+      }
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -77,7 +90,7 @@ export function useOptimized3DModel({
       }
       observer.disconnect();
     };
-  }, [threshold, rootMargin, hasBeenLoaded]);
+  }, [eager, threshold, rootMargin, hasBeenLoaded]);
 
   // Carrega model-viewer dinamicamente apenas quando necessário
   useEffect(() => {

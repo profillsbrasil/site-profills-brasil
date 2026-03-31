@@ -8,6 +8,7 @@ interface CaixaHome3dProps {
   className?: string;
   autoRotate?: boolean;
   cameraOrbit?: string;
+  eager?: boolean;
   placeholder?: React.ReactNode;
   isMobile?: boolean;
 }
@@ -18,6 +19,7 @@ export function CaixaHome3d({
   className = '',
   autoRotate = true,
   cameraOrbit = '40deg 75deg 105%',
+  eager = false,
   placeholder,
   isMobile = false
 }: CaixaHome3dProps) {
@@ -27,10 +29,10 @@ export function CaixaHome3d({
     isVisible,
     isLoaded,
     shouldRender,
-    hasBeenLoaded,
     handleModelLoad,
     handleModelError
   } = useOptimized3DModel({
+    eager,
     src: modelSrc,
     threshold: 0.1,
     rootMargin: '100px'
@@ -39,7 +41,7 @@ export function CaixaHome3d({
   return (
     <div
       ref={containerRef}
-      className={`flex h-full w-full items-center justify-center ${className}`}>
+      className={`flex w-full items-center justify-center ${className}`}>
       {/* Model-viewer: Uma vez carregado, sempre renderizado mas com visibilidade controlada */}
       {shouldRender && isLoaded && (
         // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
@@ -59,14 +61,13 @@ export function CaixaHome3d({
           shadow-intensity='1'
           exposure='1'
           interaction-prompt='none'
-          loading='lazy'
+          loading={eager ? 'eager' : 'lazy'}
           reveal='auto'
           onLoad={handleModelLoad}
           onError={handleModelError}
           style={{
             width: '100%',
-            height: '100%',
-            minHeight: isMobile ? '400px' : '600px',
+            height: isMobile ? '420px' : '100%',
             backgroundColor: 'transparent',
             '--poster-color': 'transparent',
             opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
@@ -82,16 +83,21 @@ export function CaixaHome3d({
       {/* Placeholder: Só mostra se o modelo nunca foi carregado */}
       {(!shouldRender || !isLoaded) && (
         <div
-          className='flex h-full w-full items-center justify-center'
-          style={{ minHeight: isMobile ? '200px' : '250px' }}>
+          className='flex w-full items-center justify-center'
+          style={{ height: isMobile ? '320px' : '100%' }}>
           {placeholder || (
-            <div className='text-muted-foreground flex flex-col items-center justify-center space-y-2'>
-              {isVisible && !hasBeenLoaded ? (
-                <>
-                  <div className='h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent'></div>
-                  <span className='text-sm'>Carregando modelo 3D...</span>
-                </>
-              ) : null}
+            <div
+              data-testid='caixa-home-3d-placeholder'
+              className='flex min-h-[220px] w-full max-w-sm flex-col items-center justify-center rounded-3xl border border-white/10 bg-white/5 px-6 py-8 text-center shadow-[0_20px_80px_rgba(15,23,42,0.35)] backdrop-blur-sm'>
+              <div className='relative flex h-14 w-14 items-center justify-center rounded-full border border-accent/30 bg-accent/10'>
+                <div className='h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent' />
+              </div>
+              <span className='mt-4 text-sm font-semibold tracking-wide text-white'>
+                Carregando modelo 3D...
+              </span>
+              <span className='mt-2 text-xs leading-relaxed text-white/60'>
+                Preparando a visualizacao interativa da embalagem.
+              </span>
             </div>
           )}
         </div>
