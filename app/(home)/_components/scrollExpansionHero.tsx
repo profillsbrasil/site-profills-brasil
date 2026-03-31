@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 
@@ -22,6 +22,7 @@ const CaixaHome3d = dynamic(
 );
 
 import {
+  AnimatePresence,
   motion,
   useMotionValueEvent,
   useReducedMotion,
@@ -226,6 +227,93 @@ function DesktopHero({ children }: { children?: ReactNode }) {
   );
 }
 
+const SLIDES = [
+  { title: 'Máquinas Envasadoras', desc: 'Linha completa para sua linha de produção' },
+  { title: 'Peças e Componentes',  desc: 'Reposição rápida com peças originais' },
+  { title: 'Consultoria Técnica',  desc: 'Especialistas prontos para apoiar seu negócio' },
+  { title: 'E muito mais!',        desc: 'Soluções completas para toda sua empresa' },
+];
+
+function HeroShowcase() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startAutoRotate = useCallback(() => {
+    if (intervalRef.current) return; // evita intervalos duplicados
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % SLIDES.length);
+    }, 3500);
+  }, []);
+
+  const stopAutoRotate = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    startAutoRotate();
+    return () => stopAutoRotate();
+  }, []);
+
+  return (
+    <div
+      className='pointer-events-auto mt-6 w-full'
+      onMouseEnter={stopAutoRotate}
+      onMouseLeave={startAutoRotate}
+    >
+      {/* Separador com gradient accent */}
+      <div className='mb-4 h-px bg-linear-to-r from-accent/40 to-transparent' />
+
+      {/* Slide com transição lateral */}
+      <div className='relative min-h-[54px]'>
+        <AnimatePresence mode='wait'>
+          <motion.div
+            key={activeIndex}
+            initial={{ x: 40, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -40, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className='flex items-start gap-3'
+          >
+            {/* Barra vertical accent */}
+            <div className='mt-[3px] h-[50px] w-[3px] flex-shrink-0 rounded-full bg-linear-to-b from-accent to-accent/10' />
+            <div>
+              <p className='text-[15px] font-bold text-secondary-foreground'>
+                {SLIDES[activeIndex].title}
+              </p>
+              <p className='mt-1 text-[12px] leading-relaxed text-secondary-foreground/50'>
+                {SLIDES[activeIndex].desc}
+              </p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Dots de navegação */}
+      <div className='mt-3 flex items-center gap-[5px]'>
+        {SLIDES.map((slide, i) => (
+          <button
+            key={slide.title}
+            onClick={() => {
+              stopAutoRotate();
+              setActiveIndex(i);
+              startAutoRotate();
+            }}
+            className={`h-[3px] rounded-full transition-all duration-300 ${
+              i === activeIndex
+                ? 'w-[22px] bg-accent'
+                : 'w-[6px] bg-white/20'
+            }`}
+            aria-label={`Ir para slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function HeroTextContent() {
   return (
     <div className='relative flex h-full w-full flex-col justify-center font-bold'>
@@ -233,23 +321,7 @@ function HeroTextContent() {
         Tudo Para Seu Negócio!
       </h1>
       <h2 className='mt-1 text-lg text-accent md:text-xl'>Inovação a cada embalagem</h2>
-      <div className='flex flex-col gap-1 pt-4'>
-        <p className='group flex w-full items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
-          <CircleCheckBig className='text-accent h-5 w-5' />
-          Máquinas Envasadoras
-        </p>
-        <p className='group flex items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
-          <CircleCheckBig className='text-accent h-5 w-5' />
-          Peças
-        </p>
-        <p className='group flex items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
-          <CircleCheckBig className='text-accent h-5 w-5' />
-          Consultoria e Suporte Técnico
-        </p>
-        <p className='group flex items-center gap-3 text-secondary-foreground/70 hover:text-secondary-foreground'>
-          <CircleCheckBig className='text-accent h-5 w-5' />E muito mais!
-        </p>
-      </div>
+      <HeroShowcase />
     </div>
   );
 }
