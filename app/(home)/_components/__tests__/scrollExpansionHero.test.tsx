@@ -1,4 +1,5 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { createElement } from 'react';
+import type { ElementType, HTMLAttributes, ReactNode } from 'react';
 
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -48,9 +49,9 @@ vi.mock('@/components/ui/text-animate', () => ({
     className,
   }: {
     children: ReactNode;
-    as?: keyof JSX.IntrinsicElements;
+    as?: ElementType;
     className?: string;
-  }) => <Component className={className}>{children}</Component>,
+  }) => createElement(Component, { className }, children),
 }));
 
 vi.mock('motion/react', () => ({

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Footer from './footer';
 import NavbarMobile from './navbarMobile';
@@ -32,6 +32,17 @@ vi.stubGlobal('matchMedia', () => ({
   dispatchEvent: vi.fn(),
 }));
 
+const writeTextMock = vi.fn().mockResolvedValue(undefined);
+Object.assign(navigator, {
+  clipboard: {
+    writeText: writeTextMock,
+  },
+});
+
+beforeEach(() => {
+  writeTextMock.mockClear();
+});
+
 describe('lucide social icon regression', () => {
   it('loads footer and mobile navbar modules without missing brand icon exports', async () => {
     await expect(import('./footer')).resolves.toMatchObject({
@@ -59,7 +70,7 @@ describe('lucide social icon regression', () => {
       screen
         .getByLabelText('Instagram')
         .querySelector('svg')
-    ).toHaveClass('h-6', 'w-6', 'md:h-8', 'md:w-8');
+    ).toHaveClass('size-8', 'md:size-10');
 
     unmount();
 
@@ -71,5 +82,17 @@ describe('lucide social icon regression', () => {
         .getByLabelText('Instagram')
         .querySelector('svg')
     ).toHaveClass('h-6', 'w-6');
+  });
+
+  it('highlights the copyright symbol and copies the cnpj on click', async () => {
+    render(createElement(Footer));
+
+    expect(screen.getByText('©')).toHaveClass('text-accent');
+
+    const cnpjButton = screen.getByRole('button', { name: /copiar cnpj/i });
+    fireEvent.click(cnpjButton);
+
+    expect(writeTextMock).toHaveBeenCalledWith('02.202.294/0001-60');
+    expect(await screen.findByText('CNPJ copiado')).toBeInTheDocument();
   });
 });

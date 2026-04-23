@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -55,11 +59,39 @@ const contacts = [
 ];
 
 export default function Footer() {
+  const [copiedCnpj, setCopiedCnpj] = useState(false);
+  const resetTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current !== null) {
+        window.clearTimeout(resetTimerRef.current);
+      }
+    };
+  }, []);
+
+  async function handleCopyCnpj() {
+    try {
+      await navigator.clipboard.writeText('02.202.294/0001-60');
+      setCopiedCnpj(true);
+
+      if (resetTimerRef.current !== null) {
+        window.clearTimeout(resetTimerRef.current);
+      }
+
+      resetTimerRef.current = window.setTimeout(() => {
+        setCopiedCnpj(false);
+      }, 2000);
+    } catch {
+      setCopiedCnpj(false);
+    }
+  }
+
   return (
     <footer className='relative overflow-hidden bg-secondary'>
       <GridPattern />
 
-      <div className='relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-14'>
+      <div className='relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:pt-14 md:pb-10'>
         <BlurFade delay={0.1} inView>
           <div className='mb-6 text-center md:mb-8'>
             <Link
@@ -144,13 +176,25 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
-            <p className='mt-4 flex items-center justify-center gap-1 flex-col text-xs text-secondary-foreground/50 md:text-sm'>
-              <span>
-                &copy; {new Date().getFullYear()} Profills Brasil. Todos os
-                direitos reservados.
+            <div className='mt-6 flex flex-col items-center justify-center gap-1 text-xs text-secondary-foreground/50 md:text-sm'>
+              <p className='text-center'>
+                <span className='text-accent'>&copy;</span>{' '}
+                {new Date().getFullYear()} Profills Brasil. Todos os direitos
+                reservados.
+              </p>
+              <button
+                type='button'
+                aria-label='Copiar CNPJ'
+                onClick={handleCopyCnpj}
+                className='cursor-copy text-center transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none'>
+                <span>CNPJ 02.202.294/0001-60</span>
+              </button>
+              <span
+                aria-live='polite'
+                className='min-h-4 text-[11px] text-accent/80'>
+                {copiedCnpj ? 'CNPJ copiado' : ''}
               </span>
-              <span>CNPJ 02.202.294/0001-60</span>
-            </p>
+            </div>
           </div>
         </BlurFade>
       </div>
