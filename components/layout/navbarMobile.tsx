@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/drawer';
 import logoProfills from '@/public/logo-branco.png';
 
+import { socialLinks } from './socialLinks';
 import {
   Archive,
   Brain,
@@ -28,21 +29,17 @@ import {
   Calendar,
   Cloud,
   Droplets,
-  Facebook,
   Globe,
   GraduationCap,
   Home,
-  Instagram,
   Landmark,
   Layers,
   Leaf,
-  Linkedin,
   Menu,
   Package,
   Store,
   User,
-  Wrench,
-  Youtube
+  Wrench
 } from 'lucide-react';
 
 const projetos = [
@@ -370,28 +367,7 @@ export default function NavbarMobile() {
             </div>
             <BlurFade delay={0.3} direction="up">
             <DrawerFooter className='flex flex-row items-center justify-center gap-3'>
-              {[
-                {
-                  href: 'https://www.facebook.com/profillsbrasil/',
-                  icon: Facebook,
-                  label: 'Facebook'
-                },
-                {
-                  href: 'https://www.instagram.com/profillsdobrasil/',
-                  icon: Instagram,
-                  label: 'Instagram'
-                },
-                {
-                  href: 'https://www.linkedin.com/company/profillsdobrasil/',
-                  icon: Linkedin,
-                  label: 'LinkedIn'
-                },
-                {
-                  href: 'https://www.youtube.com/channel/UCQhaNOzqbkYnZlknSd79zEw',
-                  icon: Youtube,
-                  label: 'YouTube'
-                }
-              ].map(({ href, icon: Icon, label }) => (
+              {socialLinks.map(({ href, Icon, label }) => (
                 <Link
                   key={label}
                   href={href}
@@ -399,7 +375,7 @@ export default function NavbarMobile() {
                   rel='noopener noreferrer'
                   aria-label={label}
                   className='rounded-xs border border-secondary-foreground/10 p-3 text-secondary-foreground/40 transition-all duration-300 hover:border-accent/30 hover:text-accent'>
-                  <Icon className='h-5 w-5' />
+                  <Icon className='h-6 w-6' />
                 </Link>
               ))}
             </DrawerFooter>

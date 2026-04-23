@@ -1,20 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { BlurFade } from '@/components/ui/blur-fade';
 import logoProfills from '@/public/logo-branco.png';
 
-import { BlurFade } from '@/components/ui/blur-fade';
-
 import { GridPattern } from './gridPatternBg';
-import {
-  Facebook,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  Phone,
-  Youtube
-} from 'lucide-react';
+import { socialLinks } from './socialLinks';
+import { Mail, MapPin, Phone } from 'lucide-react';
 
 const contacts = [
   {
@@ -62,29 +54,6 @@ const contacts = [
   }
 ];
 
-const socials = [
-  {
-    href: 'https://www.facebook.com/profillsbrasil/',
-    icon: Facebook,
-    label: 'Facebook'
-  },
-  {
-    href: 'https://www.instagram.com/profillsdobrasil/',
-    icon: Instagram,
-    label: 'Instagram'
-  },
-  {
-    href: 'https://www.linkedin.com/company/profillsdobrasil/',
-    icon: Linkedin,
-    label: 'LinkedIn'
-  },
-  {
-    href: 'https://www.youtube.com/channel/UCQhaNOzqbkYnZlknSd79zEw',
-    icon: Youtube,
-    label: 'YouTube'
-  }
-];
-
 export default function Footer() {
   return (
     <footer className='relative overflow-hidden bg-secondary'>
@@ -120,7 +89,11 @@ export default function Footer() {
 
         <div className='grid gap-4 md:grid-cols-3 md:gap-6'>
           {contacts.map((contact, index) => (
-            <BlurFade key={contact.title} delay={0.2 + index * 0.1} inView className='h-full'>
+            <BlurFade
+              key={contact.title}
+              delay={0.2 + index * 0.1}
+              inView
+              className='h-full'>
               <div className='group h-full rounded-xs border border-secondary-foreground/10 bg-secondary-foreground/5 p-4 transition-colors duration-300 hover:border-accent/20 hover:bg-secondary-foreground/8 md:p-6'>
                 <div className='mb-3 flex items-center gap-3 md:mb-4'>
                   <div className='flex h-9 w-9 items-center justify-center rounded-xs bg-accent/10 md:h-10 md:w-10'>
@@ -149,7 +122,7 @@ export default function Footer() {
         </div>
 
         <BlurFade delay={0.5} inView>
-          <div className='mt-8 border-t border-secondary-foreground/10 pt-8 md:mt-12 md:pt-10'>
+          <div className='mt-8 pt-8 md:mt-8'>
             <div className='mb-6 text-center md:mb-8'>
               <h3 className='mb-2 text-base font-semibold text-secondary-foreground md:text-lg'>
                 Conecte-se conosco
@@ -159,18 +132,25 @@ export default function Footer() {
               </p>
             </div>
             <div className='flex items-center justify-center gap-3 md:gap-4'>
-              {socials.map(({ href, icon: Icon, label }) => (
+              {socialLinks.map(({ href, Icon, label }) => (
                 <Link
                   key={label}
                   href={href}
                   target='_blank'
                   rel='noopener noreferrer'
                   aria-label={label}
-                  className='rounded-xs border border-secondary-foreground/10 p-3 text-secondary-foreground/40 transition-all duration-300 hover:border-accent/30 hover:text-accent md:p-4'>
-                  <Icon className='h-5 w-5 md:h-6 md:w-6' />
+                  className='rounded-xs border border-secondary-foreground/10 p-2 text-secondary-foreground/40 transition-all duration-300 hover:border-accent/30 hover:text-accent md:p-4'>
+                  <Icon className='size-8 md:size-10' />
                 </Link>
               ))}
             </div>
+            <p className='mt-4 flex items-center justify-center gap-1 flex-col text-xs text-secondary-foreground/50 md:text-sm'>
+              <span>
+                &copy; {new Date().getFullYear()} Profills Brasil. Todos os
+                direitos reservados.
+              </span>
+              <span>CNPJ 02.202.294/0001-60</span>
+            </p>
           </div>
         </BlurFade>
       </div>
