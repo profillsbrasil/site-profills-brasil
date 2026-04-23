@@ -9,10 +9,16 @@ import { useMotionValue, useSpring } from 'motion/react';
 
 const MOVEMENT_DAMPING = 1400;
 
+type GlobeRenderState = Pick<COBEOptions, 'phi' | 'width' | 'height'> &
+  Partial<COBEOptions>;
+
+type GlobeRuntimeOptions = COBEOptions & {
+  onRender?: (state: GlobeRenderState) => void;
+};
+
 const GLOBE_CONFIG: COBEOptions = {
   width: 800,
   height: 800,
-  onRender: () => {},
   devicePixelRatio: Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 2, 1.5),
   phi: 0,
   theta: 0.3,
@@ -42,7 +48,7 @@ export function Globe({
   config = GLOBE_CONFIG
 }: {
   className?: string;
-  config?: COBEOptions;
+  config?: GlobeRuntimeOptions;
 }) {
   const phiRef = useRef(0);
   const widthRef = useRef(0);
@@ -96,18 +102,20 @@ export function Globe({
     window.addEventListener('resize', onResize);
     onResize();
 
-    const globe = createGlobe(canvasRef.current!, {
+    const globeOptions: GlobeRuntimeOptions = {
       ...config,
       width: widthRef.current * 2,
       height: widthRef.current * 2,
-      onRender: (state) => {
+      onRender: (state: GlobeRenderState) => {
         if (!isVisibleRef.current) return;
         if (!pointerInteracting.current) phiRef.current += 0.005;
         state.phi = phiRef.current + rs.get();
         state.width = widthRef.current * 2;
         state.height = widthRef.current * 2;
       }
-    });
+    };
+
+    const globe = createGlobe(canvasRef.current!, globeOptions as COBEOptions);
 
     setTimeout(() => (canvasRef.current!.style.opacity = '1'), 0);
     return () => {
