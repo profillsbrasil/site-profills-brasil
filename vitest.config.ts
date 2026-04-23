@@ -8,9 +8,6 @@ export default defineConfig({
       plugins: [],
     },
   },
-  esbuild: {
-    jsx: 'automatic',
-  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
