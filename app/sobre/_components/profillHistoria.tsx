@@ -18,8 +18,8 @@ export default function ProfillHistoria() {
       aria-labelledby='titulo-historia'
       className='flex h-full w-full max-w-7xl flex-col items-center justify-center gap-5 pt-4 pb-2 md:flex-row md:gap-5 md:pt-0 md:pb-10'>
       {/* Visual: globo + marca */}
-      <div className='relative flex h-80 w-full select-none md:h-full md:w-1/2'>
-        <Globe className='absolute top-1/2 left-1/2 h-fit w-full -translate-x-1/2 -translate-y-1/2' />
+      <div className='relative flex h-80 w-full select-none md:aspect-square md:h-auto md:w-1/2'>
+        <Globe className='absolute inset-0' />
         <Image
           src={logo}
           alt='Nossa História'
