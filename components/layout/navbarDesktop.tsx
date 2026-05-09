@@ -140,6 +140,11 @@ export default function NavbarDesktop() {
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href='/clientes'>Clientes</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
             <NavigationMenuTrigger>Máquinas</NavigationMenuTrigger>
             <NavigationMenuContent>
               <div className='flex h-full w-[350px] items-center justify-center gap-2'>

@@ -39,6 +39,7 @@ import {
   Package,
   Store,
   User,
+  Users,
   Wrench
 } from 'lucide-react';
 
@@ -220,6 +221,16 @@ export default function NavbarMobile() {
                       className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
                       <User className='text-accent mr-2 size-5' />
                       Sobre
+                    </Link>
+                  </DrawerClose>
+                </BlurFade>
+                <BlurFade delay={0.125} direction="right">
+                  <DrawerClose asChild>
+                    <Link
+                      href='/clientes'
+                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
+                      <Users className='text-accent mr-2 size-5' />
+                      Clientes
                     </Link>
                   </DrawerClose>
                 </BlurFade>
