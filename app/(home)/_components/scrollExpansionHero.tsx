@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { GridPatternMobile } from '@/components/layout/gridPatternBgMobile';
 import { BlurFade } from '@/components/ui/blur-fade';
+import { ScrollHint } from '@/components/blocks/scrollHint';
 
 import {
   AnimatePresence,
@@ -93,6 +94,7 @@ function MobileHero() {
             />
           </div>
         </BlurFade>
+        <ScrollHint variant='mobile' />
       </div>
     </section>
   );
@@ -210,6 +212,7 @@ function DesktopHero() {
             </motion.div>
           </div>
         </div>
+        <ScrollHint variant='desktop' />
       </div>
     </section>
   );
