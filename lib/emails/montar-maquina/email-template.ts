@@ -1,4 +1,4 @@
-<!doctype html>
+export const template = `<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
@@ -246,3 +246,4 @@
     </table>
   </body>
 </html>
+`;

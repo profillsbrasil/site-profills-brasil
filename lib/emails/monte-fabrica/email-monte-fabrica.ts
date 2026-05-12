@@ -1,28 +1,18 @@
 import type { MonteFabricaFormData } from '@/lib/schemas/monte-fabrica-form';
 import { logger } from '@/lib/utils/logger';
 
-import fs from 'fs';
 import nodemailer from 'nodemailer';
-import path from 'path';
 
-// Configuração do transporter do Nodemailer para Gmail
+import { template as htmlEmailTemplate } from './email-template';
+
 export const createTransporter = () => {
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.GMAIL_USER_SENDER, // siteprofills@gmail.com
-      pass: process.env.GMAIL_APP_PASSWORD // App Password do Gmail
+      user: process.env.GMAIL_USER_SENDER,
+      pass: process.env.GMAIL_APP_PASSWORD
     }
   });
-};
-
-// Função para ler o arquivo de template
-const readEmailTemplate = () => {
-  const templatePath = path.join(
-    process.cwd(),
-    'lib/emails/monte-fabrica/email-template.html'
-  );
-  return fs.readFileSync(templatePath, 'utf-8');
 };
 
 // Template engine melhorado para processar {{#if}} e {{#each}}
@@ -85,7 +75,7 @@ export const createMonteFabricaEmailTemplate = (data: MonteFabricaFormData) => {
   });
 
   // Lê o template HTML (CSS já está inline)
-  const htmlTemplate = readEmailTemplate();
+  const htmlTemplate = htmlEmailTemplate;
 
   // URL base do site (sempre com protocolo)
   const siteUrl = process.env.SITE_URL || 'https://profills.com.br';

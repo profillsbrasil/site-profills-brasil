@@ -1,9 +1,9 @@
 import type { MontarMaquinaFormData } from '@/lib/schemas/montar-maquina-form';
 import { logger } from '@/lib/utils/logger';
 
-import fs from 'fs';
 import nodemailer from 'nodemailer';
-import path from 'path';
+
+import { template as htmlEmailTemplate } from './email-template';
 
 export const createTransporter = () => {
   return nodemailer.createTransport({
@@ -13,14 +13,6 @@ export const createTransporter = () => {
       pass: process.env.GMAIL_APP_PASSWORD
     }
   });
-};
-
-const readEmailTemplate = () => {
-  const templatePath = path.join(
-    process.cwd(),
-    'lib/emails/montar-maquina/email-template.html'
-  );
-  return fs.readFileSync(templatePath, 'utf-8');
 };
 
 const renderTemplate = (
@@ -77,7 +69,7 @@ export const createMontarMaquinaEmailTemplate = (
     timeZone: 'America/Sao_Paulo'
   });
 
-  const htmlTemplate = readEmailTemplate();
+  const htmlTemplate = htmlEmailTemplate;
   const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
 
   const templateData = {

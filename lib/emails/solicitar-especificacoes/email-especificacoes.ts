@@ -1,36 +1,19 @@
 import type { SpecificationFormData } from '@/lib/schemas/specification-form';
 import { logger } from '@/lib/utils/logger';
 
-import fs from 'fs';
 import nodemailer from 'nodemailer';
-import path from 'path';
 
-// Configuração do transporter do Nodemailer para Gmail
+import { template as htmlEmailTemplate } from './email-template';
+import { styles as cssEmailStyles } from './email-styles';
+
 export const createTransporter = () => {
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.GMAIL_USER_SENDER, // siteprofills@gmail.com
-      pass: process.env.GMAIL_APP_PASSWORD // App Password do Gmail
+      user: process.env.GMAIL_USER_SENDER,
+      pass: process.env.GMAIL_APP_PASSWORD
     }
   });
-};
-
-// Função para ler os arquivos de template
-const readEmailTemplate = () => {
-  const templatePath = path.join(
-    process.cwd(),
-    'lib/emails/solicitar-especificacoes/email-template.html'
-  );
-  return fs.readFileSync(templatePath, 'utf-8');
-};
-
-const readEmailStyles = () => {
-  const stylesPath = path.join(
-    process.cwd(),
-    'lib/emails/solicitar-especificacoes/email-styles.css'
-  );
-  return fs.readFileSync(stylesPath, 'utf-8');
 };
 
 // Template engine simples para substituir placeholders
@@ -71,8 +54,8 @@ export const createEmailTemplate = (data: SpecificationFormData) => {
   });
 
   // Lê o template HTML e CSS
-  let htmlTemplate = readEmailTemplate();
-  const cssStyles = readEmailStyles();
+  let htmlTemplate = htmlEmailTemplate;
+  const cssStyles = cssEmailStyles;
 
   // Substitui o CSS inline (necessário para emails)
   htmlTemplate = htmlTemplate.replace(

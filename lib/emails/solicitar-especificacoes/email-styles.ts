@@ -1,4 +1,4 @@
-/* Reset e configurações básicas para emails */
+export const styles = `/* Reset e configurações básicas para emails */
 html,
 body {
   margin: 0 !important;
@@ -229,3 +229,4 @@ a {
 .mso-btn a {
   color: #ffffff !important;
 }
+`;
