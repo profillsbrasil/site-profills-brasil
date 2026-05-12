@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { beforeAll } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { signCatalogToken, verifyCatalogToken } from './jwt-catalog';
 

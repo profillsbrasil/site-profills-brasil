@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>{{subject}}</title>
+    <style>
+      html, body { margin: 0 !important; padding: 0 !important; height: 100% !important; width: 100% !important; }
+      * { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+      table, td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; }
+      table { border-collapse: collapse !important; }
+      img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; height: auto; display: block; }
+      a { text-decoration: none; }
+      .bg { background-color: #f5f5f5; }
+      .wrap { width: 100%; max-width: 600px; margin: 0 auto; }
+      .card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+      .header { background: #1f2937; color: #ffffff; text-align: center; padding: 32px 24px; }
+      .h1 { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 22px; font-weight: 700; margin: 0; color: #ffffff; }
+      .preheader { display: none; max-height: 0; overflow: hidden; opacity: 0; font-size: 1px; line-height: 1px; }
+      .content { padding: 32px 28px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333333; }
+      .greeting { font-size: 18px; font-weight: 600; color: #111827; margin: 0 0 12px 0; }
+      .lead { font-size: 15px; line-height: 1.6; color: #374151; margin: 0 0 24px 0; }
+      .cta-wrap { text-align: center; margin: 28px 0; }
+      .cta { display: inline-block; background: #2563eb; color: #ffffff !important; font-weight: 700; font-size: 16px; padding: 14px 28px; border-radius: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .notice { background: #eff6ff; border-left: 4px solid #2563eb; padding: 14px 16px; border-radius: 6px; font-size: 14px; color: #1e3a8a; margin: 24px 0; }
+      .spam { font-size: 13px; color: #6b7280; margin: 24px 0 0 0; }
+      .footer { background: #f9fafb; padding: 20px 24px; text-align: center; font-size: 12px; color: #6b7280; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      .footer a { color: #2563eb; }
+    </style>
+  </head>
+  <body class="bg">
+    <span class="preheader">{{preheader}}</span>
+    <div class="wrap">
+      <div class="card">
+        <div class="header">
+          <h1 class="h1">{{subject}}</h1>
+        </div>
+        <div class="content">
+          <p class="greeting">Olá, {{name}}!</p>
+          <p class="lead">
+            Obrigado pelo interesse na Profills. Seu catálogo completo está pronto.
+            Clique no botão abaixo para baixar o arquivo PDF.
+          </p>
+          <div class="cta-wrap">
+            <a class="cta" href="{{downloadUrl}}">Baixar Catálogo</a>
+          </div>
+          <div class="notice">
+            ⏰ <strong>Link válido por 7 dias.</strong> Após esse período, solicite novamente em
+            <a href="{{siteUrl}}/download">{{siteUrl}}/download</a>.
+          </div>
+          <p class="spam">
+            Não encontrou na caixa de entrada? Verifique a pasta de spam.
+          </p>
+        </div>
+        <div class="footer">
+          Profills Brasil &nbsp;|&nbsp; <a href="{{siteUrl}}">{{siteUrl}}</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

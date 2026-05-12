@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { isValidCNPJ, isValidCPF, validateDocument } from './validate-document';
 
 describe('isValidCPF', () => {

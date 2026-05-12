@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { catalogRequestSchema } from './catalog-request';
 
 const valid = {
