@@ -181,14 +181,16 @@ function DesktopHero() {
               className='absolute inset-0 flex items-center justify-center'
               style={{ opacity: videoOpacity, scale: videoScale }}>
               <video
-                src='/videos/videoCurto.mp4'
                 autoPlay
                 loop
                 muted
                 playsInline
                 preload='metadata'
-                className='h-full max-h-[65vh] w-full max-w-[70vw] object-cover'
-              />
+                poster='/videos/videoCurto-poster.webp'
+                className='h-full max-h-[65vh] w-full max-w-[70vw] object-cover'>
+                <source src='/videos/videoCurto.webm' type='video/webm' />
+                <source src='/videos/videoCurto.mp4' type='video/mp4' />
+              </video>
             </motion.div>
 
             {/* Card direito: modelo 3D */}
