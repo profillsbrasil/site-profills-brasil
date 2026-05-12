@@ -5,6 +5,24 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  outputFileTracingExcludes: {
+    '*': [
+      'public/**/*.glb',
+      'public/**/*.gltf',
+      'public/**/*.mp4',
+      'public/**/*.webm',
+      'public/**/*.mov',
+      'public/**/*.png',
+      'public/**/*.jpg',
+      'public/**/*.jpeg',
+      'public/**/*.webp',
+      'public/**/*.avif',
+      'public/**/*.pdf',
+      'public/**/*.zip',
+      'lib/emails/**/*.html',
+      'lib/emails/**/*.css',
+    ],
+  },
   experimental: {
     optimizePackageImports: [
       'lucide-react',
