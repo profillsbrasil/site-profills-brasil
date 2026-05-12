@@ -8,7 +8,7 @@ import { logger } from '@/lib/utils/logger';
 
 const PDF_PATH = path.join(
   process.cwd(),
-  'public/downloads/Catalogo_ProfillsCompany.pdf'
+  'private/downloads/Catalogo_ProfillsCompany.pdf'
 );
 const PDF_FILENAME = 'Catalogo_ProfillsCompany.pdf';
 
