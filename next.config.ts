@@ -13,6 +13,15 @@ const nextConfig: NextConfig = {
       '@radix-ui/react-icons',
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/downloads/:path*',
+        destination: '/download',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
