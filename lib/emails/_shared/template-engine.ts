@@ -1,11 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
-export const readTemplate = (relativePath: string): string => {
-  const templatePath = path.join(process.cwd(), relativePath);
-  return fs.readFileSync(templatePath, 'utf-8');
-};
-
 export const renderTemplate = (
   template: string,
   data: Record<string, string | string[] | undefined>

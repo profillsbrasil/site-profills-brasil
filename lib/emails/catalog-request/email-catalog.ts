@@ -1,9 +1,8 @@
 import type { CatalogRequestData } from '@/lib/schemas/catalog-request';
 import { createTransporter } from '@/lib/emails/_shared/transporter';
-import {
-  readTemplate,
-  renderTemplate
-} from '@/lib/emails/_shared/template-engine';
+import { renderTemplate } from '@/lib/emails/_shared/template-engine';
+import { template as clientTemplate } from './email-template-client';
+import { template as internalTemplate } from './email-template-internal';
 import { logger } from '@/lib/utils/logger';
 
 const getSiteUrl = () => process.env.SITE_URL || 'https://profills.com.br';
@@ -24,9 +23,7 @@ export async function sendClientCatalogEmail(
   const siteUrl = getSiteUrl();
   const subject = 'Seu catálogo Profills está pronto';
 
-  const html = renderTemplate(
-    readTemplate('lib/emails/catalog-request/email-template-client.html'),
-    {
+  const html = renderTemplate(clientTemplate, {
       subject,
       preheader: 'Acesse o catálogo completo da Profills',
       name: input.name,
@@ -69,9 +66,7 @@ export async function sendLeadNotification(data: CatalogRequestData) {
   const subject = `Nova solicitação de catálogo — ${data.name}`;
   const timestamp = nowSaoPaulo();
 
-  const html = renderTemplate(
-    readTemplate('lib/emails/catalog-request/email-template-internal.html'),
-    {
+  const html = renderTemplate(internalTemplate, {
       name: data.name,
       document: data.document,
       phone: data.phone,

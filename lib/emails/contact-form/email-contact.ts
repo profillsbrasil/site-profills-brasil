@@ -1,9 +1,7 @@
 import type { ContactFormData } from '@/lib/schemas/contact-form';
 import { createTransporter } from '@/lib/emails/_shared/transporter';
-import {
-  readTemplate,
-  renderTemplate
-} from '@/lib/emails/_shared/template-engine';
+import { renderTemplate } from '@/lib/emails/_shared/template-engine';
+import { template as contactTemplate } from './email-template';
 import { logger } from '@/lib/utils/logger';
 
 // Função para formatar o material, serviço e acabamento como arrays
@@ -38,12 +36,6 @@ export const createContactEmailTemplate = (data: ContactFormData) => {
     timeZone: 'America/Sao_Paulo'
   });
 
-  // Lê o template HTML (CSS já está inline)
-  const htmlTemplate = readTemplate(
-    'lib/emails/contact-form/email-template.html'
-  );
-
-  // URL base do site (sempre com protocolo)
   const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
 
   // Formata os detalhes do projeto
@@ -88,7 +80,7 @@ export const createContactEmailTemplate = (data: ContactFormData) => {
   };
 
   // Renderiza o template
-  return renderTemplate(htmlTemplate, templateData);
+  return renderTemplate(contactTemplate, templateData);
 };
 
 // Função para enviar e-mail
