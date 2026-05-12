@@ -1,82 +1,10 @@
 import type { ContactFormData } from '@/lib/schemas/contact-form';
+import { createTransporter } from '@/lib/emails/_shared/transporter';
+import {
+  readTemplate,
+  renderTemplate
+} from '@/lib/emails/_shared/template-engine';
 import { logger } from '@/lib/utils/logger';
-
-import fs from 'fs';
-import nodemailer from 'nodemailer';
-import path from 'path';
-
-// Configuração do transporter do Nodemailer para Gmail
-export const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER_SENDER, // siteprofills@gmail.com
-      pass: process.env.GMAIL_APP_PASSWORD // App Password do Gmail
-    }
-  });
-};
-
-// Função para ler os arquivos de template
-const readEmailTemplate = () => {
-  const templatePath = path.join(
-    process.cwd(),
-    'lib/emails/contact-form/email-template.html'
-  );
-  return fs.readFileSync(templatePath, 'utf-8');
-};
-
-// Template engine melhorado para processar {{#if}} e {{#each}}
-const renderTemplate = (
-  template: string,
-  data: Record<string, string | string[] | undefined>
-): string => {
-  let rendered = template;
-
-  // Processa loops {{#each array}} ... {{/each}} PRIMEIRO
-  const eachRegex = /\{\{#each\s+(\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g;
-  rendered = rendered.replace(eachRegex, (match, arrayName, content) => {
-    const array = data[arrayName];
-    if (Array.isArray(array) && array.length > 0) {
-      return array
-        .map((item) => content.replace(/\{\{this\}\}/g, item))
-        .join('');
-    }
-    return '';
-  });
-
-  // Processa condicionais {{#if variavel}} ... {{/if}} DEPOIS
-  const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
-  rendered = rendered.replace(ifRegex, (match, condition, content) => {
-    const value = data[condition];
-    // Mostra o conteúdo se a variável existe, não está vazia e não é undefined
-    if (Array.isArray(value)) {
-      return value.length > 0 ? content : '';
-    }
-    return value !== undefined && value !== null && String(value).trim() !== ''
-      ? content
-      : '';
-  });
-
-  // Substitui variáveis simples {{variavel}} POR ÚLTIMO
-  Object.keys(data).forEach((key) => {
-    const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
-    const value = data[key];
-    if (Array.isArray(value)) {
-      rendered = rendered.replace(regex, value.join(', '));
-    } else {
-      rendered = rendered.replace(regex, String(value || ''));
-    }
-  });
-
-  // Remove qualquer condicional que não foi processado (fallback)
-  rendered = rendered.replace(/\{\{#each\s+\w+\}\}/g, '');
-  rendered = rendered.replace(/\{\{\/each\}\}/g, '');
-  rendered = rendered.replace(/\{\{#if\s+\w+\}\}/g, '');
-  rendered = rendered.replace(/\{\{\/if\}\}/g, '');
-  rendered = rendered.replace(/\{\{this\}\}/g, '');
-
-  return rendered;
-};
 
 // Função para formatar o material, serviço e acabamento como arrays
 const formatProjectDetails = (data: ContactFormData) => {
@@ -111,7 +39,9 @@ export const createContactEmailTemplate = (data: ContactFormData) => {
   });
 
   // Lê o template HTML (CSS já está inline)
-  const htmlTemplate = readEmailTemplate();
+  const htmlTemplate = readTemplate(
+    'lib/emails/contact-form/email-template.html'
+  );
 
   // URL base do site (sempre com protocolo)
   const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
