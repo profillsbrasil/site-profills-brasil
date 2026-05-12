@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useOptimized3DModel } from '@/components/modelo3d/hooks/useOptimized3DModel';
 
 interface CaixaHome3dProps {
@@ -11,6 +12,8 @@ interface CaixaHome3dProps {
   eager?: boolean;
   placeholder?: React.ReactNode;
   isMobile?: boolean;
+  posterSrc?: string;
+  blurDataURL?: string;
 }
 
 export function CaixaHome3d({
@@ -21,7 +24,9 @@ export function CaixaHome3d({
   cameraOrbit = '40deg 75deg 105%',
   eager = false,
   placeholder,
-  isMobile = false
+  isMobile = false,
+  posterSrc,
+  blurDataURL,
 }: CaixaHome3dProps) {
   const {
     containerRef,
@@ -41,9 +46,24 @@ export function CaixaHome3d({
   return (
     <div
       ref={containerRef}
-      className={`flex w-full items-center justify-center ${className}`}>
-      {/* Model-viewer: Uma vez carregado, sempre renderizado mas com visibilidade controlada */}
-      {shouldRender && isLoaded && (
+      className={`relative flex w-full items-center justify-center ${className}`}>
+      {posterSrc && (
+        <Image
+          src={posterSrc}
+          alt={alt}
+          width={800}
+          height={800}
+          placeholder={blurDataURL ? 'blur' : 'empty'}
+          blurDataURL={blurDataURL}
+          priority={eager}
+          sizes={isMobile ? '320px' : '50vw'}
+          className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-200 ${
+            isLoaded ? 'opacity-0' : 'opacity-100'
+          }`}
+        />
+      )}
+
+      {shouldRender && (
         // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
         <model-viewer
           ref={modelViewerRef}
@@ -55,7 +75,7 @@ export function CaixaHome3d({
           max-camera-orbit='auto auto 200%'
           disable-pan={true}
           disable-zoom={true}
-          auto-rotate={autoRotate && isVisible} // Só roda animação se estiver visível
+          auto-rotate={autoRotate && isVisible}
           auto-rotate-delay='500'
           environment-image='neutral'
           shadow-intensity='1'
@@ -70,18 +90,16 @@ export function CaixaHome3d({
             height: isMobile ? '420px' : '100%',
             backgroundColor: 'transparent',
             '--poster-color': 'transparent',
-            opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
-            pointerEvents: isVisible ? 'auto' : 'none' // Desabilita interação quando não visível
+            opacity: isLoaded && isVisible ? 1 : 0,
+            pointerEvents: isVisible ? 'auto' : 'none',
+            transition: 'opacity 200ms',
           }}
-          className={`transition-all duration-300 ${
-            isVisible && !isMobile ? 'hover:scale-[1.02]' : ''
-          }`}>
+          className={isVisible && !isMobile ? 'hover:scale-[1.02]' : ''}>
           {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
         </model-viewer>
       )}
 
-      {/* Placeholder: Só mostra se o modelo nunca foi carregado */}
-      {(!shouldRender || !isLoaded) && (
+      {!posterSrc && (!shouldRender || !isLoaded) && (
         <div
           className='flex w-full items-center justify-center'
           style={{ height: isMobile ? '320px' : '100%' }}>
@@ -96,7 +114,7 @@ export function CaixaHome3d({
                 Carregando modelo 3D...
               </span>
               <span className='mt-2 text-xs leading-relaxed text-white/60'>
-                Preparando a visualizacao interativa da embalagem.
+                Preparando a visualização interativa da embalagem.
               </span>
             </div>
           )}
