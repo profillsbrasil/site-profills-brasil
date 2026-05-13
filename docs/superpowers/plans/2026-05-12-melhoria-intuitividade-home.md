@@ -165,7 +165,7 @@ describe('ScrollHint', () => {
 - [ ] **Step 1.3: Rodar testes e confirmar que falham**
 
 ```bash
-bun test components/blocks/__tests__/scrollHint.test.tsx
+bun run test components/blocks/__tests__/scrollHint.test.tsx
 ```
 
 Expected: 8 failures, todas com "Cannot find name 'variant'" ou similar (o componente atual ignora props e retorna null).
@@ -317,7 +317,7 @@ Acrescentar ao final de `app/globals.css`:
 - [ ] **Step 1.6: Rodar testes e confirmar que passam**
 
 ```bash
-bun test components/blocks/__tests__/scrollHint.test.tsx
+bun run test components/blocks/__tests__/scrollHint.test.tsx
 ```
 
 Expected: 8 passes.
@@ -424,7 +424,7 @@ describe('ScrollHint integration', () => {
 - [ ] **Step 2.3: Rodar testes e confirmar que falham**
 
 ```bash
-bun test app/\(home\)/_components/__tests__/scrollExpansionHero.test.tsx
+bun run test app/\(home\)/_components/__tests__/scrollExpansionHero.test.tsx
 ```
 
 Expected: 3 falhas novas (`scroll-hint-desktop`/`scroll-hint-mobile` não encontrados).
@@ -460,7 +460,7 @@ Em `DesktopHero`, dentro do `<div className='sticky top-0 ...'>`, adiciona como 
 - [ ] **Step 2.7: Rodar testes e confirmar que passam (todos)**
 
 ```bash
-bun test app/\(home\)/_components/__tests__/scrollExpansionHero.test.tsx
+bun run test app/\(home\)/_components/__tests__/scrollExpansionHero.test.tsx
 ```
 
 Expected: todos os testes (existentes + novos) passam.
@@ -572,7 +572,7 @@ por:
 - [ ] **Step 3.7: Rodar suite completa**
 
 ```bash
-bun test
+bun run test
 ```
 
 Expected: tudo verde (sem regressão).
@@ -862,7 +862,7 @@ Atualizar o tipo do array (se houver) e o JSX do `<OptimizedEmbalagem3d>` (próx
 - [ ] **Step 5.3: Rodar testes**
 
 ```bash
-bun test
+bun run test
 ```
 
 Expected: tudo verde (sem regressão; nenhum teste novo nesta task).
@@ -1111,7 +1111,7 @@ O mock atual de `next/dynamic` produz `<div data-testid='caixa-home-3d' data-eag
 Rodar suite:
 
 ```bash
-bun test
+bun run test
 ```
 
 Expected: tudo verde.
@@ -1185,7 +1185,7 @@ export default function Loading() {
 - [ ] **Step 7.2: Rodar testes**
 
 ```bash
-bun test
+bun run test
 ```
 
 Expected: tudo verde.
@@ -1218,7 +1218,7 @@ git commit -m "feat(loading): skeleton estatico do hero em loading.tsx"
 - [ ] **Step 8.1: Suite completa**
 
 ```bash
-bun test
+bun run test
 ```
 
 Expected: todos os testes verdes.

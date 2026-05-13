@@ -38,19 +38,24 @@ ls /tmp/glb-meshopt-backup/ | wc -l
 
 Expected: `16`.
 
-- [ ] **Step 1.2: Restaurar GLBs originais do backup criado em Task 4 anterior (se ainda existir)**
+- [ ] **Step 1.2: Restaurar GLBs originais do git (pré-compressão meshopt)**
+
+O commit `76b4451` foi o que comprimiu com meshopt. O parent (`76b4451^` = `bf3376a` ou anterior) tem os GLBs originais.
 
 ```bash
-ls /tmp/glb-backup/ 2>/dev/null | wc -l
+mkdir -p /tmp/glb-original
+for slug in 3-soldas-duplo bisnaga fardo flowpack frascos-tubulares gable-top galao garrafas-02 lata-tinta pote02 pouch sache-4-soldas sache-especial sache-saco stick uht; do
+  git show 76b4451^:public/embalagens-3d/${slug}.glb > /tmp/glb-original/${slug}.glb
+done
+ls -lh /tmp/glb-original/ | head -20
 ```
 
-Se Expected: `16`, prosseguir com Step 1.3 usando `/tmp/glb-backup`.
-Se backup ausente (output 0 ou erro), report BLOCKED — não temos como recuperar os originais sem o backup. O usuário pode ter rodado `rm` no `/tmp`.
+Expected: 16 GLBs, tamanhos originais (bisnaga ~50MB, demais 100KB-2.8MB).
 
 - [ ] **Step 1.3: Re-comprimir cada GLB usando SÓ texture compression (sem meshopt)**
 
 ```bash
-for f in /tmp/glb-backup/*.glb; do
+for f in /tmp/glb-original/*.glb; do
   name=$(basename "$f")
   echo "==> $name"
   npx @gltf-transform/cli optimize "$f" "public/embalagens-3d/$name" --texture-compress webp --texture-size 1024
