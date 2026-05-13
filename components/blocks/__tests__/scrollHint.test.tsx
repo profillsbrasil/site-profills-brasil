@@ -105,13 +105,13 @@ describe('ScrollHint', () => {
     expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 
-  it('variant mobile renderiza pill com label', () => {
+  it('variant mobile renderiza cascade com label "Arraste para baixo"', () => {
     render(<ScrollHint variant='mobile' />);
     const el = screen.getByTestId('scroll-hint-mobile');
-    expect(el).toHaveTextContent(/role para descobrir/i);
+    expect(el).toHaveTextContent(/arraste para baixo/i);
   });
 
-  it('variant desktop renderiza label', () => {
+  it('variant desktop usa label "Role para descobrir"', () => {
     render(<ScrollHint variant='desktop' />);
     expect(screen.getByText(/role para descobrir/i)).toBeInTheDocument();
   });

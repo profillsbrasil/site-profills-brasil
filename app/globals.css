@@ -192,11 +192,6 @@ input[type='number']::-webkit-outer-spin-button {
   }
 }
 
-@keyframes scroll-hint-nudge {
-  0%, 100% { transform: rotate(45deg) translate(0, 0); }
-  50% { transform: rotate(45deg) translate(2px, 2px); }
-}
-
 .scroll-hint-chevron {
   width: 16px;
   height: 16px;
@@ -206,25 +201,4 @@ input[type='number']::-webkit-outer-spin-button {
   margin-top: -8px;
   opacity: 0;
   animation: scroll-hint-cascade 1.8s ease-in-out infinite;
-}
-
-.scroll-hint-chevron-single {
-  width: 10px;
-  height: 10px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(45deg);
-  animation: scroll-hint-nudge 1.6s ease-in-out infinite;
-}
-
-.scroll-hint-pill {
-  background-color: rgb(255 255 255 / 0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-@supports not (backdrop-filter: blur(8px)) {
-  .scroll-hint-pill {
-    background-color: rgb(255 255 255 / 0.2);
-  }
 }
