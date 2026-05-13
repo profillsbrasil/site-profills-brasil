@@ -29,75 +29,90 @@ vi.mock('motion/react', () => ({
   useReducedMotion: () => reducedMotionMock(),
 }));
 
+function setScrollY(value: number) {
+  Object.defineProperty(window, 'scrollY', {
+    configurable: true,
+    value,
+    writable: true,
+  });
+}
+
 describe('ScrollHint', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
     reducedMotionMock.mockReturnValue(false);
+    setScrollY(0);
   });
 
   afterEach(() => {
-    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
-  it('não renderiza visível antes de idleMs', () => {
-    render(<ScrollHint variant='desktop' idleMs={2500} />);
+  it('inicia visível quando scrollY < 50', () => {
+    setScrollY(0);
+    render(<ScrollHint variant='desktop' />);
+    expect(screen.getByTestId('scroll-hint-desktop')).toHaveAttribute('data-opacity', '1');
+  });
+
+  it('inicia oculto quando scrollY >= 50', () => {
+    setScrollY(100);
+    render(<ScrollHint variant='desktop' />);
     expect(screen.getByTestId('scroll-hint-desktop')).toHaveAttribute('data-opacity', '0');
   });
 
-  it('fica visível após idleMs', () => {
-    render(<ScrollHint variant='desktop' idleMs={2500} />);
+  it('some quando scrolla além do threshold', () => {
+    setScrollY(0);
+    render(<ScrollHint variant='desktop' />);
     act(() => {
-      vi.advanceTimersByTime(2500);
+      setScrollY(100);
+      window.dispatchEvent(new Event('scroll'));
+    });
+    expect(screen.getByTestId('scroll-hint-desktop')).toHaveAttribute('data-opacity', '0');
+  });
+
+  it('reaparece quando volta ao topo', () => {
+    setScrollY(200);
+    render(<ScrollHint variant='desktop' />);
+    act(() => {
+      setScrollY(0);
+      window.dispatchEvent(new Event('scroll'));
     });
     expect(screen.getByTestId('scroll-hint-desktop')).toHaveAttribute('data-opacity', '1');
   });
 
-  it('some no primeiro scroll após visível', () => {
-    render(<ScrollHint variant='desktop' idleMs={2500} />);
-    act(() => {
-      vi.advanceTimersByTime(2500);
-    });
-    act(() => {
-      window.dispatchEvent(new Event('scroll'));
-    });
-    expect(screen.getByTestId('scroll-hint-desktop')).toHaveAttribute('data-opacity', '0');
+  it('respeita threshold de 50px no limite', () => {
+    setScrollY(49);
+    const { unmount } = render(<ScrollHint variant='desktop' testId='hint-49' />);
+    expect(screen.getByTestId('hint-49')).toHaveAttribute('data-opacity', '1');
+    unmount();
+
+    setScrollY(50);
+    render(<ScrollHint variant='desktop' testId='hint-50' />);
+    expect(screen.getByTestId('hint-50')).toHaveAttribute('data-opacity', '0');
   });
 
-  it('não reaparece em scrolls subsequentes', () => {
-    render(<ScrollHint variant='desktop' idleMs={2500} />);
-    act(() => {
-      vi.advanceTimersByTime(2500);
-      window.dispatchEvent(new Event('scroll'));
-      vi.advanceTimersByTime(2500);
-      window.dispatchEvent(new Event('scroll'));
-    });
-    expect(screen.getByTestId('scroll-hint-desktop')).toHaveAttribute('data-opacity', '0');
-  });
-
-  it('respeita prefers-reduced-motion (retorna null sem armar timer)', () => {
+  it('respeita prefers-reduced-motion (retorna null sem listener)', () => {
     reducedMotionMock.mockReturnValue(true);
-    const setTimeoutSpy = vi.spyOn(window, 'setTimeout');
-    const { container } = render(<ScrollHint variant='desktop' idleMs={2500} />);
+    const addSpy = vi.spyOn(window, 'addEventListener');
+    const { container } = render(<ScrollHint variant='desktop' />);
     expect(container.firstChild).toBeNull();
-    expect(setTimeoutSpy).not.toHaveBeenCalled();
+    expect(addSpy).not.toHaveBeenCalledWith('scroll', expect.any(Function), expect.anything());
   });
 
   it('limpa listener no unmount', () => {
     const removeSpy = vi.spyOn(window, 'removeEventListener');
-    const { unmount } = render(<ScrollHint variant='desktop' idleMs={2500} />);
+    const { unmount } = render(<ScrollHint variant='desktop' />);
     unmount();
     expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
   });
 
   it('variant mobile renderiza pill com label', () => {
-    render(<ScrollHint variant='mobile' idleMs={2500} />);
+    render(<ScrollHint variant='mobile' />);
     const el = screen.getByTestId('scroll-hint-mobile');
     expect(el).toHaveTextContent(/role para descobrir/i);
   });
 
   it('variant desktop renderiza label', () => {
-    render(<ScrollHint variant='desktop' idleMs={2500} />);
+    render(<ScrollHint variant='desktop' />);
     expect(screen.getByText(/role para descobrir/i)).toBeInTheDocument();
   });
 });

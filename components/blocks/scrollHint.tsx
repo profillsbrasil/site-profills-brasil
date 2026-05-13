@@ -1,48 +1,42 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { motion, useReducedMotion } from 'motion/react';
 
+const HIDE_THRESHOLD_PX = 50;
+
 type ScrollHintProps = {
   variant: 'desktop' | 'mobile';
-  idleMs?: number;
   targetRef?: React.RefObject<HTMLElement | null>;
   testId?: string;
 };
 
-export function ScrollHint({
-  variant,
-  idleMs = 2500,
-  targetRef,
-  testId,
-}: ScrollHintProps) {
+export function ScrollHint({ variant, targetRef, testId }: ScrollHintProps) {
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useState(false);
-  const dismissedRef = useRef(false);
 
   useEffect(() => {
     if (reduceMotion) return;
 
-    const timer = window.setTimeout(() => {
-      if (!dismissedRef.current) setVisible(true);
-    }, idleMs);
-
     const target: HTMLElement | Window = targetRef?.current ?? window;
-    const onScroll = () => {
-      dismissedRef.current = true;
-      window.clearTimeout(timer);
-      setVisible(false);
-      target.removeEventListener('scroll', onScroll);
+
+    const readPosition = () => {
+      if (target === window) return window.scrollY;
+      return (target as HTMLElement).scrollTop;
     };
 
-    target.addEventListener('scroll', onScroll, { passive: true });
+    const checkPosition = () => {
+      setVisible(readPosition() < HIDE_THRESHOLD_PX);
+    };
+
+    checkPosition();
+    target.addEventListener('scroll', checkPosition, { passive: true });
 
     return () => {
-      window.clearTimeout(timer);
-      target.removeEventListener('scroll', onScroll);
+      target.removeEventListener('scroll', checkPosition);
     };
-  }, [idleMs, reduceMotion, targetRef]);
+  }, [reduceMotion, targetRef]);
 
   if (reduceMotion) return null;
 
