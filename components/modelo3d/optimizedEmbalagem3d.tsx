@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { useOptimized3DModel } from '@/components/modelo3d/hooks/useOptimized3DModel';
 
 interface OptimizedEmbalagem3dProps {
@@ -9,6 +11,7 @@ interface OptimizedEmbalagem3dProps {
   autoRotate?: boolean;
   cameraOrbit?: string;
   placeholder?: React.ReactNode;
+  posterSrc?: string;
 }
 
 export function OptimizedEmbalagem3d({
@@ -17,7 +20,8 @@ export function OptimizedEmbalagem3d({
   className = '',
   autoRotate = true,
   cameraOrbit = '40deg 75deg 105%',
-  placeholder
+  placeholder,
+  posterSrc,
 }: OptimizedEmbalagem3dProps) {
   const {
     containerRef,
@@ -82,7 +86,18 @@ export function OptimizedEmbalagem3d({
         <div
           className='flex h-full w-full items-center justify-center'
           style={{ minHeight: '250px' }}>
-          {placeholder || (
+          {placeholder ? (
+            placeholder
+          ) : posterSrc ? (
+            <Image
+              src={posterSrc}
+              alt={alt}
+              width={400}
+              height={400}
+              sizes='(max-width: 768px) 50vw, 25vw'
+              className='h-auto w-full object-contain'
+            />
+          ) : (
             <div className='text-muted-foreground flex flex-col items-center justify-center space-y-2'>
               {isVisible && !hasBeenLoaded ? (
                 <>

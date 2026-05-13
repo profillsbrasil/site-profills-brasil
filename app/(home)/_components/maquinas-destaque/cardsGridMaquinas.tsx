@@ -97,6 +97,7 @@ export function FeatureCard({
                   src={machine.imgMaquina}
                   alt={machine.name}
                   fill
+                  sizes='(max-width: 768px) 100vw, 33vw'
                   className={cn(
                     'h-full w-full rounded-xs object-contain transition-transform duration-500',
                     machine.imgMaquinaClassName
@@ -110,6 +111,7 @@ export function FeatureCard({
                   src={machine.imgEmbalagem}
                   alt={`Embalagem ${machine.name}`}
                   fill
+                  sizes='(max-width: 768px) 100vw, 33vw'
                   className={cn(
                     'h-full w-full rounded-xs !object-contain transition-transform duration-500',
                     machine.imgEmbalagemClassName

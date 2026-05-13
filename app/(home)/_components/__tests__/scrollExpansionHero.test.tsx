@@ -54,13 +54,27 @@ vi.mock('@/components/ui/text-animate', () => ({
   }) => createElement(Component, { className }, children),
 }));
 
+const reducedMotionMock = vi.fn(() => false);
+
 vi.mock('motion/react', () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
   motion: {
-    div: ({ children, ...props }: HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
+    div: ({
+      children,
+      animate: _animate,
+      initial: _initial,
+      transition: _transition,
+      style: _style,
+      ...props
+    }: HTMLAttributes<HTMLDivElement> & {
+      animate?: unknown;
+      initial?: unknown;
+      transition?: unknown;
+      style?: React.CSSProperties;
+    }) => <div {...props}>{children}</div>,
   },
   useMotionValueEvent: vi.fn(),
-  useReducedMotion: () => false,
+  useReducedMotion: () => reducedMotionMock(),
   useScroll: () => ({ scrollYProgress: {} }),
   useTransform: () => 0,
 }));
@@ -101,5 +115,42 @@ describe('ScrollExpandMedia mobile hero', () => {
     expect(within(mobileHero).getByTestId('caixa-home-3d')).toHaveAttribute('data-eager', 'true');
     expect(within(mobileHero).getByTestId('caixa-home-3d')).toHaveClass('h-[320px]');
     expect(within(mobileHero).getByTestId('caixa-home-3d')).toHaveClass('w-full');
+  });
+});
+
+describe('ScrollHint integration', () => {
+  beforeEach(() => {
+    reducedMotionMock.mockReturnValue(false);
+  });
+
+  it('DesktopHero monta ScrollHint variant desktop', () => {
+    render(
+      <ScrollExpandMedia>
+        <div>Conteudo</div>
+      </ScrollExpandMedia>
+    );
+    const desktopHero = screen.getByTestId('desktop-hero');
+    expect(within(desktopHero).getByTestId('scroll-hint-desktop')).toBeInTheDocument();
+  });
+
+  it('MobileHero monta ScrollHint variant mobile', () => {
+    render(
+      <ScrollExpandMedia>
+        <div>Conteudo</div>
+      </ScrollExpandMedia>
+    );
+    const mobileHero = screen.getByTestId('mobile-hero');
+    expect(within(mobileHero).getByTestId('scroll-hint-mobile')).toBeInTheDocument();
+  });
+
+  it('reduced-motion esconde ambas as variants', () => {
+    reducedMotionMock.mockReturnValue(true);
+    render(
+      <ScrollExpandMedia>
+        <div>Conteudo</div>
+      </ScrollExpandMedia>
+    );
+    expect(screen.queryByTestId('scroll-hint-desktop')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('scroll-hint-mobile')).not.toBeInTheDocument();
   });
 });

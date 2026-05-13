@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { GridPatternMobile } from '@/components/layout/gridPatternBgMobile';
 import { BlurFade } from '@/components/ui/blur-fade';
+import { ScrollHint } from '@/components/blocks/scrollHint';
 
 import {
   AnimatePresence,
@@ -93,6 +94,7 @@ function MobileHero() {
             />
           </div>
         </BlurFade>
+        <ScrollHint variant='mobile' />
       </div>
     </section>
   );
@@ -115,10 +117,10 @@ function DesktopHero() {
   const rightX = useTransform(scrollYProgress, [0, 0.5], [0, 300]);
   const cardsOpacity = useTransform(scrollYProgress, [0, 0.025], [1, 0]);
 
-  const videoOpacity = useTransform(scrollYProgress, [0.015, 0.06], [0, 1]);
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.035], [0, 1]);
   const videoScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1.1]);
 
-  const lightBgOpacity = useTransform(scrollYProgress, [0.6, 0.85], [0, 1]);
+  const lightBgOpacity = useTransform(scrollYProgress, [0.6, 1.0], [0, 1]);
 
   const gridOpacity = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
 
@@ -140,7 +142,7 @@ function DesktopHero() {
   }
 
   return (
-    <section ref={heroRef} className='relative h-[300vh]'>
+    <section ref={heroRef} className='relative h-[140vh]'>
       <div className='sticky top-0 h-screen overflow-hidden pt-16'>
         {/* Background escuro base */}
         <div className='absolute inset-0 bg-secondary' />
@@ -179,14 +181,16 @@ function DesktopHero() {
               className='absolute inset-0 flex items-center justify-center'
               style={{ opacity: videoOpacity, scale: videoScale }}>
               <video
-                src='/videos/videoCurto.mp4'
                 autoPlay
                 loop
                 muted
                 playsInline
                 preload='metadata'
-                className='h-full max-h-[65vh] w-full max-w-[70vw] object-cover'
-              />
+                poster='/videos/videoCurto-poster.webp'
+                className='h-full max-h-[65vh] w-full max-w-[70vw] object-cover'>
+                <source src='/videos/videoCurto.webm' type='video/webm' />
+                <source src='/videos/videoCurto.mp4' type='video/mp4' />
+              </video>
             </motion.div>
 
             {/* Card direito: modelo 3D */}
@@ -210,6 +214,7 @@ function DesktopHero() {
             </motion.div>
           </div>
         </div>
+        <ScrollHint variant='desktop' />
       </div>
     </section>
   );
