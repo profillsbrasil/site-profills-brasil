@@ -120,7 +120,7 @@ function DesktopHero() {
   const videoOpacity = useTransform(scrollYProgress, [0.015, 0.06], [0, 1]);
   const videoScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1.1]);
 
-  const lightBgOpacity = useTransform(scrollYProgress, [0.6, 0.85], [0, 1]);
+  const lightBgOpacity = useTransform(scrollYProgress, [0.6, 1.0], [0, 1]);
 
   const gridOpacity = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
 
@@ -142,7 +142,7 @@ function DesktopHero() {
   }
 
   return (
-    <section ref={heroRef} className='relative h-[300vh]'>
+    <section ref={heroRef} className='relative h-[200vh]'>
       <div className='sticky top-0 h-screen overflow-hidden pt-16'>
         {/* Background escuro base */}
         <div className='absolute inset-0 bg-secondary' />
