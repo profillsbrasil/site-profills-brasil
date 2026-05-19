@@ -110,8 +110,8 @@ function DesktopHero() {
     offset: ['start start', 'end end']
   });
 
-  // Timeline (600vh = 500vh de scroll real ≈ 5 voltas de roda):
-  // Cards saem cedo, vídeo entra e fica fixo (opacity:1) por ~440vh de hold,
+  // Timeline (300vh = 200vh de scroll real ≈ 2 voltas de roda):
+  // Cards saem cedo, vídeo entra e fica fixo (opacity:1) por ~175vh de hold,
   // até a section sticky desgrudar e revelar o conteúdo.
   const leftX = useTransform(scrollYProgress, [0, 0.1], [0, -300]);
   const rightX = useTransform(scrollYProgress, [0, 0.1], [0, 300]);
@@ -141,7 +141,7 @@ function DesktopHero() {
   }
 
   return (
-    <section ref={heroRef} className='relative h-[600vh]'>
+    <section ref={heroRef} className='relative h-[300vh]'>
       <div className='sticky top-0 h-screen overflow-hidden pt-16'>
         {/* Background escuro base */}
         <div className='absolute inset-0 bg-secondary' />
