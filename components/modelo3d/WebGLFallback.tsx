@@ -40,7 +40,11 @@ export function WebGLFallback({
         Visualização 3D indisponível
       </span>
       <span className={`mt-2 text-xs leading-relaxed ${s.text}`}>
-        Seu dispositivo ou navegador não suporta a visualização interativa.
+        Seu navegador está com a aceleração de hardware (WebGL) desativada.
+      </span>
+      <span className={`mt-1 text-xs leading-relaxed ${s.text}`}>
+        Ative a aceleração de gráficos nas configurações do navegador para ver o
+        modelo em 3D.
       </span>
     </div>
   );

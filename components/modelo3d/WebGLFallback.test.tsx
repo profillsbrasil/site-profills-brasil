@@ -11,6 +11,9 @@ describe('WebGLFallback', () => {
     expect(
       screen.getByText(/visualização 3d indisponível/i)
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(/ative a aceleração de gráficos/i)
+    ).toBeInTheDocument();
   });
 
   it('aplica o estilo da variante dark', () => {
