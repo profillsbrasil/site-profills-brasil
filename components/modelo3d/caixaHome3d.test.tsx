@@ -19,6 +19,7 @@ describe('CaixaHome3d', () => {
       isLoaded: false,
       shouldRender: false,
       hasBeenLoaded: false,
+      webglSupported: true,
       handleModelLoad: vi.fn(),
       handleModelError: vi.fn(),
     });
@@ -39,5 +40,24 @@ describe('CaixaHome3d', () => {
     expect(container.querySelector('[style*="height: 320px"]')).toHaveStyle({
       height: '320px',
     });
+  });
+
+  it('mostra o WebGLFallback quando WebGL não está disponível', () => {
+    mockedUseOptimized3DModel.mockReturnValue({
+      containerRef: { current: null },
+      modelViewerRef: { current: null },
+      isVisible: false,
+      isLoaded: false,
+      shouldRender: false,
+      hasBeenLoaded: false,
+      webglSupported: false,
+      handleModelLoad: vi.fn(),
+      handleModelError: vi.fn(),
+    });
+
+    render(<CaixaHome3d isMobile={true} />);
+
+    expect(screen.getByTestId('webgl-fallback')).toBeInTheDocument();
+    expect(screen.queryByText(/carregando modelo 3d/i)).not.toBeInTheDocument();
   });
 });

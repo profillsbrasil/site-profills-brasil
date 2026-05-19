@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 
+import { WebGLFallback } from '@/components/modelo3d/WebGLFallback';
 import { useOptimized3DModel } from '@/components/modelo3d/hooks/useOptimized3DModel';
 
 interface OptimizedEmbalagem3dProps {
@@ -30,6 +31,7 @@ export function OptimizedEmbalagem3d({
     isLoaded,
     shouldRender,
     hasBeenLoaded,
+    webglSupported,
     handleModelLoad,
     handleModelError
   } = useOptimized3DModel({
@@ -43,7 +45,7 @@ export function OptimizedEmbalagem3d({
       ref={containerRef}
       className={`flex h-full w-full items-center justify-center ${className}`}>
       {/* Model-viewer: Uma vez carregado, sempre renderizado mas com visibilidade controlada */}
-      {shouldRender && isLoaded && (
+      {shouldRender && isLoaded && webglSupported !== false && (
         // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
         <model-viewer
           ref={modelViewerRef}
@@ -82,7 +84,7 @@ export function OptimizedEmbalagem3d({
       )}
 
       {/* Placeholder: Só mostra se o modelo nunca foi carregado */}
-      {(!shouldRender || !isLoaded) && (
+      {webglSupported !== false && (!shouldRender || !isLoaded) && (
         <div
           className='flex h-full w-full items-center justify-center'
           style={{ minHeight: '250px' }}>
@@ -112,6 +114,10 @@ export function OptimizedEmbalagem3d({
             </div>
           )}
         </div>
+      )}
+
+      {webglSupported === false && !posterSrc && (
+        <WebGLFallback variant='light' />
       )}
     </div>
   );
