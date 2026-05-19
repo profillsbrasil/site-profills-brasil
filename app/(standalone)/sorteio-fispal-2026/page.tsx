@@ -54,9 +54,8 @@ export default function SorteioFispal2026() {
         </a>
       </Button>
 
-      <p className='z-10 max-w-2xl text-center text-xs text-slate-400'>
-        {/* TODO: nota legal do sorteio, se houver */}
-      </p>
+      {/* TODO: adicionar <p className='z-10 max-w-2xl text-center text-xs text-slate-400'>
+          com a nota legal do sorteio quando o conteúdo chegar */}
     </div>
   );
 }
