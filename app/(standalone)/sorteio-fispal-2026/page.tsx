@@ -48,7 +48,7 @@ export default function SorteioFispal2026() {
 
       <Button
         asChild
-        className='z-10 bg-blue-600 text-white hover:bg-blue-700'>
+        className='bg-accent text-accent-foreground hover:bg-accent/90 z-10'>
         <a href={whatsappUrl} target='_blank' rel='noopener noreferrer'>
           Participar pelo WhatsApp
         </a>
