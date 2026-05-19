@@ -110,18 +110,32 @@ function DesktopHero() {
     offset: ['start start', 'end end']
   });
 
-  // Timeline (300vh = 200vh de scroll real ≈ 2 voltas de roda):
-  // Cards saem cedo, vídeo entra e fica fixo (opacity:1) por ~175vh de hold,
+  // Timeline (200vh = 100vh de scroll real ≈ 1 volta de roda):
+  // Cards saem cedo, vídeo entra e fica fixo (opacity:1) por ~85vh de hold,
   // até a section sticky desgrudar e revelar o conteúdo.
   const leftX = useTransform(scrollYProgress, [0, 0.1], [0, -300]);
   const rightX = useTransform(scrollYProgress, [0, 0.1], [0, 300]);
-  const cardsOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
+  const cardsOpacity = useTransform(() => {
+    const p = scrollYProgress.get();
+    if (p >= 0.06) return 0;
+    return 1 - p / 0.06;
+  });
 
   // Vídeo entra em 0.04 com leve sobreposição ao fim do fade dos cards (0.06) — crossfade intencional
-  const videoOpacity = useTransform(scrollYProgress, [0.04, 0.12], [0, 1]);
+  const videoOpacity = useTransform(() => {
+    const p = scrollYProgress.get();
+    if (p <= 0.04) return 0;
+    if (p >= 0.12) return 1;
+    return (p - 0.04) / 0.08;
+  });
   const videoScale = useTransform(scrollYProgress, [0, 1], [0.8, 1.05]);
 
-  const gridOpacity = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
+  const gridOpacity = useTransform(() => {
+    const p = scrollYProgress.get();
+    if (p <= 0.05) return 1;
+    if (p >= 0.3) return 0;
+    return 1 - (p - 0.05) / 0.25;
+  });
 
   // Esconde cards completamente quando opacity chega a 0
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
@@ -141,7 +155,7 @@ function DesktopHero() {
   }
 
   return (
-    <section ref={heroRef} className='relative h-[300vh]'>
+    <section ref={heroRef} className='relative h-[200vh]'>
       <div className='sticky top-0 h-screen overflow-hidden pt-16'>
         {/* Background escuro base */}
         <div className='absolute inset-0 bg-secondary' />
