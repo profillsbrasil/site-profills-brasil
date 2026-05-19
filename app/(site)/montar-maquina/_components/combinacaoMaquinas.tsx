@@ -1,7 +1,7 @@
 import {
-  MaquinaData,
+  type MaquinaData,
   maquinasData
-} from '@/app/maquinas/_components/cardMaquinas/maquinasData';
+} from '@/app/(site)/maquinas/_components/cardMaquinas/maquinasData';
 
 // Mapeamento dos tipos de produto da UI para os tipos das máquinas
 const productTypeMapping: Record<string, string[]> = {
