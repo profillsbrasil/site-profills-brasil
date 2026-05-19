@@ -117,6 +117,7 @@ function DesktopHero() {
   const rightX = useTransform(scrollYProgress, [0, 0.1], [0, 300]);
   const cardsOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
 
+  // Vídeo entra em 0.04 com leve sobreposição ao fim do fade dos cards (0.06) — crossfade intencional
   const videoOpacity = useTransform(scrollYProgress, [0.04, 0.12], [0, 1]);
   const videoScale = useTransform(scrollYProgress, [0, 1], [0.8, 1.05]);
 
@@ -124,7 +125,7 @@ function DesktopHero() {
 
   // Esconde cards completamente quando opacity chega a 0
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    setCardsHidden(v > 0.1);
+    setCardsHidden(v > 0.06);
   });
 
   // Se reduced motion, mostra tudo estático
