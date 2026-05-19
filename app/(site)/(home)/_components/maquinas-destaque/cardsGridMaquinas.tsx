@@ -8,7 +8,7 @@ import Link from 'next/link';
 import {
   type MaquinaData,
   maquinasData
-} from '@/app/maquinas/_components/cardMaquinas/maquinasData';
+} from '@/app/(site)/maquinas/_components/cardMaquinas/maquinasData';
 import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { Button } from '@/components/ui/button';
 import {

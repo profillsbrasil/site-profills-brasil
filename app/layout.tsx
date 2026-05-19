@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import Footer from '@/components/layout/footer';
-import NavbarDesktop from '@/components/layout/navbarDesktop';
-import NavbarMobile from '@/components/layout/navbarMobile';
 import { Toaster } from '@/components/ui/sonner';
 
 import './globals.css';
@@ -54,11 +51,8 @@ export default function RootLayout({
           className='sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-slate-900 focus:shadow-lg'>
           Pular para o conteúdo
         </a>
-        <NavbarDesktop />
-        <NavbarMobile />
         <Toaster richColors />
-        <main id='main-content' className='relative h-full w-full'>{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
