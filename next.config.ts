@@ -23,14 +23,6 @@ const nextConfig: NextConfig = {
       'lib/emails/**/*.css',
     ],
   },
-  experimental: {
-    optimizePackageImports: [
-      'lucide-react',
-      'motion',
-      'framer-motion',
-      '@radix-ui/react-icons',
-    ],
-  },
   async redirects() {
     return [
       {
