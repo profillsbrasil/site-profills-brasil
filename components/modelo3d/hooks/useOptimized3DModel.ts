@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ModelViewerElement } from '@google/model-viewer';
+import { isWebGLAvailable } from './webglSupport';
 
 // Cache global para modelos 3D já carregados
 const modelCache = new Map<string, boolean>();
@@ -25,6 +26,12 @@ export function useOptimized3DModel({
   const [isLoaded, setIsLoaded] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [hasBeenLoaded, setHasBeenLoaded] = useState(false);
+  const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
+
+  // Detecta suporte a WebGL uma vez no client.
+  useEffect(() => {
+    setWebglSupported(isWebGLAvailable());
+  }, []);
 
   // Incrementa contador de instâncias
   useEffect(() => {
@@ -94,7 +101,7 @@ export function useOptimized3DModel({
 
   // Carrega model-viewer dinamicamente apenas quando necessário
   useEffect(() => {
-    if (!shouldRender || isLoaded) return;
+    if (!shouldRender || isLoaded || webglSupported !== true) return;
 
     const loadModelViewer = async () => {
       try {
@@ -110,7 +117,7 @@ export function useOptimized3DModel({
     };
 
     loadModelViewer();
-  }, [shouldRender, isLoaded]);
+  }, [shouldRender, isLoaded, webglSupported]);
 
   // Cleanup de estilos compartilhado
   useEffect(() => {
@@ -190,6 +197,7 @@ export function useOptimized3DModel({
     isLoaded,
     shouldRender: shouldRender || hasBeenLoaded, // Sempre renderiza se já foi carregado uma vez
     hasBeenLoaded,
+    webglSupported,
     handleModelLoad,
     handleModelError
   };
