@@ -115,8 +115,12 @@ function DesktopHero() {
   // até a section sticky desgrudar e revelar o conteúdo.
   const leftX = useTransform(scrollYProgress, [0, 0.1], [0, -300]);
   const rightX = useTransform(scrollYProgress, [0, 0.1], [0, 300]);
+  // Forma de função (não array input/output): impede o framer-motion de
+  // descarregar a opacity para uma WAAPI/ViewTimeline nativa, que renderiza
+  // o progresso de scroll invertido. Transforms (x, scale) não sofrem isso.
   const cardsOpacity = useTransform(() => {
     const p = scrollYProgress.get();
+    if (p <= 0) return 1;
     if (p >= 0.06) return 0;
     return 1 - p / 0.06;
   });
