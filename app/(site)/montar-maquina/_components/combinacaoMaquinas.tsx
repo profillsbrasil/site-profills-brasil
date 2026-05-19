@@ -1,5 +1,5 @@
 import {
-  MaquinaData,
+  type MaquinaData,
   maquinasData
 } from '@/app/(site)/maquinas/_components/cardMaquinas/maquinasData';
 
