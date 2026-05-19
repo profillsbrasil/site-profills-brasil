@@ -110,23 +110,21 @@ function DesktopHero() {
     offset: ['start start', 'end end']
   });
 
-  // Timeline (300vh = 200vh de scroll real):
-  // Cards e vídeo se sobrepõem — vídeo aparece ENQUANTO cards saem
-  // Movimentação dos cards é sutil (como o original: ~300px)
-  const leftX = useTransform(scrollYProgress, [0, 0.5], [0, -300]);
-  const rightX = useTransform(scrollYProgress, [0, 0.5], [0, 300]);
-  const cardsOpacity = useTransform(scrollYProgress, [0, 0.025], [1, 0]);
+  // Timeline (600vh = 500vh de scroll real ≈ 5 voltas de roda):
+  // Cards saem cedo, vídeo entra e fica fixo (opacity:1) por ~440vh de hold,
+  // até a section sticky desgrudar e revelar o conteúdo.
+  const leftX = useTransform(scrollYProgress, [0, 0.1], [0, -300]);
+  const rightX = useTransform(scrollYProgress, [0, 0.1], [0, 300]);
+  const cardsOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
 
-  const videoOpacity = useTransform(scrollYProgress, [0, 0.035], [0, 1]);
-  const videoScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1.1]);
-
-  const lightBgOpacity = useTransform(scrollYProgress, [0.6, 1.0], [0, 1]);
+  const videoOpacity = useTransform(scrollYProgress, [0.04, 0.12], [0, 1]);
+  const videoScale = useTransform(scrollYProgress, [0, 1], [0.8, 1.05]);
 
   const gridOpacity = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
 
   // Esconde cards completamente quando opacity chega a 0
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    setCardsHidden(v > 0.03);
+    setCardsHidden(v > 0.1);
   });
 
   // Se reduced motion, mostra tudo estático
@@ -142,16 +140,10 @@ function DesktopHero() {
   }
 
   return (
-    <section ref={heroRef} className='relative h-[140vh]'>
+    <section ref={heroRef} className='relative h-[600vh]'>
       <div className='sticky top-0 h-screen overflow-hidden pt-16'>
         {/* Background escuro base */}
         <div className='absolute inset-0 bg-secondary' />
-
-        {/* Background claro (crossfade) */}
-        <motion.div
-          className='absolute inset-0 bg-white'
-          style={{ opacity: lightBgOpacity }}
-        />
 
         {/* Grid pattern com fade */}
         <motion.div
