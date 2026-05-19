@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useOptimized3DModel } from '@/components/modelo3d/hooks/useOptimized3DModel';
+import { WebGLFallback } from '@/components/modelo3d/WebGLFallback';
 
 interface CaixaHome3dProps {
   modelSrc?: string;
@@ -34,6 +35,7 @@ export function CaixaHome3d({
     isVisible,
     isLoaded,
     shouldRender,
+    webglSupported,
     handleModelLoad,
     handleModelError
   } = useOptimized3DModel({
@@ -63,7 +65,7 @@ export function CaixaHome3d({
         />
       )}
 
-      {shouldRender && (
+      {shouldRender && webglSupported !== false && (
         // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
         <model-viewer
           ref={modelViewerRef}
@@ -99,7 +101,7 @@ export function CaixaHome3d({
         </model-viewer>
       )}
 
-      {!posterSrc && (!shouldRender || !isLoaded) && (
+      {!posterSrc && webglSupported !== false && (!shouldRender || !isLoaded) && (
         <div
           className='flex w-full items-center justify-center'
           style={{ height: isMobile ? '320px' : '100%' }}>
@@ -119,6 +121,9 @@ export function CaixaHome3d({
             </div>
           )}
         </div>
+      )}
+      {!posterSrc && webglSupported === false && (
+        <WebGLFallback variant='dark' />
       )}
     </div>
   );
