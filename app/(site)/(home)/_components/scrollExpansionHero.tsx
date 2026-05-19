@@ -134,13 +134,6 @@ function DesktopHero() {
   });
   const videoScale = useTransform(scrollYProgress, [0, 1], [0.8, 1.05]);
 
-  const gridOpacity = useTransform(() => {
-    const p = scrollYProgress.get();
-    if (p <= 0.05) return 1;
-    if (p >= 0.3) return 0;
-    return 1 - (p - 0.05) / 0.25;
-  });
-
   // Esconde cards completamente quando opacity chega a 0
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     setCardsHidden(v > 0.06);
@@ -164,12 +157,10 @@ function DesktopHero() {
         {/* Background escuro base */}
         <div className='absolute inset-0 bg-secondary' />
 
-        {/* Grid pattern com fade */}
-        <motion.div
-          className='absolute inset-0'
-          style={{ opacity: gridOpacity }}>
+        {/* Grid pattern — sempre visível, mantém o padrão da seção atrás do vídeo */}
+        <div className='absolute inset-0'>
           <GridPattern />
-        </motion.div>
+        </div>
 
         {/* Layout principal */}
         <div className='relative z-10 flex h-full w-full items-center justify-center'>
