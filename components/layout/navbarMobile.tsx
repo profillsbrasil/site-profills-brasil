@@ -176,6 +176,7 @@ export default function NavbarMobile() {
           <Image
             src={logoProfills}
             alt='Logo Profills'
+            priority
             className='h-8 w-auto object-contain'
           />
         </Link>
