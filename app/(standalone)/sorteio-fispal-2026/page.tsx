@@ -215,10 +215,12 @@ export default function SorteioFispal2026() {
         </div>
       </section>
 
-      {/* Como participar */}
-      <section className='relative overflow-hidden bg-secondary px-4 py-16 md:py-24'>
+      {/* Wrapper único pra evitar seams entre seções (cada GridPattern resetava o padrão) */}
+      <div className='relative overflow-hidden bg-secondary'>
         <GridPattern />
 
+      {/* Como participar */}
+      <section className='relative px-4 py-16 md:py-24'>
         <div className='relative mx-auto max-w-6xl'>
           <BlurFade delay={0.1} inView>
             <div className='mb-12 flex flex-col items-center text-center'>
@@ -287,9 +289,7 @@ export default function SorteioFispal2026() {
       </section>
 
       {/* Regras essenciais */}
-      <section className='relative overflow-hidden bg-secondary px-4 py-16 md:py-24'>
-        <GridPattern />
-
+      <section className='relative px-4 py-16 md:py-24'>
         <div className='relative mx-auto max-w-6xl'>
           <BlurFade delay={0.1} inView>
             <div className='mb-10 flex flex-col items-center text-center md:mb-12'>
@@ -329,9 +329,7 @@ export default function SorteioFispal2026() {
       </section>
 
       {/* FAQ */}
-      <section className='relative overflow-hidden bg-secondary px-4 py-16 md:py-24'>
-        <GridPattern />
-
+      <section className='relative px-4 py-16 md:py-24'>
         <div className='relative mx-auto max-w-4xl'>
           <BlurFade delay={0.1} inView>
             <div className='mb-10 flex flex-col items-center text-center md:mb-12'>
@@ -368,9 +366,7 @@ export default function SorteioFispal2026() {
       </section>
 
       {/* Footer minimal */}
-      <footer className='relative overflow-hidden border-t border-secondary-foreground/10 bg-secondary'>
-        <GridPattern />
-
+      <footer className='relative border-t border-secondary-foreground/10'>
         <div className='relative mx-auto flex max-w-6xl items-center justify-center gap-4 px-4 py-6 text-xs text-secondary-foreground/60 md:justify-start md:px-6 md:py-8 md:text-sm'>
           <Image
             src={logoProfills}
@@ -383,6 +379,7 @@ export default function SorteioFispal2026() {
           </p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
