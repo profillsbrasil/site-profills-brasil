@@ -371,13 +371,13 @@ export default function SorteioFispal2026() {
       <footer className='relative overflow-hidden border-t border-secondary-foreground/10 bg-secondary'>
         <GridPattern />
 
-        <div className='relative mx-auto flex max-w-6xl items-center gap-4 px-4 py-6 text-xs text-secondary-foreground/60 md:px-6 md:py-8 md:text-sm'>
+        <div className='relative mx-auto flex max-w-6xl items-center justify-center gap-4 px-4 py-6 text-xs text-secondary-foreground/60 md:justify-start md:px-6 md:py-8 md:text-sm'>
           <Image
             src={logoProfills}
             alt='Profills'
             className='h-7 w-auto md:h-8'
           />
-          <p>
+          <p className='hidden md:block'>
             <span className='text-accent'>&copy;</span>{' '}
             {new Date().getFullYear()} Profills Brasil. Sorteio FISPAL 2026.
           </p>
