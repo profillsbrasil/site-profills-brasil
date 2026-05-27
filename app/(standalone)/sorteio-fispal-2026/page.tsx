@@ -217,7 +217,7 @@ export default function SorteioFispal2026() {
 
       {/* Wrapper único pra evitar seams entre seções (cada GridPattern resetava o padrão) */}
       <div className='relative overflow-hidden bg-secondary'>
-        <GridPattern />
+        <GridPattern className='[mask-image:linear-gradient(to_bottom,transparent_0,black_80px,black_100%)]' />
 
       {/* Como participar */}
       <section className='relative px-4 py-16 md:py-24'>
