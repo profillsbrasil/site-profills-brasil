@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { BlurFade } from '@/components/ui/blur-fade';
+import logoCartoonsRanca from '@/public/profills-cartoons-ranca.png';
 import logoProfills from '@/public/logo-branco.png';
 
 import { GridPattern } from './gridPatternBg';
@@ -153,8 +154,28 @@ export default function Footer() {
           ))}
         </div>
 
+        <BlurFade delay={0.4} inView>
+          <div className='mt-8 grid grid-cols-[1fr_auto_1fr] items-center gap-4 md:mt-10 md:gap-6'>
+            <div className='h-px bg-gradient-to-r from-transparent via-secondary-foreground/15 to-transparent' />
+            <Link
+              href='#'
+              aria-label='Conheça também: Profills Cartoons Ranca'
+              className='group flex flex-col items-center'>
+              <span className='mb-3 text-[10px] font-medium tracking-[0.2em] text-secondary-foreground/45 uppercase transition-colors group-hover:text-accent md:text-xs'>
+                Conheça também
+              </span>
+              <Image
+                src={logoCartoonsRanca}
+                alt='Profills Cartoons Ranca'
+                className='h-10 w-auto transition duration-300 group-hover:brightness-110 md:h-12'
+              />
+            </Link>
+            <div className='h-px bg-gradient-to-r from-transparent via-secondary-foreground/15 to-transparent' />
+          </div>
+        </BlurFade>
+
         <BlurFade delay={0.5} inView>
-          <div className='mt-8 pt-8 md:mt-8'>
+          <div className='pt-8'>
             <div className='mb-6 text-center md:mb-8'>
               <h3 className='mb-2 text-base font-semibold text-secondary-foreground md:text-lg'>
                 Conecte-se conosco
