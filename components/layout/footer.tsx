@@ -6,8 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { BlurFade } from '@/components/ui/blur-fade';
-import logoCartoonsRanca from '@/public/profills-cartoons-ranca.png';
 import logoProfills from '@/public/logo-branco.png';
+import logoCartoonsRanca from '@/public/profills-cartoons-ranca.png';
 
 import { GridPattern } from './gridPatternBg';
 import { socialLinks } from './socialLinks';
@@ -159,11 +159,8 @@ export default function Footer() {
             <div className='h-px bg-gradient-to-r from-transparent via-secondary-foreground/15 to-transparent' />
             <Link
               href='#'
-              aria-label='Conheça também: Profills Cartoons Ranca'
+              aria-label='Conheça também: Profills Cartoons Branca'
               className='group flex flex-col items-center'>
-              <span className='mb-3 text-[10px] font-medium tracking-[0.2em] text-secondary-foreground/45 uppercase transition-colors group-hover:text-accent md:text-xs'>
-                Conheça também
-              </span>
               <Image
                 src={logoCartoonsRanca}
                 alt='Profills Cartoons Ranca'
