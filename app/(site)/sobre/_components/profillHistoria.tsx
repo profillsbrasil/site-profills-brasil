@@ -43,7 +43,8 @@ export default function ProfillHistoria() {
         <BlurFade delay={0.1} inView>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
-              Desde a fundação em Curitiba (PR), há mais de uma década, a{' '}
+              Desde a fundação em Cerqueira César (SP), há mais de uma década,
+              a{' '}
               <span className='text-accent font-semibold'>Profills</span>{' '}
               desenvolve{' '}
               <span className='text-accent font-semibold'>

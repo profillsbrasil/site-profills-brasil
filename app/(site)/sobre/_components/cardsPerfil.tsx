@@ -89,7 +89,7 @@ export default function CardsPerfil() {
                 <Badge
                   variant='outline'
                   className='border border-slate-300 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700'>
-                  +300 Clientes
+                  +1200 Clientes
                 </Badge>
               </div>
               <div className='flex flex-col'>
