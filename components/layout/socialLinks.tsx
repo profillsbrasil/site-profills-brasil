@@ -8,6 +8,14 @@ export type SocialLink = {
   Icon: ComponentType<SocialIconProps>;
 };
 
+export function WhatsAppIcon(props: SocialIconProps) {
+  return (
+    <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true' {...props}>
+      <path d='M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.15c-.25.69-1.44 1.32-1.99 1.36-.53.05-.53.42-3.34-.83-2.8-1.25-4.5-4.19-4.63-4.38-.13-.19-1.09-1.55-1.03-2.9.06-1.36.79-2 1.06-2.27.27-.27.58-.33.77-.33h.55c.18 0 .42-.07.65.53.25.65.83 2.24.9 2.4.07.16.11.35.01.55-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.6.17.29.76 1.29 1.63 2.09 1.12 1.03 2.06 1.35 2.35 1.5.29.15.46.13.63-.08.17-.2.73-.86.92-1.16.2-.29.39-.24.66-.14.27.1 1.71.81 2 .96.29.15.49.22.56.34.07.12.07.7-.18 1.39Z' />
+    </svg>
+  );
+}
+
 export function FacebookIcon(props: SocialIconProps) {
   return (
     <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true' {...props}>
@@ -18,11 +26,7 @@ export function FacebookIcon(props: SocialIconProps) {
 
 export function InstagramIcon(props: SocialIconProps) {
   return (
-    <svg
-      viewBox='0 0 24 24'
-      fill='currentColor'
-      aria-hidden='true'
-      {...props}>
+    <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true' {...props}>
       <path
         fillRule='evenodd'
         clipRule='evenodd'
@@ -42,11 +46,7 @@ export function LinkedInIcon(props: SocialIconProps) {
 
 export function YouTubeIcon(props: SocialIconProps) {
   return (
-    <svg
-      viewBox='0 0 24 24'
-      fill='currentColor'
-      aria-hidden='true'
-      {...props}>
+    <svg viewBox='0 0 24 24' fill='currentColor' aria-hidden='true' {...props}>
       <path
         fillRule='evenodd'
         clipRule='evenodd'
@@ -60,21 +60,21 @@ export const socialLinks: SocialLink[] = [
   {
     href: 'https://www.facebook.com/profillsbrasil/',
     label: 'Facebook',
-    Icon: FacebookIcon,
+    Icon: FacebookIcon
   },
   {
     href: 'https://www.instagram.com/profillsdobrasil/',
     label: 'Instagram',
-    Icon: InstagramIcon,
+    Icon: InstagramIcon
   },
   {
     href: 'https://www.linkedin.com/company/profillsdobrasil/',
     label: 'LinkedIn',
-    Icon: LinkedInIcon,
+    Icon: LinkedInIcon
   },
   {
     href: 'https://www.youtube.com/channel/UCQhaNOzqbkYnZlknSd79zEw',
     label: 'YouTube',
-    Icon: YouTubeIcon,
-  },
+    Icon: YouTubeIcon
+  }
 ];
