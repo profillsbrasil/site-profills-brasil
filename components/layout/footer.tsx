@@ -10,8 +10,18 @@ import logoProfills from '@/public/logo-branco.png';
 import logoCartoonsRanca from '@/public/profills-cartoons-ranca.png';
 
 import { GridPattern } from './gridPatternBg';
-import { socialLinks } from './socialLinks';
+import { WhatsAppIcon, socialLinks } from './socialLinks';
 import { Mail, MapPin, Phone } from 'lucide-react';
+
+// Números por setor (só nos links wa.me — nunca renderizados na tela).
+// TODO: trocar Suporte e Compras quando o comercial confirmar os números.
+const WHATSAPP_VENDAS = '5541997851998';
+const WHATSAPP_SUPORTE = '5541997851998';
+const WHATSAPP_COMPRAS = '5541997851998';
+
+function waLink(numero: string, mensagem: string) {
+  return `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+}
 
 const contacts = [
   {
@@ -24,9 +34,14 @@ const contacts = [
         label: 'comercial@profillsdobrasil.com.br'
       },
       {
-        href: 'tel:+5541997851998',
-        icon: Phone,
-        label: '+55 (41) 99785-1998'
+        href: waLink(
+          WHATSAPP_VENDAS,
+          'Olá! Vim pelo site da Profills e quero falar com Vendas/Peças.'
+        ),
+        icon: WhatsAppIcon,
+        label: 'Conversar no WhatsApp',
+        ariaLabel: 'Conversar no WhatsApp com Vendas/Peças',
+        external: true
       }
     ]
   },
@@ -38,6 +53,16 @@ const contacts = [
         href: 'mailto:suporte@profillsdobrasil.com.br',
         icon: Mail,
         label: 'suporte@profillsdobrasil.com.br'
+      },
+      {
+        href: waLink(
+          WHATSAPP_SUPORTE,
+          'Olá! Vim pelo site da Profills e preciso de suporte técnico.'
+        ),
+        icon: WhatsAppIcon,
+        label: 'Conversar no WhatsApp',
+        ariaLabel: 'Conversar no WhatsApp com Suporte e Assistência Técnica',
+        external: true
       }
     ]
   },
@@ -51,9 +76,14 @@ const contacts = [
         label: 'compras@profillsdobrasil.com.br'
       },
       {
-        href: 'tel:+554197695013',
-        icon: Phone,
-        label: '+55 (41) 9769-5013'
+        href: waLink(
+          WHATSAPP_COMPRAS,
+          'Olá! Vim pelo site da Profills e quero falar com Compras.'
+        ),
+        icon: WhatsAppIcon,
+        label: 'Conversar no WhatsApp',
+        ariaLabel: 'Conversar no WhatsApp com Compras (Fornecedores)',
+        external: true
       }
     ]
   }
@@ -90,7 +120,7 @@ export default function Footer() {
 
   return (
     <footer className='relative overflow-hidden bg-secondary'>
-      <GridPattern />
+      <GridPattern className='[mask-image:linear-gradient(to_bottom,transparent_0,black_80px,black_100%)]' />
 
       <div className='relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:pt-14 md:pb-10'>
         <BlurFade delay={0.1} inView>
@@ -137,17 +167,24 @@ export default function Footer() {
                   </h3>
                 </div>
                 <div className='flex flex-col space-y-2 md:space-y-3'>
-                  {contact.links.map(({ href, icon: LinkIcon, label }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      className='group/link flex items-center gap-2 text-secondary-foreground/60 transition-colors hover:text-accent md:gap-3'>
-                      <LinkIcon className='h-4 w-4 text-accent/60 transition-colors group-hover/link:text-accent md:h-4 md:w-4' />
-                      <span className='text-xs font-medium md:text-sm'>
-                        {label}
-                      </span>
-                    </Link>
-                  ))}
+                  {contact.links.map(
+                    ({ href, icon: LinkIcon, label, ariaLabel, external }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        aria-label={ariaLabel}
+                        {...(external && {
+                          target: '_blank',
+                          rel: 'noopener noreferrer'
+                        })}
+                        className='group/link flex items-center gap-2 text-secondary-foreground/60 transition-colors hover:text-accent md:gap-3'>
+                        <LinkIcon className='h-4 w-4 text-accent/60 transition-colors group-hover/link:text-accent md:h-4 md:w-4' />
+                        <span className='text-xs font-medium md:text-sm'>
+                          {label}
+                        </span>
+                      </Link>
+                    )
+                  )}
                 </div>
               </div>
             </BlurFade>
