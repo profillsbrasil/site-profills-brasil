@@ -14,6 +14,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -191,7 +192,7 @@ export default function NavbarMobile() {
               <Menu className='h-6 w-6' />
             </button>
           </DrawerTrigger>
-          <DrawerContent className='h-full w-80 border-l border-secondary-foreground/10 bg-secondary'>
+          <DrawerContent className='h-full border-l border-secondary-foreground/10 bg-secondary data-[vaul-drawer-direction=right]:w-[92%] data-[vaul-drawer-direction=right]:sm:max-w-none'>
             <DrawerHeader className='border-b border-secondary-foreground/10 pb-4'>
               <DrawerTitle className='flex items-center justify-center text-xl font-bold text-secondary-foreground'>
                 <Image
@@ -200,6 +201,9 @@ export default function NavbarMobile() {
                   className='h-8 w-auto object-contain'
                 />
               </DrawerTitle>
+              <DrawerDescription className='sr-only'>
+                Navegue pelas seções do site Profills Brasil
+              </DrawerDescription>
             </DrawerHeader>
 
             <div className='flex-1 overflow-y-auto p-4'>
@@ -211,7 +215,7 @@ export default function NavbarMobile() {
                       href='/'
                       className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
                       <Home className='text-accent mr-2 size-5' />
-                      Home
+                      Início
                     </Link>
                   </DrawerClose>
                 </BlurFade>

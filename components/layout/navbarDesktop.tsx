@@ -136,7 +136,7 @@ export default function NavbarDesktop() {
         <div className='flex h-full w-full items-center justify-center gap-2'>
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href='/'>Inicio</Link>
+              <Link href='/'>Início</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
