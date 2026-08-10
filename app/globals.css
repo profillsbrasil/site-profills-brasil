@@ -202,3 +202,53 @@ input[type='number']::-webkit-outer-spin-button {
   opacity: 0;
   animation: scroll-hint-cascade 1.8s ease-in-out infinite;
 }
+
+/* ===== Hero-carrossel: anéis, flutuação e progresso ===== */
+@keyframes hero-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-pulso {
+  0% {
+    transform: scale(0.86);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-ping {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-flutua {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes hero-track {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
