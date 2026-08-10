@@ -141,19 +141,19 @@
     }
   }
 
-  --animate-shine: shine var(--duration) infinite linear
-;
+  --animate-shine: shine var(--duration) infinite linear;
   @keyframes shine {
-  0% {
-    background-position: 0% 0%;
+    0% {
+      background-position: 0% 0%;
     }
-  50% {
-    background-position: 100% 100%;
+    50% {
+      background-position: 100% 100%;
     }
-  to {
-    background-position: 0% 0%;
+    to {
+      background-position: 0% 0%;
     }
-  }}
+  }
+}
 
 @layer base {
   * {
@@ -181,24 +181,52 @@ input[type='number']::-webkit-outer-spin-button {
   }
 }
 
-@keyframes scroll-hint-cascade {
-  0%, 80%, 100% {
-    opacity: 0;
-    transform: rotate(45deg) translate(-2px, -2px);
-  }
-  40% {
-    opacity: 1;
-    transform: rotate(45deg) translate(2px, 2px);
+/* ===== Hero-carrossel: anéis, flutuação e progresso ===== */
+@keyframes hero-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-.scroll-hint-chevron {
-  width: 16px;
-  height: 16px;
-  border-right: 2.5px solid rgb(255 255 255 / 0.85);
-  border-bottom: 2.5px solid rgb(255 255 255 / 0.85);
-  transform: rotate(45deg);
-  margin-top: -8px;
-  opacity: 0;
-  animation: scroll-hint-cascade 1.8s ease-in-out infinite;
+@keyframes hero-pulso {
+  0% {
+    transform: scale(0.86);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-ping {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-flutua {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes hero-track {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }

@@ -6,17 +6,18 @@ import CarrosselProdutos from './_components/carrosselProdutos';
 import CtaAjudarEmpresa from './_components/ctaAjudarEmpresa';
 import CtaMonteSuaFabrica from './_components/ctaMonteSuaFabrica';
 import Gt3000 from './_components/gt3000';
+import HeroCarrossel from './_components/heroCarrossel/heroCarrossel';
 import ListaEmbalagens from './_components/listaEmbalagens';
 import MaquinasDestaque from './_components/maquinas-destaque/maquinasDestaque';
-import ScrollExpandMedia from './_components/scrollExpansionHero';
 import ServicosPersonalizados from './_components/servicosPersonalizados';
 
 export default function Home() {
   return (
     <div className='relative h-full w-full'>
-      <ScrollExpandMedia>
+      <HeroCarrossel />
+      <section className='relative z-20 min-h-screen bg-white pt-8'>
         <HomeContent />
-      </ScrollExpandMedia>
+      </section>
     </div>
   );
 }
