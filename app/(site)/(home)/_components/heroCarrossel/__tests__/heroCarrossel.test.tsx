@@ -85,15 +85,16 @@ describe('HeroCarrossel', () => {
       '/maquinas/2'
     );
     expect(screen.getByTestId('indice-atual')).toHaveTextContent('02');
-    expect(screen.getByText('TP · Sachês')).toBeInTheDocument();
+    expect(screen.getByText('Stick · 1 a 4 vias')).toBeInTheDocument();
   });
 
-  it('seta anterior faz o wrap para o último slide', () => {
+  it('seta anterior faz o wrap para o último slide (Pouch)', () => {
     render(<HeroCarrossel />);
     fireEvent.click(screen.getByRole('button', { name: 'Slide anterior' }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Quatro soldas,'
+      'Stand-up pouch,'
     );
+    expect(screen.getByTestId('indice-atual')).toHaveTextContent('04');
   });
 
   it('autoplay avança sozinho após 7s', () => {

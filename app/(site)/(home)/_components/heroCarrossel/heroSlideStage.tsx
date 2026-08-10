@@ -53,7 +53,8 @@ export function HeroSlideStage({
         alt={`Envasadora ${slide.nome}`}
         priority={primeiro}
         sizes='(min-width: 900px) 45vw, 90vw'
-        className='absolute top-1/2 left-1/2 z-[2] h-[106%] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_30px_40px_rgba(2,6,23,0.65)]'
+        style={{ height: slide.maquinaAltura ?? '106%' }}
+        className='absolute top-1/2 left-1/2 z-[2] w-auto max-w-none -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_30px_40px_rgba(2,6,23,0.65)]'
       />
       <Image
         src={slide.imgEmbalagem}

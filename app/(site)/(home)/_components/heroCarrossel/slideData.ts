@@ -1,9 +1,13 @@
 import type { StaticImageData } from 'next/image';
 
+import maquinaStick from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/tc-3sc-200-2.png';
 import maquinaTc4s from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/TC 4S 200-1.png';
 import maquinaTp85 from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/TP85.png';
+import maquinaPouch from '@/lib/images/novasImagens/maquinasEmbalagens/pouch-render-maximo.png';
+import embalagemPouch from '@/lib/images/novasImagens/maquinasEmbalagens/pouches.png';
 import embalagemTc4s from '@/lib/images/novasImagens/maquinasEmbalagens/sache-4-soldas-1-via.png';
 import embalagemTp from '@/lib/images/novasImagens/maquinasEmbalagens/sache-linha-tp-azul.png';
+import embalagemStick from '@/lib/images/novasImagens/maquinasEmbalagens/stick.png';
 
 export interface SlideMaquina {
   id: string;
@@ -18,6 +22,8 @@ export interface SlideMaquina {
   /** Altura da embalagem em % da altura do palco (varia por slide) */
   embalagemAltura: string;
   embalagemEsquerda: string;
+  /** Altura da máquina em % do palco — máquinas horizontais usam menos que o default 106% */
+  maquinaAltura?: string;
   rota: string;
   /** Nome curto usado no "A seguir:" da navegação */
   labelCurto: string;
@@ -63,5 +69,45 @@ export const SLIDES: SlideMaquina[] = [
     embalagemEsquerda: '2%',
     rota: '/maquinas/2',
     labelCurto: 'TC4s · Sachê 4 soldas'
+  },
+  {
+    id: 'linha-stick',
+    nome: 'Linha Stick',
+    categoria: 'Stick pack',
+    titulo: ['Produção compacta,', 'até 4 vias de stick'],
+    descricao:
+      'Suplementos, condimentos, bebidas em pó, géis e líquidos em embalagens stick, com dosagem temporizada, volumétrica ou por bomba positiva.',
+    specs: [
+      { prefixo: 'até', valor: '4.000', unidade: 'un/h', label: 'Produção' },
+      { valor: '200-360', unidade: 'mm', label: 'Largura do filme' },
+      { valor: 'Inox', unidade: '304', label: 'Estrutura' }
+    ],
+    imgMaquina: maquinaStick,
+    imgEmbalagem: embalagemStick,
+    embalagemAltura: '30%',
+    embalagemEsquerda: '6%',
+    maquinaAltura: '96%',
+    rota: '/maquinas/9',
+    labelCurto: 'Stick · 1 a 4 vias'
+  },
+  {
+    id: 'linha-pouch',
+    nome: 'Linha Pouch',
+    categoria: 'Stand-up pouch',
+    titulo: ['Stand-up pouch,', 'em escala industrial'],
+    descricao:
+      'Linha automática para líquidos, pós e alguns sólidos, com dosagem temporizada, volumétrica ou por bomba positiva.',
+    specs: [
+      { prefixo: 'até', valor: '5.400', unidade: 'un/h', label: 'Produção' },
+      { valor: '320-650', unidade: 'mm', label: 'Largura do filme' },
+      { valor: '130-160', unidade: 'µm', label: 'Espessura do filme' }
+    ],
+    imgMaquina: maquinaPouch,
+    imgEmbalagem: embalagemPouch,
+    embalagemAltura: '34%',
+    embalagemEsquerda: '2%',
+    maquinaAltura: '84%',
+    rota: '/maquinas/16',
+    labelCurto: 'Pouch · Stand-up'
   }
 ];
