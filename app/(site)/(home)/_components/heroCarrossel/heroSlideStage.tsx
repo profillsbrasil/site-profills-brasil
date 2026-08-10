@@ -4,9 +4,8 @@ import Image from 'next/image';
 
 import { cn } from '@/lib/utils';
 
-import { motion } from 'motion/react';
-
 import type { SlideMaquina } from './slideData';
+import { motion } from 'motion/react';
 
 const EASE_ENTRADA = [0.19, 1, 0.22, 1] as const;
 
@@ -20,7 +19,12 @@ interface HeroSlideStageProps {
   estatico?: boolean;
 }
 
-export function HeroSlideStage({ slide, direcao, primeiro, estatico = false }: HeroSlideStageProps) {
+export function HeroSlideStage({
+  slide,
+  direcao,
+  primeiro,
+  estatico = false
+}: HeroSlideStageProps) {
   const conteudo = (
     <>
       {/* sombra elíptica no "chão" */}
@@ -53,8 +57,18 @@ export function HeroSlideStage({ slide, direcao, primeiro, estatico = false }: H
     <motion.div
       className='absolute inset-0'
       initial={{ opacity: 0, x: 26 * direcao, scale: 1.03 }}
-      animate={{ opacity: 1, x: 0, scale: 1, transition: { duration: 0.42, ease: EASE_ENTRADA } }}
-      exit={{ opacity: 0, x: -18 * direcao, scale: 0.99, transition: { duration: 0.13 } }}>
+      animate={{
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        transition: { duration: 0.42, ease: EASE_ENTRADA }
+      }}
+      exit={{
+        opacity: 0,
+        x: -18 * direcao,
+        scale: 0.99,
+        transition: { duration: 0.13 }
+      }}>
       {conteudo}
     </motion.div>
   );

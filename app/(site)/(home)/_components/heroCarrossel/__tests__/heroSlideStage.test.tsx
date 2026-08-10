@@ -1,21 +1,37 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
 
-import { SLIDES } from '../slideData';
 import { HeroSlideStage } from '../heroSlideStage';
+import { SLIDES } from '../slideData';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('motion/react', () => ({
   motion: {
-    div: ({ children, initial: _i, animate: _a, exit: _e, transition: _t, ...props }: HTMLAttributes<HTMLDivElement> & Record<string, unknown> & { children?: ReactNode }) => (
+    div: ({
+      children,
+      initial: _i,
+      animate: _a,
+      exit: _e,
+      transition: _t,
+      ...props
+    }: HTMLAttributes<HTMLDivElement> &
+      Record<string, unknown> & { children?: ReactNode }) => (
       <div {...props}>{children}</div>
     )
   }
 }));
 
 vi.mock('next/image', () => ({
-  default: ({ alt, className, style }: { alt: string; className?: string; style?: React.CSSProperties }) => (
+  default: ({
+    alt,
+    className,
+    style
+  }: {
+    alt: string;
+    className?: string;
+    style?: React.CSSProperties;
+  }) => (
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     <img alt={alt} className={className} style={style} />
   )
