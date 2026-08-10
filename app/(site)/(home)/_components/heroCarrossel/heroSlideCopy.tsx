@@ -148,7 +148,7 @@ export function HeroSlideCopy({
       variants={cascata}
       initial='inicial'
       animate='entrar'
-      exit={{ opacity: 0, transition: { duration: 0.12 } }}>
+      exit={{ opacity: 0, transition: { duration: 0.12, ease: 'easeIn' } }}>
       {conteudo}
     </motion.div>
   );

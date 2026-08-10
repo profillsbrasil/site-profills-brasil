@@ -74,7 +74,7 @@ export default function HeroCarrossel() {
               estatico
             />
           ) : (
-            <AnimatePresence mode='wait'>
+            <AnimatePresence mode='wait' custom={direcao}>
               <HeroSlideStage
                 key={slide.id}
                 slide={slide}

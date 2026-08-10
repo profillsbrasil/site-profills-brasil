@@ -12,6 +12,7 @@ vi.mock('motion/react', () => ({
   motion: {
     div: ({
       children,
+      custom: _c,
       variants: _v,
       initial: _i,
       animate: _a,
