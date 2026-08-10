@@ -5,12 +5,13 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 import type { SlideMaquina } from './slideData';
+import type { Variants } from 'motion/react';
 import { motion } from 'motion/react';
 
 const EASE_ENTRADA = [0.19, 1, 0.22, 1] as const;
 
 /** Variants dinâmicas: `custom` vem do AnimatePresence (evita direção presa no último render) */
-const drift = {
+const drift: Variants = {
   inicial: (direcao: number) => ({ opacity: 0, x: 26 * direcao, scale: 1.03 }),
   entrar: {
     opacity: 1,
