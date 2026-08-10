@@ -98,10 +98,10 @@ export function HeroSlideCopy({
 
       <Mascara estatico={estatico}>
         <span className='mt-7 flex w-fit items-stretch rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 max-[560px]:w-full max-[560px]:flex-col'>
-          <span className='flex gap-6 px-6 py-4 max-[560px]:flex-wrap max-[560px]:gap-4'>
+          <span className='flex gap-6 px-6 py-4 max-[560px]:flex-wrap max-[560px]:gap-4 min-[900px]:max-[1180px]:gap-4 min-[900px]:max-[1180px]:px-4 min-[900px]:max-[1180px]:py-3'>
             {slide.specs.map((spec) => (
               <span key={spec.label} className='whitespace-nowrap'>
-                <span className='block font-mono text-[1.35rem] font-semibold text-white'>
+                <span className='block font-mono text-[1.35rem] font-semibold text-white min-[900px]:max-[1180px]:text-lg'>
                   {spec.prefixo ? (
                     <span className='mr-1 text-xs font-normal text-[#b6c5e2]'>
                       {spec.prefixo}
@@ -120,7 +120,7 @@ export function HeroSlideCopy({
           </span>
           <Link
             href={slide.rota}
-            className='flex items-center gap-2 rounded-r-xs bg-accent px-6 text-sm font-semibold text-white transition-colors hover:bg-accent/90 max-[560px]:justify-center max-[560px]:rounded-b-xs max-[560px]:rounded-tr-none max-[560px]:py-3'>
+            className='flex items-center gap-2 rounded-r-xs bg-accent px-6 text-sm font-semibold text-white transition-colors hover:bg-accent/90 max-[560px]:justify-center max-[560px]:rounded-b-xs max-[560px]:rounded-tr-none max-[560px]:py-3 min-[900px]:max-[1180px]:px-4 min-[900px]:max-[1180px]:text-[0.85rem]'>
             Conhecer <ArrowRight className='size-4' />
           </Link>
         </span>
