@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 
 import { WhatsAppIcon } from '@/components/layout/socialLinks';
+import { cn } from '@/lib/utils';
 
 import type { SlideMaquina } from './slideData';
 import { ArrowRight } from 'lucide-react';
@@ -79,7 +80,14 @@ export function HeroSlideCopy({
         </span>
       </Mascara>
 
-      <Titulo className='mt-5 text-[clamp(2.1rem,3.9vw,3.5rem)] leading-[1.06] font-extrabold tracking-tight text-white'>
+      <Titulo
+        className={cn(
+          'mt-5 leading-[1.06] font-extrabold tracking-tight text-white',
+          // Linhas longas: fonte fluida pela largura da coluna (container query) — nunca clipa
+          slide.tituloCompacto
+            ? 'text-[clamp(1.5rem,7cqi,2.8rem)]'
+            : 'text-[clamp(1.9rem,3.9vw,3.5rem)]'
+        )}>
         <Mascara estatico={estatico}>
           <span className='block whitespace-nowrap'>{slide.titulo[0]}</span>
         </Mascara>

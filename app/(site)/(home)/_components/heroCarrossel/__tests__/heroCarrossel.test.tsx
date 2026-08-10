@@ -67,10 +67,10 @@ describe('HeroCarrossel', () => {
   it('abre no slide 1 (Linha TP) com h1, índice 01 e "A seguir" do TC4s', () => {
     render(<HeroCarrossel />);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Precisão de dosagem,'
+      'Envase de sachês com'
     );
     expect(screen.getByTestId('indice-atual')).toHaveTextContent('01');
-    expect(screen.getByText('TC4s · Sachê 4 soldas')).toBeInTheDocument();
+    expect(screen.getByText('TC · Sachê 4 soldas')).toBeInTheDocument();
     expect(screen.getByAltText('Envasadora Linha TP')).toBeInTheDocument();
   });
 
@@ -78,7 +78,7 @@ describe('HeroCarrossel', () => {
     render(<HeroCarrossel />);
     fireEvent.click(screen.getByRole('button', { name: 'Próximo slide' }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Quatro soldas,'
+      'Sachês com 4 soldas'
     );
     expect(screen.getByRole('link', { name: /conhecer/i })).toHaveAttribute(
       'href',
@@ -92,7 +92,7 @@ describe('HeroCarrossel', () => {
     render(<HeroCarrossel />);
     fireEvent.click(screen.getByRole('button', { name: 'Slide anterior' }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Stand-up pouch,'
+      'Alta velocidade para'
     );
     expect(screen.getByTestId('indice-atual')).toHaveTextContent('04');
   });
@@ -103,7 +103,7 @@ describe('HeroCarrossel', () => {
       vi.advanceTimersByTime(7000);
     });
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Quatro soldas,'
+      'Sachês com 4 soldas'
     );
   });
 
@@ -114,7 +114,7 @@ describe('HeroCarrossel', () => {
       vi.advanceTimersByTime(7000);
     });
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Precisão de dosagem,'
+      'Envase de sachês com'
     );
     expect(screen.queryAllByTestId('hero-ring-pulso')).toHaveLength(0);
   });

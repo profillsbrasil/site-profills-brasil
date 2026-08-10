@@ -38,12 +38,12 @@ describe('HeroSlideCopy', () => {
     expect(screen.getByText('Envasadora de sachês')).toBeInTheDocument();
 
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1).toHaveTextContent('Precisão de dosagem,');
-    expect(h1).toHaveTextContent('sachê após sachê');
-    expect(screen.getByText('Precisão de dosagem,')).toHaveClass(
+    expect(h1).toHaveTextContent('Envase de sachês com');
+    expect(h1).toHaveTextContent('precisão e versatilidade');
+    expect(screen.getByText('Envase de sachês com')).toHaveClass(
       'whitespace-nowrap'
     );
-    expect(screen.getByText('sachê após sachê')).toHaveClass(
+    expect(screen.getByText('precisão e versatilidade')).toHaveClass(
       'whitespace-nowrap'
     );
 
@@ -69,7 +69,7 @@ describe('HeroSlideCopy', () => {
     render(<HeroSlideCopy slide={SLIDES[1]} primeiro={false} />);
     expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'Quatro soldas,'
+      'Sachês com 4 soldas'
     );
   });
 
@@ -77,8 +77,8 @@ describe('HeroSlideCopy', () => {
     render(<HeroSlideCopy slide={SLIDES[0]} primeiro estatico />);
 
     const h1 = screen.getByRole('heading', { level: 1 });
-    expect(h1).toHaveTextContent('Precisão de dosagem,');
-    expect(h1).toHaveTextContent('sachê após sachê');
+    expect(h1).toHaveTextContent('Envase de sachês com');
+    expect(h1).toHaveTextContent('precisão e versatilidade');
     expect(screen.getByRole('link', { name: /conhecer/i })).toHaveAttribute(
       'href',
       '/maquinas/1'

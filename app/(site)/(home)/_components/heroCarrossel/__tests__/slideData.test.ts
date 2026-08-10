@@ -5,7 +5,7 @@ describe('SLIDES do hero-carrossel', () => {
   it('tem exatamente os 4 slides aprovados, na ordem TP → TC4s → Stick → Pouch', () => {
     expect(SLIDES).toHaveLength(4);
     expect(SLIDES[0].nome).toBe('Linha TP');
-    expect(SLIDES[1].nome).toBe('Linha TC4s');
+    expect(SLIDES[1].nome).toBe('Linha TC');
     expect(SLIDES[2].nome).toBe('Linha Stick');
     expect(SLIDES[3].nome).toBe('Linha Pouch');
   });

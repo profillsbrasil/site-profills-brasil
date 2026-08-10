@@ -49,7 +49,7 @@ describe('HeroSlideStage', () => {
 
   it('embalagem usa altura e posição definidas pelo slide', () => {
     render(<HeroSlideStage slide={SLIDES[1]} direcao={1} primeiro={false} />);
-    const embalagem = screen.getByAltText('Embalagem da Linha TC4s');
+    const embalagem = screen.getByAltText('Embalagem da Linha TC');
     expect(embalagem).toHaveStyle({ height: '42%', left: '2%' });
   });
 

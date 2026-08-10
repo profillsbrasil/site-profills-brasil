@@ -1,8 +1,8 @@
 import type { StaticImageData } from 'next/image';
 
-import maquinaStick from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/tc-3sc-200-2.png';
 import maquinaTc4s from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/TC 4S 200-1.png';
 import maquinaTp85 from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/TP85.png';
+import maquinaStick from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/tc-3sc-200-2.png';
 import maquinaPouch from '@/lib/images/novasImagens/maquinasEmbalagens/pouch-render-maximo.png';
 import embalagemPouch from '@/lib/images/novasImagens/maquinasEmbalagens/pouches.png';
 import embalagemTc4s from '@/lib/images/novasImagens/maquinasEmbalagens/sache-4-soldas-1-via.png';
@@ -24,6 +24,8 @@ export interface SlideMaquina {
   embalagemEsquerda: string;
   /** Altura da máquina em % do palco — máquinas horizontais usam menos que o default 106% */
   maquinaAltura?: string;
+  /** Títulos com linhas longas (25ch+) usam fonte fluida menor para nunca clipar */
+  tituloCompacto?: boolean;
   rota: string;
   /** Nome curto usado no "A seguir:" da navegação */
   labelCurto: string;
@@ -36,9 +38,9 @@ export const SLIDES: SlideMaquina[] = [
     id: 'linha-tp',
     nome: 'Linha TP',
     categoria: 'Envasadora de sachês',
-    titulo: ['Precisão de dosagem,', 'sachê após sachê'],
+    titulo: ['Envase de sachês com', 'precisão e versatilidade'],
     descricao:
-      'Polpas, laticínios, molhos e outros líquidos ou secos, envasados com dosagem temporizada, volumétrica ou por bomba positiva.',
+      'Solução eficiente para líquidos, como polpas, laticínios, molhos e outros produtos em sachês.',
     specs: [
       { prefixo: 'até', valor: '3.000', unidade: 'un/h', label: 'Produção' },
       { valor: '85-300', unidade: 'mm', label: 'Largura do filme' },
@@ -53,11 +55,11 @@ export const SLIDES: SlideMaquina[] = [
   },
   {
     id: 'linha-tc4s',
-    nome: 'Linha TC4s',
+    nome: 'Linha TC',
     categoria: 'Sachê 4 soldas',
-    titulo: ['Quatro soldas,', 'acabamento de gôndola'],
+    titulo: ['Sachês com 4 soldas', 'e acabamento superior'],
     descricao:
-      'Envase em uma via com alto controle de dosagem, para líquidos e secos. Datação por alto relevo, inkjet ou hotstamping.',
+      'Alta performance para produtos líquidos e secos, com formatos retangulares ou personalizados.',
     specs: [
       { prefixo: 'até', valor: '2.000', unidade: 'un/h', label: 'Produção' },
       { valor: '120-360', unidade: 'mm', label: 'Largura do filme' },
@@ -68,15 +70,15 @@ export const SLIDES: SlideMaquina[] = [
     embalagemAltura: '42%',
     embalagemEsquerda: '2%',
     rota: '/maquinas/2',
-    labelCurto: 'TC4s · Sachê 4 soldas'
+    labelCurto: 'TC · Sachê 4 soldas'
   },
   {
     id: 'linha-stick',
     nome: 'Linha Stick',
     categoria: 'Stick pack',
-    titulo: ['Produção compacta,', 'até 4 vias de stick'],
+    titulo: ['Produção compacta', 'em até 4 vias simultâneas'],
     descricao:
-      'Suplementos, condimentos, bebidas em pó, géis e líquidos em embalagens stick, com dosagem temporizada, volumétrica ou por bomba positiva.',
+      'Indicada para suplementos, condimentos, pós, géis e líquidos em embalagens stick práticas e resistentes.',
     specs: [
       { prefixo: 'até', valor: '4.000', unidade: 'un/h', label: 'Produção' },
       { valor: '200-360', unidade: 'mm', label: 'Largura do filme' },
@@ -87,6 +89,7 @@ export const SLIDES: SlideMaquina[] = [
     embalagemAltura: '30%',
     embalagemEsquerda: '6%',
     maquinaAltura: '96%',
+    tituloCompacto: true,
     rota: '/maquinas/9',
     labelCurto: 'Stick · 1 a 4 vias'
   },
@@ -94,9 +97,9 @@ export const SLIDES: SlideMaquina[] = [
     id: 'linha-pouch',
     nome: 'Linha Pouch',
     categoria: 'Stand-up pouch',
-    titulo: ['Stand-up pouch,', 'em escala industrial'],
+    titulo: ['Alta velocidade para', 'embalagens stand-up pouch'],
     descricao:
-      'Linha automática para líquidos, pós e alguns sólidos, com dosagem temporizada, volumétrica ou por bomba positiva.',
+      'Linha automática para líquidos, pós, grãos e sólidos, com eficiência em operações de grande escala.',
     specs: [
       { prefixo: 'até', valor: '5.400', unidade: 'un/h', label: 'Produção' },
       { valor: '320-650', unidade: 'mm', label: 'Largura do filme' },
@@ -107,6 +110,7 @@ export const SLIDES: SlideMaquina[] = [
     embalagemAltura: '34%',
     embalagemEsquerda: '2%',
     maquinaAltura: '84%',
+    tituloCompacto: true,
     rota: '/maquinas/16',
     labelCurto: 'Pouch · Stand-up'
   }
