@@ -26,7 +26,22 @@ const WHATSAPP_URL = `https://wa.me/5541997851998?text=${encodeURIComponent(
 )}`;
 
 /* Máscara do Reveal: o bloco sobe de dentro de um recorte overflow-hidden */
-function Mascara({ children }: { children: ReactNode }) {
+function Mascara({
+  children,
+  estatico = false
+}: {
+  children: ReactNode;
+  /** Reduced motion: sem motion.span nem variants */
+  estatico?: boolean;
+}) {
+  if (estatico) {
+    return (
+      <span className='block overflow-hidden'>
+        <span className='block'>{children}</span>
+      </span>
+    );
+  }
+
   return (
     <span className='block overflow-hidden'>
       <motion.span variants={bloco} className='block'>
@@ -53,7 +68,7 @@ export function HeroSlideCopy({
 
   const conteudo = (
     <>
-      <Mascara>
+      <Mascara estatico={estatico}>
         <span className='inline-flex items-baseline gap-2.5'>
           <span className='text-2xl font-extrabold tracking-tight text-accent'>
             {slide.nome}
@@ -65,23 +80,23 @@ export function HeroSlideCopy({
       </Mascara>
 
       <Titulo className='mt-5 text-[clamp(2.1rem,3.9vw,3.5rem)] leading-[1.06] font-extrabold tracking-tight text-white'>
-        <Mascara>
+        <Mascara estatico={estatico}>
           <span className='block whitespace-nowrap'>{slide.titulo[0]}</span>
         </Mascara>
-        <Mascara>
+        <Mascara estatico={estatico}>
           <span className='block whitespace-nowrap text-accent'>
             {slide.titulo[1]}
           </span>
         </Mascara>
       </Titulo>
 
-      <Mascara>
+      <Mascara estatico={estatico}>
         <p className='mt-4 max-w-[44ch] text-base leading-relaxed text-[#b6c5e2]'>
           {slide.descricao}
         </p>
       </Mascara>
 
-      <Mascara>
+      <Mascara estatico={estatico}>
         <span className='mt-7 flex w-fit items-stretch rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 max-[560px]:w-full max-[560px]:flex-col'>
           <span className='flex gap-6 px-6 py-4 max-[560px]:flex-wrap max-[560px]:gap-4'>
             {slide.specs.map((spec) => (
@@ -111,7 +126,7 @@ export function HeroSlideCopy({
         </span>
       </Mascara>
 
-      <Mascara>
+      <Mascara estatico={estatico}>
         <a
           href={WHATSAPP_URL}
           target='_blank'

@@ -72,4 +72,16 @@ describe('HeroSlideCopy', () => {
       'Quatro soldas,'
     );
   });
+
+  it('modo estático (reduced motion) renderiza o conteúdo sem cascata', () => {
+    render(<HeroSlideCopy slide={SLIDES[0]} primeiro estatico />);
+
+    const h1 = screen.getByRole('heading', { level: 1 });
+    expect(h1).toHaveTextContent('Precisão de dosagem,');
+    expect(h1).toHaveTextContent('sachê após sachê');
+    expect(screen.getByRole('link', { name: /conhecer/i })).toHaveAttribute(
+      'href',
+      '/maquinas/1'
+    );
+  });
 });
