@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Button } from '@/components/ui/button';
 import { TextAnimate } from '@/components/ui/text-animate';
+import { cn } from '@/lib/utils';
 
 import CardMaquina from './_components/cardMaquinas/cardMaquina';
 import {
@@ -14,6 +15,17 @@ import {
   maquinasData,
   tiposEmbalagem
 } from './_components/cardMaquinas/maquinasData';
+
+/* Chip de filtro da Prancheta Industrial: tracejado em repouso,
+   sólido accent quando ativo (mesma gramática das setas do hero) */
+function chipFiltro(ativo: boolean) {
+  return cn(
+    'z-11 rounded-xs border text-xs transition-colors md:text-sm',
+    ativo
+      ? 'border-solid border-accent bg-accent/15 text-white hover:bg-accent/20'
+      : 'text-muted-foreground border-dashed border-[rgba(148,178,235,0.3)] bg-transparent hover:border-solid hover:border-accent hover:bg-accent/10 hover:text-white'
+  );
+}
 
 function MaquinasContent() {
   const searchParams = useSearchParams();
@@ -101,7 +113,7 @@ function MaquinasContent() {
   }, [categoriaFiltro]);
 
   return (
-    <div className='relative flex min-h-screen w-full flex-col items-center justify-center bg-slate-900 py-10'>
+    <div className='tema-navy bg-background text-foreground relative flex min-h-screen w-full flex-col items-center justify-center py-10'>
       <GridPattern />
       <TextAnimate
         animation='blurInUp'
@@ -113,7 +125,7 @@ function MaquinasContent() {
         Nossas Máquinas
       </TextAnimate>
       {/* Navegação superior - visível em desktop */}
-      <div className='sticky top-16 left-0 z-20 hidden h-14 w-full items-center justify-center gap-3 bg-slate-900 py-2 text-white md:flex'>
+      <div className='bg-background sticky top-16 left-0 z-20 hidden h-14 w-full items-center justify-center gap-3 py-2 md:flex'>
         <GridPattern />
         <Button
           variant='ghost'
@@ -121,9 +133,7 @@ function MaquinasContent() {
             setCategoriaFiltro('Todas');
             updateUrl('Todas', embalagemFiltro);
           }}
-          className={`border-border/20 z-11 rounded-xs border text-xs md:text-sm ${
-            categoriaFiltro === 'Todas' ? 'bg-slate-700' : 'bg-slate-900'
-          }`}>
+          className={chipFiltro(categoriaFiltro === 'Todas')}>
           Todas
         </Button>
         {categorias.map((categoria) => (
@@ -134,16 +144,14 @@ function MaquinasContent() {
               setCategoriaFiltro(categoria);
               updateUrl(categoria, embalagemFiltro);
             }}
-            className={`border-border/20 z-11 rounded-xs border text-xs md:text-sm ${
-              categoriaFiltro === categoria ? 'bg-slate-700' : 'bg-slate-900'
-            }`}>
+            className={chipFiltro(categoriaFiltro === categoria)}>
             {categoria}
           </Button>
         ))}
       </div>
 
       {/* Scroll horizontal mobile - apenas tipos de máquinas */}
-      <div className='scrollbar-hide sticky top-16 left-0 z-20 w-full bg-slate-900 px-4 py-2 md:hidden'>
+      <div className='scrollbar-hide bg-background sticky top-16 left-0 z-20 w-full px-4 py-2 md:hidden'>
         <div className='scrollbar-hide flex gap-3 overflow-x-auto'>
           <Button
             variant='ghost'
@@ -151,9 +159,10 @@ function MaquinasContent() {
               setCategoriaFiltro('Todas');
               updateUrl('Todas', embalagemFiltro);
             }}
-            className={`border-border/20 flex-shrink-0 rounded-xs border text-xs whitespace-nowrap text-white ${
-              categoriaFiltro === 'Todas' ? 'bg-slate-700' : 'bg-slate-800'
-            }`}>
+            className={cn(
+              'flex-shrink-0 whitespace-nowrap',
+              chipFiltro(categoriaFiltro === 'Todas')
+            )}>
             Todas
           </Button>
           {categorias.map((categoria) => (
@@ -164,9 +173,10 @@ function MaquinasContent() {
                 setCategoriaFiltro(categoria);
                 updateUrl(categoria, embalagemFiltro);
               }}
-              className={`border-border/20 flex-shrink-0 rounded-xs border text-xs whitespace-nowrap text-white ${
-                categoriaFiltro === categoria ? 'bg-slate-700' : 'bg-slate-800'
-              }`}>
+              className={cn(
+                'flex-shrink-0 whitespace-nowrap',
+                chipFiltro(categoriaFiltro === categoria)
+              )}>
               {categoria}
             </Button>
           ))}
@@ -175,7 +185,7 @@ function MaquinasContent() {
 
       <div className='flex w-full gap-5 pr-0 md:pr-3'>
         {/* Sidebar desktop */}
-        <div className='sticky top-32 left-0 z-10 ml-2 hidden h-full w-1/6 flex-col items-center justify-start gap-2 rounded-xs bg-transparent text-white md:flex'>
+        <div className='sticky top-32 left-0 z-10 ml-2 hidden h-full w-1/6 flex-col items-center justify-start gap-2 rounded-xs bg-transparent md:flex'>
           <Button
             onClick={() => {
               setEmbalagemFiltro('Todas');
@@ -183,7 +193,10 @@ function MaquinasContent() {
               updateUrl('Todas', 'Todas');
             }}
             variant='ghost'
-            className='border-border/20 mb-2 w-full rounded-xs border bg-slate-900 py-2 text-center text-sm font-semibold'>
+            className={cn(
+              'mb-2 w-full py-2 text-center font-semibold text-white',
+              chipFiltro(false)
+            )}>
             Embalagens Compatíveis
           </Button>
           <div className='flex w-3/4 flex-col gap-2'>
@@ -193,9 +206,7 @@ function MaquinasContent() {
                 setEmbalagemFiltro('Todas');
                 updateUrl(categoriaFiltro, 'Todas');
               }}
-              className={`border-border/20 z-11 rounded-xs border text-xs ${
-                embalagemFiltro === 'Todas' ? 'bg-slate-700' : 'bg-slate-900'
-              }`}>
+              className={chipFiltro(embalagemFiltro === 'Todas')}>
               Todas
             </Button>
             {tiposVisiveis.map((tipo) => (
@@ -206,9 +217,7 @@ function MaquinasContent() {
                   setEmbalagemFiltro(tipo);
                   updateUrl(categoriaFiltro, tipo);
                 }}
-                className={`border-border/20 z-11 rounded-xs border text-xs ${
-                  embalagemFiltro === tipo ? 'bg-slate-700' : 'bg-slate-900'
-                }`}>
+                className={chipFiltro(embalagemFiltro === tipo)}>
                 {tipo}
               </Button>
             ))}
@@ -217,9 +226,15 @@ function MaquinasContent() {
 
         {maquinasFiltradas.length === 0 ? (
           <div className='z-10 mt-8 mr-2 grid min-h-screen w-full grid-cols-12 grid-rows-12 rounded-xs px-4 md:max-w-5/6 md:px-0'>
-            <div className='border-border/20 col-span-12 col-start-1 row-span-1 row-start-1 flex w-full max-w-md flex-col items-center justify-center gap-3 place-self-center border border-dashed bg-slate-900 p-4 text-white md:col-span-4 md:col-start-5 md:row-span-2 md:row-start-2 md:p-6'>
-              <p className='text-center text-sm md:text-base'>
-                Nenhum card encontrado para os filtros selecionados.
+            {/* Empty state em placa técnica */}
+            <div className='relative col-span-12 col-start-1 row-span-1 row-start-1 flex w-full max-w-md flex-col items-center justify-center gap-3 place-self-center rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-4 md:col-span-4 md:col-start-5 md:row-span-2 md:row-start-2 md:p-6'>
+              <span
+                aria-hidden
+                className='absolute top-0.5 right-1.5 font-mono text-xs text-[rgba(148,178,235,0.4)]'>
+                +
+              </span>
+              <p className='text-muted-foreground text-center text-sm md:text-base'>
+                Nenhuma máquina encontrada para os filtros selecionados.
               </p>
               <Button
                 variant='ghost'
@@ -228,7 +243,7 @@ function MaquinasContent() {
                   setCategoriaFiltro('Todas');
                   updateUrl('Todas', 'Todas');
                 }}
-                className='border-border/20 z-20 w-full rounded-xs border text-xs md:w-auto md:text-sm'>
+                className={cn('z-20 w-full md:w-auto', chipFiltro(false))}>
                 Limpar filtros
               </Button>
             </div>
@@ -249,8 +264,8 @@ export default function Maquinas() {
   return (
     <Suspense
       fallback={
-        <div className='flex min-h-screen w-full items-center justify-center bg-slate-900'>
-          <div className='text-white'>Carregando...</div>
+        <div className='tema-navy bg-background flex min-h-screen w-full items-center justify-center'>
+          <div className='text-muted-foreground'>Carregando...</div>
         </div>
       }>
       <MaquinasContent />
