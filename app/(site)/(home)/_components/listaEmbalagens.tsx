@@ -6,10 +6,13 @@ import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { TextAnimate } from '@/components/ui/text-animate';
 
 const OptimizedEmbalagem3d = dynamic(
-  () => import('@/components/modelo3d/optimizedEmbalagem3d').then((m) => ({ default: m.OptimizedEmbalagem3d })),
+  () =>
+    import('@/components/modelo3d/optimizedEmbalagem3d').then((m) => ({
+      default: m.OptimizedEmbalagem3d
+    })),
   {
     ssr: false,
-    loading: () => <div style={{ minHeight: '150px' }} />,
+    loading: () => <div style={{ minHeight: '150px' }} />
   }
 );
 
@@ -123,7 +126,13 @@ export default function ListaEmbalagens() {
       <div className='mx-auto max-w-6xl'>
         {/* Header Section */}
         <div className='items-left mb-6 flex flex-col text-left md:mb-5'>
-          <TextAnimate animation='blurInUp' by='word' as='h2' once startOnView className='text-2xl mb-3 flex gap-2 leading-tight font-bold md:text-3xl md:mb-2'>
+          <TextAnimate
+            animation='blurInUp'
+            by='word'
+            as='h2'
+            once
+            startOnView
+            className='text-2xl mb-3 flex gap-2 leading-tight font-bold md:text-3xl md:mb-2'>
             Nossas Embalagens
           </TextAnimate>
 
@@ -136,26 +145,33 @@ export default function ListaEmbalagens() {
         <AnimatedContainer delay={0.3}>
           <div className='mb-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5'>
             {listaDeEmbalagens.map((card, index) => (
+              // Moldura blueprint: 3D no quadro tracejado com cantoneiras accent
               <div
                 key={index}
-                className='group bg-background hover:bg-muted flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-xs border border-black/30 shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl'>
-                <div className='relative'>
-                  <div className='bg-background rounded-xs p-3 group-hover:shadow-md group-hover:shadow-black/10 md:p-5'>
-                    <OptimizedEmbalagem3d
-                      modelSrc={card.modelSrc}
-                      alt={`Modelo 3D - ${card.title}`}
-                      cameraOrbit={card.cameraOrbit}
-                      autoRotate={true}
-                    />
-                  </div>
-                  <div className='flex flex-col gap-1 border-t border-black/30 px-3 py-2 md:gap-2 md:px-5'>
-                    <h3 className='flex-1 text-sm font-semibold md:text-base'>
-                      {card.title}
-                    </h3>
-                    <p className='pb-1 text-xs leading-relaxed md:pb-2 md:text-sm'>
-                      {card.description}
-                    </p>
-                  </div>
+                className='group flex h-full w-full cursor-pointer flex-col'>
+                <div className='relative flex-1 rounded-t-xs border border-dashed border-[rgba(148,178,235,0.3)] p-3 transition-colors duration-300 group-hover:border-[rgba(148,178,235,0.55)] md:p-5'>
+                  <span
+                    aria-hidden
+                    className='absolute -top-px -left-px z-10 h-2 w-2 border-t border-l border-accent'
+                  />
+                  <span
+                    aria-hidden
+                    className='absolute -right-px -bottom-px z-10 h-2 w-2 border-r border-b border-accent'
+                  />
+                  <OptimizedEmbalagem3d
+                    modelSrc={card.modelSrc}
+                    alt={`Modelo 3D - ${card.title}`}
+                    cameraOrbit={card.cameraOrbit}
+                    autoRotate={true}
+                  />
+                </div>
+                <div className='flex flex-col gap-1 rounded-b-xs border border-t-0 border-dashed border-[rgba(148,178,235,0.22)] bg-slate-900/60 px-3 py-2 transition-colors duration-300 group-hover:bg-slate-900/85 md:gap-2 md:px-5'>
+                  <h3 className='flex-1 text-sm font-semibold text-white md:text-base'>
+                    {card.title}
+                  </h3>
+                  <p className='text-muted-foreground line-clamp-2 min-h-[2lh] pb-1 text-xs leading-relaxed md:pb-2 md:text-sm'>
+                    {card.description}
+                  </p>
                 </div>
               </div>
             ))}

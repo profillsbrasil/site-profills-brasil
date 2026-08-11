@@ -40,7 +40,7 @@ export default function HeroCarrossel() {
   const estatico = Boolean(reduzirMovimento);
 
   return (
-    <section className='relative flex min-h-screen items-center overflow-hidden bg-secondary pt-16'>
+    <section className='relative flex min-h-[min(100vh,880px)] items-center overflow-hidden bg-secondary pt-16'>
       {/* fundo: gradiente radial navy + grid pattern mascarado */}
       <div className='absolute inset-0 bg-[radial-gradient(120%_90%_at_78%_40%,#1b2a4d_0%,#0f172a_46%,#0a1122_100%)]' />
       <div className='absolute inset-0 [mask-image:radial-gradient(85%_85%_at_60%_45%,black_30%,transparent_100%)]'>

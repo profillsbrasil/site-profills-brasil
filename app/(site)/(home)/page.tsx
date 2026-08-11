@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className='relative h-full w-full'>
       <HeroCarrossel />
-      <section className='relative z-20 min-h-screen bg-white pt-8'>
+      <section className='tema-navy relative z-20 min-h-screen border-t border-dashed border-[rgba(148,178,235,0.22)] bg-background text-foreground'>
         <HomeContent />
       </section>
     </div>
@@ -28,12 +28,20 @@ const HomeContent = () => {
       <div className='mx-auto flex h-full w-full flex-col items-center justify-center overflow-x-hidden'>
         <GridPattern />
         <Gt3000 />
-        <CtaAjudarEmpresa />
+        {/* Faixas elevadas: um tom acima do navy base + separadores tracejados,
+            criando o ritmo claro↔escuro entre as seções */}
+        <div className='w-full border-y border-dashed border-[rgba(148,178,235,0.22)] bg-[oklch(0.2380_0.0430_266)]'>
+          <CtaAjudarEmpresa />
+        </div>
         <CtaMonteSuaFabrica />
         <MaquinasDestaque />
-        <CarrosselProdutos />
+        <div className='w-full border-y border-dashed border-[rgba(148,178,235,0.22)] bg-[oklch(0.2380_0.0430_266)]'>
+          <CarrosselProdutos />
+        </div>
         <ListaEmbalagens />
-        <ServicosPersonalizados />
+        <div className='w-full border-y border-dashed border-[rgba(148,178,235,0.22)] bg-[oklch(0.2380_0.0430_266)]'>
+          <ServicosPersonalizados />
+        </div>
       </div>
     </div>
   );

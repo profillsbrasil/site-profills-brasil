@@ -230,3 +230,50 @@ input[type='number']::-webkit-outer-spin-button {
     transform: scaleX(1);
   }
 }
+
+/* "Hover automático" dos chips de marcas: cada chip ocupa 1/8 do ciclo
+   (delay escalonado no componente); fora da sua vez o overlay é invisível,
+   então o hover real continua respondendo normalmente. */
+@keyframes marca-borda-ativa {
+  0%,
+  12.5%,
+  100% {
+    opacity: 0;
+  }
+  3%,
+  9.5% {
+    opacity: 1;
+  }
+}
+
+@keyframes marca-logo-ativa {
+  0%,
+  12.5%,
+  100% {
+    opacity: 0.65;
+  }
+  3%,
+  9.5% {
+    opacity: 1;
+  }
+}
+
+/* ===== Tema navy local: conteúdo da home na paleta do hero =====
+   Re-declara os tokens semânticos para a subárvore — os componentes que usam
+   bg-background/text-muted-foreground/border-border seguem automaticamente. */
+.tema-navy {
+  --background: oklch(0.2084 0.0417 266.3592);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.2503 0.0417 266.3592);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.2503 0.0417 266.3592);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(1 0 0);
+  --primary-foreground: oklch(0.2084 0.0417 266.3592);
+  --secondary: oklch(0.2503 0.0417 266.3592);
+  --muted: oklch(0.2734 0.0428 266.3592);
+  --muted-foreground: oklch(0.8206 0.0417 262);
+  --border: oklch(0.62 0.06 262 / 25%);
+  --input: oklch(0.62 0.06 262 / 25%);
+  --ring: oklch(0.6207 0.1894 259.9358);
+}

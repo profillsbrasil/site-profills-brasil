@@ -13,7 +13,7 @@ Donos de fábricas e indústrias de todos os portes (pequenas, médias e grandes
 
 ### Aesthetic Direction
 - **Tom visual:** Industrial premium — limpo, tecnológico, com presença forte. Não minimalista demais, mas sem excesso decorativo
-- **Tema:** Light mode único (com seções hero/navbar/footer em dark slate-900 como contraste)
+- **Tema:** Home em navy blueprint ("A Prancheta Industrial" — ver DESIGN.md) com navbar/footer navy em todo o site; páginas internas (catálogo, formulários) em light mode
 - **Anti-referências:** Nada que pareça amador, genérico ou artesanal. Evitar estética "template gratuito"
 - **Paleta base:**
   - **Primary/Foreground:** Dark navy (~oklch 0.21 0.002 286) — textos e elementos principais

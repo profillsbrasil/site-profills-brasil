@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-11T13:30:00-03:00",
+  "title": "Design System: Profills Brasil",
+  "extensions": {
+    "colorMeta": {
+      "navy-base": {
+        "role": "neutral",
+        "displayName": "Navy Base",
+        "canonical": "oklch(0.2084 0.0417 266.3592)",
+        "tonalRamp": ["oklch(0.15 0.04 266)", "oklch(0.21 0.042 266)", "oklch(0.25 0.042 266)", "oklch(0.35 0.042 266)", "oklch(0.5 0.05 264)", "oklch(0.62 0.06 262)", "oklch(0.82 0.042 262)", "oklch(0.95 0.02 262)"]
+      },
+      "azul-acao": {
+        "role": "primary",
+        "displayName": "Azul de Ação",
+        "canonical": "oklch(0.6207 0.1894 259.9358)",
+        "tonalRamp": ["oklch(0.25 0.12 260)", "oklch(0.35 0.15 260)", "oklch(0.45 0.18 260)", "oklch(0.55 0.19 260)", "oklch(0.62 0.19 260)", "oklch(0.72 0.15 259)", "oklch(0.82 0.1 258)", "oklch(0.92 0.05 256)"]
+      },
+      "azul-claro-texto": {
+        "role": "neutral",
+        "displayName": "Azul Claro de Texto",
+        "canonical": "oklch(0.8206 0.0417 262)",
+        "tonalRamp": ["oklch(0.3 0.042 262)", "oklch(0.42 0.042 262)", "oklch(0.55 0.042 262)", "oklch(0.68 0.042 262)", "oklch(0.82 0.042 262)", "oklch(0.88 0.032 262)", "oklch(0.93 0.02 262)", "oklch(0.97 0.01 262)"]
+      },
+      "navy-faixa": {
+        "role": "neutral",
+        "displayName": "Navy Faixa",
+        "canonical": "oklch(0.2380 0.0430 266)",
+        "tonalRamp": ["oklch(0.16 0.043 266)", "oklch(0.2 0.043 266)", "oklch(0.238 0.043 266)", "oklch(0.3 0.043 266)", "oklch(0.45 0.05 264)", "oklch(0.6 0.055 263)", "oklch(0.78 0.045 262)", "oklch(0.93 0.02 262)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Título do hero em duas linhas; variante compacta via container query (7cqi) para linhas longas." },
+      "data": { "displayName": "Data (Mono)", "purpose": "Valores de spec e índices; exclusiva do Geist Mono." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-entrada", "value": "cubic-bezier(0.19, 1, 0.22, 1)", "purpose": "Easing exponencial de entrada do Reveal do hero (máscaras sobem em cascata de 0.04s)." },
+      { "name": "marca-borda-ativa", "value": "16s linear infinite, delay i*2s", "purpose": "Hover automático dos chips de marca: overlay de borda accent pulsa em sequência." },
+      { "name": "hover-superficie", "value": "transition-colors 300ms", "purpose": "Transição padrão tracejado→sólido accent em placas, molduras e chips." },
+      { "name": "hero-flutua", "value": "translateY(-10px) alternado", "purpose": "Flutuação da embalagem no palco do hero." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "768px" },
+      { "name": "hero-2col", "value": "900px" },
+      { "name": "hero-placa-compacta", "value": "900–1180px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Placa Técnica",
+      "kind": "card",
+      "refersTo": "placa-tecnica",
+      "description": "Card de benefício/argumento: borda tracejada que vira sólida accent no hover, marca '+' de prancheta.",
+      "html": "<div class=\"ds-placa\"><span class=\"ds-placa-mais\">+</span><div class=\"ds-placa-cab\"><span class=\"ds-placa-icone\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"oklch(0.6207 0.1894 259.9358)\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/></svg></span><h3>Conformidade garantida</h3></div><p>Envase higiênico nos padrões da Anvisa, sem contato com micro-organismos.</p></div>",
+      "css": ".ds-placa { position: relative; background: rgba(15,23,42,0.6); border: 1px dashed rgba(148,178,235,0.3); border-radius: 2px; padding: 24px; font-family: 'Geist', ui-sans-serif, system-ui; transition: border-color .3s, background-color .3s, border-style .3s; } .ds-placa:hover { border-style: solid; border-color: oklch(0.6207 0.1894 259.9358); background: rgba(15,23,42,0.85); } .ds-placa-mais { position: absolute; top: 2px; right: 6px; font-family: ui-monospace, monospace; font-size: 12px; color: rgba(148,178,235,0.4); } .ds-placa-cab { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; } .ds-placa-icone { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 2px; background: oklch(0.6207 0.1894 259.9358 / 0.1); } .ds-placa h3 { color: #fff; font-size: 16px; font-weight: 600; margin: 0; } .ds-placa p { color: oklch(0.8206 0.0417 262); font-size: 14px; line-height: 1.625; margin: 0; }",
+      "name_pt": "Placa Técnica"
+    },
+    {
+      "name": "Moldura Blueprint",
+      "kind": "card",
+      "refersTo": "placa-tecnica",
+      "description": "Card de produto: mídia flutuando num quadro tracejado com cantoneiras accent; só o rodapé tem superfície.",
+      "html": "<div class=\"ds-moldura\"><div class=\"ds-moldura-quadro\"><span class=\"ds-canto ds-canto-tl\"></span><span class=\"ds-canto ds-canto-br\"></span><div class=\"ds-moldura-midia\"></div></div><div class=\"ds-moldura-rodape\"><h3>Envasadora TP-1000</h3><p>Envase automático de sachês com precisão e velocidade.</p></div></div>",
+      "css": ".ds-moldura { display: flex; flex-direction: column; width: 260px; font-family: 'Geist', ui-sans-serif, system-ui; cursor: pointer; } .ds-moldura-quadro { position: relative; flex: 1; border: 1px dashed rgba(148,178,235,0.3); border-radius: 2px 2px 0 0; padding: 16px; transition: border-color .3s; } .ds-moldura:hover .ds-moldura-quadro { border-color: rgba(148,178,235,0.55); } .ds-canto { position: absolute; width: 8px; height: 8px; border: 0 solid oklch(0.6207 0.1894 259.9358); } .ds-canto-tl { top: -1px; left: -1px; border-top-width: 1px; border-left-width: 1px; } .ds-canto-br { bottom: -1px; right: -1px; border-bottom-width: 1px; border-right-width: 1px; } .ds-moldura-midia { height: 110px; background: linear-gradient(145deg, #c8cdd8, #6d7587); border-radius: 2px; opacity: .9; } .ds-moldura-rodape { background: rgba(15,23,42,0.6); border: 1px dashed rgba(148,178,235,0.22); border-top: 0; border-radius: 0 0 2px 2px; padding: 12px 14px; transition: background-color .3s; } .ds-moldura:hover .ds-moldura-rodape { background: rgba(15,23,42,0.85); } .ds-moldura-rodape h3 { color: #fff; font-size: 14px; font-weight: 600; margin: 0 0 4px; } .ds-moldura-rodape p { color: oklch(0.8206 0.0417 262); font-size: 12px; line-height: 1.5; margin: 0; }"
+    },
+    {
+      "name": "Botão Sólido (sobre navy)",
+      "kind": "button",
+      "refersTo": "botao-solido",
+      "description": "Ação primária em superfície navy: branco explícito, nunca token de background.",
+      "html": "<button class=\"ds-btn-solido\">Começar meu projeto <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-solido { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #0f172a; font-family: 'Geist', ui-sans-serif, system-ui; font-size: 15px; font-weight: 600; padding: 12px 24px; border: 1px solid rgba(148,178,235,0.25); border-radius: 2px; cursor: pointer; transition: transform .3s, border-color .3s; } .ds-btn-solido:hover { transform: scale(1.02); border-color: oklch(0.6207 0.1894 259.9358 / 0.3); } .ds-btn-solido:focus-visible { outline: 2px solid oklch(0.6207 0.1894 259.9358); outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão de Ação (hero)",
+      "kind": "button",
+      "refersTo": "botao-acao",
+      "description": "CTA accent acoplado à placa de specs do hero.",
+      "html": "<button class=\"ds-btn-acao\">Conhecer <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-acao { display: inline-flex; align-items: center; gap: 8px; background: oklch(0.6207 0.1894 259.9358); color: #fff; font-family: 'Geist', ui-sans-serif, system-ui; font-size: 14px; font-weight: 600; padding: 14px 24px; border: none; border-radius: 2px; cursor: pointer; transition: background-color .2s; } .ds-btn-acao:hover { background: oklch(0.6207 0.1894 259.9358 / 0.9); } .ds-btn-acao:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
+    },
+    {
+      "name": "Chip de Marca",
+      "kind": "chip",
+      "refersTo": "chip-marca",
+      "description": "Logo de fornecedor monocromática branca em chip navy tracejado; brilha no hover.",
+      "html": "<span class=\"ds-chip-marca\"><span class=\"ds-chip-logo\">FESTO</span></span>",
+      "css": ".ds-chip-marca { display: inline-flex; align-items: center; justify-content: center; height: 64px; min-width: 120px; background: oklch(0.2503 0.0417 266.3592); border: 1px dashed rgba(148,178,235,0.25); border-radius: 2px; padding: 12px; transition: border-color .3s; } .ds-chip-marca:hover { border-color: oklch(0.6207 0.1894 259.9358 / 0.6); } .ds-chip-logo { color: #dbe4f5; font-family: 'Geist', ui-sans-serif, system-ui; font-weight: 700; letter-spacing: 0.06em; font-size: 14px; opacity: 0.65; transition: opacity .3s; } .ds-chip-marca:hover .ds-chip-logo { opacity: 1; }"
+    },
+    {
+      "name": "Seta de Navegação",
+      "kind": "button",
+      "refersTo": "botao-acao",
+      "description": "Navegação do carrossel do hero: quadrado tracejado que acende sólido accent.",
+      "html": "<button class=\"ds-seta\" aria-label=\"Próximo slide\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg></button>",
+      "css": ".ds-seta { display: grid; place-items: center; width: 44px; height: 44px; background: rgba(148,178,235,0.07); border: 1px dashed rgba(148,178,235,0.3); border-radius: 2px; cursor: pointer; transition: border-color .2s, border-style .2s, background-color .2s; } .ds-seta:hover { border-style: solid; border-color: oklch(0.6207 0.1894 259.9358); background: oklch(0.6207 0.1894 259.9358 / 0.15); } .ds-seta:focus-visible { outline: 2px solid oklch(0.6207 0.1894 259.9358); outline-offset: 2px; }"
+    },
+    {
+      "name": "Placa de Specs (hero)",
+      "kind": "custom",
+      "refersTo": "placa-tecnica",
+      "description": "Assinatura do hero: dados em mono com prefixo 'até', rótulos uppercase, CTA acoplado.",
+      "html": "<div class=\"ds-specs\"><div class=\"ds-specs-grupo\"><div class=\"ds-spec\"><span class=\"ds-spec-valor\"><em>até</em> 3.000 <small>un/h</small></span><span class=\"ds-spec-rotulo\">PRODUÇÃO</span></div><div class=\"ds-spec\"><span class=\"ds-spec-valor\">85-300 <small>mm</small></span><span class=\"ds-spec-rotulo\">LARGURA DO FILME</span></div></div><button class=\"ds-specs-cta\">Conhecer →</button></div>",
+      "css": ".ds-specs { display: inline-flex; align-items: stretch; background: rgba(15,23,42,0.6); border: 1px dashed rgba(148,178,235,0.3); border-radius: 2px; font-family: 'Geist', ui-sans-serif, system-ui; } .ds-specs-grupo { display: flex; gap: 24px; padding: 16px 24px; } .ds-spec { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; } .ds-spec-valor { font-family: ui-monospace, monospace; font-size: 21px; font-weight: 600; color: #fff; } .ds-spec-valor em { font-style: normal; font-size: 12px; font-weight: 400; color: oklch(0.8206 0.0417 262); margin-right: 4px; } .ds-spec-valor small { font-size: 12px; font-weight: 400; color: oklch(0.8206 0.0417 262); } .ds-spec-rotulo { font-size: 10.9px; letter-spacing: 0.05em; text-transform: uppercase; color: oklch(0.8206 0.0417 262); } .ds-specs-cta { display: flex; align-items: center; background: oklch(0.6207 0.1894 259.9358); color: #fff; font-size: 14px; font-weight: 600; padding: 0 24px; border: none; border-radius: 0 2px 2px 0; cursor: pointer; transition: background-color .2s; } .ds-specs-cta:hover { background: oklch(0.6207 0.1894 259.9358 / 0.9); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Prancheta Industrial",
+    "overview": "O site é um desenho técnico vivo. Sobre o navy profundo corre um grid de blueprint; o conteúdo se organiza em placas técnicas, molduras de cota com cantoneiras, réguas tracejadas e specs em fonte mono — como se cada seção tivesse saído da prancheta de um engenheiro da Profills. Nada é decorativo: o tracejado marca fronteira, a cantoneira marca medida, o mono marca dado. As máquinas de inox são as protagonistas — fotos e modelos 3D flutuam direto no navy, emoldurados, nunca engaiolados em caixas brancas — e o azul de ação aparece com parcimônia para que cada aparição conte.",
+    "keyCharacteristics": [
+      "Fundo navy blueprint com grid pattern; superfícies elevadas por tom, nunca por sombra",
+      "Fronteiras sempre tracejadas; hover promove tracejado → sólido no azul de ação",
+      "Pontas quadradas (2px) em tudo — a estética de precisão da marca",
+      "Dados técnicos em Geist Mono; rótulos uppercase espaçados",
+      "Movimento funcional e discreto, sempre com fallback para prefers-reduced-motion"
+    ],
+    "rules": [
+      { "name": "A Regra da Cor Explícita", "body": "Dentro de .tema-navy, tokens semânticos; fora dela (hero, navbar, footer em bg-secondary), cores literais como #b6c5e2 — os tokens resolvem para o tema claro.", "section": "colors" },
+      { "name": "A Regra do Accent Raro", "body": "O Azul de Ação nunca vira fundo de seção nem texto corrido. Ele pontua: um botão, uma borda acesa, uma palavra no título.", "section": "colors" },
+      { "name": "A Regra do Leading Depois", "body": "Em cn(), leading-* sempre depois de text-[tamanho arbitrário] — o tailwind-merge descarta um leading declarado antes.", "section": "typography" },
+      { "name": "A Regra da Sombra Zero", "body": "Nenhum shadow sobre navy. Elevação = tom + borda. Card chapado? Suba um degrau de tom.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do separar seções e superfícies com linha tracejada rgba(148,178,235,0.22–0.3) — é a assinatura do sistema.",
+      "Do usar o hover tracejado→sólido-accent como affordance padrão de interação.",
+      "Do dar fallback estático a toda animação (useReducedMotion em JS, motion-reduce: em CSS).",
+      "Do importar imagens estaticamente (lib/images/) e logos de fornecedor com fundo transparente.",
+      "Do medir uniformidade de cards por linha ao criar grids novos (flex-1 + min-h-[2lh])."
+    ],
+    "donts": [
+      "Don't usar bg-background/bg-secondary como superfície de card dentro de navy — card invisível.",
+      "Don't usar sombras sobre navy, nem borda border-black/*.",
+      "Don't usar texto branco translúcido para hierarquia — o secundário é o Azul Claro #b6c5e2.",
+      "Don't usar gradientes de fade como transição entre seções — fronteira é linha, não névoa.",
+      "Don't arredondar além de rounded-xs (2px).",
+      "Don't declarar leading-* antes de text-[...] arbitrário dentro de cn()."
+    ]
+  }
+}

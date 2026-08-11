@@ -119,8 +119,8 @@ export default function Footer() {
   }
 
   return (
-    <footer className='relative overflow-hidden bg-secondary'>
-      <GridPattern className='[mask-image:linear-gradient(to_bottom,transparent_0,black_80px,black_100%)]' />
+    <footer className='relative overflow-hidden border-t border-dashed border-[rgba(148,178,235,0.22)] bg-secondary'>
+      <GridPattern />
 
       <div className='relative mx-auto max-w-7xl px-4 py-8 md:px-6 md:pt-14 md:pb-10'>
         <BlurFade delay={0.1} inView>
@@ -136,14 +136,14 @@ export default function Footer() {
               />
             </Link>
             <div className='mx-auto max-w-3xl'>
-              <p className='text-sm leading-relaxed font-medium text-secondary-foreground/80 md:text-lg'>
+              <p className='text-sm leading-relaxed font-medium text-[#b6c5e2] md:text-lg'>
                 A Profills é uma empresa jovem e arrojada, que produz{' '}
                 <span className='text-accent font-semibold'>
                   Máquinas Envasadoras
                 </span>{' '}
                 para produtos líquidos, pastosos e sólidos.
               </p>
-              <p className='mt-2 text-xs text-secondary-foreground/50 md:text-base'>
+              <p className='mt-2 text-xs text-[#b6c5e2]/70 md:text-base'>
                 Utilizando tecnologia de ponta e os melhores componentes.
               </p>
             </div>
@@ -157,12 +157,18 @@ export default function Footer() {
               delay={0.2 + index * 0.1}
               inView
               className='h-full'>
-              <div className='group h-full rounded-xs border border-secondary-foreground/10 bg-secondary-foreground/5 p-4 transition-colors duration-300 hover:border-accent/20 hover:bg-secondary-foreground/8 md:p-6'>
+              {/* Placa técnica (cores explícitas: o footer vive fora da .tema-navy) */}
+              <div className='group relative h-full rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-4 transition-colors duration-300 hover:border-solid hover:border-accent hover:bg-slate-900/85 md:p-6'>
+                <span
+                  aria-hidden
+                  className='absolute top-0.5 right-1.5 font-mono text-xs text-[rgba(148,178,235,0.4)]'>
+                  +
+                </span>
                 <div className='mb-3 flex items-center gap-3 md:mb-4'>
                   <div className='flex h-9 w-9 items-center justify-center rounded-xs bg-accent/10 md:h-10 md:w-10'>
                     <contact.icon className='h-4 w-4 text-accent md:h-5 md:w-5' />
                   </div>
-                  <h3 className='text-sm font-semibold text-secondary-foreground md:text-base'>
+                  <h3 className='text-sm font-semibold text-white md:text-base'>
                     {contact.title}
                   </h3>
                 </div>
@@ -177,7 +183,7 @@ export default function Footer() {
                           target: '_blank',
                           rel: 'noopener noreferrer'
                         })}
-                        className='group/link flex items-center gap-2 text-secondary-foreground/60 transition-colors hover:text-accent md:gap-3'>
+                        className='group/link flex items-center gap-2 text-[#b6c5e2] transition-colors hover:text-accent md:gap-3'>
                         <LinkIcon className='h-4 w-4 text-accent/60 transition-colors group-hover/link:text-accent md:h-4 md:w-4' />
                         <span className='text-xs font-medium md:text-sm'>
                           {label}
@@ -193,7 +199,7 @@ export default function Footer() {
 
         <BlurFade delay={0.4} inView>
           <div className='mt-8 grid grid-cols-[1fr_auto_1fr] items-center gap-4 md:mt-10 md:gap-6'>
-            <div className='h-px bg-gradient-to-r from-transparent via-secondary-foreground/15 to-transparent' />
+            <div className='h-px border-t border-dashed border-[rgba(148,178,235,0.22)]' />
             <Link
               href='#'
               aria-label='Conheça também: Profills Cartoons Branca'
@@ -204,17 +210,17 @@ export default function Footer() {
                 className='h-10 w-auto transition duration-300 group-hover:brightness-110 md:h-12'
               />
             </Link>
-            <div className='h-px bg-gradient-to-r from-transparent via-secondary-foreground/15 to-transparent' />
+            <div className='h-px border-t border-dashed border-[rgba(148,178,235,0.22)]' />
           </div>
         </BlurFade>
 
         <BlurFade delay={0.5} inView>
           <div className='pt-8'>
             <div className='mb-6 text-center md:mb-8'>
-              <h3 className='mb-2 text-base font-semibold text-secondary-foreground md:text-lg'>
+              <h3 className='mb-2 text-base font-semibold text-white md:text-lg'>
                 Conecte-se conosco
               </h3>
-              <p className='text-xs text-secondary-foreground/50 md:text-base'>
+              <p className='text-xs text-[#b6c5e2]/70 md:text-base'>
                 Acompanhe nossos projetos e novidades do setor industrial
               </p>
             </div>
@@ -226,12 +232,12 @@ export default function Footer() {
                   target='_blank'
                   rel='noopener noreferrer'
                   aria-label={label}
-                  className='rounded-xs border border-secondary-foreground/10 p-2 text-secondary-foreground/40 transition-all duration-300 hover:border-accent/30 hover:text-accent md:p-4'>
+                  className='rounded-xs border border-dashed border-[rgba(148,178,235,0.25)] p-2 text-[#b6c5e2]/70 transition-all duration-300 hover:border-solid hover:border-accent hover:text-accent md:p-4'>
                   <Icon className='size-8 md:size-10' />
                 </Link>
               ))}
             </div>
-            <div className='mt-6 flex flex-col items-center justify-center gap-1 text-xs text-secondary-foreground/50 md:text-sm'>
+            <div className='mt-6 flex flex-col items-center justify-center gap-1 text-xs text-[#b6c5e2]/70 md:text-sm'>
               <p className='text-center'>
                 <span className='text-accent'>&copy;</span>{' '}
                 {new Date().getFullYear()} Profills Brasil. Todos os direitos
