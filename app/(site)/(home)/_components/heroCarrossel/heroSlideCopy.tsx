@@ -82,11 +82,14 @@ export function HeroSlideCopy({
 
       <Titulo
         className={cn(
-          'mt-5 leading-[1.06] font-extrabold tracking-tight text-white',
+          'mt-4 font-extrabold tracking-tight text-white',
           // Linhas longas: fonte fluida pela largura da coluna (container query) — nunca clipa
           slide.tituloCompacto
             ? 'text-[clamp(1.5rem,7cqi,2.8rem)]'
-            : 'text-[clamp(1.9rem,3.9vw,3.5rem)]'
+            : 'text-[clamp(1.9rem,3.9vw,3.5rem)]',
+          // Depois do font-size: o tailwind-merge trata text-[...] como conflito de
+          // line-height e descartaria um leading declarado antes dele
+          'leading-[1.06]'
         )}>
         <Mascara estatico={estatico}>
           <span className='block whitespace-nowrap'>{slide.titulo[0]}</span>
@@ -99,13 +102,13 @@ export function HeroSlideCopy({
       </Titulo>
 
       <Mascara estatico={estatico}>
-        <p className='mt-4 max-w-[44ch] text-base leading-relaxed text-[#b6c5e2]'>
+        <p className='mt-3 max-w-[44ch] text-base leading-relaxed text-[#b6c5e2]'>
           {slide.descricao}
         </p>
       </Mascara>
 
       <Mascara estatico={estatico}>
-        <span className='mt-7 flex w-fit items-stretch rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 max-[560px]:w-full max-[560px]:flex-col'>
+        <span className='mt-5 flex w-fit items-stretch rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 max-[560px]:w-full max-[560px]:flex-col'>
           <span className='flex gap-6 px-6 py-4 max-[560px]:flex-wrap max-[560px]:gap-4 min-[900px]:max-[1180px]:gap-4 min-[900px]:max-[1180px]:px-4 min-[900px]:max-[1180px]:py-3'>
             {slide.specs.map((spec) => (
               <span key={spec.label} className='whitespace-nowrap'>
@@ -139,7 +142,7 @@ export function HeroSlideCopy({
           href={WHATSAPP_URL}
           target='_blank'
           rel='noopener noreferrer'
-          className='mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#b6c5e2] transition-colors hover:text-white'>
+          className='mt-3 inline-flex items-center gap-2 text-sm font-medium text-[#b6c5e2] transition-colors hover:text-white'>
           <WhatsAppIcon className='size-4 text-[#25d366]' />
           Falar com um especialista
         </a>
