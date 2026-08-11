@@ -38,8 +38,18 @@ export default function MaquinaCard({
       trigger={filtersApplied ? 'mount' : 'inView'} // Usa "mount" quando filtros aplicados da URL
       once={!filtersApplied} // Permite reanimação quando filtros mudam
       amount={0.1} // Dispara quando 10% do elemento está visível
-      className={`border-border/20 group hover:border-accent/30 flex h-[28rem] w-full flex-col overflow-hidden rounded-xs border bg-slate-900 text-white md:h-[32rem]`}>
-      <div className={`relative h-[86%] w-full px-2`}>
+      className={`group flex h-[28rem] w-full flex-col md:h-[32rem]`}>
+      {/* Moldura blueprint: mídia no quadro tracejado com cantoneiras accent */}
+      <div
+        className={`relative h-[86%] w-full rounded-t-xs border border-dashed border-[rgba(148,178,235,0.3)] px-2 transition-colors duration-300 group-hover:border-[rgba(148,178,235,0.55)]`}>
+        <span
+          aria-hidden
+          className='absolute -top-px -left-px z-10 h-2 w-2 border-t border-l border-accent'
+        />
+        <span
+          aria-hidden
+          className='absolute -right-px -bottom-px z-10 h-2 w-2 border-r border-b border-accent'
+        />
         <Image
           src={maquina.imgMaquina}
           alt='Máquina'
@@ -65,11 +75,13 @@ export default function MaquinaCard({
         />
       </div>
       <div
-        className={`flex h-[14%] w-full flex-col items-center justify-center bg-slate-800`}>
-        <h1 className='group-hover:text-accent text-base font-bold md:text-lg'>
+        className={`flex h-[14%] w-full flex-col items-center justify-center rounded-b-xs border border-t-0 border-dashed border-[rgba(148,178,235,0.22)] bg-slate-900/60 transition-colors duration-300 group-hover:bg-slate-900/85`}>
+        <h2 className='text-base font-bold text-white md:text-lg'>
           {maquina.name}
-        </h1>
-        <p className='text-xs font-light md:text-sm'>{maquina.descricao}</p>
+        </h2>
+        <p className='text-muted-foreground text-xs md:text-sm'>
+          {maquina.descricao}
+        </p>
       </div>
     </AnimatedContainer>
   );
