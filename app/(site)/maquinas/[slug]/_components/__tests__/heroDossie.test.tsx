@@ -15,7 +15,9 @@ describe('HeroDossie', () => {
       screen.getByRole('heading', { level: 1, name: piloto.nomeCompleto })
     ).toBeInTheDocument();
     expect(screen.getByText(piloto.headline)).toBeInTheDocument();
-    expect(screen.getAllByText(/Stand-up pouch/i).length).toBeGreaterThan(0);
+    expect(screen.getByTestId('categoria-hero')).toHaveTextContent(
+      'Stand-up pouch'
+    );
     expect(screen.getByText(/P\.16/)).toBeInTheDocument();
   });
 

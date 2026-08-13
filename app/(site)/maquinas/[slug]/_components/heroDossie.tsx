@@ -32,7 +32,9 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
       <section className='relative border border-dashed border-[rgba(148,178,235,0.35)] p-5 md:p-8'>
         <Cantoneiras />
         <div className='flex items-center justify-between border-b border-dashed border-[rgba(148,178,235,0.25)] pb-3'>
-          <span className='text-accent font-mono text-[10px] tracking-[0.2em] uppercase'>
+          <span
+            data-testid='categoria-hero'
+            className='text-accent font-mono text-[10px] tracking-[0.2em] uppercase'>
             {maquina.categoria}
           </span>
           <span className='text-muted-foreground/60 font-mono text-[10px] tracking-wider'>
