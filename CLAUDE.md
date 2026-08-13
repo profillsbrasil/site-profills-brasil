@@ -32,9 +32,8 @@ lib/
 ├── utils/                ← input-masks, cep, validate-document, jwt-catalog, logger
 ├── schemas/              ← schemas zod dos forms — compartilhados entre client e route.ts
 ├── emails/<form>/        ← template + envio nodemailer; _shared/ tem transporter e template-engine
-├── data/                 ← dados estruturados de conteúdo (listaClientes)
-├── images/<categoria>/   ← imagens importadas no código (maquinas, projetos, logoClientes…)
-└── catalogo_completo_maquinas.json
+├── data/                 ← dados estruturados de conteúdo (listaClientes); data/maquinas/ é a fonte única das máquinas — registry por slug, 1 arquivo por máquina
+└── images/<categoria>/   ← imagens importadas no código (catalogo2026, projetos, logoClientes…)
 
 public/                   ← só o que precisa de URL direta: videos/, embalagens-3d/*.glb, logos, geojson
 private/downloads/        ← arquivos NÃO públicos (catálogo 77MB), servidos via api/download/[token] com JWT

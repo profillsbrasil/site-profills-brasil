@@ -146,7 +146,7 @@ Migração de `arquivos-referencia/Imagens/` para `lib/images/catalogo2026/{maqu
 | `/montar-maquina` | Heurística de recomendação re-apontada para o novo registry (campos `categoria`/`embalagensCompativeis`/`capacidadeMaxima`); comportamento preservado |
 | `specificationModal` | Vira CTA "Solicitar proposta técnica e comercial"; payload ganha `slug` no lugar de `maquinaId` numérico (API `/api/specifications` ajustada) |
 | Bug herdado | `animationDuration={maquina.unidadeMaxima}` no Highlighter morre junto com a página antiga |
-| Código morto | `maquinasData.ts`, `lib/catalogo_completo_maquinas.json`, `lib/images/maquinas/` (pasta órfã) e imagens órfãs de `maquinasEmbalagens/` removidos ao fim da migração |
+| Código morto | `maquinasData.ts`, `lib/catalogo_completo_maquinas.json`, `lib/images/maquinas/` (pasta órfã) e imagens órfãs de `maquinasEmbalagens/` — **removido** (Task 5, Fase 4) |
 
 ## 8. Testes e QA
 
