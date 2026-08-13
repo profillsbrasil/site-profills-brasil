@@ -78,7 +78,7 @@ export default function MaquinaCard({
               onLoad={() => setPkgLoaded(true)}
               className={`${
                 maquina.imagens.embalagemClassName ||
-                'absolute right-3 bottom-0 h-1/2 w-1/2 object-cover'
+                'absolute right-3 bottom-0 h-1/2 w-auto max-w-[65%] object-contain'
               } transition-opacity duration-300 ${pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
           </>
