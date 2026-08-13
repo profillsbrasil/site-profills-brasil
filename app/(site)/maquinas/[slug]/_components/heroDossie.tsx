@@ -48,7 +48,11 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
         </div>
 
         <div className='flex flex-col items-center gap-6 pt-6 md:flex-row'>
-          <div className='w-full md:w-[45%]'>
+          <div
+            className={cn(
+              'w-full',
+              maquina.imagens ? 'md:w-[45%]' : 'md:w-full'
+            )}>
             <h1 className='text-2xl leading-tight font-bold text-white md:text-4xl'>
               {maquina.nomeCompleto}
             </h1>
@@ -99,17 +103,19 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
             <div className='mt-6 flex flex-wrap gap-3'>{children}</div>
           </div>
 
-          <div className='relative flex w-full justify-center md:w-[55%]'>
-            <Image
-              src={maquina.imagens.maquina}
-              alt={`${maquina.nomeCompleto} Profills`}
-              priority
-              className={cn(
-                'md:-my-16 max-h-[320px] w-auto object-contain drop-shadow-[0_18px_28px_rgba(0,0,0,0.45)] md:max-h-[480px]',
-                maquina.imagens.maquinaClassName
-              )}
-            />
-          </div>
+          {maquina.imagens && (
+            <div className='relative flex w-full justify-center md:w-[55%]'>
+              <Image
+                src={maquina.imagens.maquina}
+                alt={`${maquina.nomeCompleto} Profills`}
+                priority
+                className={cn(
+                  'md:-my-16 max-h-[320px] w-auto object-contain drop-shadow-[0_18px_28px_rgba(0,0,0,0.45)] md:max-h-[480px]',
+                  maquina.imagens.maquinaClassName
+                )}
+              />
+            </div>
+          )}
         </div>
       </section>
     </AnimatedContainer>

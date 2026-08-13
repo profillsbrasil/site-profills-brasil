@@ -8,6 +8,7 @@ import { WHATSAPP_VENDAS, waLink } from '@/lib/utils/whatsapp';
 import { AplicacoesProdutos } from './_components/aplicacoesProdutos';
 import { Conversao } from './_components/conversao';
 import { EmbalagemBloco } from './_components/embalagemBloco';
+import { EscopoEngenharia } from './_components/escopoEngenharia';
 import { FichaTecnica } from './_components/fichaTecnica';
 import { HeroDossie } from './_components/heroDossie';
 import { Relacionadas } from './_components/relacionadas';
@@ -36,7 +37,9 @@ export async function generateMetadata({
     openGraph: {
       title: maquina.seo.titulo,
       description: maquina.seo.descricao,
-      images: [{ url: maquina.imagens.maquina.src }]
+      ...(maquina.imagens && {
+        images: [{ url: maquina.imagens.maquina.src }]
+      })
     }
   };
 }
@@ -54,6 +57,9 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
           { id: 'embalagem', rotulo: 'Embalagem' },
           { id: 'ficha-tecnica', rotulo: 'Ficha técnica' }
         ]
+      : []),
+    ...(maquina.tipoPagina === 'engenharia' && maquina.conteudoEngenharia
+      ? [{ id: 'escopo', rotulo: 'Escopo' }]
       : []),
     { id: 'contato', rotulo: 'Contato' }
   ];
@@ -96,6 +102,10 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
           </HeroDossie>
           <VisaoGeral maquina={maquina} />
           <VideoMaquina video={maquina.video} nome={maquina.nome} />
+          {maquina.tipoPagina === 'engenharia' &&
+            maquina.conteudoEngenharia && (
+              <EscopoEngenharia conteudo={maquina.conteudoEngenharia} />
+            )}
           {maquina.tipoPagina === 'padrao' && (
             <>
               <AplicacoesProdutos aplicacoes={maquina.aplicacoes} />

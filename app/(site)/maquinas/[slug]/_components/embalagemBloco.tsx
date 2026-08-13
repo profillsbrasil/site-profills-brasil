@@ -53,12 +53,13 @@ export function EmbalagemBloco({ maquina }: { maquina: MaquinaCatalogo }) {
               </p>
             </>
           ) : (
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- só renderiza fora do branch engenharia (page.tsx); imagens é garantida por integridade.test.ts para tipoPagina='padrao'
             <Image
-              src={maquina.imagens.embalagem}
+              src={maquina.imagens!.embalagem}
               alt={`Embalagem produzida pela ${maquina.nome}`}
               className={cn(
                 'mx-auto max-h-64 w-auto object-contain md:max-h-80',
-                maquina.imagens.embalagemClassName
+                maquina.imagens!.embalagemClassName
               )}
             />
           )}

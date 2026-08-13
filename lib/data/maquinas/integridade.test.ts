@@ -17,11 +17,12 @@ describe('integridade do registry de máquinas', () => {
     }
   });
 
-  it('máquinas padrão têm specs não-vazias; engenharia tem conteudoEngenharia', () => {
+  it('máquinas padrão têm specs e imagens; engenharia tem conteudoEngenharia', () => {
     for (const m of maquinasCatalogo) {
       if (m.tipoPagina === 'padrao') {
         expect(m.specsMaquina.length, m.slug).toBeGreaterThan(0);
         expect(m.specsEmbalagem.length, m.slug).toBeGreaterThan(0);
+        expect(m.imagens, m.slug).toBeDefined();
       } else {
         expect(m.conteudoEngenharia, m.slug).toBeDefined();
       }

@@ -44,7 +44,8 @@ export interface MaquinaCatalogo {
     categorias: CategoriaProduto[];
     produtos: string[];
   };
-  imagens: {
+  /** obrigatória em máquinas 'padrao' (enforçado em integridade.test.ts); ausente nas de 'engenharia' */
+  imagens?: {
     maquina: StaticImageData;
     embalagem: StaticImageData;
     maquinaClassName?: string;

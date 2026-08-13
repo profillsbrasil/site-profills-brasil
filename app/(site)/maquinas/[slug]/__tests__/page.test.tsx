@@ -9,6 +9,36 @@ vi.mock('next/navigation', () => ({
   })
 }));
 
+// Injeta uma máquina de engenharia fake (fixture só deste teste, spread do
+// piloto) para exercitar o branch tipoPagina='engenharia' sem depender de
+// dados reais do catálogo — categoria/embalagens divergem do piloto de
+// propósito, para que a máquina fake não apareça como "relacionada" dela
+// mesma nem faça o piloto aparecer no grid de Relacionadas.
+vi.mock('@/lib/data/maquinas', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/data/maquinas')>();
+  const maquinaEngenhariaFake = {
+    ...actual.maquinasCatalogo[0],
+    slug: 'engenharia-fake',
+    nome: 'Linha Engenharia Fake',
+    nomeCompleto: 'Linha Engenharia Fake - Solução Integrada',
+    tipoPagina: 'engenharia' as const,
+    categoria: 'Linhas completas e automação' as const,
+    embalagensCompativeis: [] as string[],
+    imagens: undefined,
+    conteudoEngenharia: {
+      escopo: 'Escopo de teste da solução de engenharia integrada.',
+      blocos: [{ rotulo: 'Etapa', valor: 'Integração completa da linha' }]
+    }
+  };
+  return {
+    ...actual,
+    getMaquinaBySlug: (slug: string) =>
+      slug === 'engenharia-fake'
+        ? maquinaEngenhariaFake
+        : actual.getMaquinaBySlug(slug)
+  };
+});
+
 // Padrão sancionado do repo (ver heroDossie.test.tsx, fichaTecnica.test.tsx etc.):
 // next/image não roda em jsdom, mock reduz para uma tag <img> simples.
 vi.mock('next/image', () => ({
@@ -68,5 +98,16 @@ describe('página de máquina', () => {
     expect(ids).toContain('ficha-tecnica');
     expect(ids).toContain('contato');
     expect(container.querySelector('#video')).toBeNull(); // piloto sem vídeo
+  });
+
+  it('página de engenharia renderiza escopo, omite ficha técnica e não exibe imagem de máquina', async () => {
+    const { container } = render(
+      await MaquinaPage({
+        params: Promise.resolve({ slug: 'engenharia-fake' })
+      })
+    );
+    expect(container.querySelector('#escopo')).not.toBeNull();
+    expect(container.querySelector('#ficha-tecnica')).toBeNull();
+    expect(container.querySelectorAll('img').length).toBe(0);
   });
 });

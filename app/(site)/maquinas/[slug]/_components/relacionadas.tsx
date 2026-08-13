@@ -5,8 +5,17 @@ import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { type MaquinaCatalogo, maquinasCatalogo } from '@/lib/data/maquinas';
 import { getMaquinasRelacionadas } from '@/lib/data/maquinas/relacionadas';
 
+function temImagens(m: MaquinaCatalogo): m is MaquinaCatalogo & {
+  imagens: NonNullable<MaquinaCatalogo['imagens']>;
+} {
+  return m.imagens !== undefined;
+}
+
 export function Relacionadas({ maquina }: { maquina: MaquinaCatalogo }) {
-  const relacionadas = getMaquinasRelacionadas(maquina, maquinasCatalogo);
+  const relacionadas = getMaquinasRelacionadas(
+    maquina,
+    maquinasCatalogo
+  ).filter(temImagens);
   if (relacionadas.length === 0) return null;
 
   return (

@@ -64,4 +64,12 @@ describe('HeroDossie', () => {
     expect(container.querySelector('[data-ticker]')).not.toBeNull();
     expect(screen.queryByText('Capacidade de produção')).toBeNull();
   });
+
+  it('sem imagens, não renderiza <img> e o H1 continua presente', () => {
+    render(<HeroDossie maquina={{ ...piloto, imagens: undefined }} />);
+    expect(screen.queryByRole('img')).toBeNull();
+    expect(
+      screen.getByRole('heading', { level: 1, name: piloto.nomeCompleto })
+    ).toBeInTheDocument();
+  });
 });
