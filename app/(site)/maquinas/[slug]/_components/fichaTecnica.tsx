@@ -42,6 +42,8 @@ function PlacaSpecs({
 }
 
 export function FichaTecnica({ maquina }: { maquina: MaquinaCatalogo }) {
+  if (!maquina.imagens) return null;
+
   return (
     <section id='ficha-tecnica' className='scroll-mt-28 py-10 md:py-14'>
       <AnimatedContainer>
@@ -55,13 +57,12 @@ export function FichaTecnica({ maquina }: { maquina: MaquinaCatalogo }) {
         <div className='mt-5 flex flex-col gap-4 md:flex-row'>
           <PlacaSpecs titulo='Máquina' itens={maquina.specsMaquina} />
           <PlacaSpecs titulo='Embalagem' itens={maquina.specsEmbalagem}>
-            {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- só renderiza fora do branch engenharia (page.tsx); imagens é garantida por integridade.test.ts para tipoPagina='padrao' */}
             <Image
-              src={maquina.imagens!.embalagem}
+              src={maquina.imagens.embalagem}
               alt={`Embalagem da ${maquina.nome}`}
               className={cn(
                 'mx-auto mt-4 max-h-56 w-auto object-contain md:max-h-64',
-                maquina.imagens!.embalagemClassName
+                maquina.imagens.embalagemClassName
               )}
             />
           </PlacaSpecs>

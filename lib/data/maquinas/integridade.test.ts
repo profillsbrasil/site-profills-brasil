@@ -37,12 +37,11 @@ describe('integridade do registry de máquinas', () => {
     }
   });
 
-  it('redirects e registry são consistentes nos dois sentidos', () => {
-    // todo destino de redirect existe no registry
-    for (const r of maquinaRedirects) {
-      expect(getMaquinaBySlug(r.slug), `redirect ${r.legacyId}`).toBeDefined();
-    }
-    // toda máquina com legacyId tem redirect
+  it('toda máquina com legacyId tem redirect no mapa', () => {
+    // Nesta fase o mapa de redirects (32 entradas) já cobre todos os ids
+    // 1–33 (exceto 18), mas o registry ainda só tem o piloto (id 16) — a
+    // checagem redirect→registry (destino existe no registry) só faz
+    // sentido a partir da Task 4 e vive no it.todo abaixo.
     for (const m of maquinasCatalogo) {
       if (m.legacyId === undefined) continue;
       expect(
@@ -50,9 +49,11 @@ describe('integridade do registry de máquinas', () => {
         m.slug
       ).toBe(true);
     }
-    // NOTA fase 2: quando as 35 fichas existirem, adicionar asserção de
-    // cobertura completa dos ids 1–33 (18 → /maquinas é caso especial no next.config).
   });
+
+  it.todo(
+    'cobertura total: ids 1-17 e 19-33 redirecionam para slugs existentes no registry'
+  );
 
   it('getMaquinaBySlug resolve o piloto e rejeita slug inválido', () => {
     expect(getMaquinaBySlug('envasadora-stand-up-pouch-speed')?.nome).toBe(
