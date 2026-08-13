@@ -5,10 +5,6 @@ import type React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-  type MaquinaData,
-  maquinasData
-} from '@/app/(site)/maquinas/_components/cardMaquinas/maquinasData';
 import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,19 +12,43 @@ import {
   CarouselContent,
   CarouselItem
 } from '@/components/ui/carousel';
+import { type MaquinaCatalogo, getMaquinaBySlug } from '@/lib/data/maquinas';
 import { cn } from '@/lib/utils';
 
 import Autoplay from 'embla-carousel-autoplay';
 import { ArrowRight, Package, Zap } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
 
-// Seleciona as 5 máquinas principais para destaque
-const featuredMachines = maquinasData.filter((machine) =>
-  [1, 2, 16, 22, 27].includes(machine.id)
-);
+// Slugs das 5 máquinas em destaque na home, na ordem de exibição nos cards
+// (equivalentes aos antigos ids [1, 2, 16, 22, 27]).
+const featuredSlugs = [
+  'envasadora-saches-liquidos-linha-tp',
+  'envasadora-saches-4-soldas-tc4s-1-via',
+  'envasadora-stand-up-pouch-speed',
+  'enfardadeira-produtos-acabados-tc4u',
+  'envasadora-gable-top-gt'
+] as const;
+
+type MaquinaDestaque = MaquinaCatalogo & {
+  imagens: NonNullable<MaquinaCatalogo['imagens']>;
+};
+
+// Falha alto em tempo de build se algum slug sumir do registry ou a máquina
+// perder as imagens — destaque da home sempre precisa de foto (spec §7).
+const featuredMachines: MaquinaDestaque[] = featuredSlugs.map((slug) => {
+  const m = getMaquinaBySlug(slug);
+  if (!m || !m.imagens) throw new Error(`destaque inválido: ${slug}`);
+  return m as MaquinaDestaque;
+});
+
+// Subtítulo do card: parte após ' - ' de nomeCompleto; sem separador, cai na categoria
+function subtituloDe(maquina: MaquinaCatalogo): string {
+  const [, subtitulo] = maquina.nomeCompleto.split(' - ');
+  return subtitulo ?? maquina.categoria;
+}
 
 export type FeatureCardProps = React.ComponentProps<'div'> & {
-  machine: MaquinaData;
+  machine: MaquinaDestaque;
   /** Intervalo do autoplay máquina↔embalagem — valores diferentes por card
       para as trocas não acontecerem em uníssono */
   atrasoAutoplay?: number;
@@ -107,7 +127,7 @@ export function FeatureCard({
   const reduzirMovimento = useReducedMotion();
 
   return (
-    <Link href={`/maquinas/${machine.id}`} className='group block h-full'>
+    <Link href={`/maquinas/${machine.slug}`} className='group block h-full'>
       {/* Moldura blueprint: mídia num quadro tracejado com cantoneiras accent;
           só o rodapé tem superfície */}
       <div
@@ -142,13 +162,13 @@ export function FeatureCard({
               <CarouselItem className='flex items-center justify-center p-3 md:p-4'>
                 <div className='relative h-40 w-full md:h-56'>
                   <Image
-                    src={machine.imgMaquina}
-                    alt={machine.name}
+                    src={machine.imagens.maquina}
+                    alt={machine.nome}
                     fill
                     sizes='(max-width: 768px) 100vw, 33vw'
                     className={cn(
                       'h-full w-full rounded-xs object-contain transition-transform duration-500',
-                      machine.imgMaquinaClassName
+                      machine.imagens.maquinaClassName
                     )}
                   />
                 </div>
@@ -156,13 +176,13 @@ export function FeatureCard({
               <CarouselItem className='flex items-center justify-center p-3 md:p-4'>
                 <div className='relative h-40 w-full md:h-56'>
                   <Image
-                    src={machine.imgEmbalagem}
-                    alt={`Embalagem ${machine.name}`}
+                    src={machine.imagens.embalagem}
+                    alt={`Embalagem ${machine.nome}`}
                     fill
                     sizes='(max-width: 768px) 100vw, 33vw'
                     className={cn(
                       'h-full w-full rounded-xs !object-contain transition-transform duration-500',
-                      machine.imgEmbalagemClassName
+                      machine.imagens.embalagemClassName
                     )}
                   />
                 </div>
@@ -175,19 +195,19 @@ export function FeatureCard({
             embaixo com respiro próprio — nada de espaçamento uniforme */}
         <div className='rounded-b-xs border border-t-0 border-dashed border-[rgba(148,178,235,0.22)] bg-slate-900/60 p-3 transition-colors duration-300 group-hover:bg-slate-900/85 md:px-4'>
           <h3 className='mb-1 text-sm font-semibold tracking-wide text-white md:text-base'>
-            {machine.name}
+            {machine.nome}
           </h3>
 
           <p className='text-muted-foreground mb-2.5 line-clamp-2 text-xs md:text-sm'>
-            {machine.descricao}
+            {subtituloDe(machine)}
           </p>
 
           <div className='space-y-1.5'>
-            {machine.unidadeMaxima && (
+            {machine.capacidadeMaxima && (
               <div className='flex items-center gap-1 text-xs md:gap-2'>
                 <Zap className='text-accent h-3 w-3' />
                 <span>
-                  Até {machine.unidadeMaxima.toLocaleString('pt-BR')} un/h
+                  Até {machine.capacidadeMaxima.toLocaleString('pt-BR')} un/h
                 </span>
               </div>
             )}
