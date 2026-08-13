@@ -49,8 +49,7 @@ export const automacaoIndustrialRoboticaIntegrada: MaquinaCatalogo = {
   specsEmbalagem: [],
   embalagensCompativeis: [],
   conteudoEngenharia: {
-    escopo:
-      'A Linha Automatizada integra braços robóticos, esteiras sincronizadas, sensores, máquinas envolvedoras e sistemas de controle em um fluxo contínuo. A solução é desenvolvida conforme a operação para reduzir gargalos, elevar repetibilidade e ampliar o controle do processo. Pode incluir integração total por CLP e possibilidade de monitoramento remoto, conforme o escopo do projeto.',
+    escopo: '',
     blocos: [
       {
         rotulo: 'Embalagens e produtos',

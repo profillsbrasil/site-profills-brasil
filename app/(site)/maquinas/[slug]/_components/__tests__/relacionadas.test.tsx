@@ -40,9 +40,7 @@ describe('Relacionadas', () => {
       categoria: 'Embalagens rígidas e higienização' // só a Lavadora vive aqui
     };
     const { container } = render(
-      <Relacionadas
-        maquina={{ ...sozinha, slug: 'maquina-lavagem-galoes' }}
-      />
+      <Relacionadas maquina={{ ...sozinha, slug: 'maquina-lavagem-galoes' }} />
     );
     // a Lavadora é a única da categoria e é "ela mesma" (slug igual) e não há
     // interseção de embalagens com outras categorias → bloco some por completo
@@ -64,8 +62,11 @@ describe('Relacionadas', () => {
 
     it('não aparece no grid de relacionadas', () => {
       maquinasCatalogo.push(semFoto);
-      render(<Relacionadas maquina={piloto} />);
+      const { container } = render(<Relacionadas maquina={piloto} />);
       expect(screen.queryByText('Máquina Sem Foto')).toBeNull();
+      // a fake sem foto não pode roubar a vaga de uma candidata real
+      expect(container.querySelectorAll('a').length).toBe(3);
+      expect(screen.getByText('Linha Pouch Compacta')).toBeInTheDocument();
     });
   });
 });

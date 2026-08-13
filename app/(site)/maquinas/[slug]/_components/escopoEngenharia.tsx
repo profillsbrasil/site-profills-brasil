@@ -13,9 +13,11 @@ export function EscopoEngenharia({ conteudo }: EscopoEngenhariaProps) {
           <h2 className='text-lg font-bold text-white md:text-xl'>
             Escopo da solução
           </h2>
-          <p className='text-muted-foreground mt-3 leading-relaxed'>
-            {conteudo.escopo}
-          </p>
+          {conteudo.escopo && (
+            <p className='text-muted-foreground mt-3 leading-relaxed'>
+              {conteudo.escopo}
+            </p>
+          )}
         </div>
         <div className='md:w-2/5'>
           <div className='relative border border-dashed border-[rgba(148,178,235,0.35)] bg-slate-900/60 p-5'>

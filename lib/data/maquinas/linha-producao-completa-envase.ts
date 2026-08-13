@@ -55,8 +55,7 @@ export const linhaProducaoCompletaEnvase: MaquinaCatalogo = {
   specsEmbalagem: [],
   embalagensCompativeis: [],
   conteudoEngenharia: {
-    escopo:
-      'A Profills desenvolve linhas de produção completas para operações que exigem sincronismo entre preparo, dosagem, envase, transporte, acumulação e final de linha. O projeto considera layout, fluxo produtivo, embalagem, capacidade desejada, automação e requisitos operacionais. A solução pode integrar reatores, tanques, bombas, elevadores, envasadoras, esteiras, mesas acumuladoras, encaixotadoras e plataformas.',
+    escopo: '',
     blocos: [
       {
         rotulo: 'Embalagens',

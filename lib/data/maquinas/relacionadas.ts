@@ -1,5 +1,9 @@
 import type { MaquinaCatalogo } from './types';
 
+export type MaquinaRelacionada = MaquinaCatalogo & {
+  imagens: NonNullable<MaquinaCatalogo['imagens']>;
+};
+
 function intersecao(a: string[], b: string[]) {
   return a.filter((x) => b.includes(x)).length;
 }
@@ -26,10 +30,13 @@ export function getMaquinasRelacionadas(
   maquina: MaquinaCatalogo,
   todas: MaquinaCatalogo[],
   limite = 3
-): MaquinaCatalogo[] {
-  const candidatas = todas.filter((m) => m.slug !== maquina.slug);
+): MaquinaRelacionada[] {
+  const candidatas = todas.filter(
+    (m): m is MaquinaRelacionada =>
+      m.slug !== maquina.slug && m.imagens !== undefined
+  );
 
-  const ordenar = (lista: MaquinaCatalogo[]) =>
+  const ordenar = <T extends MaquinaCatalogo>(lista: T[]): T[] =>
     lista
       .map((m, i) => ({
         m,

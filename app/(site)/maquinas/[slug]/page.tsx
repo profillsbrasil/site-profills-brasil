@@ -70,7 +70,7 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
       <div className='relative z-10'>
         <SubNavMaquina nome={maquina.nome} secoes={secoes}>
           <SpecificationModal
-            maquinaId={maquina.legacyId ?? 0}
+            maquinaSlug={maquina.slug}
             maquinaNome={maquina.nome}
             triggerClassName='h-7 px-3 text-xs'
           />
@@ -79,7 +79,7 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
         <div className='mx-auto w-full max-w-7xl px-4 md:px-8'>
           <HeroDossie maquina={maquina}>
             <SpecificationModal
-              maquinaId={maquina.legacyId ?? 0}
+              maquinaSlug={maquina.slug}
               maquinaNome={maquina.nome}
             />
             <a
@@ -114,7 +114,9 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
             </>
           )}
           <Conversao maquina={maquina} />
-          <Relacionadas maquina={maquina} />
+          {maquina.tipoPagina === 'padrao' && (
+            <Relacionadas maquina={maquina} />
+          )}
         </div>
       </div>
     </div>

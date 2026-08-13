@@ -1,10 +1,9 @@
 import type { SpecificationFormData } from '@/lib/schemas/specification-form';
 import { logger } from '@/lib/utils/logger';
 
-import nodemailer from 'nodemailer';
-
-import { template as htmlEmailTemplate } from './email-template';
 import { styles as cssEmailStyles } from './email-styles';
+import { template as htmlEmailTemplate } from './email-template';
+import nodemailer from 'nodemailer';
 
 export const createTransporter = () => {
   return nodemailer.createTransport({
@@ -77,11 +76,11 @@ export const createEmailTemplate = (data: SpecificationFormData) => {
     telefone: data.telefone,
     empresa: data.empresa,
     maquinaNome: data.maquinaNome,
-    maquinaId: String(data.maquinaId),
+    maquinaSlug: data.maquinaSlug,
     observacoes: data.observacoes,
     // URLs absolutas já prontas
     logoUrl: `${siteUrl}/logo-branco.png`,
-    urlMaquina: `${siteUrl}/maquinas/${data.maquinaId}`,
+    urlMaquina: `${siteUrl}/maquinas/${data.maquinaSlug}`,
     siteUrl: siteUrl
   };
 
@@ -109,7 +108,7 @@ Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' 
 
 MÁQUINA SOLICITADA:
 - Nome: ${data.maquinaNome}
-- ID: ${data.maquinaId}
+- Slug: ${data.maquinaSlug}
 
 DADOS DO SOLICITANTE:
 - Nome: ${data.nome}

@@ -30,4 +30,18 @@ describe('EscopoEngenharia', () => {
     const { container } = render(<EscopoEngenharia conteudo={conteudo} />);
     expect(container.querySelector('section#escopo')).not.toBeNull();
   });
+
+  it('omite o parágrafo quando escopo é vazio, mas mantém a placa de blocos', () => {
+    const { container } = render(
+      <EscopoEngenharia conteudo={{ ...conteudo, escopo: '' }} />
+    );
+    expect(
+      screen.getByRole('heading', { name: 'Escopo da solução' })
+    ).toBeInTheDocument();
+    expect(container.querySelector('p')).toBeNull();
+    for (const bloco of conteudo.blocos) {
+      expect(screen.getByText(bloco.rotulo)).toBeInTheDocument();
+      expect(screen.getByText(bloco.valor)).toBeInTheDocument();
+    }
+  });
 });

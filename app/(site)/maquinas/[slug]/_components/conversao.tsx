@@ -18,9 +18,7 @@ export function Conversao({ maquina }: { maquina: MaquinaCatalogo }) {
         </p>
         <div className='mt-6 flex flex-wrap items-center justify-center gap-3'>
           <SpecificationModal
-            // TODO(fase 2/3): máquinas sem legacyId ficam com maquinaId=0 até o
-            // payload migrar para slug (schema hoje exige maquinaId numérico min(1)).
-            maquinaId={maquina.legacyId ?? 0}
+            maquinaSlug={maquina.slug}
             maquinaNome={maquina.nome}
           />
           <a

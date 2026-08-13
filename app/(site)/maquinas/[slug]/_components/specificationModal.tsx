@@ -26,13 +26,13 @@ import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
 
 interface SpecificationModalProps {
-  maquinaId: number;
+  maquinaSlug: string;
   maquinaNome: string;
   triggerClassName?: string;
 }
 
 export default function SpecificationModal({
-  maquinaId,
+  maquinaSlug,
   maquinaNome,
   triggerClassName
 }: SpecificationModalProps) {
@@ -49,7 +49,7 @@ export default function SpecificationModal({
       specificationFormSchema
     ) as Resolver<SpecificationFormData>,
     defaultValues: {
-      maquinaId,
+      maquinaSlug,
       maquinaNome
     }
   });
