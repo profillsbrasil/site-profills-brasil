@@ -1,10 +1,10 @@
 import type { StaticImageData } from 'next/image';
 
-import imgGraos from '@/lib/images/catalogo2026/produtos/graos.png';
-import imgLiquidos from '@/lib/images/catalogo2026/produtos/liquidos.png';
-import imgPastosos from '@/lib/images/catalogo2026/produtos/pastosos.png';
-import imgPos from '@/lib/images/catalogo2026/produtos/pos.png';
-import imgSolidos from '@/lib/images/catalogo2026/produtos/solidos.png';
+import imgGraos from '@/lib/images/catalogo2026/produtos/graos.webp';
+import imgLiquidos from '@/lib/images/catalogo2026/produtos/liquidos.webp';
+import imgPastosos from '@/lib/images/catalogo2026/produtos/pastosos.webp';
+import imgPos from '@/lib/images/catalogo2026/produtos/pos.webp';
+import imgSolidos from '@/lib/images/catalogo2026/produtos/solidos.webp';
 
 import type { CategoriaProduto } from './types';
 
