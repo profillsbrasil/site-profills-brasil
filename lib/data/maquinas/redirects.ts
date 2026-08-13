@@ -6,3 +6,19 @@
 export const maquinaRedirects: { legacyId: number; slug: string }[] = [
   { legacyId: 16, slug: 'envasadora-stand-up-pouch-speed' }
 ];
+
+/** id 18 (Doypack) saiu do catálogo 2026 — decisão 4 do spec. */
+const REDIRECT_REMOVIDAS = [
+  { source: '/maquinas/18', destination: '/maquinas' }
+];
+
+export function buildMaquinaRedirects() {
+  return [
+    ...maquinaRedirects.map((r) => ({
+      source: `/maquinas/${r.legacyId}`,
+      destination: `/maquinas/${r.slug}`,
+      permanent: true
+    })),
+    ...REDIRECT_REMOVIDAS.map((r) => ({ ...r, permanent: true }))
+  ];
+}
