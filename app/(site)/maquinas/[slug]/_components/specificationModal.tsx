@@ -18,19 +18,23 @@ import {
   type SpecificationFormData,
   specificationFormSchema
 } from '@/lib/schemas/specification-form';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { MaquinaData } from '../../_components/cardMaquinas/maquinasData';
 import { Controller, Resolver, useForm } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
 
 interface SpecificationModalProps {
-  maquina: MaquinaData;
+  maquinaId: number;
+  maquinaNome: string;
+  triggerClassName?: string;
 }
 
 export default function SpecificationModal({
-  maquina
+  maquinaId,
+  maquinaNome,
+  triggerClassName
 }: SpecificationModalProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,8 +49,8 @@ export default function SpecificationModal({
       specificationFormSchema
     ) as Resolver<SpecificationFormData>,
     defaultValues: {
-      maquinaId: maquina.id,
-      maquinaNome: maquina.name
+      maquinaId,
+      maquinaNome
     }
   });
 
@@ -97,19 +101,22 @@ export default function SpecificationModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='border-border/30 rounded-xs border bg-emerald-600/90 px-8 py-5 text-lg font-semibold text-white hover:bg-emerald-600/80'>
-          Solicitar Especificações
+        <Button
+          className={cn(
+            'bg-accent hover:bg-accent/85 rounded-xs px-6 py-5 font-semibold text-white',
+            triggerClassName
+          )}>
+          Solicitar proposta técnica e comercial
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[500px]'>
         <DialogHeader>
           <DialogTitle className='text-xl font-bold text-slate-900'>
-            Solicitar Especificações
+            Solicitar proposta técnica e comercial
           </DialogTitle>
           <DialogDescription className='text-slate-600'>
-            Preencha os dados abaixo para receber as especificações técnicas da
-            máquina{' '}
-            <span className='text-accent font-semibold'>{maquina.name}</span>
+            Preencha os dados abaixo para receber a proposta da máquina{' '}
+            <span className='text-accent font-semibold'>{maquinaNome}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -227,7 +234,7 @@ export default function SpecificationModal({
               type='submit'
               disabled={isSubmitting}
               className='bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50'>
-              {isSubmitting ? 'Enviando...' : 'Solicitar Especificações'}
+              {isSubmitting ? 'Enviando...' : 'Enviar solicitação'}
             </Button>
           </div>
         </form>
