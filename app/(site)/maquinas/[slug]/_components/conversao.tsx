@@ -27,7 +27,7 @@ export function Conversao({ maquina }: { maquina: MaquinaCatalogo }) {
             href={waLink(WHATSAPP_VENDAS, mensagem)}
             target='_blank'
             rel='noopener noreferrer'
-            className='text-muted-foreground hover:text-foreground rounded-xs border border-[rgba(148,178,235,0.4)] px-6 py-3 font-semibold transition-colors'>
+            className='text-muted-foreground hover:text-foreground inline-flex h-12 items-center rounded-xs border border-[rgba(148,178,235,0.4)] px-6 font-semibold transition-colors'>
             Falar com um especialista
           </a>
         </div>

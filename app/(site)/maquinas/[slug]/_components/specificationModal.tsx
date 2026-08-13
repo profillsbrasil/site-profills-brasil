@@ -103,7 +103,7 @@ export default function SpecificationModal({
       <DialogTrigger asChild>
         <Button
           className={cn(
-            'bg-accent hover:bg-accent/85 rounded-xs px-6 py-5 font-semibold text-white',
+            'bg-accent hover:bg-accent/85 h-12 rounded-xs px-6 font-semibold text-white',
             triggerClassName
           )}>
           Solicitar proposta técnica e comercial

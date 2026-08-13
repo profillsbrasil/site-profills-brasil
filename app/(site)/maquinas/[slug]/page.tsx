@@ -66,7 +66,7 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
           <SpecificationModal
             maquinaId={maquina.legacyId ?? 0}
             maquinaNome={maquina.nome}
-            triggerClassName='px-3 py-1.5 text-xs'
+            triggerClassName='h-7 px-3 text-xs'
           />
         </SubNavMaquina>
 
@@ -83,7 +83,7 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
               )}
               target='_blank'
               rel='noopener noreferrer'
-              className='text-muted-foreground hover:text-foreground rounded-xs border border-[rgba(148,178,235,0.4)] px-5 py-2.5 text-sm font-semibold transition-colors'>
+              className='text-muted-foreground hover:text-foreground inline-flex h-12 items-center rounded-xs border border-[rgba(148,178,235,0.4)] px-6 text-sm font-semibold transition-colors'>
               Falar com um especialista
             </a>
             {maquina.video && (

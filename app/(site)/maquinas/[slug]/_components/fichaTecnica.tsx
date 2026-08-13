@@ -59,7 +59,7 @@ export function FichaTecnica({ maquina }: { maquina: MaquinaCatalogo }) {
               src={maquina.imagens.embalagem}
               alt={`Embalagem da ${maquina.nome}`}
               className={cn(
-                'mx-auto mt-4 max-h-28 w-auto object-contain',
+                'mx-auto mt-4 max-h-56 w-auto object-contain md:max-h-64',
                 maquina.imagens.embalagemClassName
               )}
             />
