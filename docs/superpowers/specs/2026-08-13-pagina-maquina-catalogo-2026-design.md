@@ -159,8 +159,9 @@ Migração de `arquivos-referencia/Imagens/` para `lib/images/catalogo2026/{maqu
 
 ### Bloqueadores de conteúdo (resolvem antes do deploy big-bang; não travam o desenvolvimento)
 
-- **Foto da "Linear com Fechamento Automático"**: não existe nos arquivos de referência e `imagens.maquina` é obrigatório. Resolver com o usuário antes do deploy: obter foto da Profills **ou** decidir explicitamente reutilizar a foto da família de frascos como representativa.
+- ~~**Foto da "Linear com Fechamento Automático"**~~ **RESOLVIDO (2026-08-13)**: usuário decidiu reutilizar a foto da família horizontal-linear como representativa; trocar por foto real quando a Profills enviar. (Nota: `imagens` virou opcional no modelo para suportar as 2 páginas de engenharia sem foto; obrigatória via teste de integridade para `tipoPagina='padrao'`.)
 - **Doypack id18**: confirmação final da Profills de que saiu de linha (decisão 4 já tomada; reverter é barato até o deploy).
+- **Foto própria do Pouch Cartonado**: docx define máquina distinta do Pouch Speed, mas a única foto disponível é a mesma — pedir foto diferenciada à Profills (página no ar usa a compartilhada).
 
 ### Pendências de engenharia (não bloqueiam; validar com a Profills)
 
