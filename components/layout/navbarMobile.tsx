@@ -3,13 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { BlurFade } from '@/components/ui/blur-fade';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion';
+import { BlurFade } from '@/components/ui/blur-fade';
 import {
   Drawer,
   DrawerClose,
@@ -20,6 +20,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer';
+import { categoriasCatalogo } from '@/lib/data/maquinas';
 import logoProfills from '@/public/logo-branco.png';
 
 import { socialLinks } from './socialLinks';
@@ -29,7 +30,6 @@ import {
   Building,
   Calendar,
   Cloud,
-  Droplets,
   Globe,
   GraduationCap,
   Home,
@@ -99,25 +99,15 @@ const projetos = [
 
 const maquinas = [
   {
-    title: 'Envasadoras',
-    href: '/maquinas?categoria=Envasadoras',
-    icon: <Droplets className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Enfardadeiras',
-    href: '/maquinas?categoria=Enfardadeiras',
-    icon: <Archive className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Embaladoras',
-    href: '/maquinas?categoria=Embaladoras',
-    icon: <Package className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Envolvedoras',
-    href: '/maquinas?categoria=Envolvedoras',
+    title: 'Todas as máquinas',
+    href: '/maquinas',
     icon: <Layers className='text-accent mr-2 size-5' />
-  }
+  },
+  ...categoriasCatalogo.map((categoria) => ({
+    title: categoria,
+    href: `/maquinas?categoria=${encodeURIComponent(categoria)}`,
+    icon: <Package className='text-accent mr-2 size-5' />
+  }))
 ];
 
 const pecas = [
@@ -209,7 +199,7 @@ export default function NavbarMobile() {
             <div className='flex-1 overflow-y-auto p-4'>
               {/* Links principais */}
               <div className='mb-6'>
-                <BlurFade delay={0.05} direction="right">
+                <BlurFade delay={0.05} direction='right'>
                   <DrawerClose asChild>
                     <Link
                       href='/'
@@ -219,7 +209,7 @@ export default function NavbarMobile() {
                     </Link>
                   </DrawerClose>
                 </BlurFade>
-                <BlurFade delay={0.1} direction="right">
+                <BlurFade delay={0.1} direction='right'>
                   <DrawerClose asChild>
                     <Link
                       href='/sobre'
@@ -229,7 +219,7 @@ export default function NavbarMobile() {
                     </Link>
                   </DrawerClose>
                 </BlurFade>
-                <BlurFade delay={0.125} direction="right">
+                <BlurFade delay={0.125} direction='right'>
                   <DrawerClose asChild>
                     <Link
                       href='/clientes'
@@ -239,7 +229,7 @@ export default function NavbarMobile() {
                     </Link>
                   </DrawerClose>
                 </BlurFade>
-                <BlurFade delay={0.15} direction="right">
+                <BlurFade delay={0.15} direction='right'>
                   <DrawerClose asChild>
                     <Link
                       href='/montar-fabrica'
@@ -249,7 +239,7 @@ export default function NavbarMobile() {
                     </Link>
                   </DrawerClose>
                 </BlurFade>
-                <BlurFade delay={0.2} direction="right">
+                <BlurFade delay={0.2} direction='right'>
                   <DrawerClose asChild>
                     <Link
                       href='/montar-maquina'
@@ -262,139 +252,147 @@ export default function NavbarMobile() {
               </div>
 
               {/* Accordion para seções com múltiplas opções */}
-              <BlurFade delay={0.25} direction="right">
-              <Accordion type='multiple' className='w-full'>
-                {/* Máquinas */}
-                <AccordionItem value='maquinas' className='border-secondary-foreground/10'>
-                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                    <div className='flex items-center'>
-                      <Package className='text-accent mr-2 size-5' />
-                      Máquinas
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className='pb-4'>
-                    <div className='space-y-2 pl-6'>
-                      {maquinas.map((maquina) => (
-                        <div
-                          key={maquina.title}
-                          className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
-                          <DrawerClose asChild>
-                            <Link
-                              href={maquina.href}
-                              className='flex w-full items-center'>
-                              {maquina.icon}
-                              {maquina.title}
-                            </Link>
-                          </DrawerClose>
-                        </div>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
+              <BlurFade delay={0.25} direction='right'>
+                <Accordion type='multiple' className='w-full'>
+                  {/* Máquinas */}
+                  <AccordionItem
+                    value='maquinas'
+                    className='border-secondary-foreground/10'>
+                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
+                      <div className='flex items-center'>
+                        <Package className='text-accent mr-2 size-5' />
+                        Máquinas
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className='pb-4'>
+                      <div className='space-y-2 pl-6'>
+                        {maquinas.map((maquina) => (
+                          <div
+                            key={maquina.title}
+                            className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
+                            <DrawerClose asChild>
+                              <Link
+                                href={maquina.href}
+                                className='flex w-full items-center'>
+                                {maquina.icon}
+                                {maquina.title}
+                              </Link>
+                            </DrawerClose>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                {/* Peças - oculto até integração com sistema externo */}
-                <AccordionItem value='pecas' className='hidden border-secondary-foreground/10'>
-                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                    <div className='flex items-center'>
-                      <Archive className='text-accent mr-2 size-5' />
-                      Peças
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className='pb-4'>
-                    <div className='space-y-2 pl-6'>
-                      {pecas.map((peca) => (
-                        <div
-                          key={peca.title}
-                          className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
-                          <DrawerClose asChild>
-                            <Link
-                              href={peca.href}
-                              target='_blank'
-                              className='flex w-full items-center'>
-                              {peca.title}
-                            </Link>
-                          </DrawerClose>
-                        </div>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
+                  {/* Peças - oculto até integração com sistema externo */}
+                  <AccordionItem
+                    value='pecas'
+                    className='hidden border-secondary-foreground/10'>
+                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
+                      <div className='flex items-center'>
+                        <Archive className='text-accent mr-2 size-5' />
+                        Peças
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className='pb-4'>
+                      <div className='space-y-2 pl-6'>
+                        {pecas.map((peca) => (
+                          <div
+                            key={peca.title}
+                            className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
+                            <DrawerClose asChild>
+                              <Link
+                                href={peca.href}
+                                target='_blank'
+                                className='flex w-full items-center'>
+                                {peca.title}
+                              </Link>
+                            </DrawerClose>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                {/* Projetos */}
-                <AccordionItem value='projetos' className='border-secondary-foreground/10'>
-                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                    <div className='flex items-center'>
-                      <Brain className='text-accent mr-2 size-5' />
-                      Projetos
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className='pb-4'>
-                    <div className='space-y-3 pl-6'>
-                      {projetos.map((projeto) => (
-                        <div
-                          key={projeto.title}
-                          className='hover:text-accent flex items-start py-3 text-secondary-foreground/70 transition-colors'>
-                          <DrawerClose asChild>
-                            <Link
-                              href={projeto.href}
-                              className='flex w-full items-start'>
-                              <div className='flex items-start'>
-                                {projeto.icon}
-                                <div className='font-medium'>
-                                  {projeto.title}
+                  {/* Projetos */}
+                  <AccordionItem
+                    value='projetos'
+                    className='border-secondary-foreground/10'>
+                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
+                      <div className='flex items-center'>
+                        <Brain className='text-accent mr-2 size-5' />
+                        Projetos
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className='pb-4'>
+                      <div className='space-y-3 pl-6'>
+                        {projetos.map((projeto) => (
+                          <div
+                            key={projeto.title}
+                            className='hover:text-accent flex items-start py-3 text-secondary-foreground/70 transition-colors'>
+                            <DrawerClose asChild>
+                              <Link
+                                href={projeto.href}
+                                className='flex w-full items-start'>
+                                <div className='flex items-start'>
+                                  {projeto.icon}
+                                  <div className='font-medium'>
+                                    {projeto.title}
+                                  </div>
                                 </div>
-                              </div>
-                            </Link>
-                          </DrawerClose>
-                        </div>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
+                              </Link>
+                            </DrawerClose>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
 
-                {/* Outros Serviços */}
-                <AccordionItem value='servicos' className='border-secondary-foreground/10'>
-                  <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                    <div className='flex items-center'>
-                      <Layers className='text-accent mr-2 size-5' />
-                      Outros Serviços
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className='pb-4'>
-                    <div className='space-y-2 pl-6'>
-                      {servicos.map((servico) => (
-                        <div
-                          key={servico.title}
-                          className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
-                          <DrawerClose asChild>
-                            <Link
-                              href={servico.href}
-                              className='flex w-full items-center'>
-                              {servico.title}
-                            </Link>
-                          </DrawerClose>
-                        </div>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+                  {/* Outros Serviços */}
+                  <AccordionItem
+                    value='servicos'
+                    className='border-secondary-foreground/10'>
+                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
+                      <div className='flex items-center'>
+                        <Layers className='text-accent mr-2 size-5' />
+                        Outros Serviços
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className='pb-4'>
+                      <div className='space-y-2 pl-6'>
+                        {servicos.map((servico) => (
+                          <div
+                            key={servico.title}
+                            className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
+                            <DrawerClose asChild>
+                              <Link
+                                href={servico.href}
+                                className='flex w-full items-center'>
+                                {servico.title}
+                              </Link>
+                            </DrawerClose>
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </BlurFade>
             </div>
-            <BlurFade delay={0.3} direction="up">
-            <DrawerFooter className='flex flex-row items-center justify-center gap-3'>
-              {socialLinks.map(({ href, Icon, label }) => (
-                <Link
-                  key={label}
-                  href={href}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label={label}
-                  className='rounded-xs border border-secondary-foreground/10 p-3 text-secondary-foreground/40 transition-all duration-300 hover:border-accent/30 hover:text-accent'>
-                  <Icon className='h-6 w-6' />
-                </Link>
-              ))}
-            </DrawerFooter>
+            <BlurFade delay={0.3} direction='up'>
+              <DrawerFooter className='flex flex-row items-center justify-center gap-3'>
+                {socialLinks.map(({ href, Icon, label }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label={label}
+                    className='rounded-xs border border-secondary-foreground/10 p-3 text-secondary-foreground/40 transition-all duration-300 hover:border-accent/30 hover:text-accent'>
+                    <Icon className='h-6 w-6' />
+                  </Link>
+                ))}
+              </DrawerFooter>
             </BlurFade>
           </DrawerContent>
         </Drawer>

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,17 +14,16 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from '@/components/layout/customNavigationMenu';
+import { categoriasCatalogo } from '@/lib/data/maquinas';
 import servicosPersonalizados from '@/lib/images/extras/cortador.jpg';
 import pecasImg from '@/lib/images/extras/pecas-producao.png';
 import maquinaImagem from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/tc-4s-204-360-3.png';
 import logoProfills from '@/public/logo-branco.png';
 
 import {
-  Archive,
   Brain,
   Calendar,
   Cloud,
-  Droplets,
   ExternalLink,
   Globe,
   GraduationCap,
@@ -152,32 +151,23 @@ export default function NavbarDesktop() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Máquinas</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className='flex h-full w-[350px] items-center justify-center gap-2'>
-                <div className='flex h-full w-1/2 flex-col gap-3'>
+              <div className='flex h-full w-[420px] items-center justify-center gap-2'>
+                <div className='flex h-full w-1/2 flex-col gap-1'>
                   <ListItem
-                    href='/maquinas?categoria=Envasadoras'
-                    title='Envasadoras'
+                    href='/maquinas'
+                    title='Todas as máquinas'
                     className='w-full'
-                    icon={<Droplets className='text-accent mr-2 size-6' />}
-                  />
-                  <ListItem
-                    href='/maquinas?categoria=Enfardadeiras'
-                    title='Enfardadeiras'
-                    className='w-full'
-                    icon={<Archive className='text-accent mr-2 size-6' />}
-                  />
-                  <ListItem
-                    href='/maquinas?categoria=Embaladoras'
-                    className='w-full'
-                    title='Embaladoras'
-                    icon={<Package className='text-accent mr-2 size-6' />}
-                  />
-                  <ListItem
-                    href='/maquinas?categoria=Envolvedoras'
-                    className='w-full'
-                    title='Envolvedoras'
                     icon={<Layers className='text-accent mr-2 size-6' />}
                   />
+                  {categoriasCatalogo.map((categoria) => (
+                    <ListItem
+                      key={categoria}
+                      href={`/maquinas?categoria=${encodeURIComponent(categoria)}`}
+                      title={categoria}
+                      className='w-full'
+                      icon={<Package className='text-accent mr-2 size-6' />}
+                    />
+                  ))}
                 </div>
                 <Image
                   src={maquinaImagem}
@@ -209,7 +199,8 @@ export default function NavbarDesktop() {
                         target='_blank'
                         rel='noopener noreferrer'
                         className='flex w-full items-center gap-1 text-left'>
-                        Resistência <ExternalLink className='size-3 opacity-50' />
+                        Resistência{' '}
+                        <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
@@ -227,7 +218,8 @@ export default function NavbarDesktop() {
                         target='_blank'
                         rel='noopener noreferrer'
                         className='flex w-full items-center gap-1 text-left'>
-                        Silenciadores <ExternalLink className='size-3 opacity-50' />
+                        Silenciadores{' '}
+                        <ExternalLink className='size-3 opacity-50' />
                       </Link>
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
