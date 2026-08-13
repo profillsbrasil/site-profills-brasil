@@ -4,15 +4,23 @@ function intersecao(a: string[], b: string[]) {
   return a.filter((x) => b.includes(x)).length;
 }
 
-function difRelativaCapacidade(a?: number, b?: number) {
-  if (!a || !b) return 0; // critério ignorado quando um lado não tem valor
-  return Math.abs(a - b) / Math.max(a, b);
+/** Comparação pairwise de capacidade: sem informação (algum lado ausente) → 0 (neutro). */
+function cmpCapacidade(
+  referencia: number | undefined,
+  a: number | undefined,
+  b: number | undefined
+) {
+  if (referencia == null || a == null || b == null) return 0;
+  const difA = Math.abs(a - referencia) / Math.max(a, referencia);
+  const difB = Math.abs(b - referencia) / Math.max(b, referencia);
+  return difA - difB;
 }
 
 /**
  * Algoritmo do spec §3.9: mesma categoria primeiro (ranking por embalagens em
- * comum, desempate por menor diferença relativa de capacidade); completa com
- * máquinas de outras categorias que compartilham embalagem.
+ * comum, desempate por menor diferença relativa de capacidade — ausência de
+ * capacidade em qualquer lado é neutra, preserva ordem do registry); completa
+ * com máquinas de outras categorias que compartilham embalagem.
  */
 export function getMaquinasRelacionadas(
   maquina: MaquinaCatalogo,
@@ -21,33 +29,34 @@ export function getMaquinasRelacionadas(
 ): MaquinaCatalogo[] {
   const candidatas = todas.filter((m) => m.slug !== maquina.slug);
 
-  const pontuar = (m: MaquinaCatalogo) => ({
-    maquina: m,
-    embalagens: intersecao(
-      m.embalagensCompativeis,
-      maquina.embalagensCompativeis
-    ),
-    capacidade: difRelativaCapacidade(
-      m.capacidadeMaxima,
-      maquina.capacidadeMaxima
-    )
-  });
-
-  const ordenar = (lista: ReturnType<typeof pontuar>[]) =>
+  const ordenar = (lista: MaquinaCatalogo[]) =>
     lista
+      .map((m, i) => ({
+        m,
+        i,
+        emb: intersecao(m.embalagensCompativeis, maquina.embalagensCompativeis)
+      }))
       .sort(
-        (a, b) => b.embalagens - a.embalagens || a.capacidade - b.capacidade
+        (a, b) =>
+          b.emb - a.emb ||
+          cmpCapacidade(
+            maquina.capacidadeMaxima,
+            a.m.capacidadeMaxima,
+            b.m.capacidadeMaxima
+          ) ||
+          a.i - b.i // estabilidade explícita: sem info, preserva ordem do registry
       )
-      .map((x) => x.maquina);
+      .map((x) => x.m);
 
   const mesmaCategoria = ordenar(
-    candidatas.filter((m) => m.categoria === maquina.categoria).map(pontuar)
+    candidatas.filter((m) => m.categoria === maquina.categoria)
   );
   const outras = ordenar(
-    candidatas
-      .filter((m) => m.categoria !== maquina.categoria)
-      .map(pontuar)
-      .filter((x) => x.embalagens > 0)
+    candidatas.filter(
+      (m) =>
+        m.categoria !== maquina.categoria &&
+        intersecao(m.embalagensCompativeis, maquina.embalagensCompativeis) > 0
+    )
   );
 
   return [...mesmaCategoria, ...outras].slice(0, limite);
