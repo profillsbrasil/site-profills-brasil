@@ -11,8 +11,41 @@ vi.mock('next/image', () => ({
 }));
 
 describe('Relacionadas', () => {
-  it('não renderiza nada quando o registry só tem a própria máquina (fase 0)', () => {
+  it('renderiza até 3 máquinas da mesma categoria para o piloto', () => {
     const { container } = render(<Relacionadas maquina={piloto} />);
+    const links = container.querySelectorAll('a');
+    expect(links.length).toBe(3);
+    // mesma categoria (Stand-up pouch), rankeadas por embalagem em comum + capacidade próxima
+    expect(screen.getByText('Linha Pouch')).toBeInTheDocument();
+    expect(screen.getByText('Linha Pouch Mini')).toBeInTheDocument();
+    expect(screen.getByText('Linha Pouch Compacta')).toBeInTheDocument();
+    // nunca lista a própria máquina
+    expect(
+      container.querySelector(`a[href='/maquinas/${piloto.slug}']`)
+    ).toBeNull();
+  });
+
+  it('não renderiza nada quando não há relacionadas (máquina isolada fake)', () => {
+    const isolada: MaquinaCatalogo = {
+      ...piloto,
+      slug: 'isolada-fake',
+      categoria: 'Fim de linha',
+      embalagensCompativeis: []
+    };
+    // 'Fim de linha' tem só a Envolvedora no registry — que compartilha 0
+    // embalagens com a isolada, mas é mesma categoria, então aparece.
+    // Para o caso genuinamente vazio: categoria sem NENHUMA outra máquina.
+    const sozinha: MaquinaCatalogo = {
+      ...isolada,
+      categoria: 'Embalagens rígidas e higienização' // só a Lavadora vive aqui
+    };
+    const { container } = render(
+      <Relacionadas
+        maquina={{ ...sozinha, slug: 'maquina-lavagem-galoes' }}
+      />
+    );
+    // a Lavadora é a única da categoria e é "ela mesma" (slug igual) e não há
+    // interseção de embalagens com outras categorias → bloco some por completo
     expect(container.innerHTML).toBe('');
   });
 
@@ -31,9 +64,8 @@ describe('Relacionadas', () => {
 
     it('não aparece no grid de relacionadas', () => {
       maquinasCatalogo.push(semFoto);
-      const { container } = render(<Relacionadas maquina={piloto} />);
+      render(<Relacionadas maquina={piloto} />);
       expect(screen.queryByText('Máquina Sem Foto')).toBeNull();
-      expect(container.innerHTML).toBe('');
     });
   });
 });

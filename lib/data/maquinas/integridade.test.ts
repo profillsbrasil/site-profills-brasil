@@ -51,9 +51,22 @@ describe('integridade do registry de máquinas', () => {
     }
   });
 
-  it.todo(
-    'cobertura total: ids 1-17 e 19-33 redirecionam para slugs existentes no registry'
-  );
+  it('cobertura total: ids 1-17 e 19-33 redirecionam para slugs existentes no registry', () => {
+    const idsEsperados = [
+      ...Array.from({ length: 17 }, (_, i) => i + 1),
+      ...Array.from({ length: 15 }, (_, i) => i + 19)
+    ];
+    for (const id of idsEsperados) {
+      const redirect = maquinaRedirects.find((r) => r.legacyId === id);
+      expect(redirect, `id ${id} sem redirect`).toBeDefined();
+      expect(
+        getMaquinaBySlug(redirect!.slug),
+        `destino do id ${id} (${redirect!.slug}) não existe no registry`
+      ).toBeDefined();
+    }
+    // id 18 (Doypack removida) não tem entrada — vai direto para /maquinas no next.config
+    expect(maquinaRedirects.some((r) => r.legacyId === 18)).toBe(false);
+  });
 
   it('getMaquinaBySlug resolve o piloto e rejeita slug inválido', () => {
     expect(getMaquinaBySlug('envasadora-stand-up-pouch-speed')?.nome).toBe(
