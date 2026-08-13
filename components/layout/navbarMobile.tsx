@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ICONE_CATEGORIA } from '@/components/layout/iconesCategorias';
 import {
   Accordion,
   AccordionContent,
@@ -103,11 +104,14 @@ const maquinas = [
     href: '/maquinas',
     icon: <Layers className='text-accent mr-2 size-5' />
   },
-  ...categoriasCatalogo.map((categoria) => ({
-    title: categoria,
-    href: `/maquinas?categoria=${encodeURIComponent(categoria)}`,
-    icon: <Package className='text-accent mr-2 size-5' />
-  }))
+  ...categoriasCatalogo.map((categoria) => {
+    const Icone = ICONE_CATEGORIA[categoria];
+    return {
+      title: categoria,
+      href: `/maquinas?categoria=${encodeURIComponent(categoria)}`,
+      icon: <Icone className='text-accent mr-2 size-5' />
+    };
+  })
 ];
 
 const pecas = [

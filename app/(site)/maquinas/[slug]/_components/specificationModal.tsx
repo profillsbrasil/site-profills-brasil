@@ -233,7 +233,7 @@ export default function SpecificationModal({
             <Button
               type='submit'
               disabled={isSubmitting}
-              className='bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50'>
+              className='bg-accent hover:bg-accent/85 text-white disabled:opacity-50'>
               {isSubmitting ? 'Enviando...' : 'Enviar solicitação'}
             </Button>
           </div>

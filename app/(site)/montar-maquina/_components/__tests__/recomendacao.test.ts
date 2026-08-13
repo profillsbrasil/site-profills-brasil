@@ -22,7 +22,10 @@ describe('getBestMachineRecommendation', () => {
     { embalagem: 'garrafa', produto: 'liquidos', embalagemEsperada: 'Garrafa' },
     { embalagem: 'frasco', produto: 'liquidos', embalagemEsperada: 'Frasco' },
     { embalagem: 'fardo', produto: 'solido', embalagemEsperada: 'Fardo' },
-    { embalagem: 'pote', produto: 'pastoso', embalagemEsperada: 'Pote' }
+    { embalagem: 'pote', produto: 'pastoso', embalagemEsperada: 'Pote' },
+    // cobre os 2 tipos de produto que faltavam no vocabulário da UI
+    { embalagem: 'pouch', produto: 'viscoso', embalagemEsperada: 'Pouch' },
+    { embalagem: 'sache', produto: 'granular', embalagemEsperada: 'Sachê' }
   ];
 
   it.each(casos)(

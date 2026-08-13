@@ -14,6 +14,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from '@/components/layout/customNavigationMenu';
+import { ICONE_CATEGORIA } from '@/components/layout/iconesCategorias';
 import { categoriasCatalogo } from '@/lib/data/maquinas';
 import servicosPersonalizados from '@/lib/images/extras/cortador.jpg';
 import pecasImg from '@/lib/images/extras/pecas-producao.png';
@@ -159,15 +160,18 @@ export default function NavbarDesktop() {
                     className='w-full'
                     icon={<Layers className='text-accent mr-2 size-6' />}
                   />
-                  {categoriasCatalogo.map((categoria) => (
-                    <ListItem
-                      key={categoria}
-                      href={`/maquinas?categoria=${encodeURIComponent(categoria)}`}
-                      title={categoria}
-                      className='w-full'
-                      icon={<Package className='text-accent mr-2 size-6' />}
-                    />
-                  ))}
+                  {categoriasCatalogo.map((categoria) => {
+                    const Icone = ICONE_CATEGORIA[categoria];
+                    return (
+                      <ListItem
+                        key={categoria}
+                        href={`/maquinas?categoria=${encodeURIComponent(categoria)}`}
+                        title={categoria}
+                        className='w-full'
+                        icon={<Icone className='text-accent mr-2 size-6' />}
+                      />
+                    );
+                  })}
                 </div>
                 <Image
                   src={maquinaImagem}

@@ -83,11 +83,14 @@ export default function MaquinaCard({
             />
           </>
         ) : (
-          // Máquinas de engenharia não têm foto de catálogo: miolo sólido
-          // com o nome centralizado no lugar das imagens.
-          <div className='flex h-full w-full items-center justify-center rounded-t-xs bg-slate-900/60'>
-            <span className='px-4 text-center text-sm font-semibold text-white md:text-base'>
-              {maquina.nome}
+          // Máquinas de engenharia não têm foto de catálogo: miolo sólido com
+          // rótulo técnico (o nome já aparece no rodapé do card).
+          <div className='flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xs bg-slate-900/60'>
+            <span className='text-accent font-mono text-2xl'>+</span>
+            <span className='text-muted-foreground/70 px-4 text-center font-mono text-[11px] tracking-[0.2em] uppercase'>
+              Solução de engenharia
+              <br />
+              sob projeto
             </span>
           </div>
         )}
