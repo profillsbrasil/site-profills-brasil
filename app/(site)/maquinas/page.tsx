@@ -7,14 +7,11 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Button } from '@/components/ui/button';
 import { TextAnimate } from '@/components/ui/text-animate';
+import { categoriasCatalogo, maquinasCatalogo } from '@/lib/data/maquinas';
+import { tiposEmbalagem } from '@/lib/data/maquinas/tipos-embalagem';
 import { cn } from '@/lib/utils';
 
 import CardMaquina from './_components/cardMaquinas/cardMaquina';
-import {
-  categorias,
-  maquinasData,
-  tiposEmbalagem
-} from './_components/cardMaquinas/maquinasData';
 
 /* Chip de filtro da Prancheta Industrial: tracejado em repouso,
    sólido accent quando ativo (mesma gramática das setas do hero) */
@@ -59,7 +56,9 @@ function MaquinasContent() {
 
     if (
       categoriaFromUrl &&
-      categorias.includes(categoriaFromUrl as (typeof categorias)[number])
+      categoriasCatalogo.includes(
+        categoriaFromUrl as (typeof categoriasCatalogo)[number]
+      )
     ) {
       setCategoriaFiltro(categoriaFromUrl);
     }
@@ -87,7 +86,7 @@ function MaquinasContent() {
   }, [categoriaFiltro, embalagemFiltro]);
 
   const maquinasFiltradas = useMemo(() => {
-    return maquinasData.filter((maquina) => {
+    return maquinasCatalogo.filter((maquina) => {
       const categoriaPassa =
         categoriaFiltro === 'Todas' || maquina.categoria === categoriaFiltro;
       const embalagemPassa =
@@ -102,7 +101,7 @@ function MaquinasContent() {
   const tiposVisiveis = useMemo(() => {
     if (categoriaFiltro === 'Todas') return tiposEmbalagem;
     const set = new Set<string>();
-    maquinasData.forEach((m) => {
+    maquinasCatalogo.forEach((m) => {
       if (m.categoria === categoriaFiltro) {
         m.embalagensCompativeis.forEach((e) => set.add(e));
       }
@@ -136,7 +135,7 @@ function MaquinasContent() {
           className={chipFiltro(categoriaFiltro === 'Todas')}>
           Todas
         </Button>
-        {categorias.map((categoria) => (
+        {categoriasCatalogo.map((categoria) => (
           <Button
             key={categoria}
             variant='ghost'
@@ -165,7 +164,7 @@ function MaquinasContent() {
             )}>
             Todas
           </Button>
-          {categorias.map((categoria) => (
+          {categoriasCatalogo.map((categoria) => (
             <Button
               key={categoria}
               variant='ghost'
