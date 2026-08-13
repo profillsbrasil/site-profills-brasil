@@ -30,6 +30,13 @@ describe('FichaTecnica', () => {
     ).toBeInTheDocument();
   });
 
+  it('renderiza a nota de validação técnica de engenharia', () => {
+    render(<FichaTecnica maquina={piloto} />);
+    expect(
+      screen.getByText(/sujeitas a validação técnica de engenharia/)
+    ).toBeInTheDocument();
+  });
+
   it('não renderiza linha para campo ausente (arrays curtos não quebram)', () => {
     render(
       <FichaTecnica

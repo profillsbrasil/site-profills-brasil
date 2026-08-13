@@ -38,4 +38,30 @@ describe('HeroDossie', () => {
     );
     expect(container.querySelector('[data-ticker]')).toBeNull();
   });
+
+  it('renderiza o disclaimer de capacidade junto do ticker quando capacidadeMaxima existe', () => {
+    render(<HeroDossie maquina={piloto} />);
+    expect(
+      screen.getByText(
+        /A produção varia conforme produto, volume, embalagem e configuração do projeto/
+      )
+    ).toBeInTheDocument();
+  });
+
+  it('não renderiza o disclaimer de capacidade quando capacidadeMaxima é undefined', () => {
+    render(<HeroDossie maquina={{ ...piloto, capacidadeMaxima: undefined }} />);
+    expect(
+      screen.queryByText(
+        /A produção varia conforme produto, volume, embalagem e configuração do projeto/
+      )
+    ).toBeNull();
+  });
+
+  it('usa a linha dedicada de ticker no fallback specsMaquina, sem duplicar "Capacidade de produção"', () => {
+    const { container } = render(
+      <HeroDossie maquina={{ ...piloto, destaqueHero: undefined }} />
+    );
+    expect(container.querySelector('[data-ticker]')).not.toBeNull();
+    expect(screen.queryByText('Capacidade de produção')).toBeNull();
+  });
 });

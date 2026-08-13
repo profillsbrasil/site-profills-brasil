@@ -68,7 +68,8 @@ export function FichaTecnica({ maquina }: { maquina: MaquinaCatalogo }) {
 
         <p className='text-muted-foreground/50 mt-3 text-xs italic'>
           Valores máximos de referência. A produção varia conforme produto,
-          volume, embalagem e configuração do projeto.
+          volume, embalagem e configuração do projeto. Especificações sujeitas a
+          validação técnica de engenharia.
         </p>
       </AnimatedContainer>
     </section>

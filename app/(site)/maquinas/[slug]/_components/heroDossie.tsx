@@ -25,7 +25,12 @@ interface HeroDossieProps {
 }
 
 export function HeroDossie({ maquina, children }: HeroDossieProps) {
-  const linhas = maquina.destaqueHero ?? maquina.specsMaquina.slice(0, 3);
+  const linhasBase = maquina.destaqueHero ?? maquina.specsMaquina.slice(0, 3);
+  const capacidadeMaxima = maquina.capacidadeMaxima;
+  const temTicker = capacidadeMaxima != null;
+  const linhas = temTicker
+    ? linhasBase.filter((l) => !l.rotulo.startsWith('Capacidade')).slice(0, 2)
+    : linhasBase;
 
   return (
     <AnimatedContainer trigger='mount' className='pt-8 md:pt-12'>
@@ -52,6 +57,24 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
             </p>
 
             <dl className='mt-5 w-full max-w-sm font-mono'>
+              {temTicker && (
+                <div className='flex items-baseline justify-between gap-4 border-b border-[rgba(148,178,235,0.15)] py-2 last:border-0'>
+                  <dt className='text-muted-foreground/70 text-[11px] tracking-wider uppercase'>
+                    Capacidade
+                  </dt>
+                  <dd className='text-right text-sm font-semibold text-white'>
+                    <span data-ticker>
+                      até{' '}
+                      <NumberTicker
+                        value={capacidadeMaxima}
+                        startValue={Math.floor(capacidadeMaxima * 0.5)}
+                        className='font-semibold text-white'
+                      />{' '}
+                      un/h
+                    </span>
+                  </dd>
+                </div>
+              )}
               {linhas.map((item) => (
                 <div
                   key={item.rotulo}
@@ -60,26 +83,18 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
                     {item.rotulo}
                   </dt>
                   <dd className='text-right text-sm font-semibold text-white'>
-                    {item.rotulo === 'Capacidade' &&
-                    maquina.capacidadeMaxima ? (
-                      <span data-ticker>
-                        até{' '}
-                        <NumberTicker
-                          value={maquina.capacidadeMaxima}
-                          startValue={Math.floor(
-                            maquina.capacidadeMaxima * 0.5
-                          )}
-                          className='font-semibold text-white'
-                        />{' '}
-                        un/h
-                      </span>
-                    ) : (
-                      item.valor
-                    )}
+                    {item.valor}
                   </dd>
                 </div>
               ))}
             </dl>
+
+            {temTicker && (
+              <p className='text-muted-foreground/50 mt-2 max-w-sm font-mono text-[10px] italic'>
+                A produção varia conforme produto, volume, embalagem e
+                configuração do projeto.
+              </p>
+            )}
 
             <div className='mt-6 flex flex-wrap gap-3'>{children}</div>
           </div>
