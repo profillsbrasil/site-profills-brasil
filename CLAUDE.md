@@ -43,21 +43,21 @@ docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
 
 ## Onde colocar cada coisa
 
-| Vou adicionar…             | Vai em…                                                                                                        |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Componente shadcn          | `bunx shadcn@latest add <nome>` → `components/ui/`                                                              |
-| Componente Magic UI        | `bunx shadcn@latest add @magicui/<nome>` → `components/magicui/`                                                |
-| Componente de uma rota só  | `app/(site)/<rota>/_components/` (forms complexos ganham subpasta com `components/` interno)                    |
-| Componente reutilizável    | Wrapper genérico → `components/` raiz (padrão: `AnimatedContainer`) · bloco composto → `blocks/` · casca → `layout/` |
-| Imagem usada em componente | `lib/images/<categoria>/` + import estático (`import img from '@/lib/images/...'`) — nunca string de path. Exceções legadas em `public/images/` (`gt3000.png`) |
-| Imagem/asset com URL fixa  | `public/` (og-image, favicon, logo referenciado por URL)                                                        |
-| Vídeo                      | `public/videos/`. Padrão de referência (hero): trio webm + mp4 + poster webp, `preload='metadata'`. Há exceção legada com mp4 único (`servico-personalizado.mp4`) |
+| Vou adicionar…             | Vai em…                                                                                                                                                                |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Componente shadcn          | `bunx shadcn@latest add <nome>` → `components/ui/`                                                                                                                     |
+| Componente Magic UI        | `bunx shadcn@latest add @magicui/<nome>` → `components/magicui/`                                                                                                       |
+| Componente de uma rota só  | `app/(site)/<rota>/_components/` (forms complexos ganham subpasta com `components/` interno)                                                                           |
+| Componente reutilizável    | Wrapper genérico → `components/` raiz (padrão: `AnimatedContainer`) · bloco composto → `blocks/` · casca → `layout/`                                                   |
+| Imagem usada em componente | `lib/images/<categoria>/` + import estático (`import img from '@/lib/images/...'`) — nunca string de path. Exceções legadas em `public/images/` (`gt3000.png`)         |
+| Imagem/asset com URL fixa  | `public/` (og-image, favicon, logo referenciado por URL)                                                                                                               |
+| Vídeo                      | `public/videos/`. Padrão de referência (hero): trio webm + mp4 + poster webp, `preload='metadata'`. Há exceção legada com mp4 único (`servico-personalizado.mp4`)      |
 | Modelo 3D                  | `public/embalagens-3d/*.glb`, < 2MB (exceção legada: `caixa-teste-3d.glb` na raiz de `public/`) — renderizar via `components/modelo3d/`, nunca `<model-viewer>` direto |
-| Texto/copy de página       | Hardcoded no componente da rota (arrays `const` no topo); listas grandes → `lib/data/`                          |
-| Formulário novo            | Schema zod em `lib/schemas/` + `app/api/<nome>/route.ts` + template em `lib/emails/<nome>/` (usar `_shared/`)   |
-| Util/helper                | `lib/utils/` com teste `.test.ts` ao lado                                                                       |
-| Tipos globais/declarações  | `types/*.d.ts`                                                                                                  |
-| Arquivo para download      | Público → `public/`; controlado → `private/downloads/` + token (`lib/utils/jwt-catalog.ts`)                     |
+| Texto/copy de página       | Hardcoded no componente da rota (arrays `const` no topo); listas grandes → `lib/data/`                                                                                 |
+| Formulário novo            | Schema zod em `lib/schemas/` + `app/api/<nome>/route.ts` + template em `lib/emails/<nome>/` (usar `_shared/`)                                                          |
+| Util/helper                | `lib/utils/` com teste `.test.ts` ao lado                                                                                                                              |
+| Tipos globais/declarações  | `types/*.d.ts`                                                                                                                                                         |
+| Arquivo para download      | Público → `public/`; controlado → `private/downloads/` + token (`lib/utils/jwt-catalog.ts`)                                                                            |
 
 Testes vivem sempre ao lado do código (`*.test.tsx` ou `__tests__/`).
 
@@ -88,5 +88,6 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 - Sem `.env` local, as rotas de e-mail/download falham — não é bug do seu código; ver `.env.example`.
 - Grid pattern de fundo: a implementação viva é `components/layout/gridPatternBg(Mobile).tsx` (usada em ~20 rotas). As variantes em `components/` raiz e `magicui/` (`grid-pattern`, `animated-grid-pattern`, `interactive-grid-pattern`) são código morto — candidatas a remoção, não usar.
 - `text-animate` existe em `ui/` e `magicui/` — verificar qual variante a rota vizinha já usa antes de importar.
+- Testes que renderizam carrossel **embla** precisam de stubs `matchMedia`/`ResizeObserver` no arquivo de teste (pattern sancionado em `cardsGridMaquinas.test.tsx`); componentes portaled do vaul (`DrawerContent`) precisam da classe `tema-navy` explícita — o portal escapa do escopo do tema.
 - Tema é light-mode único com seções dark (`bg-secondary`) — não há toggle dark/light.
 - Conteúdo do site é em pt-BR.
