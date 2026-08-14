@@ -43,19 +43,19 @@ export function AplicacoesProdutos({
           </p>
         </div>
 
-        <div className='flex flex-wrap gap-2 md:w-1/2 md:justify-end'>
+        <div className='flex flex-wrap gap-3 md:w-1/2 md:justify-end'>
           {aplicacoes.categorias.map((cat) => {
             const info = categoriasProdutoInfo[cat];
             return (
               <figure
                 key={cat}
-                className='relative w-[92px] overflow-hidden rounded-md border border-[rgba(148,178,235,0.2)]'>
+                className='relative w-32 overflow-hidden rounded-md border border-[rgba(148,178,235,0.2)] md:w-[136px]'>
                 <Image
                   src={info.img}
                   alt={`Categoria ${info.rotulo}`}
                   className='aspect-square w-full object-cover'
                 />
-                <figcaption className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(3,8,20,0.92)] to-transparent px-2 pt-4 pb-1 text-[9px] font-semibold tracking-wider text-white uppercase'>
+                <figcaption className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(3,8,20,0.92)] to-transparent px-2.5 pt-5 pb-1.5 text-[11px] font-semibold tracking-wider text-white uppercase'>
                   {info.rotulo}
                 </figcaption>
               </figure>
