@@ -15,10 +15,10 @@ import {
   NavigationMenuTrigger
 } from '@/components/layout/customNavigationMenu';
 import { ICONE_CATEGORIA } from '@/components/layout/iconesCategorias';
-import { categoriasCatalogo } from '@/lib/data/maquinas';
+import { categoriasCatalogo, maquinasCatalogo } from '@/lib/data/maquinas';
+import type { CategoriaCatalogo } from '@/lib/data/maquinas';
 import servicosPersonalizados from '@/lib/images/extras/cortador.jpg';
 import pecasImg from '@/lib/images/extras/pecas-producao.png';
-import maquinaImagem from '@/lib/images/novasImagens/maquinasEmbalagens/maquinas/tc-4s-204-360-3.png';
 import logoProfills from '@/public/logo-branco.png';
 
 import {
@@ -31,7 +31,6 @@ import {
   Landmark,
   Layers,
   Leaf,
-  Package,
   Store
 } from 'lucide-react';
 
@@ -94,8 +93,24 @@ const projetos: {
   }
 ];
 
+/* Vitrine do popout de Máquinas: primeira máquina com foto da categoria
+   (ordem do registry). Categoria só de engenharia (sem fotos) retorna
+   undefined — a vitrine mostra o placeholder, nunca máquina de outra
+   categoria. */
+function maquinaVitrine(categoria: CategoriaCatalogo | null) {
+  return maquinasCatalogo.find(
+    (m) => m.imagens && (categoria === null || m.categoria === categoria)
+  );
+}
+
 export default function NavbarDesktop() {
   const [scrolled, setScrolled] = useState(false);
+  const [categoriaVitrine, setCategoriaVitrine] =
+    useState<CategoriaCatalogo | null>(null);
+  const vitrine = maquinaVitrine(categoriaVitrine);
+  const subtituloVitrine = vitrine
+    ? (vitrine.nomeCompleto.split(' - ')[1] ?? vitrine.categoria)
+    : '';
 
   useEffect(() => {
     let ticking = false;
@@ -152,13 +167,19 @@ export default function NavbarDesktop() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Máquinas</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className='flex h-full w-[420px] items-center justify-center gap-2'>
-                <div className='flex h-full w-1/2 flex-col gap-1'>
+              <div className='flex w-[640px] gap-3'>
+                <div className='flex min-w-0 flex-1 flex-col gap-1 whitespace-nowrap'>
                   <ListItem
                     href='/maquinas'
                     title='Todas as máquinas'
                     className='w-full'
                     icon={<Layers className='text-accent mr-2 size-6' />}
+                    onMouseEnter={() => setCategoriaVitrine(null)}
+                    onFocus={() => setCategoriaVitrine(null)}
+                  />
+                  <div
+                    aria-hidden
+                    className='my-1 border-t border-dashed border-[rgba(148,178,235,0.22)]'
                   />
                   {categoriasCatalogo.map((categoria) => {
                     const Icone = ICONE_CATEGORIA[categoria];
@@ -169,16 +190,51 @@ export default function NavbarDesktop() {
                         title={categoria}
                         className='w-full'
                         icon={<Icone className='text-accent mr-2 size-6' />}
+                        onMouseEnter={() => setCategoriaVitrine(categoria)}
+                        onFocus={() => setCategoriaVitrine(categoria)}
                       />
                     );
                   })}
                 </div>
-                <Image
-                  src={maquinaImagem}
-                  loading='eager'
-                  alt='Máquina de embalagem cartonada'
-                  className='mt-5 h-full w-1/2 scale-130 object-contain'
-                />
+                <div className='relative flex w-[250px] shrink-0 flex-col rounded-xs border border-dashed border-[rgba(148,178,235,0.3)]'>
+                  <span
+                    aria-hidden
+                    className='border-accent absolute -top-px -left-px z-10 h-2 w-2 border-t border-l'
+                  />
+                  <span
+                    aria-hidden
+                    className='border-accent absolute -right-px -bottom-px z-10 h-2 w-2 border-r border-b'
+                  />
+                  {vitrine?.imagens ? (
+                    <div
+                      key={vitrine.slug}
+                      className='animate-in fade-in flex min-h-0 flex-1 flex-col duration-200 motion-reduce:animate-none'>
+                      <Image
+                        src={vitrine.imagens.maquina}
+                        alt={vitrine.nome}
+                        loading='eager'
+                        className='min-h-0 w-full flex-1 object-contain p-3'
+                      />
+                      <div className='border-t border-dashed border-[rgba(148,178,235,0.22)] bg-slate-900/60 px-3 py-2'>
+                        <p className='text-sm font-bold text-white'>
+                          {vitrine.nome}
+                        </p>
+                        <p className='text-muted-foreground/70 font-mono text-[10px] tracking-wider uppercase'>
+                          {subtituloVitrine}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='animate-in fade-in flex min-h-0 flex-1 flex-col items-center justify-center gap-2 rounded-xs bg-slate-900/60 p-4 duration-200 motion-reduce:animate-none'>
+                      <span className='text-accent font-mono text-2xl'>+</span>
+                      <span className='text-muted-foreground/70 px-2 text-center font-mono text-[11px] tracking-[0.2em] uppercase'>
+                        Solução de engenharia
+                        <br />
+                        sob projeto
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
