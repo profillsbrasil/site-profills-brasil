@@ -25,7 +25,9 @@ describe('listagem de máquinas no registry', () => {
 
   it('filtro por categoria "Stand-up pouch" mostra só as máquinas dessa categoria', () => {
     const { container } = render(<Maquinas />);
-    const [botao] = screen.getAllByRole('button', { name: 'Stand-up pouch' });
+    const [botao] = screen.getAllByRole('button', {
+      name: /^Stand-up pouch/
+    });
     fireEvent.click(botao);
 
     const esperado = maquinasCatalogo.filter(
@@ -53,6 +55,21 @@ describe('listagem de máquinas no registry', () => {
       within(link as HTMLElement).queryAllByText(semImagem!.nome).length
     ).toBeGreaterThan(0);
     expect(link!.querySelectorAll('img').length).toBe(0);
+  });
+
+  it('busca por texto filtra por nome ignorando acento e caixa', () => {
+    const { container } = render(<Maquinas />);
+    const [campo] = screen.getAllByRole('textbox', {
+      name: 'Buscar máquina'
+    });
+    fireEvent.change(campo, { target: { value: 'POUCH' } });
+
+    const esperado = maquinasCatalogo.filter((m) =>
+      `${m.nome} ${m.nomeCompleto}`.toLowerCase().includes('pouch')
+    );
+    expect(esperado.length).toBeGreaterThan(0);
+    const links = container.querySelectorAll('a[href^="/maquinas/"]');
+    expect(links.length).toBe(esperado.length);
   });
 
   it('cada card linka para /maquinas/<slug>', () => {

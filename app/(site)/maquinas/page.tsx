@@ -6,22 +6,21 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Button } from '@/components/ui/button';
-import { TextAnimate } from '@/components/ui/text-animate';
 import { categoriasCatalogo, maquinasCatalogo } from '@/lib/data/maquinas';
 import { tiposEmbalagem } from '@/lib/data/maquinas/tipos-embalagem';
 import { cn } from '@/lib/utils';
 
 import CardMaquina from './_components/cardMaquinas/cardMaquina';
+import {
+  FiltrosMobile,
+  FiltrosSidebar,
+  chipFiltro
+} from './_components/filtrosSidebar';
 
-/* Chip de filtro da Prancheta Industrial: tracejado em repouso,
-   sólido accent quando ativo (mesma gramática das setas do hero) */
-function chipFiltro(ativo: boolean) {
-  return cn(
-    'z-11 rounded-xs border text-xs transition-colors md:text-sm',
-    ativo
-      ? 'border-solid border-accent bg-accent/15 text-white hover:bg-accent/20'
-      : 'text-muted-foreground border-dashed border-[rgba(148,178,235,0.3)] bg-transparent hover:border-solid hover:border-accent hover:bg-accent/10 hover:text-white'
-  );
+/* Busca sem cerimônia: ignora acento e caixa (NFD separa os diacríticos,
+   a faixa U+0300–U+036F os remove) */
+function normalizar(texto: string) {
+  return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
 function MaquinasContent() {
@@ -30,9 +29,10 @@ function MaquinasContent() {
   const pathname = usePathname();
   const [categoriaFiltro, setCategoriaFiltro] = useState<string>('Todas');
   const [embalagemFiltro, setEmbalagemFiltro] = useState<string>('Todas');
+  const [busca, setBusca] = useState<string>('');
 
   // Função para atualizar a URL com os filtros
-  const updateUrl = (categoria: string, embalagem: string) => {
+  const updateUrl = (categoria: string, embalagem: string, q: string) => {
     const params = new URLSearchParams();
 
     if (categoria !== 'Todas') {
@@ -41,6 +41,10 @@ function MaquinasContent() {
 
     if (embalagem !== 'Todas') {
       params.set('embalagem', embalagem);
+    }
+
+    if (q.trim() !== '') {
+      params.set('q', q.trim());
     }
 
     const queryString = params.toString();
@@ -53,6 +57,7 @@ function MaquinasContent() {
   useEffect(() => {
     const categoriaFromUrl = searchParams.get('categoria');
     const embalagemFromUrl = searchParams.get('embalagem');
+    const buscaFromUrl = searchParams.get('q');
 
     if (
       categoriaFromUrl &&
@@ -71,7 +76,21 @@ function MaquinasContent() {
     ) {
       setEmbalagemFiltro(embalagemFromUrl);
     }
+
+    if (buscaFromUrl) {
+      setBusca(buscaFromUrl);
+    }
   }, [searchParams]);
+
+  // Digitação atualiza a listagem na hora; a URL só depois de uma pausa,
+  // para o replace do router não rodar a cada tecla
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateUrl(categoriaFiltro, embalagemFiltro, busca);
+    }, 300);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [busca]);
 
   // Estado para controlar se os filtros foram aplicados da URL
   const [filtersApplied, setFiltersApplied] = useState(false);
@@ -85,6 +104,8 @@ function MaquinasContent() {
     return () => clearTimeout(timer);
   }, [categoriaFiltro, embalagemFiltro]);
 
+  const termoBusca = normalizar(busca.trim());
+
   const maquinasFiltradas = useMemo(() => {
     return maquinasCatalogo.filter((maquina) => {
       const categoriaPassa =
@@ -92,10 +113,15 @@ function MaquinasContent() {
       const embalagemPassa =
         embalagemFiltro === 'Todas' ||
         maquina.embalagensCompativeis.includes(embalagemFiltro);
+      const buscaPassa =
+        termoBusca === '' ||
+        normalizar(`${maquina.nome} ${maquina.nomeCompleto}`).includes(
+          termoBusca
+        );
 
-      return categoriaPassa && embalagemPassa;
+      return categoriaPassa && embalagemPassa && buscaPassa;
     });
-  }, [categoriaFiltro, embalagemFiltro]);
+  }, [categoriaFiltro, embalagemFiltro, termoBusca]);
 
   // Tipos de embalagem dinâmicos com base nas máquinas filtradas por categoria
   const tiposVisiveis = useMemo(() => {
@@ -111,120 +137,93 @@ function MaquinasContent() {
     return tiposEmbalagem.filter((t) => lista.includes(t));
   }, [categoriaFiltro]);
 
-  return (
-    <div className='tema-navy bg-background text-foreground relative flex min-h-screen w-full flex-col items-center justify-center py-10'>
-      <GridPattern />
-      <TextAnimate
-        animation='blurInUp'
-        by='word'
-        as='h1'
-        once
-        startOnView
-        className='z-10 pt-20 pb-4 text-2xl font-bold text-white md:pt-24 md:text-3xl'>
-        Nossas Máquinas
-      </TextAnimate>
-      {/* Navegação superior - visível em desktop */}
-      <div className='bg-background sticky top-16 left-0 z-20 hidden h-14 w-full items-center justify-center gap-3 py-2 md:flex'>
-        <GridPattern />
-        <Button
-          variant='ghost'
-          onClick={() => {
-            setCategoriaFiltro('Todas');
-            updateUrl('Todas', embalagemFiltro);
-          }}
-          className={chipFiltro(categoriaFiltro === 'Todas')}>
-          Todas
-        </Button>
-        {categoriasCatalogo.map((categoria) => (
-          <Button
-            key={categoria}
-            variant='ghost'
-            onClick={() => {
-              setCategoriaFiltro(categoria);
-              updateUrl(categoria, embalagemFiltro);
-            }}
-            className={chipFiltro(categoriaFiltro === categoria)}>
-            {categoria}
-          </Button>
-        ))}
-      </div>
+  // Contagem por categoria = o que o clique produz: interseção com a
+  // embalagem ativa e a busca; se a embalagem for totalmente incompatível
+  // com a categoria, o clique a reseta (aplicarCategoria) — a busca nunca
+  // reseta, então sempre entra na conta
+  const contagemPorCategoria = useMemo(() => {
+    const passaEmbalagem = (m: (typeof maquinasCatalogo)[number]) =>
+      embalagemFiltro === 'Todas' ||
+      m.embalagensCompativeis.includes(embalagemFiltro);
+    const passaBusca = (m: (typeof maquinasCatalogo)[number]) =>
+      termoBusca === '' ||
+      normalizar(`${m.nome} ${m.nomeCompleto}`).includes(termoBusca);
+    const contagem: Record<string, number> = {
+      Todas: maquinasCatalogo.filter((m) => passaEmbalagem(m) && passaBusca(m))
+        .length
+    };
+    for (const categoria of categoriasCatalogo) {
+      const daCategoria = maquinasCatalogo.filter(
+        (m) => m.categoria === categoria
+      );
+      const embalagemMantida =
+        embalagemFiltro === 'Todas' || daCategoria.some(passaEmbalagem);
+      contagem[categoria] = daCategoria.filter(
+        (m) => (!embalagemMantida || passaEmbalagem(m)) && passaBusca(m)
+      ).length;
+    }
+    return contagem;
+  }, [embalagemFiltro, termoBusca]);
 
-      {/* Scroll horizontal mobile - apenas tipos de máquinas */}
-      <div className='scrollbar-hide bg-background sticky top-16 left-0 z-20 w-full px-4 py-2 md:hidden'>
-        <div className='scrollbar-hide flex gap-3 overflow-x-auto'>
-          <Button
-            variant='ghost'
-            onClick={() => {
-              setCategoriaFiltro('Todas');
-              updateUrl('Todas', embalagemFiltro);
-            }}
-            className={cn(
-              'flex-shrink-0 whitespace-nowrap',
-              chipFiltro(categoriaFiltro === 'Todas')
-            )}>
-            Todas
-          </Button>
-          {categoriasCatalogo.map((categoria) => (
-            <Button
-              key={categoria}
-              variant='ghost'
-              onClick={() => {
-                setCategoriaFiltro(categoria);
-                updateUrl(categoria, embalagemFiltro);
-              }}
-              className={cn(
-                'flex-shrink-0 whitespace-nowrap',
-                chipFiltro(categoriaFiltro === categoria)
-              )}>
-              {categoria}
-            </Button>
-          ))}
-        </div>
-      </div>
+  // Trocar de categoria descarta embalagem incompatível com a nova categoria
+  // (antes ela ficava ativa e invisível, zerando a listagem sem explicação)
+  const aplicarCategoria = (categoria: string) => {
+    const tiposDaCategoria =
+      categoria === 'Todas'
+        ? tiposEmbalagem
+        : tiposEmbalagem.filter((t) =>
+            maquinasCatalogo.some(
+              (m) =>
+                m.categoria === categoria && m.embalagensCompativeis.includes(t)
+            )
+          );
+    const embalagem = tiposDaCategoria.includes(
+      embalagemFiltro as (typeof tiposEmbalagem)[number]
+    )
+      ? embalagemFiltro
+      : 'Todas';
+    setCategoriaFiltro(categoria);
+    setEmbalagemFiltro(embalagem);
+    updateUrl(categoria, embalagem, busca);
+  };
+
+  const aplicarEmbalagem = (tipo: string) => {
+    setEmbalagemFiltro(tipo);
+    updateUrl(categoriaFiltro, tipo, busca);
+  };
+
+  const limparFiltros = () => {
+    setCategoriaFiltro('Todas');
+    setEmbalagemFiltro('Todas');
+    setBusca('');
+    updateUrl('Todas', 'Todas', '');
+  };
+
+  const propsFiltros = {
+    categoriaFiltro,
+    embalagemFiltro,
+    busca,
+    tiposVisiveis,
+    contagemPorCategoria,
+    totalFiltrado: maquinasFiltradas.length,
+    onCategoria: aplicarCategoria,
+    onEmbalagem: aplicarEmbalagem,
+    onBusca: setBusca,
+    onLimpar: limparFiltros
+  };
+
+  return (
+    <div className='tema-navy bg-background text-foreground relative flex min-h-screen w-full flex-col items-center justify-center pt-16 pb-10'>
+      <GridPattern />
+      <h1 className='sr-only'>Nossas Máquinas</h1>
+
+      <FiltrosMobile {...propsFiltros} />
 
       <div className='flex w-full gap-5 pr-0 md:pr-3'>
-        {/* Sidebar desktop */}
-        <div className='sticky top-32 left-0 z-10 ml-2 hidden h-full w-1/6 flex-col items-center justify-start gap-2 rounded-xs bg-transparent md:flex'>
-          <Button
-            onClick={() => {
-              setEmbalagemFiltro('Todas');
-              setCategoriaFiltro('Todas');
-              updateUrl('Todas', 'Todas');
-            }}
-            variant='ghost'
-            className={cn(
-              'mb-2 w-full py-2 text-center font-semibold text-white',
-              chipFiltro(false)
-            )}>
-            Embalagens Compatíveis
-          </Button>
-          <div className='flex w-3/4 flex-col gap-2'>
-            <Button
-              variant='ghost'
-              onClick={() => {
-                setEmbalagemFiltro('Todas');
-                updateUrl(categoriaFiltro, 'Todas');
-              }}
-              className={chipFiltro(embalagemFiltro === 'Todas')}>
-              Todas
-            </Button>
-            {tiposVisiveis.map((tipo) => (
-              <Button
-                key={tipo}
-                variant='ghost'
-                onClick={() => {
-                  setEmbalagemFiltro(tipo);
-                  updateUrl(categoriaFiltro, tipo);
-                }}
-                className={chipFiltro(embalagemFiltro === tipo)}>
-                {tipo}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <FiltrosSidebar {...propsFiltros} />
 
         {maquinasFiltradas.length === 0 ? (
-          <div className='z-10 mt-8 mr-2 grid min-h-screen w-full grid-cols-12 grid-rows-12 rounded-xs px-4 md:max-w-5/6 md:px-0'>
+          <div className='z-10 mt-8 mr-2 grid min-h-screen w-full grid-cols-12 grid-rows-12 rounded-xs px-4 md:px-0'>
             {/* Empty state em placa técnica */}
             <div className='relative col-span-12 col-start-1 row-span-1 row-start-1 flex w-full max-w-md flex-col items-center justify-center gap-3 place-self-center rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-4 md:col-span-4 md:col-start-5 md:row-span-2 md:row-start-2 md:p-6'>
               <span
@@ -237,11 +236,7 @@ function MaquinasContent() {
               </p>
               <Button
                 variant='ghost'
-                onClick={() => {
-                  setEmbalagemFiltro('Todas');
-                  setCategoriaFiltro('Todas');
-                  updateUrl('Todas', 'Todas');
-                }}
+                onClick={limparFiltros}
                 className={cn('z-20 w-full md:w-auto', chipFiltro(false))}>
                 Limpar filtros
               </Button>
