@@ -1,9 +1,11 @@
 import type { NextConfig } from 'next';
 
+import { buildMaquinaRedirects } from './lib/data/maquinas/redirects';
+
 const nextConfig: NextConfig = {
   compress: true,
   images: {
-    formats: ['image/avif', 'image/webp'],
+    formats: ['image/avif', 'image/webp']
   },
   outputFileTracingExcludes: {
     '*': [
@@ -20,18 +22,19 @@ const nextConfig: NextConfig = {
       'public/**/*.pdf',
       'public/**/*.zip',
       'lib/emails/**/*.html',
-      'lib/emails/**/*.css',
-    ],
+      'lib/emails/**/*.css'
+    ]
   },
   async redirects() {
     return [
       {
         source: '/downloads/:path*',
         destination: '/download',
-        permanent: true,
+        permanent: true
       },
+      ...buildMaquinaRedirects()
     ];
-  },
+  }
 };
 
 export default nextConfig;

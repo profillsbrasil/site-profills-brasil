@@ -3,13 +3,18 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-
-import { MaquinaData } from './maquinasData';
+import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 
 interface MaquinaCardProps {
-  maquina: MaquinaData;
+  maquina: MaquinaCatalogo;
   index: number; // Para delay escalonado
   filtersApplied?: boolean; // Indica se os filtros foram aplicados da URL
+}
+
+// Subtítulo do card: parte após ' - ' de nomeCompleto; sem separador, cai na categoria
+function subtituloDe(maquina: MaquinaCatalogo): string {
+  const [, subtitulo] = maquina.nomeCompleto.split(' - ');
+  return subtitulo ?? maquina.categoria;
 }
 
 export default function MaquinaCard({
@@ -27,7 +32,7 @@ export default function MaquinaCard({
   useEffect(() => {
     setImgLoaded(false);
     setPkgLoaded(false);
-  }, [maquina.id]);
+  }, [maquina.slug]);
 
   // Delay escalonado para animação suave (máximo 0.3s para melhor performance)
   const animationDelay = Math.min(index * 0.03, 0.3);
@@ -50,37 +55,53 @@ export default function MaquinaCard({
           aria-hidden
           className='absolute -right-px -bottom-px z-10 h-2 w-2 border-r border-b border-accent'
         />
-        <Image
-          src={maquina.imgMaquina}
-          alt='Máquina'
-          width={400}
-          height={300}
-          loading={'eager'} // Primeiras 9 imagens carregam imediatamente
-          onLoad={() => setImgLoaded(true)}
-          className={`${
-            maquina.imgMaquinaClassName || 'h-full w-full object-contain'
-          } transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-        />
-        <Image
-          src={maquina.imgEmbalagem}
-          alt='Embalagem'
-          width={200}
-          height={150}
-          loading={'eager'} // Primeiras 9 imagens carregam imediatamente
-          onLoad={() => setPkgLoaded(true)}
-          className={`${
-            maquina.imgEmbalagemClassName ||
-            'absolute right-3 bottom-0 h-1/2 w-1/2 object-cover'
-          } transition-opacity duration-300 ${pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
-        />
+        {maquina.imagens ? (
+          <>
+            <Image
+              src={maquina.imagens.maquina}
+              alt='Máquina'
+              width={400}
+              height={300}
+              loading={'eager'} // Primeiras 9 imagens carregam imediatamente
+              onLoad={() => setImgLoaded(true)}
+              className={`${
+                maquina.imagens.maquinaClassName ||
+                'h-full w-full object-contain'
+              } transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+            <Image
+              src={maquina.imagens.embalagem}
+              alt='Embalagem'
+              width={200}
+              height={150}
+              loading={'eager'} // Primeiras 9 imagens carregam imediatamente
+              onLoad={() => setPkgLoaded(true)}
+              className={`${
+                maquina.imagens.embalagemClassName ||
+                'absolute right-3 bottom-0 h-1/2 w-auto max-w-[65%] object-contain'
+              } transition-opacity duration-300 ${pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+          </>
+        ) : (
+          // Máquinas de engenharia não têm foto de catálogo: miolo sólido com
+          // rótulo técnico (o nome já aparece no rodapé do card).
+          <div className='flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xs bg-slate-900/60'>
+            <span className='text-accent font-mono text-2xl'>+</span>
+            <span className='text-muted-foreground/70 px-4 text-center font-mono text-[11px] tracking-[0.2em] uppercase'>
+              Solução de engenharia
+              <br />
+              sob projeto
+            </span>
+          </div>
+        )}
       </div>
       <div
         className={`flex h-[14%] w-full flex-col items-center justify-center rounded-b-xs border border-t-0 border-dashed border-[rgba(148,178,235,0.22)] bg-slate-900/60 transition-colors duration-300 group-hover:bg-slate-900/85`}>
         <h2 className='text-base font-bold text-white md:text-lg'>
-          {maquina.name}
+          {maquina.nome}
         </h2>
         <p className='text-muted-foreground text-xs md:text-sm'>
-          {maquina.descricao}
+          {subtituloDe(maquina)}
         </p>
       </div>
     </AnimatedContainer>

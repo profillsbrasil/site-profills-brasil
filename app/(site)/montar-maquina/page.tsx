@@ -36,8 +36,8 @@ import {
   getBestMachineRecommendation,
   initialContactFormData
 } from './_components/combinacaoMaquinas';
-import { motion } from 'motion/react';
 import { Drill } from 'lucide-react';
+import { motion } from 'motion/react';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
 
@@ -152,7 +152,6 @@ export default function MachineBuilder() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='mb-3 text-2xl font-bold text-white md:mb-4 md:text-3xl'>
             Monte sua Máquina
@@ -315,25 +314,27 @@ export default function MachineBuilder() {
                   // Mostrar detalhes da máquina recomendada
                   <div className='flex h-full w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-6'>
                     <div className='border-border/20 relative flex h-48 w-full items-center justify-center rounded-xs border border-dashed bg-slate-900/80 py-4 shadow-xl backdrop-blur md:h-96 md:w-1/3'>
-                      <Image
-                        src={recommendation.machine.imgMaquina}
-                        alt={recommendation.machine.name}
-                        className='h-full w-auto object-contain'
-                      />
+                      {recommendation.machine.imagens?.maquina ? (
+                        <Image
+                          src={recommendation.machine.imagens.maquina}
+                          alt={recommendation.machine.nome}
+                          className='h-full w-auto object-contain'
+                        />
+                      ) : (
+                        <Drill className='h-12 w-12 text-slate-400 md:h-20 md:w-20' />
+                      )}
                     </div>
                     <div className='flex h-full w-full flex-col items-center justify-between gap-3 md:h-80 md:max-h-96 md:w-2/3 md:gap-2'>
                       <div className='border-border/20 flex h-full w-full flex-col gap-3 rounded-xs border border-dashed bg-slate-900/80 p-4 shadow-xl backdrop-blur md:gap-4 md:p-6'>
                         <div>
                           <h2 className='text-lg font-bold text-white md:text-xl'>
-                            {recommendation.machine.name}
+                            {recommendation.machine.nome}
                           </h2>
                           <p className='mb-2 text-xs text-blue-400 md:text-sm'>
-                            {recommendation.machine.categoria} •
-                            Compatibilidade:{' '}
-                            {Math.round(recommendation.compatibilityScore)}%
+                            {recommendation.machine.categoria}
                           </p>
                           <p className='mb-3 text-xs text-slate-300 md:text-sm'>
-                            {recommendation.machine.about}
+                            {recommendation.machine.headline}
                           </p>
                         </div>
 
@@ -344,7 +345,7 @@ export default function MachineBuilder() {
                             </span>
                             <p className='text-slate-300'>
                               Até{' '}
-                              {recommendation.machine.unidadeMaxima?.toLocaleString() ||
+                              {recommendation.machine.capacidadeMaxima?.toLocaleString() ||
                                 'N/A'}{' '}
                               unidades/hora
                             </p>
@@ -362,7 +363,7 @@ export default function MachineBuilder() {
                         </div>
                       </div>
                       <div className='flex h-full w-full items-center justify-center'>
-                        <Link href={`/maquinas/${recommendation.machine.id}`}>
+                        <Link href={`/maquinas/${recommendation.machine.slug}`}>
                           <Button className='w-full bg-blue-600 text-sm hover:bg-blue-700 md:text-base'>
                             Ver mais sobre esta máquina
                           </Button>

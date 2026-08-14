@@ -31,7 +31,10 @@ export const specificationFormSchema = z.object({
       .regex(/^\(\d{2}\) \d{5}-\d{4}$/, 'ex. (11) 99999-9999')
   ),
   empresa: optionalTrimmed,
-  maquinaId: z.coerce.number().min(1, 'ID da máquina é obrigatório'),
+  maquinaSlug: z.preprocess(
+    (v) => (typeof v === 'string' ? v.trim() : ''),
+    z.string().min(1, 'Slug da máquina é obrigatório')
+  ),
   maquinaNome: z.preprocess(
     (v) => (typeof v === 'string' ? v.trim() : ''),
     z.string().min(1, 'Nome da máquina é obrigatório')
