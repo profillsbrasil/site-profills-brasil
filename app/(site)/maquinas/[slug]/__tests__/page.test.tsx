@@ -9,6 +9,26 @@ vi.mock('next/navigation', () => ({
   })
 }));
 
+// embla-carousel (Relacionadas) lê matchMedia e ResizeObserver, ausentes no
+// jsdom — mesmo stub de cardsGridMaquinas.test.tsx.
+vi.stubGlobal('matchMedia', () => ({
+  matches: false,
+  media: '',
+  onchange: null,
+  addListener: vi.fn(),
+  removeListener: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  dispatchEvent: vi.fn()
+}));
+
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+vi.stubGlobal('ResizeObserver', ResizeObserverStub);
+
 // Injeta uma máquina de engenharia fake (fixture só deste teste, spread do
 // piloto) para exercitar o branch tipoPagina='engenharia' sem depender de
 // dados reais do catálogo — categoria/embalagens divergem do piloto de

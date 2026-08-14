@@ -114,10 +114,10 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
             </>
           )}
           <Conversao maquina={maquina} />
-          {maquina.tipoPagina === 'padrao' && (
-            <Relacionadas maquina={maquina} />
-          )}
         </div>
+        {/* Fora do container: o carrossel de relacionadas corre de borda a
+            borda da página; o cabeçalho interno realinha com o max-w-7xl */}
+        {maquina.tipoPagina === 'padrao' && <Relacionadas maquina={maquina} />}
       </div>
     </div>
   );

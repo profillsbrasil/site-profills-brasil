@@ -25,12 +25,16 @@ function cmpCapacidade(
  * comum, desempate por menor diferença relativa de capacidade — ausência de
  * capacidade em qualquer lado é neutra, preserva ordem do registry); completa
  * com máquinas de outras categorias que compartilham embalagem.
+ * Sem `limite`, devolve o pool ranqueado inteiro (uso: carrossel).
+ * `minimo` garante fileira cheia: pool menor que isso é completado com as
+ * demais máquinas com foto, na ordem do registry, após as ranqueadas.
  */
 export function getMaquinasRelacionadas(
   maquina: MaquinaCatalogo,
   todas: MaquinaCatalogo[],
-  limite = 3
+  opcoes: { limite?: number; minimo?: number } = {}
 ): MaquinaRelacionada[] {
+  const { limite, minimo } = opcoes;
   const candidatas = todas.filter(
     (m): m is MaquinaRelacionada =>
       m.slug !== maquina.slug && m.imagens !== undefined
@@ -66,5 +70,12 @@ export function getMaquinasRelacionadas(
     )
   );
 
-  return [...mesmaCategoria, ...outras].slice(0, limite);
+  const resultado = [...mesmaCategoria, ...outras];
+  if (minimo != null && resultado.length < minimo) {
+    const complemento = candidatas
+      .filter((m) => !resultado.includes(m))
+      .slice(0, minimo - resultado.length);
+    resultado.push(...complemento);
+  }
+  return limite == null ? resultado : resultado.slice(0, limite);
 }
