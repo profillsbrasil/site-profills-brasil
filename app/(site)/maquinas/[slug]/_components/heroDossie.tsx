@@ -4,6 +4,7 @@ import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { NumberTicker } from '@/components/magicui/number-ticker';
 import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 import { cn } from '@/lib/utils';
+import { compostosJuntos } from '@/lib/utils/nbsp';
 
 function Cantoneiras() {
   const base = 'absolute h-2.5 w-2.5 border-accent';
@@ -39,10 +40,10 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
         <div className='flex items-center justify-between border-b border-dashed border-[rgba(148,178,235,0.25)] pb-3'>
           <span
             data-testid='categoria-hero'
-            className='text-accent font-mono text-[10px] tracking-[0.2em] uppercase'>
+            className='text-accent font-mono text-xs tracking-[0.2em] uppercase'>
             {maquina.categoria}
           </span>
-          <span className='text-muted-foreground/60 font-mono text-[10px] tracking-wider'>
+          <span className='text-muted-foreground/60 font-mono text-xs tracking-wider'>
             FICHA · CATÁLOGO 2026 · {maquina.paginaCatalogo}
           </span>
         </div>
@@ -53,20 +54,20 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
               'w-full',
               maquina.imagens ? 'md:w-[45%]' : 'md:w-full'
             )}>
-            <h1 className='text-2xl leading-tight font-bold text-white md:text-4xl'>
+            <h1 className='text-2xl leading-tight font-bold text-pretty text-white md:text-4xl'>
               {maquina.nomeCompleto}
             </h1>
-            <p className='text-muted-foreground mt-3 max-w-md text-sm md:text-base'>
+            <p className='text-muted-foreground mt-3 max-w-md text-base text-pretty md:text-lg'>
               {maquina.headline}
             </p>
 
             <dl className='mt-5 w-full max-w-sm font-mono'>
               {temTicker && (
                 <div className='flex items-baseline justify-between gap-4 border-b border-[rgba(148,178,235,0.15)] py-2 last:border-0'>
-                  <dt className='text-muted-foreground/70 text-[11px] tracking-wider uppercase'>
+                  <dt className='text-muted-foreground/70 text-[13px] tracking-wider uppercase'>
                     Capacidade
                   </dt>
-                  <dd className='text-right text-sm font-semibold text-white'>
+                  <dd className='text-right text-base font-semibold text-white'>
                     <span data-ticker>
                       até{' '}
                       <NumberTicker
@@ -83,18 +84,18 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
                 <div
                   key={item.rotulo}
                   className='flex items-baseline justify-between gap-4 border-b border-[rgba(148,178,235,0.15)] py-2 last:border-0'>
-                  <dt className='text-muted-foreground/70 text-[11px] tracking-wider uppercase'>
+                  <dt className='text-muted-foreground/70 text-[13px] tracking-wider uppercase'>
                     {item.rotulo}
                   </dt>
-                  <dd className='text-right text-sm font-semibold text-white'>
-                    {item.valor}
+                  <dd className='text-right text-base font-semibold text-pretty text-white'>
+                    {compostosJuntos(item.valor)}
                   </dd>
                 </div>
               ))}
             </dl>
 
             {temTicker && (
-              <p className='text-muted-foreground/50 mt-2 max-w-sm font-mono text-[10px] italic'>
+              <p className='text-muted-foreground/50 mt-2 max-w-sm font-mono text-xs italic'>
                 A produção varia conforme produto, volume, embalagem e
                 configuração do projeto.
               </p>

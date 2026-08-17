@@ -33,7 +33,7 @@ export function Relacionadas({ maquina }: { maquina: MaquinaCatalogo }) {
       <AnimatedContainer>
         <Carousel opts={{ align: 'start' }}>
           <div className='mx-auto mb-4 flex w-full max-w-7xl items-center justify-between px-4 md:px-8'>
-            <h2 className='text-base font-bold text-white'>
+            <h2 className='text-lg font-bold text-white md:text-xl'>
               Máquinas relacionadas
             </h2>
             <div className='flex gap-2'>
@@ -56,11 +56,11 @@ export function Relacionadas({ maquina }: { maquina: MaquinaCatalogo }) {
                     alt={m.nomeCompleto}
                     className='mx-auto h-40 w-auto object-contain md:h-48'
                   />
-                  <p className='mt-3 text-sm font-semibold text-white'>
+                  <p className='mt-3 text-base font-semibold text-white'>
                     {m.nome}
                   </p>
                   {m.capacidadeMaxima && (
-                    <p className='text-muted-foreground/70 font-mono text-xs'>
+                    <p className='text-muted-foreground/70 font-mono text-sm'>
                       até {m.capacidadeMaxima.toLocaleString('pt-BR')} un/h
                     </p>
                   )}
