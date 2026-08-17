@@ -382,18 +382,24 @@ export default function NavbarDesktop() {
               <div className='grid w-[350px] grid-cols-2 gap-4'>
                 <div className='flex flex-col gap-2'>
                   <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>Corte a Laser</Link>
+                    <Link href='/servicos-personalizados#corte-laser'>
+                      Corte a Laser
+                    </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>
+                    <Link href='/servicos-personalizados#dobra-cnc'>
                       Dobra e Corte CNC
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>Usinagem CNC</Link>
+                    <Link href='/servicos-personalizados#usinagem-cnc'>
+                      Usinagem CNC
+                    </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>Soldagem</Link>
+                    <Link href='/servicos-personalizados#soldagem'>
+                      Soldagem
+                    </Link>
                   </NavigationMenuLink>
                 </div>
                 <div className='relative h-full w-full'>

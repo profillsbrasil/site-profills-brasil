@@ -155,10 +155,10 @@ const pecas = [
 ];
 
 const servicos = [
-  { title: 'Corte a Laser', href: '/servicos-personalizados' },
-  { title: 'Dobra e Corte CNC', href: '/servicos-personalizados' },
-  { title: 'Usinagem CNC', href: '/servicos-personalizados' },
-  { title: 'Soldagem', href: '/servicos-personalizados' }
+  { title: 'Corte a Laser', href: '/servicos-personalizados#corte-laser' },
+  { title: 'Dobra e Corte CNC', href: '/servicos-personalizados#dobra-cnc' },
+  { title: 'Usinagem CNC', href: '/servicos-personalizados#usinagem-cnc' },
+  { title: 'Soldagem', href: '/servicos-personalizados#soldagem' }
 ];
 
 export default function NavbarMobile() {

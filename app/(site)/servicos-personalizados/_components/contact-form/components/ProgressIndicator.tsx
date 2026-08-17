@@ -20,7 +20,7 @@ export function ProgressIndicator({
           key={step}
           className={cn(
             'relative z-10 flex h-2 w-2 rounded-full transition-colors duration-300',
-            step <= currentStep ? 'bg-white' : 'bg-slate-900'
+            step <= currentStep ? 'bg-white' : 'bg-[rgba(148,178,235,0.35)]'
           )}
         />
       ))}

@@ -66,7 +66,7 @@ export default function ContactForm() {
       id='entre-em-contato'
       className='flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-0'>
       {/* Imagem lateral */}
-      <div className='flex h-48 w-full items-center justify-center md:h-full md:min-h-[65vh] md:w-1/2'>
+      <div className='flex h-48 w-full items-center justify-center md:h-auto md:w-1/2'>
         <div className='flex h-full w-full'>
           <Image
             src={corteLaser}
@@ -77,7 +77,7 @@ export default function ContactForm() {
       </div>
 
       {/* Formulário */}
-      <div className='flex h-full w-full items-center justify-center p-4 md:min-h-[65vh] md:w-1/2 md:p-0'>
+      <div className='flex h-full w-full items-center justify-center p-4 md:w-1/2 md:p-6'>
         <div className='mx-auto flex h-fit w-full max-w-md flex-col items-center justify-center gap-6 rounded-xs md:gap-10'>
           {/* Indicador de progresso */}
           <div className='relative'>
@@ -110,7 +110,7 @@ export default function ContactForm() {
                     type='button'
                     variant='outline'
                     onClick={prevStep}
-                    className='!bg-muted flex items-center gap-2 hover:scale-101 hover:text-slate-900'
+                    className='flex items-center gap-2 hover:scale-101'
                     disabled={isSubmitting}>
                     <ArrowLeft size={16} />
                     Voltar
@@ -124,7 +124,7 @@ export default function ContactForm() {
                 onClick={handleContinue}
                 disabled={isSubmitting || isLoadingCep}
                 className={cn(
-                  'bg-slate-900 text-white transition-colors hover:bg-slate-800',
+                  'bg-accent hover:bg-accent/85 rounded-xs text-white transition-colors',
                   currentStep === 1 ? 'w-full' : 'flex-1'
                 )}>
                 <div className='flex w-full items-center justify-center gap-2 text-sm font-semibold text-white'>

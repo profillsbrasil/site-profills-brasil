@@ -1,7 +1,6 @@
 import Image from 'next/image';
 
-import { GridPattern } from '@/components/layout/gridPatternBg';
-import { Highlighter } from '@/components/magicui/highlighter';
+import { AnimatedContainer } from '@/components/AnimatedContainer';
 import brindesCorporativos from '@/lib/images/extras/servicos/brindes-inox.jpg';
 import cutelariaInox from '@/lib/images/extras/servicos/cutelaria-inox.jpg';
 import pecasSobMedida from '@/lib/images/extras/servicos/especiais-02.jpg';
@@ -40,44 +39,45 @@ const listaServicos = [
 
 export default function ListaServicos() {
   return (
-    <div className='flex w-full max-w-6xl flex-col items-center justify-center gap-4 py-8 md:gap-5 md:py-10'>
-      <div className='flex w-full flex-col items-start justify-start'>
-        <Highlighter
-          action='underline'
-          
-          animationDuration={4000}
-          textColor='text-2xl font-bold mb-3 md:text-3xl md:mb-2'>
+    <section id='o-que-fazemos' className='w-full scroll-mt-28 py-10 md:py-14'>
+      <AnimatedContainer>
+        <h2 className='text-xl font-bold text-white md:text-2xl'>
           O que podemos fazer?
-        </Highlighter>
-        <p className='text-muted-foreground text-sm md:text-base'>
-          Conheça alguns dos nossos serviços personalizados
+        </h2>
+        <p className='text-muted-foreground/70 mt-1 font-mono text-sm tracking-wider'>
+          Peças e produtos exclusivos em inox
         </p>
-      </div>
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5'>
-        {listaServicos.map((servico) => (
-          <div
-            id={servico.id}
-            key={servico.id}
-            className='bg-muted group z-10 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xs border border-black/10 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:bg-slate-50 hover:shadow-2xl md:gap-5 md:p-5'>
-            <div className='relative flex h-48 w-full md:h-full'>
-              <GridPattern />
-              <Image
-                src={servico.image}
-                alt={servico.title}
-                className='z-10 h-full w-full rounded-xs object-fill transition-all duration-300 md:object-cover'
-              />
-            </div>
-            <div className='flex flex-col items-start justify-start'>
-              <h3 className='mb-2 text-xl font-bold md:text-2xl'>
-                {servico.title}
-              </h3>
-              <p className='text-muted-foreground text-sm leading-relaxed md:text-base'>
-                {servico.description}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+
+        <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5'>
+          {listaServicos.map((servico) => (
+            <article
+              id={servico.id}
+              key={servico.id}
+              className='group relative scroll-mt-28 border border-dashed border-[rgba(148,178,235,0.35)] bg-slate-900/60 transition-colors hover:border-[rgba(148,178,235,0.6)]'>
+              <span className='text-accent/60 absolute -top-2 -left-1 z-10 font-mono text-xs'>
+                +
+              </span>
+              <div className='relative h-52 w-full overflow-hidden md:h-64'>
+                <Image
+                  src={servico.image}
+                  alt={servico.title}
+                  fill
+                  sizes='(min-width: 768px) 50vw, 100vw'
+                  className='object-cover transition-transform duration-300 group-hover:scale-[1.03]'
+                />
+              </div>
+              <div className='p-4 md:p-5'>
+                <h3 className='text-lg font-bold text-white md:text-xl'>
+                  {servico.title}
+                </h3>
+                <p className='text-muted-foreground mt-2 text-base leading-relaxed text-pretty'>
+                  {servico.description}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </AnimatedContainer>
+    </section>
   );
 }
