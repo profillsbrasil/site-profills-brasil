@@ -13,15 +13,15 @@ export function AplicacoesProdutos({
     <section id='aplicacoes' className='scroll-mt-28 py-10 md:py-14'>
       <AnimatedContainer className='flex flex-col gap-8 md:flex-row md:items-start'>
         <div className='md:w-1/2'>
-          <h2 className='text-lg font-bold text-white md:text-xl'>
+          <h2 className='text-xl font-bold text-white md:text-2xl'>
             Aplicações e produtos
           </h2>
-          <p className='text-muted-foreground/70 mt-1 font-mono text-xs tracking-wider'>
+          <p className='text-muted-foreground/70 mt-1 font-mono text-sm tracking-wider'>
             {aplicacoes.categoriaPrincipal}
           </p>
 
           <details className='group mt-5 max-w-md border border-dashed border-[rgba(148,178,235,0.35)] bg-slate-900/60'>
-            <summary className='text-muted-foreground flex cursor-pointer list-none items-center justify-between px-4 py-3 font-mono text-sm select-none'>
+            <summary className='text-muted-foreground flex cursor-pointer list-none items-center justify-between px-4 py-3 font-mono text-base select-none'>
               Ver produtos compatíveis ({aplicacoes.produtos.length})
               <span className='text-accent transition-transform group-open:rotate-45'>
                 ＋
@@ -31,13 +31,13 @@ export function AplicacoesProdutos({
               {aplicacoes.produtos.map((p) => (
                 <li
                   key={p}
-                  className='text-muted-foreground rounded-full border border-[rgba(148,178,235,0.25)] px-3 py-1 text-xs'>
+                  className='text-muted-foreground rounded-full border border-[rgba(148,178,235,0.25)] px-3 py-1 text-sm'>
                   {p}
                 </li>
               ))}
             </ul>
           </details>
-          <p className='text-muted-foreground/50 mt-3 max-w-md text-xs italic'>
+          <p className='text-muted-foreground/50 mt-3 max-w-md text-sm italic'>
             Exemplos editoriais, sujeitos à validação técnica com produto,
             volume, embalagem e dosador.
           </p>
@@ -55,7 +55,7 @@ export function AplicacoesProdutos({
                   alt={`Categoria ${info.rotulo}`}
                   className='aspect-square w-full object-cover'
                 />
-                <figcaption className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(3,8,20,0.92)] to-transparent px-2.5 pt-5 pb-1.5 text-[11px] font-semibold tracking-wider text-white uppercase'>
+                <figcaption className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(3,8,20,0.92)] to-transparent px-2.5 pt-5 pb-1.5 text-[13px] font-semibold tracking-wider text-white uppercase'>
                   {info.rotulo}
                 </figcaption>
               </figure>

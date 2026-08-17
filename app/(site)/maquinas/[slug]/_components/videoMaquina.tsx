@@ -11,7 +11,7 @@ export function VideoMaquina({ video, nome }: VideoMaquinaProps) {
   return (
     <section id='video' className='scroll-mt-28 py-10 md:py-14'>
       <AnimatedContainer>
-        <h2 className='text-lg font-bold text-white md:text-xl'>
+        <h2 className='text-xl font-bold text-white md:text-2xl'>
           Veja a {nome} em operação
         </h2>
         <div className='relative mt-4 border border-dashed border-[rgba(148,178,235,0.35)] p-2'>

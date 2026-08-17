@@ -6,10 +6,10 @@ export function VisaoGeral({ maquina }: { maquina: MaquinaCatalogo }) {
     <section id='visao-geral' className='scroll-mt-28 py-10 md:py-14'>
       <AnimatedContainer className='flex flex-col gap-8 md:flex-row'>
         <div className='md:w-3/5'>
-          <h2 className='text-lg font-bold text-white md:text-xl'>
+          <h2 className='text-xl font-bold text-white md:text-2xl'>
             Visão geral
           </h2>
-          <p className='text-muted-foreground mt-3 leading-relaxed'>
+          <p className='text-muted-foreground mt-3 text-lg leading-relaxed text-pretty'>
             {maquina.descritivo}
           </p>
         </div>
@@ -19,14 +19,14 @@ export function VisaoGeral({ maquina }: { maquina: MaquinaCatalogo }) {
               <span className='text-accent/60 absolute -top-2 -left-1 font-mono text-xs'>
                 +
               </span>
-              <h3 className='font-mono text-xs font-semibold tracking-widest text-white uppercase'>
+              <h3 className='font-mono text-sm font-semibold tracking-widest text-white uppercase'>
                 Recursos e especiais
               </h3>
               <ul className='mt-3 space-y-2'>
                 {maquina.recursos.map((r) => (
                   <li
                     key={r}
-                    className='text-muted-foreground flex gap-2 text-sm'>
+                    className='text-muted-foreground flex gap-2 text-base'>
                     <span className='text-accent'>▸</span>
                     {r}
                   </li>

@@ -72,7 +72,7 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
           <SpecificationModal
             maquinaSlug={maquina.slug}
             maquinaNome={maquina.nome}
-            triggerClassName='h-7 px-3 text-xs'
+            triggerClassName='h-9 px-4 text-xs'
           />
         </SubNavMaquina>
 

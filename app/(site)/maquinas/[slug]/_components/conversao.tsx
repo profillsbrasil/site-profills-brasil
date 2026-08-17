@@ -10,10 +10,10 @@ export function Conversao({ maquina }: { maquina: MaquinaCatalogo }) {
   return (
     <section id='contato' className='scroll-mt-28 py-12 text-center md:py-16'>
       <AnimatedContainer>
-        <h2 className='text-xl font-bold text-white md:text-2xl'>
+        <h2 className='text-2xl font-bold text-balance text-white md:text-3xl'>
           Pronto para dimensionar a {maquina.nome} na sua operação?
         </h2>
-        <p className='text-muted-foreground mt-2'>
+        <p className='text-muted-foreground mt-2 text-lg text-pretty'>
           Fale com o time técnico-comercial da Profills.
         </p>
         <div className='mt-6 flex flex-wrap items-center justify-center gap-3'>

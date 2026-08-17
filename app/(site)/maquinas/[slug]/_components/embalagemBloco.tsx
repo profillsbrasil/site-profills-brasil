@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { AnimatedContainer } from '@/components/AnimatedContainer';
 import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 import { cn } from '@/lib/utils';
+import { compostosJuntos } from '@/lib/utils/nbsp';
 
 const OptimizedEmbalagem3d = dynamic(
   () =>
@@ -22,7 +23,7 @@ export function EmbalagemBloco({ maquina }: { maquina: MaquinaCatalogo }) {
     <section id='embalagem' className='scroll-mt-28 py-10 md:py-14'>
       <AnimatedContainer className='flex flex-col items-center gap-8 md:flex-row'>
         <div className='md:w-1/2'>
-          <h2 className='text-lg font-bold text-white md:text-xl'>
+          <h2 className='text-xl font-bold text-white md:text-2xl'>
             A embalagem que ela entrega
           </h2>
           <dl className='mt-4 max-w-md font-mono'>
@@ -30,11 +31,11 @@ export function EmbalagemBloco({ maquina }: { maquina: MaquinaCatalogo }) {
               <div
                 key={item.rotulo}
                 className='flex items-baseline justify-between gap-4 border-b border-[rgba(148,178,235,0.15)] py-2 last:border-0'>
-                <dt className='text-muted-foreground/70 text-[11px] tracking-wider uppercase'>
+                <dt className='text-muted-foreground/70 text-[13px] tracking-wider uppercase'>
                   {item.rotulo}
                 </dt>
-                <dd className='max-w-[60%] text-right text-sm text-white'>
-                  {item.valor}
+                <dd className='max-w-[60%] text-right text-base text-pretty text-white'>
+                  {compostosJuntos(item.valor)}
                 </dd>
               </div>
             ))}
@@ -50,7 +51,7 @@ export function EmbalagemBloco({ maquina }: { maquina: MaquinaCatalogo }) {
                 alt={`Embalagem produzida pela ${maquina.nome}`}
                 className='h-64 w-full md:h-80'
               />
-              <p className='text-muted-foreground/50 mt-2 text-center font-mono text-[10px]'>
+              <p className='text-muted-foreground/50 mt-2 text-center font-mono text-xs'>
                 ⟲ arraste para girar o modelo 3D
               </p>
             </>
