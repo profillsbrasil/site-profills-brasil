@@ -5,6 +5,7 @@ import { BlurFade } from '@/components/ui/blur-fade';
 import { TextAnimate } from '@/components/ui/text-animate';
 import logoAutonics from '@/lib/images/fornecedores/Autonics.png';
 import logoFesto from '@/lib/images/fornecedores/Festo.png';
+import logoHiwin from '@/lib/images/fornecedores/Hiwin.png';
 import logoNetzsch from '@/lib/images/fornecedores/Netzsch.png';
 import logoOmron from '@/lib/images/fornecedores/Omron.png';
 import logoPanasonic from '@/lib/images/fornecedores/Panasonic.png';
@@ -25,6 +26,10 @@ const fornecedores = [
     alt: 'Festo'
   },
 
+  {
+    logo: logoHiwin,
+    alt: 'Hiwin'
+  },
   {
     logo: logoNetzsch,
     alt: 'Netzsch'
@@ -139,7 +144,7 @@ export default function CtaAjudarEmpresa() {
               A qualidade começa na escolha dos melhores componentes
             </p>
           </div>
-          <div className='grid grid-cols-4 gap-4 md:flex md:w-full md:items-center md:justify-center md:gap-6'>
+          <div className='grid grid-cols-3 gap-4 md:flex md:w-full md:items-center md:justify-center md:gap-6'>
             {fornecedores.map((fornecedor, i) => (
               <div
                 key={fornecedor.alt}
@@ -148,7 +153,7 @@ export default function CtaAjudarEmpresa() {
                 <span
                   aria-hidden
                   style={{ animationDelay: `${i * 2}s` }}
-                  className='pointer-events-none absolute -inset-px rounded-xs border border-accent opacity-0 motion-reduce:hidden animate-[marca-borda-ativa_16s_linear_infinite]'
+                  className='pointer-events-none absolute -inset-px rounded-xs border border-accent opacity-0 motion-reduce:hidden animate-[marca-borda-ativa_18s_linear_infinite]'
                 />
                 {/* brightness-0 + invert: logos monocromáticas brancas sobre o navy */}
                 <Image
@@ -156,7 +161,7 @@ export default function CtaAjudarEmpresa() {
                   alt={fornecedor.alt}
                   sizes='(max-width: 768px) 25vw, 12vw'
                   style={{ animationDelay: `${i * 2}s` }}
-                  className='h-full w-full object-contain opacity-65 brightness-0 invert transition-opacity duration-300 group-hover:opacity-100 motion-reduce:animate-none animate-[marca-logo-ativa_16s_linear_infinite]'
+                  className='h-full w-full object-contain opacity-65 brightness-0 invert transition-opacity duration-300 group-hover:opacity-100 motion-reduce:animate-none animate-[marca-logo-ativa_18s_linear_infinite]'
                 />
               </div>
             ))}
