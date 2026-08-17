@@ -82,19 +82,3 @@ function pontuarProduto(
   return maquina.aplicacoes.categorias.includes(categoria) ? 1 : 0;
 }
 
-// Dados do formulário de contato quando não há máquina compatível
-export interface ContactFormData {
-  nome: string;
-  email: string;
-  empresa: string;
-  contato: string;
-  detalhes: string;
-}
-
-export const initialContactFormData: ContactFormData = {
-  nome: '',
-  email: '',
-  empresa: '',
-  contato: '',
-  detalhes: ''
-};
