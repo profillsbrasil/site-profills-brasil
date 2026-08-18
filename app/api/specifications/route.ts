@@ -9,12 +9,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = specificationFormSchema.parse(body);
 
-    // Enviar e-mail com as especificações
-    try {
-      await sendSpecificationEmail(validatedData);
-    } catch (emailError) {
-      logger.error('❌ Erro no envio do e-mail:', emailError);
-    }
+    /* Sem try/catch aqui: falha de envio precisa virar 500 para o visitante
+       ver o erro — engolir e responder sucesso perdia a solicitação em
+       silêncio. O catch externo loga e responde. */
+    await sendSpecificationEmail(validatedData);
 
     return NextResponse.json(
       {

@@ -9,12 +9,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = contactFormSchema.parse(body);
 
-    // Enviar e-mail com os dados do contato
-    try {
-      await sendContactEmail(validatedData);
-    } catch (emailError) {
-      console.error('❌ Erro no envio do e-mail:', emailError);
-    }
+    /* Sem try/catch aqui: falha de envio precisa virar 500 para o visitante
+       ver o erro — engolir e responder sucesso perdia a solicitação em
+       silêncio. O catch externo loga e responde. */
+    await sendContactEmail(validatedData);
 
     return NextResponse.json(
       {
