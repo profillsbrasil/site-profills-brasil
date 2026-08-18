@@ -28,17 +28,20 @@ export function AnimatedContainer({
 }: AnimatedContainerProps) {
   const reduce = useReducedMotion();
 
-  if (reduce) {
-    return <div className={className}>{children}</div>;
-  }
-
+  /* Reduced motion NÃO pode trocar a árvore (div estática vs motion.div):
+     o SSR emite opacity:0 inline e, num hydration mismatch, o React não
+     corrige atributos — a página inteira ficava invisível para quem usa
+     "reduzir animações". A árvore é sempre a mesma; com reduce, só a
+     transition (que não vai ao HTML) zera: o conteúdo aparece instantâneo. */
   if (trigger === 'mount') {
     // Garante que aparece sempre, mesmo em tabs/modais/carrosséis
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay, duration: 0.6, ease: 'easeOut' }}
+        transition={
+          reduce ? { duration: 0 } : { delay, duration: 0.6, ease: 'easeOut' }
+        }
         className={className}>
         {children}
       </motion.div>
@@ -51,7 +54,9 @@ export function AnimatedContainer({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, amount }}
-      transition={{ delay, duration: 0.4, ease: 'easeOut' }}
+      transition={
+        reduce ? { duration: 0 } : { delay, duration: 0.4, ease: 'easeOut' }
+      }
       className={className}>
       {children}
     </motion.div>
