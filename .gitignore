@@ -51,4 +51,4 @@ next-env.d.ts
 # teste
 .playwright-mcp/
 .env.local
-.env*
+.env.local
