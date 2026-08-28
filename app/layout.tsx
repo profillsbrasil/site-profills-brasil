@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import MetaPixel from '@/components/layout/metaPixel';
 import { Toaster } from '@/components/ui/sonner';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 import './globals.css';
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
+const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -58,6 +60,7 @@ export default function RootLayout({
         {children}
       </body>
       {gaId && <GoogleAnalytics gaId={gaId} />}
+      {metaPixelId && <MetaPixel pixelId={metaPixelId} />}
     </html>
   );
 }
