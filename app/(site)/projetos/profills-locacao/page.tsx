@@ -10,7 +10,7 @@ import ServicoAssinatura from './_components/servicoAssinatura';
 export const metadata: Metadata = metadataDaPagina({
   titulo: 'Profills Locação',
   descricao:
-    'Máquinas envasadoras por mensalidade, para quem está começando ou quer expandir a produção sem imobilizar capital no equipamento.',
+    'A linha de máquinas envasadoras por mensalidade que a Profills prepara, para quem quer produzir sem imobilizar capital no equipamento.',
   path: '/projetos/profills-locacao'
 });
 

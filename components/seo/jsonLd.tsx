@@ -7,7 +7,10 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
     <script
       type='application/ld+json'
       // O objeto é montado no servidor a partir de dados do repo, nunca de input do usuário.
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{
+        // escapa < para um texto de conteúdo com </script> não fechar a tag
+        __html: JSON.stringify(data).replace(/</g, String.raw`\u003c`)
+      }}
     />
   );
 }

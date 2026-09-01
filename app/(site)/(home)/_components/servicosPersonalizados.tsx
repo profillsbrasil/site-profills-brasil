@@ -51,8 +51,8 @@ export default function ServicosPersonalizados() {
                 .
               </p>
               <p>
-                Trabalhamos com metalurgia própria, do desenho técnico ao
-                acabamento, para peças sob medida e projetos especiais.
+                Somamos experiência em metalurgia e projeto próprio para entregar
+                peças sob medida e projetos especiais.
               </p>
             </div>
           </div>

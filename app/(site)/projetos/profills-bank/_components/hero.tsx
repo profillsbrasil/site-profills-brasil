@@ -38,7 +38,8 @@ export default function Hero() {
               <span className='text-accent font-semibold'>
                 serviços financeiros digitais
               </span>
-              , mais acessíveis que os dos bancos tradicionais.
+              , com o objetivo de serem mais acessíveis que os dos bancos
+              tradicionais.
             </p>
 
             <p>

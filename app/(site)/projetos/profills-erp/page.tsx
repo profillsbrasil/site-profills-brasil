@@ -11,7 +11,7 @@ import SolucaoERP from './_components/solucaoERP';
 export const metadata: Metadata = metadataDaPagina({
   titulo: 'Profills ERP',
   descricao:
-    'Sistema de gestão acessível para pequenos produtores, com emissão de nota fiscal e relatórios sem depender de terceiros.',
+    'O sistema de gestão que a Profills prepara para pequenos produtores, com emissão de nota fiscal e relatórios sem depender de terceiros.',
   path: '/projetos/profills-erp'
 });
 

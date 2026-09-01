@@ -34,7 +34,7 @@ export default function Hero() {
         <BlurFade delay={0.2} inView>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
-              A Profills entra nesse mercado com uma{' '}
+              A Profills vai entrar nesse mercado com uma{' '}
               <span className='text-accent font-semibold'>proposta direta</span>{' '}
               para apoiar o crescimento e a expansão de pequenos e grandes
               produtores, distribuidores e indústrias: uma{' '}

@@ -10,7 +10,7 @@ import SolucaoMarketplace from './_components/solucaoMarketplace';
 export const metadata: Metadata = metadataDaPagina({
   titulo: 'Profills Marketplace',
   descricao:
-    'Marketplace de insumos que liga produtores, distribuidores e indústrias, com negociação e venda online.',
+    'O marketplace de insumos que a Profills prepara para ligar produtores, distribuidores e indústrias, com negociação e venda online.',
   path: '/projetos/profills-marketplace'
 });
 

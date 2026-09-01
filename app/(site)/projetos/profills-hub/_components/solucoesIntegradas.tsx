@@ -49,11 +49,11 @@ export default function SolucoesIntegradas() {
               Engenharia de Fábricas
             </h3>
             <p className='mb-6 leading-relaxed text-gray-700'>
-              Nossa equipe de engenharia{' '}
+              Nossa equipe de engenharia está preparada para{' '}
               <span className='text-accent font-semibold'>
-                projeta fábricas
+                projetar fábricas
               </span>{' '}
-              e fornece soluções completas em{' '}
+              e fornecer soluções completas em{' '}
               <span className='text-accent font-semibold'>
                 processamento de alimentos
               </span>

@@ -5,6 +5,7 @@ import { GridPattern } from '@/components/layout/gridPatternBg';
 import { JsonLd } from '@/components/seo/jsonLd';
 import { getMaquinaBySlug, maquinasCatalogo } from '@/lib/data/maquinas';
 import { breadcrumbSchema, maquinaSchema } from '@/lib/seo/schemas';
+import { OG_IMAGE, SITE_LOCALE, SITE_NAME } from '@/lib/seo/site';
 import { WHATSAPP_VENDAS, waLink } from '@/lib/utils/whatsapp';
 
 import { AplicacoesProdutos } from './_components/aplicacoesProdutos';
@@ -34,6 +35,18 @@ export async function generateMetadata({
   const maquina = getMaquinaBySlug(slug);
   if (!maquina) return {};
   const url = `/maquinas/${maquina.slug}`;
+  const tituloComMarca = `${maquina.seo.titulo} | ${SITE_NAME}`;
+  // Máquina de engenharia não tem foto; sem este fallback a página sairia sem
+  // og:image, porque declarar openGraph aqui substitui o objeto herdado do root.
+  const imagem = maquina.imagens
+    ? {
+        url: maquina.imagens.maquina.src,
+        width: maquina.imagens.maquina.width,
+        height: maquina.imagens.maquina.height,
+        alt: maquina.nomeCompleto
+      }
+    : { url: OG_IMAGE, width: 1200, height: 630, alt: maquina.nomeCompleto };
+
   return {
     title: maquina.seo.titulo,
     description: maquina.seo.descricao,
@@ -41,24 +54,17 @@ export async function generateMetadata({
     openGraph: {
       type: 'website',
       url,
-      title: maquina.seo.titulo,
+      siteName: SITE_NAME,
+      locale: SITE_LOCALE,
+      title: tituloComMarca,
       description: maquina.seo.descricao,
-      ...(maquina.imagens && {
-        images: [
-          {
-            url: maquina.imagens.maquina.src,
-            width: maquina.imagens.maquina.width,
-            height: maquina.imagens.maquina.height,
-            alt: maquina.nomeCompleto
-          }
-        ]
-      })
+      images: [imagem]
     },
     twitter: {
       card: 'summary_large_image',
-      title: maquina.seo.titulo,
+      title: tituloComMarca,
       description: maquina.seo.descricao,
-      ...(maquina.imagens && { images: [maquina.imagens.maquina.src] })
+      images: [imagem.url]
     }
   };
 }

@@ -101,8 +101,8 @@ export default function CtaAjudarEmpresa() {
             </Highlighter>
           </h2>
           <p className='text-muted-foreground mx-auto max-w-2xl text-sm md:text-base'>
-            Veja como automatizar o envase reduz custos, garante conformidade e
-            libera tempo para o resto do seu negócio
+            Veja como automatizar o envase reduz custos, adequa a operação às
+            normas e libera tempo para o resto do seu negócio
           </p>
         </div>
 

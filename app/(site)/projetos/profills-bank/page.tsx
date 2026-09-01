@@ -10,7 +10,7 @@ import TecnologiaDbaas from './_components/tecnologiaDbaas';
 export const metadata: Metadata = metadataDaPagina({
   titulo: 'Profills Bank',
   descricao:
-    'Serviços financeiros digitais para a indústria, com gestão de contas de pagamento por parceiros homologados no Banco Central.',
+    'Serviços financeiros digitais com gestão de contas de pagamento, intermediados por parceiros homologados no Banco Central.',
   path: '/projetos/profills-bank'
 });
 

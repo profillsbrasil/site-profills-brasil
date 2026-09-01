@@ -1,8 +1,8 @@
 import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 
 import {
-  CNPJ,
   EMAIL_COMERCIAL,
+  OG_IMAGE,
   REDES_SOCIAIS,
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -20,11 +20,9 @@ export function organizacaoSchema() {
     '@type': 'Organization',
     '@id': ORGANIZACAO_ID,
     name: SITE_NAME,
-    legalName: 'Profills do Brasil',
     url: SITE_URL,
     logo: urlAbsoluta('/logo.png'),
     description: SITE_DESCRIPTION,
-    taxID: CNPJ,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Curitiba',
@@ -81,7 +79,9 @@ export function maquinaSchema(maquina: MaquinaCatalogo) {
     description: maquina.seo.descricao,
     url,
     category: maquina.categoria,
-    ...(maquina.imagens && { image: urlAbsoluta(maquina.imagens.maquina.src) }),
+    image: urlAbsoluta(
+      maquina.imagens ? maquina.imagens.maquina.src : OG_IMAGE
+    ),
     brand: { '@type': 'Brand', name: SITE_NAME },
     manufacturer: { '@id': ORGANIZACAO_ID },
     additionalProperty: specs,

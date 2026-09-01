@@ -139,7 +139,7 @@ export default function CadeiaSuprimentos() {
               <span className='text-accent font-semibold'>
                 ponto de contato entre os mercados
               </span>{' '}
-              e nossas outras bases em todo o mundo.
+              e as nossas outras bases.
             </p>
             <p className='leading-relaxed text-gray-700'>
               Fornecemos{' '}

@@ -40,6 +40,7 @@ export const metadata: Metadata = {
   title: 'Sorteio FISPAL 2026',
   description:
     'Concorra a uma TV 65", uma Churrasqueira Champions Grill e um Cooler Profills. Sorteio em 05/06/2026 no estande Profills na FISPAL 2026.',
+  alternates: { canonical: '/sorteio-fispal-2026' },
   robots: { index: false, follow: false },
   openGraph: {
     title: 'Sorteio Profills FISPAL 2026',
