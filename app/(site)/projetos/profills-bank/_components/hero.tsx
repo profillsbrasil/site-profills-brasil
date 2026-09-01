@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { Highlighter } from '@/components/magicui/highlighter';
 import { BlurFade } from '@/components/ui/blur-fade';
 import imgBank from '@/lib/images/projetos/Bank.jpg';
 
@@ -22,30 +23,36 @@ export default function Hero() {
         </div>
       </BlurFade>
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
+        <Highlighter
+          action='underline'
+          animationDuration={4000}
+          textColor='text-2xl font-bold md:text-4xl'>
+          <h1 id='titulo-profills-bank'>Profills Bank</h1>
+        </Highlighter>
+
         <BlurFade delay={0.2} inView>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
-          <p>
-            A <span className='text-accent font-semibold'>Profills Bank</span> é
-            uma empresa privada que atua na comercialização de{' '}
-            <span className='text-accent font-semibold'>
-              serviços financeiros digitais
-            </span>
-            , buscando ser mais acessível em relação aos serviços bancários
-            tradicionais.
-          </p>
+            <p>
+              A <span className='text-accent font-semibold'>Profills Bank</span>{' '}
+              é uma empresa privada que comercializa{' '}
+              <span className='text-accent font-semibold'>
+                serviços financeiros digitais
+              </span>
+              , mais acessíveis que os dos bancos tradicionais.
+            </p>
 
-          <p>
-            Atuamos como{' '}
-            <span className='text-accent font-semibold'>
-              intermediadora com parceiros homologados
-            </span>{' '}
-            perante o Banco Central, fornecendo sistemas e serviços financeiros
-            para a{' '}
-            <span className='text-accent font-semibold'>
-              gestão de contas de pagamentos
-            </span>
-            .
-          </p>
+            <p>
+              Atuamos como{' '}
+              <span className='text-accent font-semibold'>
+                intermediadora com parceiros homologados
+              </span>{' '}
+              perante o Banco Central, fornecendo sistemas e serviços
+              financeiros para a{' '}
+              <span className='text-accent font-semibold'>
+                gestão de contas de pagamentos
+              </span>
+              .
+            </p>
           </div>
         </BlurFade>
 

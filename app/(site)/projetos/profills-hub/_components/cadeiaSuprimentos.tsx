@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import {
   Apple,
@@ -20,10 +20,9 @@ export default function CadeiaSuprimentos() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-3xl'>
-            <h2 id='titulo-cadeia'> Conectando Mercados Globalmente</h2>
+            <h2 id='titulo-cadeia'>Conectando Mercados Globalmente</h2>
           </Highlighter>
           <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
             Desde nossa fundação, trabalhamos na{' '}
@@ -115,7 +114,7 @@ export default function CadeiaSuprimentos() {
               , entre outros produtos.
             </p>
             <p className='leading-relaxed text-gray-700'>
-              Entendemos que é possível{' '}
+              Podemos{' '}
               <span className='text-accent font-semibold'>
                 construir mais valor
               </span>{' '}
@@ -136,7 +135,7 @@ export default function CadeiaSuprimentos() {
               </h3>
             </div>
             <p className='mb-4 leading-relaxed text-gray-700'>
-              Somos capazes de agir como um{' '}
+              Atuamos como{' '}
               <span className='text-accent font-semibold'>
                 ponto de contato entre os mercados
               </span>{' '}
@@ -145,9 +144,9 @@ export default function CadeiaSuprimentos() {
             <p className='leading-relaxed text-gray-700'>
               Fornecemos{' '}
               <span className='text-accent font-semibold'>
-                acesso ao conhecimento adquirido
+                acesso ao conhecimento que acumulamos ao longo dos anos
               </span>{' '}
-              ao longo de nossa jornada, proporcionando{' '}
+              e oferecemos{' '}
               <span className='text-accent font-semibold'>
                 soluções de embalagem
               </span>{' '}

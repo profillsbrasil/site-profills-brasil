@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import { Building, Flag, Globe, MapPin } from 'lucide-react';
 
@@ -13,7 +13,6 @@ export default function ExpansaoGlobal() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-3xl'>
             <h2 id='titulo-expansao'>Expansão Global</h2>
@@ -51,9 +50,8 @@ export default function ExpansaoGlobal() {
               <span className='text-accent font-semibold'>
                 Pará, Paraná, São Paulo
               </span>
-              , uma nova unidade na{' '}
-              <span className='text-accent font-semibold'>Bahia</span>, e muito
-              mais está por vir.
+              , e uma nova unidade na{' '}
+              <span className='text-accent font-semibold'>Bahia</span>.
             </p>
 
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>

@@ -24,6 +24,9 @@ export default function MaquinasPage() {
           { nome: 'Máquinas', path: '/maquinas' }
         ])}
       />
+      <h1 className='sr-only'>
+        Catálogo de máquinas envasadoras e embaladoras Profills
+      </h1>
       <CatalogoMaquinas />
     </>
   );

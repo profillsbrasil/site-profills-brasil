@@ -17,6 +17,9 @@ export const metadata: Metadata = metadataDaPagina({
 export default function ServicosPersonalizados() {
   return (
     <div className='flex min-h-screen w-full flex-col items-center justify-center pt-10 pb-10 md:px-0'>
+      <h1 className='sr-only'>
+        Serviços industriais personalizados da Profills
+      </h1>
       <GridPattern />
       <video
         src='/videos/servico-personalizado.mp4'

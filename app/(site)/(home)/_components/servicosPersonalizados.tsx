@@ -51,10 +51,8 @@ export default function ServicosPersonalizados() {
                 .
               </p>
               <p>
-                Unindo tecnologia de ponta e experiência em metalurgia,
-                atendemos desde peças sob medida até projetos especiais, sempre
-                com precisão e qualidade. Na Profills, inovação e excelência
-                caminham juntas para transformar suas ideias em realidade.
+                Trabalhamos com metalurgia própria, do desenho técnico ao
+                acabamento, para peças sob medida e projetos especiais.
               </p>
             </div>
           </div>

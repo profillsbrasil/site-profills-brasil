@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import { Package, Shield, Target, Users } from 'lucide-react';
 
@@ -142,10 +142,10 @@ export default function Alimentacao() {
                 <Target className='h-8 w-8 text-white' />
               </div>
               <h4 className='mb-2 font-semibold text-gray-800'>
-                Processamento Inovador
+                Processamento Avançado
               </h4>
               <p className='text-sm text-gray-600'>
-                Soluções tecnológicas para envase
+                Tecnologia própria para envase
               </p>
             </div>
 

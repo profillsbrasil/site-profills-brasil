@@ -10,22 +10,22 @@ export default function ServicoAssinatura() {
           {/* Left Content */}
           <div className='flex flex-col justify-center space-y-6'>
             <h2 className='text-2xl font-bold text-gray-900 md:text-3xl'>
-              Sua Empresa Dispondo de um{' '}
+              Sua Empresa com um{' '}
               <span className='text-[#2d62ef]'>Serviço por Assinatura</span>
             </h2>
             <p className='text-sm leading-relaxed text-gray-700 md:text-lg'>
-              Trata-se de{' '}
+              É um{' '}
               <span className='font-semibold text-[#2d62ef]'>
-                sucesso garantido
+                caminho mais seguro
               </span>{' '}
-              para as empresas em expansão e um{' '}
+              para empresas em expansão e um{' '}
               <span className='font-semibold text-[#2d62ef]'>
                 ambiente seguro
               </span>
-              , um ponto de entrada fácil no mercado, para aqueles que estão em
-              sua primeira empreitada,{' '}
+              , um ponto de entrada fácil no mercado para quem está na primeira
+              empreitada, com{' '}
               <span className='font-semibold text-[#2d62ef]'>
-                reduzindo os riscos inerentes a esse primeiro passo
+                menos risco nesse primeiro passo
               </span>
               .
             </p>
@@ -49,7 +49,7 @@ export default function ServicoAssinatura() {
                 Soluções Profills Hub
               </h3>
               <p className='text-gray-600'>
-                Acesso completo ao ecossistema integrado de soluções
+                Acesso completo às soluções da Profills Hub
               </p>
             </div>
 

@@ -51,9 +51,9 @@ export default function BeneficiosSociedade() {
             Benefícios para a <span className='text-[#2d62ef]'>Sociedade</span>
           </h2>
           <p className='mx-auto max-w-4xl text-lg text-gray-600'>
-            Qual o benefício desse projeto para a sociedade? A Profills, como
-            uma empresa consolidada, sabe exatamente o que é necessário para
-            chegar à estabilidade no mercado
+            A Profills é uma empresa consolidada que sabe o que é necessário
+            para chegar à estabilidade no mercado, e quer compartilhar esse
+            conhecimento com a sociedade
           </p>
         </div>
 
@@ -86,11 +86,11 @@ export default function BeneficiosSociedade() {
                 Nossa Visão de Futuro
               </h3>
               <p className='mb-4 text-lg leading-relaxed text-gray-700'>
-                A Profills, sendo uma{' '}
+                Como uma{' '}
                 <span className='font-semibold text-[#2d62ef]'>
                   empresa inovadora
                 </span>
-                , enxerga a necessidade de trabalhar com a educação e o acesso à
+                , a Profills vê a necessidade de investir em educação e acesso à
                 informação, pensando em{' '}
                 <span className='font-semibold text-[#2d62ef]'>
                   cenários futuros
@@ -98,13 +98,13 @@ export default function BeneficiosSociedade() {
                 .
               </p>
               <p className='text-lg leading-relaxed text-gray-700'>
-                A aplicação de todo esse conhecimento pode gerar{' '}
+                Esse conhecimento pode gerar{' '}
                 <span className='font-semibold text-[#2d62ef]'>
-                  impactos significativos em mercados existentes
+                  impacto em mercados já existentes
                 </span>{' '}
-                no Brasil, além da{' '}
+                no Brasil, além de ajudar a{' '}
                 <span className='font-semibold text-[#2d62ef]'>
-                  criação de diversas novas empresas de sucesso
+                  criar novas empresas
                 </span>
                 .
               </p>
@@ -119,7 +119,7 @@ export default function BeneficiosSociedade() {
                   Inovação Contínua
                 </h4>
                 <p className='text-xs text-gray-600'>
-                  Pensando sempre em cenários futuros e soluções inovadoras
+                  Foco em cenários futuros e em ideias novas para o setor
                 </p>
               </div>
               <div className='text-center'>

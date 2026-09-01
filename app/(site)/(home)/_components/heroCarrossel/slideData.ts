@@ -40,7 +40,7 @@ export const SLIDES: SlideMaquina[] = [
     categoria: 'Envasadora de sachês',
     titulo: ['Envase de sachês com', 'precisão e versatilidade'],
     descricao:
-      'Solução eficiente para líquidos, como polpas, laticínios, molhos e outros produtos em sachês.',
+      'Envasa líquidos como polpas, laticínios, molhos e outros produtos em sachês.',
     specs: [
       { prefixo: 'até', valor: '3.000', unidade: 'un/h', label: 'Produção' },
       { valor: '85-300', unidade: 'mm', label: 'Largura do filme' },
@@ -99,7 +99,7 @@ export const SLIDES: SlideMaquina[] = [
     categoria: 'Stand-up pouch',
     titulo: ['Alta velocidade para', 'embalagens stand-up pouch'],
     descricao:
-      'Linha automática para líquidos, pós, grãos e sólidos, com eficiência em operações de grande escala.',
+      'Linha automática para líquidos, pós, grãos e sólidos, indicada para operações de grande escala.',
     specs: [
       { prefixo: 'até', valor: '5.400', unidade: 'un/h', label: 'Produção' },
       { valor: '320-650', unidade: 'mm', label: 'Largura do filme' },

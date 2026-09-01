@@ -84,7 +84,7 @@ export default function carrosselProdutos() {
             once
             startOnView
             className='text-2xl font-bold mb-2'>
-            Inovação e Praticidade
+            Praticidade no dia a dia
           </TextAnimate>
           <p className='text-muted-foreground text-sm'>
             Diversos produtos já aproveitam as vantagens das embalagens
@@ -112,30 +112,37 @@ export default function carrosselProdutos() {
 
       {/* Carousel desktop */}
       <div className='z-10 mx-auto hidden h-1/2 w-full max-w-6xl flex-col justify-center gap-5 px-4 py-5 md:flex'>
-      <div className='flex flex-col gap-2'>
-        <TextAnimate animation='blurInUp' by='word' as='h2' once startOnView className='text-3xl font-bold mb-2'>
-          Inovação e Praticidade
-        </TextAnimate>
-        <p className='text-muted-foreground text-base'>
-          Diversos produtos já aproveitam as vantagens das embalagens Gable-Top
-        </p>
+        <div className='flex flex-col gap-2'>
+          <TextAnimate
+            animation='blurInUp'
+            by='word'
+            as='h2'
+            once
+            startOnView
+            className='text-3xl font-bold mb-2'>
+            Praticidade no dia a dia
+          </TextAnimate>
+          <p className='text-muted-foreground text-base'>
+            Diversos produtos já aproveitam as vantagens das embalagens
+            Gable-Top
+          </p>
+        </div>
+        <Carousel plugins={[Autoplay({ delay: 5000 })]}>
+          <AnimatedContainer delay={0.3}>
+            <CarouselContent className='h-full w-full'>
+              {produtos.map((produto) => (
+                <CarouselItem key={produto.id}>
+                  <Image
+                    src={produto.imageProduct}
+                    alt={produto.name}
+                    className='h-full w-full rounded-xs object-contain'
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </AnimatedContainer>
+        </Carousel>
       </div>
-      <Carousel plugins={[Autoplay({ delay: 5000 })]}>
-        <AnimatedContainer delay={0.3}>
-          <CarouselContent className='h-full w-full'>
-            {produtos.map((produto) => (
-              <CarouselItem key={produto.id}>
-                <Image
-                  src={produto.imageProduct}
-                  alt={produto.name}
-                  className='h-full w-full rounded-xs object-contain'
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </AnimatedContainer>
-      </Carousel>
-    </div>
     </>
   );
 }

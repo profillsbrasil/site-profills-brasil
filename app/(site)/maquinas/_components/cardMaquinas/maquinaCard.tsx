@@ -88,7 +88,7 @@ export default function MaquinaCard({
           <div className='flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xs bg-slate-900/60'>
             <span className='text-accent font-mono text-2xl'>+</span>
             <span className='text-muted-foreground/70 px-4 text-center font-mono text-[11px] tracking-[0.2em] uppercase'>
-              Solução de engenharia
+              Engenharia
               <br />
               sob projeto
             </span>

@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import { Building2, Globe, HandHeart, TrendingUp } from 'lucide-react';
 
@@ -89,20 +89,20 @@ export default function DesenvolvimentoFuturo() {
                 <Building2 className='h-8 w-8 text-white' />
               </div>
               <h3 className='text-2xl font-bold text-gray-800'>
-                Soluções Inclusivas
+                Modelo Inclusivo
               </h3>
             </div>
 
             <p className='mb-6 leading-relaxed text-gray-700'>
-              Apresentamos soluções tanto para{' '}
+              Trabalhamos tanto com{' '}
               <span className='font-semibold text-indigo-600'>
                 grandes corporações
               </span>{' '}
-              quanto para o{' '}
+              quanto com o{' '}
               <span className='font-semibold text-indigo-600'>
                 pequeno produtor
               </span>
-              , que tem sua renda hoje limitada ao comércio local.
+              , que hoje tem a renda limitada ao comércio local.
             </p>
 
             <div className='space-y-4'>

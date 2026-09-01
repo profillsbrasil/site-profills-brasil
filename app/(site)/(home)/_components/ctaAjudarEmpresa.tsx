@@ -60,19 +60,19 @@ const cards = [
   {
     title: 'Conformidade garantida',
     description:
-      'Adequação da operação a um processo de envase higiênico, nos padrões da Anvisa, impedindo o contato do produto com micro-organismos.',
+      'Processo de envase higiênico, dentro dos padrões da Anvisa, sem contato do produto com micro-organismos.',
     icon: <Shield className='h-5 w-5 text-accent' />
   },
   {
     title: 'Otimização de tempo',
     description:
-      'Tempo para dedicar-se a outras áreas do seu negócio, a exemplo das vendas e abertura de novos mercados.',
+      'Mais tempo para focar em outras áreas do negócio, como vendas e abertura de novos mercados.',
     icon: <Clock className='h-5 w-5 text-accent' />
   },
   {
     title: 'Automatização completa',
     description:
-      'Automatização do processo de envase, evitando desperdícios, otimizando a produção com aumento em volume de envase.',
+      'Automatiza o envase, reduz desperdício e aumenta o volume produzido.',
     icon: <Settings className='h-5 w-5 text-accent' />
   }
 ];
@@ -101,8 +101,8 @@ export default function CtaAjudarEmpresa() {
             </Highlighter>
           </h2>
           <p className='text-muted-foreground mx-auto max-w-2xl text-sm md:text-base'>
-            Descubra como nossas soluções podem revolucionar seus processos e
-            impulsionar seus resultados de forma mensurável e sustentável
+            Veja como automatizar o envase reduz custos, garante conformidade e
+            libera tempo para o resto do seu negócio
           </p>
         </div>
 

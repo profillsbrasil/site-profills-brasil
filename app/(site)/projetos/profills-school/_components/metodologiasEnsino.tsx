@@ -64,9 +64,9 @@ export default function MetodologiasEnsino() {
             <span className='text-[#2d62ef]'>Profills School</span>
           </h2>
           <p className='mx-auto max-w-3xl text-lg text-gray-600'>
-            O projeto tem o intuito de fornecer metodologias diversas para
-            colaboradores e comunidades, gerando mais profissionais qualificados
-            para o mercado de trabalho
+            O projeto quer levar metodologias diferentes a colaboradores e
+            comunidades, formando mais profissionais qualificados para o mercado
+            de trabalho
           </p>
         </div>
 

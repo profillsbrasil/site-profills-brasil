@@ -21,11 +21,11 @@ export default function ImpactoEducacao() {
             </h2>
             <div className='space-y-4'>
               <p className='text-lg leading-relaxed text-gray-700'>
-                O Brasil enfrenta um desafio significativo: conseguirá{' '}
+                O Brasil enfrenta um{' '}
                 <span className='font-semibold text-red-600'>
-                  impactar positivamente o mercado de trabalho brasileiro
-                </span>{' '}
-                que, com a pandemia, lida com cerca de{' '}
+                  desafio grave no mercado de trabalho
+                </span>
+                : a pandemia deixou o país com cerca de{' '}
                 <span className='font-semibold text-red-600'>
                   14 milhões de desempregados
                 </span>
@@ -70,7 +70,7 @@ export default function ImpactoEducacao() {
                   </h3>
                   <p className='mt-2 text-blue-700'>
                     Educação online se tornou um dos mercados mais promissores
-                    no cenário brasileiro
+                    no Brasil
                   </p>
                 </div>
               </div>

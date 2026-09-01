@@ -81,7 +81,8 @@ export default function Gt3000() {
             </Highlighter>
           </div>
           <p className='text-muted-foreground text-sm md:text-lg'>
-            A linha de produção GT-3000 é a mais moderna e eficiente do mercado.
+            A linha GT-3000 reduz espaço de estoque, otimiza a cubagem e
+            dispensa alumínio na embalagem.
           </p>
         </div>
 

@@ -380,7 +380,7 @@ export default function ConfiguradorMaquina() {
 
                         <p className='mt-2 text-xs'>Preencha o formulário</p>
                         <p className='text-xs'>
-                          Receber uma solução personalizada.
+                          Você recebe uma proposta personalizada.
                         </p>
                       </div>
                     </div>

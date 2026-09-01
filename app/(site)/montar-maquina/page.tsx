@@ -22,6 +22,7 @@ export default function MontarMaquinaPage() {
           { nome: 'Monte sua máquina', path: '/montar-maquina' }
         ])}
       />
+      <h1 className='sr-only'>Monte sua máquina envasadora</h1>
       <ConfiguradorMaquina />
     </>
   );

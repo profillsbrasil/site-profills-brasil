@@ -18,8 +18,8 @@ import {
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { motion } from 'motion/react';
 import { ArrowRight, Building2, Mail, Phone, User } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Controller, useForm } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
@@ -91,7 +91,6 @@ export default function FormularioMontarFabrica() {
           <h1 className='text-center'>
             <Highlighter
               action='underline'
-              
               animationDuration={4000}
               textColor='text-2xl font-bold tracking-wider text-white uppercase md:text-3xl'>
               Monte sua Fábrica
@@ -138,8 +137,8 @@ export default function FormularioMontarFabrica() {
                   consultoria técnica
                 </span>
                 , <span className='text-accent font-semibold'>fabricação</span>{' '}
-                e <span className='text-accent font-semibold'>suporte</span>,
-                garantindo uma solução completa e personalizada para{' '}
+                e <span className='text-accent font-semibold'>suporte</span>: um
+                atendimento completo e personalizado para{' '}
                 <span className='text-accent font-semibold'>o seu negócio</span>
                 .
               </p>

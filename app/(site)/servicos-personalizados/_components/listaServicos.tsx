@@ -13,28 +13,28 @@ const listaServicos = [
     image: cutelariaInox,
     title: 'Cutelaria em Inox',
     description:
-      'Cortes e dobras de alta precisão para produção de facas artesanais. Garantimos matéria-prima de qualidade e acabamento impecável, proporcionando peças funcionais, duráveis e com estética refinada.'
+      'Cortes e dobras de alta precisão para facas artesanais, com matéria-prima de qualidade e acabamento impecável. O resultado são peças duráveis e com estética refinada.'
   },
   {
     id: 'brindes-corporativos',
     image: brindesCorporativos,
     title: 'Brindes Corporativos',
     description:
-      'Personalize chaveiros, marcadores, suportes e outros itens exclusivos em inox. Brindes resistentes, elegantes e feitos sob medida para valorizar sua marca e encantar clientes e parceiros.'
+      'Personalize chaveiros, marcadores, suportes e outros itens exclusivos em inox. Brindes resistentes e feitos sob medida para valorizar sua marca.'
   },
   {
     id: 'projetos-arquitetonicos',
     image: pecasSobMedida,
     title: 'Projetos Arquitetônicos',
     description:
-      'Soluções em inox para transformar ambientes com modernidade e sofisticação. Realizamos desde detalhes estruturais até móveis personalizados, unindo design, precisão técnica e durabilidade.'
+      'Peças em inox para transformar ambientes, de detalhes estruturais a móveis personalizados. Unimos design, precisão técnica e durabilidade em cada projeto.'
   },
   {
     id: 'pecas-sob-medida',
     image: projetosArquitetonicos,
     title: 'Peças Sob Medida',
     description:
-      'Desenvolvemos peças personalizadas em inox para usos industriais, comerciais e decorativos. Cortes, dobras e soldas realizados com excelência, oferecendo versatilidade e qualidade em cada projeto.'
+      'Desenvolvemos peças personalizadas em inox para uso industrial, comercial e decorativo. Cortes, dobras e soldas com precisão: o resultado é versatilidade e qualidade em cada projeto.'
   }
 ];
 
@@ -44,7 +44,6 @@ export default function ListaServicos() {
       <div className='flex w-full flex-col items-start justify-start'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold mb-3 md:text-3xl md:mb-2'>
           O que podemos fazer?

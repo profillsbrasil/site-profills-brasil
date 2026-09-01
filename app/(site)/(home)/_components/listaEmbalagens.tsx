@@ -114,7 +114,7 @@ const listaDeEmbalagens = [
   },
   {
     title: 'Lata de Tinta',
-    description: 'Lata de tinta para embalagem de tinta.',
+    description: 'Embalagem metálica para armazenar e transportar tinta.',
     modelSrc: '/embalagens-3d/lata-tinta.glb',
     cameraOrbit: '190deg 66deg 100%'
   }
@@ -137,7 +137,7 @@ export default function ListaEmbalagens() {
           </TextAnimate>
 
           <p className='text-muted-foreground text-sm leading-relaxed md:text-base'>
-            Soluções para todos os tipos de produtos
+            Embalagens para produtos líquidos, pastosos e sólidos
           </p>
         </div>
 

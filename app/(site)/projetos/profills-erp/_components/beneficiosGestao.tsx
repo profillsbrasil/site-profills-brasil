@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import {
   BookOpen,
@@ -20,18 +20,18 @@ export default function BeneficiosGestao() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-3xl'>
             <h2 id='titulo-beneficios'>Boas Práticas Incorporadas</h2>
           </Highlighter>
           <p className='mx-auto mt-2 max-w-4xl text-sm text-gray-600 md:text-lg'>
-            <span className='text-accent font-semibold'>
-              Boas práticas de negócios
-            </span>{' '}
-            serão incorporadas através do{' '}
+            O{' '}
             <span className='text-accent font-semibold'>
               fluxo de trabalho fixado ao ERP
+            </span>{' '}
+            vai incorporar{' '}
+            <span className='text-accent font-semibold'>
+              boas práticas de negócio
             </span>
             .
           </p>
@@ -133,7 +133,7 @@ export default function BeneficiosGestao() {
                 Menos Erros
               </h3>
               <p className='text-sm leading-relaxed text-gray-600'>
-                Automação reduz significativamente{' '}
+                Automação reduz{' '}
                 <span className='text-accent font-semibold'>erros manuais</span>
               </p>
             </div>

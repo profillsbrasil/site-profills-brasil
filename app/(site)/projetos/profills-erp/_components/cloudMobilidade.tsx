@@ -20,9 +20,9 @@ export default function CloudMobilidade() {
           </p>
           <div className='border-border/20 rounded-xs border bg-slate-900 p-4 backdrop-blur-sm md:p-6'>
             <p className='text-base font-medium md:text-lg'>
-              Um sistema de gestão integrado permite que{' '}
+              Um sistema de gestão integrado libera{' '}
               <span className='text-accent font-bold'>
-                mais tempo seja usado no que realmente importa
+                mais tempo para o que importa
               </span>
               :<br />
               <span className='font-bold'>Melhores produtos, mais vendas</span>.

@@ -1,7 +1,7 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { GridPattern } from '@/components/layout/gridPatternBg';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import {
   ArrowRightLeft,
@@ -22,15 +22,14 @@ export default function SolucoesIntegradas() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-3xl'>
             <h2 id='titulo-solucoes'>Soluções Integradas</h2>
           </Highlighter>
           <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
             Nossa equipe de engenharia está preparada para{' '}
-            <span className='text-accent font-semibold'>projetar fábricas</span>,
-            fornecendo{' '}
+            <span className='text-accent font-semibold'>projetar fábricas</span>
+            , fornecendo{' '}
             <span className='text-accent font-semibold'>
               soluções completas em processamento de alimentos
             </span>
@@ -50,11 +49,11 @@ export default function SolucoesIntegradas() {
               Engenharia de Fábricas
             </h3>
             <p className='mb-6 leading-relaxed text-gray-700'>
-              Nossa equipe de engenharia está preparada para{' '}
+              Nossa equipe de engenharia{' '}
               <span className='text-accent font-semibold'>
-                projetar fábricas
-              </span>
-              , fornecendo soluções completas em{' '}
+                projeta fábricas
+              </span>{' '}
+              e fornece soluções completas em{' '}
               <span className='text-accent font-semibold'>
                 processamento de alimentos
               </span>
@@ -94,9 +93,9 @@ export default function SolucoesIntegradas() {
             <p className='mb-6 leading-relaxed text-gray-700'>
               Fornecemos{' '}
               <span className='text-accent font-semibold'>
-                acesso ao conhecimento adquirido
-              </span>{' '}
-              ao longo de nossa jornada, juntamente com o{' '}
+                acesso ao conhecimento que acumulamos ao longo dos anos
+              </span>
+              , além do{' '}
               <span className='text-accent font-semibold'>
                 know-how necessário
               </span>{' '}

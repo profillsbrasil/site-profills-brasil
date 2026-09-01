@@ -11,11 +11,7 @@ import { tiposEmbalagem } from '@/lib/data/maquinas/tipos-embalagem';
 import { cn } from '@/lib/utils';
 
 import CardMaquina from './cardMaquinas/cardMaquina';
-import {
-  FiltrosMobile,
-  FiltrosSidebar,
-  chipFiltro
-} from './filtrosSidebar';
+import { FiltrosMobile, FiltrosSidebar, chipFiltro } from './filtrosSidebar';
 
 /* Busca sem cerimônia: ignora acento e caixa (NFD separa os diacríticos,
    a faixa U+0300–U+036F os remove) */
@@ -215,7 +211,6 @@ function MaquinasContent() {
   return (
     <div className='tema-navy bg-background text-foreground relative flex min-h-screen w-full flex-col items-center justify-center pt-16 pb-10'>
       <GridPattern />
-      <h1 className='sr-only'>Nossas Máquinas</h1>
 
       <FiltrosMobile {...propsFiltros} />
 
