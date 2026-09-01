@@ -30,8 +30,7 @@ export default function SolucaoMarketplace() {
     {
       icon: Smartphone,
       title: 'Mobile Commerce',
-      description:
-        'Compras pelo celular ou computador de forma totalmente intuitiva',
+      description: 'Compras pelo celular ou computador de forma intuitiva',
       color: 'bg-purple-100 text-purple-600'
     },
     {
@@ -152,9 +151,9 @@ export default function SolucaoMarketplace() {
             Mais que Compra e Venda
           </h3>
           <p className='mb-6 text-sm md:text-lg'>
-            Profills Marketplace envolve conexões e parcerias estratégicas que
-            constituirão um hub de negócios, ligando produtores locais,
-            distribuidores, consumidores e comércios
+            O Profills Marketplace vai conectar produtores locais,
+            distribuidores, consumidores e comércios em parcerias estratégicas
+            de negócio
           </p>
         </div>
       </AnimatedContainer>

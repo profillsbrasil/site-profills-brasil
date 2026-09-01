@@ -11,7 +11,7 @@ export const envasadoraStickTc3sc1A4Vias: MaquinaCatalogo = {
   headline:
     'Sachês stick em até quatro vias para porções individuais de líquidos, pós e granulados.',
   seo: {
-    titulo: 'Envasadora Stick TC3SC de 1 a 4 Vias | Profills',
+    titulo: 'Envasadora Stick TC3SC de 1 a 4 Vias',
     descricao:
       'Envasadora de sachês stick TC3SC com uma a quatro vias para líquidos e secos, produzindo até 4.000 unidades por hora.'
   },

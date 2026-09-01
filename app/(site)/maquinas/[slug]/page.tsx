@@ -2,7 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { JsonLd } from '@/components/seo/jsonLd';
 import { getMaquinaBySlug, maquinasCatalogo } from '@/lib/data/maquinas';
+import { breadcrumbSchema, maquinaSchema } from '@/lib/seo/schemas';
+import { OG_IMAGE, SITE_LOCALE, SITE_NAME } from '@/lib/seo/site';
 import { WHATSAPP_VENDAS, waLink } from '@/lib/utils/whatsapp';
 
 import { AplicacoesProdutos } from './_components/aplicacoesProdutos';
@@ -31,15 +34,37 @@ export async function generateMetadata({
   const { slug } = await params;
   const maquina = getMaquinaBySlug(slug);
   if (!maquina) return {};
+  const url = `/maquinas/${maquina.slug}`;
+  const tituloComMarca = `${maquina.seo.titulo} | ${SITE_NAME}`;
+  // Máquina de engenharia não tem foto; sem este fallback a página sairia sem
+  // og:image, porque declarar openGraph aqui substitui o objeto herdado do root.
+  const imagem = maquina.imagens
+    ? {
+        url: maquina.imagens.maquina.src,
+        width: maquina.imagens.maquina.width,
+        height: maquina.imagens.maquina.height,
+        alt: maquina.nomeCompleto
+      }
+    : { url: OG_IMAGE, width: 1200, height: 630, alt: maquina.nomeCompleto };
+
   return {
     title: maquina.seo.titulo,
     description: maquina.seo.descricao,
+    alternates: { canonical: url },
     openGraph: {
-      title: maquina.seo.titulo,
+      type: 'website',
+      url,
+      siteName: SITE_NAME,
+      locale: SITE_LOCALE,
+      title: tituloComMarca,
       description: maquina.seo.descricao,
-      ...(maquina.imagens && {
-        images: [{ url: maquina.imagens.maquina.src }]
-      })
+      images: [imagem]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: tituloComMarca,
+      description: maquina.seo.descricao,
+      images: [imagem.url]
     }
   };
 }
@@ -66,6 +91,14 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
 
   return (
     <div className='tema-navy bg-background text-foreground relative min-h-screen w-full pt-16'>
+      <JsonLd data={maquinaSchema(maquina)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { nome: 'Início', path: '/' },
+          { nome: 'Máquinas', path: '/maquinas' },
+          { nome: maquina.nome, path: `/maquinas/${maquina.slug}` }
+        ])}
+      />
       <GridPattern />
       <div className='relative z-10'>
         <SubNavMaquina nome={maquina.nome} secoes={secoes}>

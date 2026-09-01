@@ -11,7 +11,7 @@ export const envasadoraCaixasAssepticasLeiteSucos: MaquinaCatalogo = {
   headline:
     'Processo integrado para bebidas de longa vida em embalagem cartonada asséptica, com produtividade contínua e controle automatizado.',
   seo: {
-    titulo: 'Envasadora para Caixas Assépticas | Profills',
+    titulo: 'Envasadora para Caixas Assépticas',
     descricao:
       'Linha automática para esterilização, envase e selagem de bebidas em caixas assépticas de 100 a 1.000 ml, com até 6.000 unidades por hora.'
   },

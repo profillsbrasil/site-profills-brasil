@@ -22,7 +22,6 @@ export default function ProfillFabrica() {
       <div className='flex w-full flex-col items-center gap-4 md:w-1/2 md:gap-5'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h2 id='titulo-estrutura'>Conheça a Nossa Estrutura</h2>
@@ -33,15 +32,15 @@ export default function ProfillFabrica() {
             <p className='text-sm md:text-lg'>
               Para garantir{' '}
               <span className='text-accent font-semibold'>
-                qualidade e inovação
-              </span>{' '}
-              , a Profills possui fábrica própria. A matriz está em{' '}
-              <span className='text-accent font-semibold'>Curitiba (PR)</span> e a
-              unidade fabril em{' '}
+                qualidade e padronização
+              </span>
+              , a Profills tem fábrica própria. A matriz está em{' '}
+              <span className='text-accent font-semibold'>Curitiba (PR)</span> e
+              a unidade fabril em{' '}
               <span className='text-accent font-semibold'>
                 Cerqueira César (SP)
               </span>
-              . Cerqueira César (SP).
+              .
             </p>
 
             <p className='text-sm md:text-lg'>
@@ -50,8 +49,8 @@ export default function ProfillFabrica() {
                 parque industrial{' '}
               </span>{' '}
               reúne CNC de corte e dobra e usinagem de precisão para aço inox e
-              outros materiais. A engenharia de produto atua integrada à produção,
-              acelerando{' '}
+              outros materiais. A engenharia de produto atua integrada à
+              produção, acelerando{' '}
               <span className='text-accent font-semibold'>
                 protótipos, testes e validações
               </span>
@@ -60,9 +59,10 @@ export default function ProfillFabrica() {
 
             <p className='text-sm md:text-lg'>
               Produzimos internamente grande parte dos componentes e estruturas
-              das máquinas, com controle de qualidade e{' '}
+              das máquinas, com{' '}
               <span className='text-accent font-semibold'>
-                mais consistência e padronização no resultado final
+                mais controle de qualidade, consistência e padronização no
+                resultado final
               </span>
               .
             </p>

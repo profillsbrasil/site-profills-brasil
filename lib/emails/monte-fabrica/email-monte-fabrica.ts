@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/seo/site';
+
 import type { MonteFabricaFormData } from '@/lib/schemas/monte-fabrica-form';
 import { logger } from '@/lib/utils/logger';
 
@@ -78,7 +80,7 @@ export const createMonteFabricaEmailTemplate = (data: MonteFabricaFormData) => {
   const htmlTemplate = htmlEmailTemplate;
 
   // URL base do site (sempre com protocolo)
-  const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
+  const siteUrl = SITE_URL;
 
   // Dados para o template
   const templateData = {

@@ -11,7 +11,7 @@ export const envasadoraSaches4SoldasTc4s1Via: MaquinaCatalogo = {
   headline:
     'Sachês quatro soldas com precisão, acabamento profissional e opções de abertura e formato especial.',
   seo: {
-    titulo: 'Envasadora de Sachês 4 Soldas TC4S 1 Via | Profills',
+    titulo: 'Envasadora de Sachês 4 Soldas TC4S 1 Via',
     descricao:
       'Envasadora TC4S de uma via para sachês quatro soldas, líquidos e secos, com produção de até 2.000 unidades por hora.'
   },

@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/seo/site';
+
 import { NextRequest, NextResponse } from 'next/server';
 
 import {
@@ -17,7 +19,7 @@ export async function POST(request: NextRequest) {
       { email: data.email, name: data.name },
       '7d'
     );
-    const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
+    const siteUrl = SITE_URL;
     const downloadUrl = `${siteUrl}/api/download/${token}`;
 
     await Promise.all([

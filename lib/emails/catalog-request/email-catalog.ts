@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/seo/site';
+
 import type { CatalogRequestData } from '@/lib/schemas/catalog-request';
 import { createTransporter } from '@/lib/emails/_shared/transporter';
 import { renderTemplate } from '@/lib/emails/_shared/template-engine';
@@ -5,7 +7,7 @@ import { template as clientTemplate } from './email-template-client';
 import { template as internalTemplate } from './email-template-internal';
 import { logger } from '@/lib/utils/logger';
 
-const getSiteUrl = () => process.env.SITE_URL || 'https://profills.com.br';
+const getSiteUrl = () => SITE_URL;
 
 const nowSaoPaulo = () =>
   new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });

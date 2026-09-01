@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imgLocacao from '@/lib/images/projetos/Locacao.jpg';
 
 import { Calendar, CreditCard, Settings, TrendingUp } from 'lucide-react';
@@ -26,7 +26,6 @@ export default function Hero() {
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h1 id='titulo-profills-locacao'>Profills Locação</h1>
@@ -36,29 +35,29 @@ export default function Hero() {
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
               Em um{' '}
-            <span className='text-accent font-semibold'>
-              modelo de negócio único
-            </span>
-            , planejamos revolucionar o mercado de envase no Brasil oferecendo
-            uma nova linha de{' '}
-            <span className='text-accent font-semibold'>
-              Máquinas por mensalidade
-            </span>
-            , para atender empreendedores que estão começando seus negócios ou
-            empresas consolidadas interessadas em{' '}
-            <span className='text-accent font-semibold'>
-              soluções menos onerosas
-            </span>{' '}
-            para expandir suas operações.
-          </p>
+              <span className='text-accent font-semibold'>
+                modelo de negócio único
+              </span>
+              , planejamos lançar no mercado de envase brasileiro uma nova linha
+              de{' '}
+              <span className='text-accent font-semibold'>
+                Máquinas por mensalidade
+              </span>
+              , para atender empreendedores que estão começando seus negócios ou
+              empresas consolidadas interessadas em{' '}
+              <span className='text-accent font-semibold'>
+                soluções menos onerosas
+              </span>{' '}
+              para expandir suas operações.
+            </p>
 
-          <p>
-            Os clientes terão à sua disposição todo o{' '}
-            <span className='text-accent font-semibold'>
-              conhecimento e experiência da Profills
-            </span>
-            , Máquinas confiáveis, soluções da Profills Hub, bem como instruções
-              acerca do processamento de alimentos e boas práticas.
+            <p>
+              Os clientes terão à sua disposição todo o{' '}
+              <span className='text-accent font-semibold'>
+                conhecimento e experiência da Profills
+              </span>
+              , Máquinas confiáveis, soluções da Profills Hub, bem como
+              instruções sobre processamento de alimentos e boas práticas.
             </p>
           </div>
         </BlurFade>

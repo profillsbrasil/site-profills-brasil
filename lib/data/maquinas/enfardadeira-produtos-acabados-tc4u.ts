@@ -11,7 +11,7 @@ export const enfardadeiraProdutosAcabadosTc4u: MaquinaCatalogo = {
   headline:
     'Agrupamento e enfardamento automático de produtos pré-embalados para melhorar proteção, organização e transporte.',
   seo: {
-    titulo: 'Enfardadeira Automática TC4U | Profills',
+    titulo: 'Enfardadeira Automática TC4U',
     descricao:
       'Enfardadeira TC4U para agrupamento, compactação e selagem de produtos acabados, com produção de até 1.100 fardos por hora.'
   },

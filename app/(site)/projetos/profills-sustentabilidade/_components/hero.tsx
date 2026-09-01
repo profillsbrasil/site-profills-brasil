@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imgSustentabilidade from '@/lib/images/projetos/Sustentabilidade.jpg';
 
 import { GraduationCap, Heart, Leaf, TrendingUp } from 'lucide-react';
@@ -38,27 +38,26 @@ export default function Hero() {
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
               Nossa missão é{' '}
-            <span className='font-semibold text-green-600'>
-              entregar alimentação segura, nutritiva e suficiente
-            </span>
-            , em todos os lugares. Através da{' '}
-            <span className='font-semibold text-green-600'>
-              educação e inovação
-            </span>
-            , construímos um futuro sustentável.
-          </p>
+              <span className='font-semibold text-green-600'>
+                entregar alimentação segura, nutritiva e suficiente
+              </span>
+              , em todos os lugares. Através da{' '}
+              <span className='font-semibold text-green-600'>
+                educação e inovação
+              </span>
+              , construímos um futuro sustentável.
+            </p>
 
-          <p>
-            Acreditamos que o{' '}
-            <span className='font-semibold text-green-600'>
-              consumo consciente de alimentos
-            </span>{' '}
-            é a forma mais simples e eficaz para combater o desperdício,
-            apresentando{' '}
-            <span className='font-semibold text-green-600'>
-              soluções inovadoras
-            </span>{' '}
-              na parte de processamento e envase de alimentos.
+            <p>
+              Acreditamos que o{' '}
+              <span className='font-semibold text-green-600'>
+                consumo consciente de alimentos
+              </span>{' '}
+              é a forma mais simples e eficaz de combater o desperdício, com{' '}
+              <span className='font-semibold text-green-600'>
+                novas tecnologias
+              </span>{' '}
+              de processamento e envase de alimentos.
             </p>
           </div>
         </BlurFade>

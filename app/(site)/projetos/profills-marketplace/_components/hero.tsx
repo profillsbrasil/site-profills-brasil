@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imgMarketplace from '@/lib/images/projetos/marketplace.jpg';
 
 import { Globe, Shield, Smartphone, Users } from 'lucide-react';
@@ -26,7 +26,6 @@ export default function Hero() {
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h1 id='titulo-profills-marketplace'>Profills Marketplace</h1>
@@ -35,27 +34,25 @@ export default function Hero() {
         <BlurFade delay={0.2} inView>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
-              A Profills vê nesse mercado uma{' '}
-            <span className='text-accent font-semibold'>
-              oportunidade de colaborar
-            </span>{' '}
-            com o crescimento e a expansão de pequenos e grandes produtores,
-            distribuidores e indústrias, fornecendo uma{' '}
-            <span className='text-accent font-semibold'>
-              ferramenta para a negociação e venda dos insumos de forma online
-            </span>
-            , por meio de um marketplace exclusivo.
-          </p>
+              A Profills vai entrar nesse mercado com uma{' '}
+              <span className='text-accent font-semibold'>proposta direta</span>{' '}
+              para apoiar o crescimento e a expansão de pequenos e grandes
+              produtores, distribuidores e indústrias: uma{' '}
+              <span className='text-accent font-semibold'>
+                ferramenta para negociar e vender insumos online
+              </span>
+              , dentro de um marketplace exclusivo.
+            </p>
 
-          <p>
-            Por ser uma empresa com uma{' '}
-            <span className='text-accent font-semibold'>
-              carteira vasta de clientes
-            </span>
-            , a Profills agregará os{' '}
-            <span className='text-accent font-semibold'>
-              melhores fornecedores e produtores
-            </span>{' '}
+            <p>
+              Por ser uma empresa com uma{' '}
+              <span className='text-accent font-semibold'>
+                carteira vasta de clientes
+              </span>
+              , a Profills agregará os{' '}
+              <span className='text-accent font-semibold'>
+                melhores fornecedores e produtores
+              </span>{' '}
               dos mais diversos nichos.
             </p>
           </div>

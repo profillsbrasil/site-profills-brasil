@@ -7,7 +7,7 @@ export const linhaProducaoCompletaEnvase: MaquinaCatalogo = {
   headline:
     'Integração industrial do preparo do produto ao final de linha, com equipamentos sincronizados em um único projeto.',
   seo: {
-    titulo: 'Linha de Produção Completa para Envase | Profills',
+    titulo: 'Linha de Produção Completa para Envase',
     descricao:
       'Projetos integrados de envase, transporte, acumulação, encaixotamento e acessórios, desenvolvidos conforme layout e meta de produção.'
   },

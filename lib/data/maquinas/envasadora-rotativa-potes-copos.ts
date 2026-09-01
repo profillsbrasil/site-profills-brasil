@@ -11,7 +11,7 @@ export const envasadoraRotativaPotesCopos: MaquinaCatalogo = {
   headline:
     'Envase e fechamento automático de potes e copos para produtos líquidos ou secos.',
   seo: {
-    titulo: 'Envasadora Rotativa para Potes e Copos | Profills',
+    titulo: 'Envasadora Rotativa para Potes e Copos',
     descricao:
       'Máquina rotativa para envase e fechamento automático de potes, copos e embalagens tubulares, com produção de até 1.000 unidades por hora.'
   },

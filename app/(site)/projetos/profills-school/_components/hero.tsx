@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imgSchool from '@/lib/images/projetos/School.jpg';
 
 import { BookOpen, GraduationCap, Users, Zap } from 'lucide-react';
@@ -26,7 +26,6 @@ export default function Hero() {
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h1 id='titulo-profills-school'>Profills School</h1>
@@ -35,29 +34,29 @@ export default function Hero() {
         <BlurFade delay={0.2} inView>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
-              Quando se fala em educação, existem{' '}
-            <span className='text-accent font-semibold'>
-              muitas possibilidades de atuação
-            </span>
-            . A Profills do Brasil planeja contribuir com seus clientes e
-            parceiros transmitindo seus{' '}
-            <span className='text-accent font-semibold'>
-              conhecimentos técnicos nas diversas áreas
-            </span>{' '}
-            em que atua.
-          </p>
+              Em educação, existem{' '}
+              <span className='text-accent font-semibold'>
+                muitas possibilidades de atuação
+              </span>
+              , e a Profills do Brasil planeja contribuir com clientes e
+              parceiros, transmitindo seus{' '}
+              <span className='text-accent font-semibold'>
+                conhecimentos técnicos nas diversas áreas
+              </span>{' '}
+              em que atua.
+            </p>
 
-          <p>
-            Na visão da Profills, a{' '}
-            <span className='text-accent font-semibold'>
-              educação é um meio de grande impacto na sociedade
-            </span>
-            . Logo, acreditamos que podemos e devemos contribuir com nossos
-            funcionários, clientes e futuros parceiros, para que tenham cada vez
-            mais{' '}
-            <span className='text-accent font-semibold'>
-              acesso às informações úteis e necessárias
-            </span>
+            <p>
+              Na visão da Profills, a{' '}
+              <span className='text-accent font-semibold'>
+                educação é um meio de grande impacto na sociedade
+              </span>
+              . Logo, acreditamos que podemos e devemos contribuir com nossos
+              funcionários, clientes e futuros parceiros, para que tenham cada
+              vez mais{' '}
+              <span className='text-accent font-semibold'>
+                acesso às informações úteis e necessárias
+              </span>
               , de forma prática e facilitada.
             </p>
           </div>

@@ -1,4 +1,4 @@
-'use client';
+import type { Metadata } from 'next';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
 
@@ -10,6 +10,10 @@ import HeroCarrossel from './_components/heroCarrossel/heroCarrossel';
 import ListaEmbalagens from './_components/listaEmbalagens';
 import MaquinasDestaque from './_components/maquinas-destaque/maquinasDestaque';
 import ServicosPersonalizados from './_components/servicosPersonalizados';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' }
+};
 
 export default function Home() {
   return (

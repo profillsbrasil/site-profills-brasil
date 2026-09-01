@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/seo/site';
+
 import type { ContactFormData } from '@/lib/schemas/contact-form';
 import { createTransporter } from '@/lib/emails/_shared/transporter';
 import { renderTemplate } from '@/lib/emails/_shared/template-engine';
@@ -36,7 +38,7 @@ export const createContactEmailTemplate = (data: ContactFormData) => {
     timeZone: 'America/Sao_Paulo'
   });
 
-  const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
+  const siteUrl = SITE_URL;
 
   // Formata os detalhes do projeto
   const projectDetails = formatProjectDetails(data);

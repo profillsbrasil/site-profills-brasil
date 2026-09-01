@@ -7,7 +7,7 @@ export const automacaoIndustrialRoboticaIntegrada: MaquinaCatalogo = {
   headline:
     'Automação integrada com robôs, esteiras e sensores para conectar envase, encaixotamento e paletização.',
   seo: {
-    titulo: 'Automação Industrial e Paletização Robótica | Profills',
+    titulo: 'Automação Industrial e Paletização Robótica',
     descricao:
       'Soluções robóticas integradas para envase, encaixotamento, transporte, paletização e monitoramento de linhas industriais.'
   },

@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import { Brain, Lightbulb, Target, Users } from 'lucide-react';
 
@@ -13,13 +13,12 @@ export default function PesquisaDesenvolvimento() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-4xl'>
             <h2 id='titulo-pesquisa'>Pesquisa & Desenvolvimento</h2>
           </Highlighter>
           <p className='mx-auto mt-4 max-w-3xl text-sm text-gray-600 md:text-lg'>
-            Diversas práticas vêm sendo adotadas a fim de{' '}
+            A Profills adota práticas para{' '}
             <span className='text-accent font-semibold'>
               melhorar os processos, projetos e desenvolvimento dos equipamentos
             </span>
@@ -41,19 +40,19 @@ export default function PesquisaDesenvolvimento() {
               </h3>
             </div>
             <p className='leading-relaxed text-gray-700'>
-              Todos os nossos serviços em pesquisas{' '}
+              Nossos serviços de pesquisa{' '}
               <span className='text-accent font-semibold'>
                 vão além da automação
               </span>
-              , eles tendem a aproveitar o máximo da capacidade da{' '}
+              : aproveitam ao máximo a capacidade da{' '}
               <span className='text-accent font-semibold'>
-                inteligência artificial – IA
+                inteligência artificial (IA)
               </span>
-              , unindo a{' '}
+              , unindo{' '}
               <span className='text-accent font-semibold'>
-                conectividade, indústria 4.0, inteligência analítica da web
-              </span>{' '}
-              e muito mais.
+                conectividade, indústria 4.0 e inteligência analítica da web
+              </span>
+              .
             </p>
           </div>
         </AnimatedContainer>

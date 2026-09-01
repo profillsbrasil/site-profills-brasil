@@ -11,7 +11,7 @@ export const envasadoraSaches4SoldasTc4s2Vias: MaquinaCatalogo = {
   headline:
     'Duas vias de envase para elevar a velocidade de produção de sachês quatro soldas.',
   seo: {
-    titulo: 'Envasadora de Sachês 4 Soldas TC4S 2 Vias | Profills',
+    titulo: 'Envasadora de Sachês 4 Soldas TC4S 2 Vias',
     descricao:
       'Envasadora TC4S de duas vias para líquidos e secos, com produção simultânea de até 4.000 sachês quatro soldas por hora.'
   },

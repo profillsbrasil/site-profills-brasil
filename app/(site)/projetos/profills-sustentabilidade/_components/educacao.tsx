@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import { BookOpen, Brain, Globe, Users } from 'lucide-react';
 
@@ -194,9 +194,8 @@ export default function Educacao() {
             <span className='font-semibold text-indigo-600'>
               profissionais qualificados
             </span>
-            , criando uma rede de conhecimento que impacta diretamente e
-            indiretamente todos aqueles que são tocados pelas nossas máquinas e
-            soluções.
+            , criando uma rede de conhecimento que chega, direta ou
+            indiretamente, a quem usa nossas máquinas e equipamentos.
           </p>
         </div>
       </AnimatedContainer>

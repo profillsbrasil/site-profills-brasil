@@ -11,7 +11,7 @@ export const empacotadeiraVerticalPtcSpeed: MaquinaCatalogo = {
   headline:
     'Empacotamento vertical de pós, grãos e sólidos com diferentes sistemas de alimentação e dosagem.',
   seo: {
-    titulo: 'Empacotadeira Vertical PTC Speed | Profills',
+    titulo: 'Empacotadeira Vertical PTC Speed',
     descricao:
       'Empacotadeira vertical PTC Speed para pós, grãos e sólidos, com múltiplos dosadores e produção de até 4.200 unidades por hora.'
   },

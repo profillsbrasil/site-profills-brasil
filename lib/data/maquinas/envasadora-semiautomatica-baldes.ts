@@ -12,7 +12,7 @@ export const envasadoraSemiautomaticaBaldes: MaquinaCatalogo = {
   headline:
     'Envase semiautomático de líquidos e pastosos em recipientes de diferentes volumes, com operação simples e controlada.',
   seo: {
-    titulo: 'Envasadora Semiautomática para Baldes | Profills',
+    titulo: 'Envasadora Semiautomática para Baldes',
     descricao:
       'Envasadora semiautomática para líquidos e pastosos em frascos, baldes, latas e bombonas, com produção de até 800 unidades por hora.'
   },

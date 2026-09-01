@@ -11,7 +11,7 @@ export const envasadoraSeladoraBisnagas: MaquinaCatalogo = {
   headline:
     'Envase preciso e fechamento automático de bisnagas para produtos de diferentes viscosidades.',
   seo: {
-    titulo: 'Envasadora e Seladora de Bisnagas | Profills',
+    titulo: 'Envasadora e Seladora de Bisnagas',
     descricao:
       'Máquina automática para envase e fechamento de bisnagas plásticas, metálicas ou cartonadas, com produção de até 1.800 unidades por hora.'
   },

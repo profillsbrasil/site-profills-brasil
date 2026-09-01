@@ -11,7 +11,7 @@ export const envasadoraBagsLiquidosTc3sc: MaquinaCatalogo = {
   headline:
     'Envase preciso de líquidos em bags de maior capacidade, com excelente vedação e controle do processo.',
   seo: {
-    titulo: 'Envasadora para Bags de Líquidos TC3SC | Profills',
+    titulo: 'Envasadora para Bags de Líquidos TC3SC',
     descricao:
       'Linha TC3SC Bag para envase de líquidos em embalagens de maior volume, com dosagem volumétrica e até 1.200 unidades por hora.'
   },

@@ -12,7 +12,7 @@ export const envasadoraStandUpPouchPreFormadoComTampa: MaquinaCatalogo = {
   headline:
     'Envase e fechamento automático de pouches pré-formados com tampa rosqueável, com foco em higiene, segurança e praticidade.',
   seo: {
-    titulo: 'Envasadora de Pouch Pré-formado com Tampa | Profills',
+    titulo: 'Envasadora de Pouch Pré-formado com Tampa',
     descricao:
       'Linha automática para envase e aplicação de tampas rosqueáveis em stand-up pouches pré-formados, com produção de até 2.400 unidades por hora.'
   },

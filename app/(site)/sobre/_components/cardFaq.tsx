@@ -2,13 +2,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Highlighter } from '@/components/magicui/highlighter';
-import { BlurFade } from '@/components/ui/blur-fade';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion';
+import { BlurFade } from '@/components/ui/blur-fade';
 import { Button } from '@/components/ui/button';
 import meninaSuporte from '@/lib/images/extras/suport-img.png';
 
@@ -57,7 +57,7 @@ export const faqQuestoes: FAQ[] = [
   {
     pergunta: 'Por que a Profills?',
     resposta:
-      'Especialistas em envase com fábrica própria e foco em soluções sob medida.',
+      'Especialistas em envase, com fábrica própria e produção sob medida.',
     topicos: [
       'Experiência em diferentes portes e segmentos.',
       '+300 clientes no Brasil e América do Sul.',
@@ -118,7 +118,6 @@ export default function CardFaq() {
       <div className='flex w-full justify-center'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-3xl'>
           Perguntas Frequentes
@@ -165,7 +164,10 @@ export default function CardFaq() {
             ))}
           </Accordion>
         </BlurFade>
-        <BlurFade delay={0.2} inView className='relative flex h-full w-full flex-col items-center justify-center md:w-1/2'>
+        <BlurFade
+          delay={0.2}
+          inView
+          className='relative flex h-full w-full flex-col items-center justify-center md:w-1/2'>
           <Image
             src={meninaSuporte}
             alt='Menina Suporte'
@@ -181,7 +183,9 @@ export default function CardFaq() {
                 variant='outline'
                 size='lg'
                 className='!bg-background hover:border-accent group hover:bg-accent/10 border-border w-full rounded-xs px-6 py-3 font-semibold shadow-sm transition-all duration-300 hover:scale-[1.02] hover:text-black hover:shadow-md md:w-auto md:px-8 md:py-4'>
-                <span className='text-sm md:text-base'>Fale com nossa equipe</span>
+                <span className='text-sm md:text-base'>
+                  Fale com nossa equipe
+                </span>
                 <ArrowRight className='group-hover:text-accent ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1 md:h-6 md:w-6' />
               </Button>
             </Link>

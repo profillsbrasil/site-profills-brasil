@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import {
   Database,
@@ -20,7 +20,6 @@ export default function SolucaoERP() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-3xl'>
             <h2 id='titulo-solucao'>Solução ERP Completa</h2>
@@ -180,7 +179,7 @@ export default function SolucaoERP() {
               Melhor Fluxo de Informações
             </h3>
             <p className='mb-4 leading-relaxed text-gray-700'>
-              Reduzindo a necessidade de{' '}
+              Com menos{' '}
               <span className='text-accent font-semibold'>
                 interface manual
               </span>
@@ -217,15 +216,15 @@ export default function SolucaoERP() {
               Gestão de Custos Inteligente
             </h3>
             <p className='mb-4 leading-relaxed text-gray-700'>
-              A gestão de custos será beneficiada por meio de um{' '}
+              Um{' '}
               <span className='text-accent font-semibold'>
                 melhor controle de estoque
               </span>{' '}
-              e redução de incertezas com relação ao{' '}
+              e menos incerteza sobre o{' '}
               <span className='text-accent font-semibold'>
                 prazo de entrega (lead time)
-              </span>
-              .
+              </span>{' '}
+              vão melhorar a gestão de custos.
             </p>
             <div className='space-y-2'>
               <div className='flex items-center gap-2'>

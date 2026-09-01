@@ -11,7 +11,7 @@ export const envasadoraGableTopGt: MaquinaCatalogo = {
   headline:
     'Envase, esterilização e selagem térmica de embalagens gable top com precisão, higiene e apresentação premium.',
   seo: {
-    titulo: 'Envasadora Gable Top GT | Profills',
+    titulo: 'Envasadora Gable Top GT',
     descricao:
       'Linha GT para envase em embalagens cartonadas gable top de 250 a 2.000 ml, com produção de até 3.000 unidades por hora.'
   },

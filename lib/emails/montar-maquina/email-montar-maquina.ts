@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/seo/site';
+
 import type { MontarMaquinaFormData } from '@/lib/schemas/montar-maquina-form';
 import { logger } from '@/lib/utils/logger';
 
@@ -70,7 +72,7 @@ export const createMontarMaquinaEmailTemplate = (
   });
 
   const htmlTemplate = htmlEmailTemplate;
-  const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
+  const siteUrl = SITE_URL;
 
   const templateData = {
     subject: 'Solicitação de Orçamento - Monte sua Máquina',

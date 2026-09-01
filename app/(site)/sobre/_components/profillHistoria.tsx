@@ -4,13 +4,14 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
 import { Highlighter } from '@/components/magicui/highlighter';
-
-const Globe = dynamic(
-  () => import('@/components/magicui/globe').then((m) => ({ default: m.Globe })),
-  { ssr: false }
-);
 import { BlurFade } from '@/components/ui/blur-fade';
 import logo from '@/public/logo.png';
+
+const Globe = dynamic(
+  () =>
+    import('@/components/magicui/globe').then((m) => ({ default: m.Globe })),
+  { ssr: false }
+);
 
 export default function ProfillHistoria() {
   return (
@@ -34,7 +35,6 @@ export default function ProfillHistoria() {
       <div className='flex w-full flex-col items-center gap-4 md:w-1/2 md:gap-5'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h2 id='titulo-historia'>Nossa História</h2>
@@ -43,15 +43,14 @@ export default function ProfillHistoria() {
         <BlurFade delay={0.1} inView>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
-              Desde a fundação em Cerqueira César (SP), há mais de uma década,
-              a{' '}
+              Desde a fundação em Cerqueira César (SP), há mais de uma década, a{' '}
               <span className='text-accent font-semibold'>Profills</span>{' '}
               desenvolve{' '}
               <span className='text-accent font-semibold'>
                 máquinas envasadoras
               </span>{' '}
-              para produtos líquidos, pastosos e sólidos. Nascemos para oferecer
-              soluções modernas de envase em um mercado que exigia{' '}
+              para produtos líquidos, pastosos e sólidos. Nascemos em um mercado
+              que exigia{' '}
               <span className='text-accent font-semibold'>
                 fornecedores especializados
               </span>{' '}
@@ -71,15 +70,16 @@ export default function ProfillHistoria() {
               <span className='text-accent font-semibold'>
                 antecipamos tendências
               </span>{' '}
-              em embalagens e automação, elevando eficiência, higiene e
-              conformidade nas linhas de envase.
+              em embalagens e automação para manter as linhas de envase mais
+              eficientes, higiênicas e dentro das normas.
             </p>
 
             <p>
               Nossa trajetória é sustentada por{' '}
-              <span className='text-accent font-semibold'>fábrica própria</span> —
-              com unidade em Cerqueira César (SP) — e por uma cultura de melhoria
-              contínua. Produção interna, testes rigorosos e padronização garantem
+              <span className='text-accent font-semibold'>fábrica própria</span>
+              , com unidade em Cerqueira César (SP), e por uma cultura de
+              melhoria contínua. Produção interna, testes rigorosos e
+              padronização garantem
               <span className='text-accent font-semibold'>
                 {' '}
                 entregas confiáveis

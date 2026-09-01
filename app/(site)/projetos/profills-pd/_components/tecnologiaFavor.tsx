@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 
 import { Cog, Cpu, GraduationCap, Wrench, Zap } from 'lucide-react';
 
@@ -13,17 +13,18 @@ export default function TecnologiaFavor() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-4xl'>
             <h2 id='titulo-tecnologia'>Tecnologia a Nosso Favor</h2>
           </Highlighter>
           <p className='mx-auto mt-4 max-w-4xl text-sm text-gray-600 md:text-lg'>
-            No campo da tecnologia, buscamos fazer a{' '}
-            <span className='text-accent font-semibold'>gestão dos recursos</span>{' '}
-            a fim de criar as{' '}
+            Na tecnologia, cuidamos da{' '}
             <span className='text-accent font-semibold'>
-              melhores soluções para o mercado
+              gestão dos recursos
+            </span>{' '}
+            para criar{' '}
+            <span className='text-accent font-semibold'>
+              equipamentos e processos melhores para o mercado
             </span>
             .
           </p>
@@ -145,7 +146,7 @@ export default function TecnologiaFavor() {
               <span className='text-accent font-semibold'>
                 Softwares indispensáveis
               </span>{' '}
-              no processo de criação e desenvolvimento de soluções.
+              no processo de criação e desenvolvimento de equipamentos.
             </p>
             <div className='space-y-2'>
               <div className='flex items-center gap-2 text-sm text-gray-600'>
@@ -203,11 +204,11 @@ export default function TecnologiaFavor() {
             Melhoria Contínua
           </h3>
           <p className='text-lg leading-relaxed'>
-            Visando o{' '}
+            Para o{' '}
             <span className='font-semibold text-[#2d62ef]'>
-              crescimento, melhoria e desempenho da produção
+              crescimento, a melhoria e o desempenho da produção
             </span>{' '}
-            de nossos clientes, pensamos sempre na busca de soluções para o{' '}
+            dos nossos clientes, buscamos avançar o{' '}
             <span className='font-semibold text-[#2d62ef]'>
               processo de automação industrial
             </span>

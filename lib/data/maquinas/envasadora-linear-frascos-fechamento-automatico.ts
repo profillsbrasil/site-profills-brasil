@@ -12,7 +12,7 @@ export const envasadoraLinearFrascosFechamentoAutomatico: MaquinaCatalogo = {
   headline:
     'Envase linear e fechamento integrado para frascos pequenos, com bomba volumétrica e cilindro pneumático.',
   seo: {
-    titulo: 'Envasadora Linear com Fechamento Automático | Profills',
+    titulo: 'Envasadora Linear com Fechamento Automático',
     descricao:
       'Linha automática para envase de líquidos em frascos de 0,5 a 500 ml, com bomba volumétrica e produção de até 3.000 unidades por hora.'
   },

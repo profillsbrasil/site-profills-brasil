@@ -11,7 +11,7 @@ export const envasadoraSaches3SoldasLiquidosTc3sc: MaquinaCatalogo = {
   headline:
     'Dosagem precisa de líquidos em sachês três soldas, com flexibilidade de materiais e formatos.',
   seo: {
-    titulo: 'Envasadora de Sachês para Líquidos TC3SC | Profills',
+    titulo: 'Envasadora de Sachês para Líquidos TC3SC',
     descricao:
       'Envasadora TC3SC para líquidos em sachês três soldas, com dosagem temporizada, positiva ou volumétrica e até 1.800 unidades por hora.'
   },

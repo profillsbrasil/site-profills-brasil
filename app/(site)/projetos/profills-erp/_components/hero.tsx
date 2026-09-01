@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imgErp from '@/lib/images/projetos/ERP.jpg';
 
 import { AlertTriangle, BarChart3, Cloud, Users } from 'lucide-react';
@@ -25,7 +25,6 @@ export default function Hero() {
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h1 id='titulo-profills-erp'>Profills ERP</h1>
@@ -35,24 +34,24 @@ export default function Hero() {
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
               As pequenas empresas no Brasil{' '}
-            <span className='text-accent font-semibold'>
-              carecem de inclusão digital
-            </span>
-            , com um grande número de produtores dependendo de terceiros para
-            atividades básicas, como a{' '}
-            <span className='text-accent font-semibold'>
-              emissão de notas fiscais
-            </span>
-            .
-          </p>
+              <span className='text-accent font-semibold'>
+                carecem de inclusão digital
+              </span>
+              , e muitos produtores dependem de terceiros para atividades
+              básicas, como a{' '}
+              <span className='text-accent font-semibold'>
+                emissão de notas fiscais
+              </span>
+              .
+            </p>
 
-          <p>
-            A Profills fornecerá uma{' '}
-            <span className='text-accent font-semibold'>
-              solução abrangente e acessível
-            </span>
-            , permitindo que os negócios sejam executados{' '}
-            <span className='text-accent font-semibold'>sem esforço</span>: o{' '}
+            <p>
+              A Profills fornecerá uma{' '}
+              <span className='text-accent font-semibold'>
+                solução completa e acessível
+              </span>{' '}
+              para que os negócios funcionem{' '}
+              <span className='text-accent font-semibold'>sem esforço</span>: o{' '}
               <span className='text-accent font-semibold'>Profills ERP</span>.
             </p>
           </div>

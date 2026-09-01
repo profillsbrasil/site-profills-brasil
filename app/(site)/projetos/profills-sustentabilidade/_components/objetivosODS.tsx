@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imgOds1 from '@/lib/images/projetos/sustentavel/1.png';
 import imgOds2 from '@/lib/images/projetos/sustentavel/2.png';
 import imgOds3 from '@/lib/images/projetos/sustentavel/3.png';
@@ -51,31 +51,30 @@ export default function ObjetivosODS() {
         <div className='text-center'>
           <Highlighter
             action='underline'
-            
             animationDuration={4000}
             textColor='text-2xl font-bold md:text-3xl'>
             <h2 id='titulo-ods'>Objetivos do Desenvolvimento Sustentável</h2>
           </Highlighter>
           <div className='mx-auto mt-6 max-w-4xl'>
             <p className='mb-4 text-sm text-gray-600 md:text-lg'>
-            A{' '}
-            <span className='font-semibold text-gray-800'>
-              Organização das Nações Unidas
-            </span>{' '}
-            lançou em 2015 os{' '}
-            <span className='font-semibold text-gray-800'>
-              Objetivos do Desenvolvimento Sustentável (ODS)
-            </span>
-            , que constituem um apelo global para acabar com a miséria, proteger
-            o meio ambiente e garantir que todas as pessoas possam ter paz e
-            prosperidade.
-          </p>
-          <div className='flex items-center justify-center gap-3 rounded-xs border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-100 p-4'>
-            <Target className='h-6 w-6 text-blue-600' />
-            <p className='font-semibold text-blue-800'>
-              A Profills está engajada com os ODS e trabalha para contribuir com
-              a Agenda 2030 no Brasil e no mundo.
+              A{' '}
+              <span className='font-semibold text-gray-800'>
+                Organização das Nações Unidas
+              </span>{' '}
+              lançou em 2015 os{' '}
+              <span className='font-semibold text-gray-800'>
+                Objetivos do Desenvolvimento Sustentável (ODS)
+              </span>
+              , que constituem um apelo global para acabar com a miséria,
+              proteger o meio ambiente e garantir que todas as pessoas possam
+              ter paz e prosperidade.
             </p>
+            <div className='flex items-center justify-center gap-3 rounded-xs border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-100 p-4'>
+              <Target className='h-6 w-6 text-blue-600' />
+              <p className='font-semibold text-blue-800'>
+                A Profills está engajada com os ODS e trabalha para contribuir
+                com a Agenda 2030 no Brasil e no mundo.
+              </p>
             </div>
           </div>
         </div>
@@ -84,16 +83,16 @@ export default function ObjetivosODS() {
       {/* ODS Grid - Simples e Limpo */}
       <BlurFade delay={0.2} inView>
         <div className='w-full'>
-        <div className='grid grid-cols-3 justify-items-center gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4'>
-          {odsImages.map((ods, index) => (
-            <div key={index + 1} className='flex items-center justify-center'>
-              <Image
-                src={ods}
-                alt={`ODS ${index + 1}`}
-                className='h-auto w-full rounded-xs shadow-sm'
-              />
-            </div>
-          ))}
+          <div className='grid grid-cols-3 justify-items-center gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4'>
+            {odsImages.map((ods, index) => (
+              <div key={index + 1} className='flex items-center justify-center'>
+                <Image
+                  src={ods}
+                  alt={`ODS ${index + 1}`}
+                  className='h-auto w-full rounded-xs shadow-sm'
+                />
+              </div>
+            ))}
           </div>
         </div>
       </BlurFade>
@@ -101,46 +100,54 @@ export default function ObjetivosODS() {
       {/* Estatísticas da Agenda 2030 */}
       <BlurFade delay={0.3} inView>
         <div className='w-full'>
-        <div className='rounded-xs border border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8'>
-          <div className='mb-8 text-center'>
-            <h3 className='mb-4 text-2xl font-bold text-gray-800'>
-              Agenda 2030 - Nosso Compromisso
-            </h3>
-            <p className='mx-auto max-w-3xl text-sm text-gray-700 md:text-lg'>
-              Até 2030, trabalhamos para contribuir significativamente com os
-              Objetivos do Desenvolvimento Sustentável através de nossas
-              soluções inovadoras e impacto social.
-            </p>
-          </div>
+          <div className='rounded-xs border border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8'>
+            <div className='mb-8 text-center'>
+              <h3 className='mb-4 text-2xl font-bold text-gray-800'>
+                Agenda 2030 - Nosso Compromisso
+              </h3>
+              <p className='mx-auto max-w-3xl text-sm text-gray-700 md:text-lg'>
+                Até 2030, trabalhamos para contribuir com os Objetivos do
+                Desenvolvimento Sustentável por meio dos nossos equipamentos e
+                do impacto social que geramos.
+              </p>
+            </div>
 
-          <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-6'>
-            <div className='text-center'>
-              <div className='mb-3 text-3xl font-bold text-indigo-600'>17</div>
-              <div className='text-sm text-gray-600'>Objetivos Globais</div>
-            </div>
-            <div className='text-center'>
-              <div className='mb-3 text-3xl font-bold text-purple-600'>169</div>
-              <div className='text-sm text-gray-600'>Metas Específicas</div>
-            </div>
-            <div className='text-center'>
-              <div className='mb-3 text-3xl font-bold text-pink-600'>2030</div>
-              <div className='text-sm text-gray-600'>
-                Prazo para Implementação
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5 md:gap-6'>
+              <div className='text-center'>
+                <div className='mb-3 text-3xl font-bold text-indigo-600'>
+                  17
+                </div>
+                <div className='text-sm text-gray-600'>Objetivos Globais</div>
+              </div>
+              <div className='text-center'>
+                <div className='mb-3 text-3xl font-bold text-purple-600'>
+                  169
+                </div>
+                <div className='text-sm text-gray-600'>Metas Específicas</div>
+              </div>
+              <div className='text-center'>
+                <div className='mb-3 text-3xl font-bold text-pink-600'>
+                  2030
+                </div>
+                <div className='text-sm text-gray-600'>
+                  Prazo para Implementação
+                </div>
+              </div>
+              <div className='text-center'>
+                <div className='mb-3 text-3xl font-bold text-emerald-600'>
+                  193
+                </div>
+                <div className='text-sm text-gray-600'>
+                  Países Comprometidos
+                </div>
+              </div>
+              <div className='text-center'>
+                <div className='mb-3 text-3xl font-bold text-orange-600'>1</div>
+                <div className='text-sm text-gray-600'>
+                  Planeta para Cuidarmos
+                </div>
               </div>
             </div>
-            <div className='text-center'>
-              <div className='mb-3 text-3xl font-bold text-emerald-600'>
-                193
-              </div>
-              <div className='text-sm text-gray-600'>Países Comprometidos</div>
-            </div>
-            <div className='text-center'>
-              <div className='mb-3 text-3xl font-bold text-orange-600'>1</div>
-              <div className='text-sm text-gray-600'>
-                Planeta para Cuidarmos
-              </div>
-            </div>
-          </div>
           </div>
         </div>
       </BlurFade>

@@ -11,7 +11,7 @@ export const envasadoraSachesFormatadosTc4s3Vias: MaquinaCatalogo = {
   headline:
     'Alta produtividade em sachês formatados, com três vias de envase e geometrias desenvolvidas para destacar o produto.',
   seo: {
-    titulo: 'Envasadora de Sachês Formatados TC4S 3 Vias | Profills',
+    titulo: 'Envasadora de Sachês Formatados TC4S 3 Vias',
     descricao:
       'Linha TC4S de três vias para sachês formatados com quatro soldas, líquidos e secos, produzindo até 6.000 unidades por hora.'
   },

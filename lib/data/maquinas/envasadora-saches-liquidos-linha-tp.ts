@@ -11,7 +11,7 @@ export const envasadoraSachesLiquidosLinhaTp: MaquinaCatalogo = {
   headline:
     'Versatilidade e precisão para envase de líquidos em sachês, com diferentes larguras, volumes e opções de acabamento.',
   seo: {
-    titulo: 'Envasadora de Sachês para Líquidos Linha TP | Profills',
+    titulo: 'Envasadora de Sachês para Líquidos Linha TP',
     descricao:
       'Linha TP para envase de líquidos em sachês de PEBD ou PEAD, com produção de até 3.000 unidades por hora e opções especiais de solda e formato.'
   },

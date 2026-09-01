@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imagePd from '@/lib/images/projetos/PeD.jpg';
 
 import { Brain, Cpu, Factory, TrendingUp } from 'lucide-react';
@@ -26,7 +26,6 @@ export default function Hero() {
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h1 id='titulo-profills-pd'>Profills P&D</h1>
@@ -35,28 +34,27 @@ export default function Hero() {
         <BlurFade delay={0.2} inView>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
-              Vive-se um momento em que as{' '}
-            <span className='text-accent font-semibold'>
-              mudanças são rápidas e necessárias
-            </span>{' '}
-            em uma sociedade que almeja evoluir. Para acompanhar essa evolução,
-            a maneira como administramos os{' '}
-            <span className='text-accent font-semibold'>
-              projetos e pesquisas vêm mudando
-            </span>
-            .
-          </p>
+              O setor muda rápido, e{' '}
+              <span className='text-accent font-semibold'>
+                acompanhar esse ritmo é necessário
+              </span>{' '}
+              para quem quer crescer. Isso já muda a forma como administramos os{' '}
+              <span className='text-accent font-semibold'>
+                projetos e as pesquisas
+              </span>
+              .
+            </p>
 
-          <p>
-            Sendo{' '}
-            <span className='text-accent font-semibold'>
-              líder de mercado no segmento de Máquinas Envasadoras
-            </span>
-            , a Profills conta com uma{' '}
-            <span className='text-accent font-semibold'>
-              equipe de P&D multifuncional
-            </span>{' '}
-              e que mantém diálogo constante com as outras áreas do negócio.
+            <p>
+              Como{' '}
+              <span className='text-accent font-semibold'>
+                líder de mercado no segmento de Máquinas Envasadoras
+              </span>
+              , a Profills conta com uma{' '}
+              <span className='text-accent font-semibold'>
+                equipe de P&D multifuncional
+              </span>
+              , que mantém diálogo constante com as outras áreas do negócio.
             </p>
           </div>
         </BlurFade>

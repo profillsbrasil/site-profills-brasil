@@ -11,7 +11,7 @@ export const envasadoraPouchCompactaPreFormado: MaquinaCatalogo = {
   headline:
     'Automação de alimentação, abertura, dosagem e selagem em uma solução compacta para áreas produtivas com espaço reduzido.',
   seo: {
-    titulo: 'Envasadora Pouch Compacta Pré-formado | Profills',
+    titulo: 'Envasadora Pouch Compacta Pré-formado',
     descricao:
       'Envasadora compacta para stand-up pouch pré-formado, indicada para líquidos, grãos e pós, com produção de até 900 unidades por hora.'
   },

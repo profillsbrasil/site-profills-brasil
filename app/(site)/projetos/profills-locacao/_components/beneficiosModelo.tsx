@@ -36,7 +36,7 @@ export default function BeneficiosModelo() {
       icon: HandHeart,
       title: 'Experiência Profills',
       description:
-        'Todo o conhecimento e expertise de líder de mercado ao seu dispor',
+        'Conhecimento e experiência de quem lidera o mercado, ao seu dispor',
       color: 'bg-orange-100 text-orange-600'
     },
     {
@@ -64,8 +64,8 @@ export default function BeneficiosModelo() {
             <span className='text-[#2d62ef]'>Modelo por Assinatura</span>
           </h2>
           <p className='mx-auto max-w-3xl text-sm text-gray-600 md:text-lg'>
-            Uma nova forma de acessar tecnologia de ponta, reduzindo riscos e
-            maximizando oportunidades para seu negócio
+            Uma nova forma de acessar tecnologia de ponta, com menos risco e
+            mais oportunidade para seu negócio
           </p>
         </div>
 
@@ -91,11 +91,11 @@ export default function BeneficiosModelo() {
 
         <div className='mt-12 rounded-xs bg-slate-900 p-8 text-center text-white'>
           <h3 className='decoration-accent mb-4 text-xl font-bold underline underline-offset-4 md:text-2xl'>
-            Pronto para Revolucionar seu Negócio?
+            Pronto para Começar com o Modelo por Assinatura?
           </h3>
           <p className='mb-6 text-sm md:text-lg'>
-            Junte-se à revolução do mercado de envase no Brasil com o modelo
-            mais inovador e seguro do setor
+            Adote o modelo por assinatura de máquinas de envase e reduza o
+            investimento inicial do seu negócio
           </p>
         </div>
       </AnimatedContainer>
