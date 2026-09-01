@@ -1,8 +1,18 @@
+import type { Metadata } from 'next';
+
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { metadataDaPagina } from '@/lib/seo/metadata';
 
 import Hero from './_components/hero';
 import Instituicao from './_components/instituicao';
 import TecnologiaDbaas from './_components/tecnologiaDbaas';
+
+export const metadata: Metadata = metadataDaPagina({
+  titulo: 'Profills Bank',
+  descricao:
+    'Serviços financeiros digitais para a indústria, com gestão de contas de pagamento por parceiros homologados no Banco Central.',
+  path: '/projetos/profills-bank'
+});
 
 export default function ProfillsBank() {
   return (

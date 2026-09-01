@@ -1,9 +1,19 @@
+import type { Metadata } from 'next';
+
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { metadataDaPagina } from '@/lib/seo/metadata';
 
 import BeneficiosGestao from './_components/beneficiosGestao';
 import CloudMobilidade from './_components/cloudMobilidade';
 import Hero from './_components/hero';
 import SolucaoERP from './_components/solucaoERP';
+
+export const metadata: Metadata = metadataDaPagina({
+  titulo: 'Profills ERP',
+  descricao:
+    'Sistema de gestão acessível para pequenos produtores, com emissão de nota fiscal e relatórios sem depender de terceiros.',
+  path: '/projetos/profills-erp'
+});
 
 export default function ProfillsERP() {
   return (

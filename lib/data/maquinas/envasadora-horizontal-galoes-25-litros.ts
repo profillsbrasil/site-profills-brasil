@@ -11,7 +11,7 @@ export const envasadoraHorizontalGaloes25Litros: MaquinaCatalogo = {
   headline:
     'Dosagem gravimétrica para envase de líquidos em galões e recipientes de até 25 litros.',
   seo: {
-    titulo: 'Envasadora para Galões de até 25 Litros | Profills',
+    titulo: 'Envasadora para Galões de até 25 Litros',
     descricao:
       'Linha horizontal para envase gravimétrico de líquidos em galões de até 25 litros, com produção de até 2.000 unidades por hora.'
   },

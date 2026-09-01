@@ -11,7 +11,7 @@ export const envasadoraStandUpPouchCartonado: MaquinaCatalogo = {
   headline:
     'Alta velocidade de envase em stand-up pouch cartonado, combinando produtividade e diferenciação de embalagem.',
   seo: {
-    titulo: 'Envasadora Stand-Up Pouch Cartonado | Profills',
+    titulo: 'Envasadora Stand-Up Pouch Cartonado',
     descricao:
       'Envasadora mecânica de alta velocidade para stand-up pouch cartonado, com produção de até 5.400 unidades por hora.'
   },

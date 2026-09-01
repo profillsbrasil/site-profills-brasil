@@ -2,15 +2,17 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 
 import fabricaBg from '@/lib/images/extras/FabricaRemderNew.png';
+import { metadataDaPagina } from '@/lib/seo/metadata';
 
 import { CatalogForm } from './_components/catalog-form/CatalogForm';
 import { ExpiredBanner } from './_components/catalog-form/components/ExpiredBanner';
 
-export const metadata: Metadata = {
-  title: 'Solicitar Catálogo — Profills Brasil',
-  description:
-    'Receba o catálogo completo da Profills no seu email. Máquinas envasadoras, embaladoras e linhas de produção industriais.'
-};
+export const metadata: Metadata = metadataDaPagina({
+  titulo: 'Solicitar o catálogo 2026',
+  descricao:
+    'Receba o catálogo completo da Profills por e-mail: 35 máquinas envasadoras e embaladoras com ficha técnica, capacidade e tipos de embalagem.',
+  path: '/download'
+});
 
 type SearchParams = Promise<{ error?: 'expired' | 'invalid' }>;
 

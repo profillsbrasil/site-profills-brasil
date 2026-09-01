@@ -11,7 +11,7 @@ export const envasadoraSachesPosSolidosTcv: MaquinaCatalogo = {
   headline:
     'Produtividade no envase de pós, grãos e sólidos em sachês três soldas.',
   seo: {
-    titulo: 'Envasadora de Sachês para Pós e Sólidos TCV | Profills',
+    titulo: 'Envasadora de Sachês para Pós e Sólidos TCV',
     descricao:
       'Linha TCV para pós, grãos e sólidos em sachês três soldas, com produção de até 4.000 unidades por hora.'
   },

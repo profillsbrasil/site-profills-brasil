@@ -1,10 +1,20 @@
+import type { Metadata } from 'next';
+
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { metadataDaPagina } from '@/lib/seo/metadata';
 
 import Alimentacao from './_components/alimentacao';
 import DesenvolvimentoFuturo from './_components/desenvolvimentoFuturo';
 import Educacao from './_components/educacao';
 import Hero from './_components/hero';
 import ObjetivosODS from './_components/objetivosODS';
+
+export const metadata: Metadata = metadataDaPagina({
+  titulo: 'Profills Sustentabilidade',
+  descricao:
+    'Combate ao desperdício de alimentos por embalagem adequada, educação e projetos de consumo consciente.',
+  path: '/projetos/profills-sustentabilidade'
+});
 
 export default function ProfillsSustentabilidade() {
   return (

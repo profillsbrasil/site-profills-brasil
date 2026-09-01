@@ -11,7 +11,7 @@ export const envasadoraHorizontalRotativaFrascos: MaquinaCatalogo = {
   headline:
     'Envase rotativo de alta produtividade para frascos de diferentes formatos e volumes.',
   seo: {
-    titulo: 'Envasadora Rotativa para Frascos | Profills',
+    titulo: 'Envasadora Rotativa para Frascos',
     descricao:
       'Envasadora rotativa para líquidos em frascos de 0,5 a 5 litros, com 8, 12 ou 24 bicos e produção de até 5.000 unidades por hora.'
   },

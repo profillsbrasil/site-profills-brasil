@@ -12,7 +12,7 @@ export const envasadoraHorizontalLinearFrascos: MaquinaCatalogo = {
   headline:
     'Envase linear de líquidos e viscosos em frascos de diferentes materiais e volumes.',
   seo: {
-    titulo: 'Envasadora Horizontal Linear para Frascos | Profills',
+    titulo: 'Envasadora Horizontal Linear para Frascos',
     descricao:
       'Linha linear para envase de líquidos e viscosos em frascos de 0,1 a 5 litros, com 4, 6 ou 8 bicos e até 1.800 unidades por hora.'
   },

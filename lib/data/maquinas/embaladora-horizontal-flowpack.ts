@@ -11,7 +11,7 @@ export const embaladoraHorizontalFlowpack: MaquinaCatalogo = {
   headline:
     'Embalagem horizontal contínua para itens sólidos unitários ou agrupados, com velocidade, precisão e apresentação padronizada.',
   seo: {
-    titulo: 'Embaladora Horizontal Flowpack | Profills',
+    titulo: 'Embaladora Horizontal Flowpack',
     descricao:
       'Embaladora horizontal flowpack para produtos sólidos unitários ou agrupados, com produção de até 3.000 unidades por hora.'
   },

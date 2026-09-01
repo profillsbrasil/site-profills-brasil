@@ -11,7 +11,7 @@ export const envasadoraMiniStandUpPouch: MaquinaCatalogo = {
   headline:
     'Precisão no envase de pequenos pouches líquidos, com dosagem servoacionada, vedação segura e apresentação profissional.',
   seo: {
-    titulo: 'Envasadora Mini Stand-Up Pouch | Profills',
+    titulo: 'Envasadora Mini Stand-Up Pouch',
     descricao:
       'Envasadora para mini stand-up pouch de líquidos, com dosagem volumétrica servoacionada e produção de até 1.500 unidades por hora.'
   },

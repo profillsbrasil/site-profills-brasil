@@ -11,7 +11,7 @@ export const envasadoraStandUpPouchSpeed: MaquinaCatalogo = {
   headline:
     'Alta produtividade para operações que precisam automatizar alimentação, abertura, dosagem e selagem de embalagens stand-up pouch.',
   seo: {
-    titulo: 'Envasadora Stand-Up Pouch Speed | Profills',
+    titulo: 'Envasadora Stand-Up Pouch Speed',
     descricao:
       'Envasadora automática stand-up pouch de alta velocidade para líquidos, pós, grãos e sólidos, com produção de até 5.400 unidades por hora.'
   },

@@ -11,7 +11,7 @@ export const maquinaLavagemGaloes: MaquinaCatalogo = {
   headline:
     'Higienização automatizada de galões reutilizáveis em etapas de lavagem e aplicação de solução de limpeza.',
   seo: {
-    titulo: 'Máquina de Lavagem de Galões | Profills',
+    titulo: 'Máquina de Lavagem de Galões',
     descricao:
       'Lavadora automática para galões reutilizáveis de 10 e 20 litros, com cinco bicos de lavagem e capacidade de até 1.600 unidades por hora.'
   },

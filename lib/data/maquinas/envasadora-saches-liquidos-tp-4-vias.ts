@@ -11,7 +11,7 @@ export const envasadoraSachesLiquidosTp4Vias: MaquinaCatalogo = {
   headline:
     'Quatro vias simultâneas para ampliar a produtividade de líquidos, cremes e pastas em sachês.',
   seo: {
-    titulo: 'Envasadora de Sachês TP 4 Vias | Profills',
+    titulo: 'Envasadora de Sachês TP 4 Vias',
     descricao:
       'Envasadora TP de quatro vias para líquidos, cremes e pastas, com produção simultânea de até 8.000 sachês por hora.'
   },

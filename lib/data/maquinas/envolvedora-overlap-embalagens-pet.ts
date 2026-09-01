@@ -11,7 +11,7 @@ export const envolvedoraOverlapEmbalagensPet: MaquinaCatalogo = {
   headline:
     'Envolvimento automático de conjuntos de embalagens PET para proteção, estabilidade e transporte.',
   seo: {
-    titulo: 'Envolvedora Overlap para Embalagens PET | Profills',
+    titulo: 'Envolvedora Overlap para Embalagens PET',
     descricao:
       'Máquina envolvedora overlap para agrupamento e proteção de garrafas PET, com esteira alimentada e capacidade de até 90 unidades por hora.'
   },

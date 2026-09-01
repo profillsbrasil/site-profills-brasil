@@ -12,7 +12,7 @@ export const envasadoraSaches3SoldasPosSolidosTc3sc: MaquinaCatalogo = {
   headline:
     'Envase de pós, grãos e sólidos em sachês três soldas com diferentes opções de abertura e formato.',
   seo: {
-    titulo: 'Envasadora de Sachês para Pós e Sólidos TC3SC | Profills',
+    titulo: 'Envasadora de Sachês para Pós e Sólidos TC3SC',
     descricao:
       'Envasadora TC3SC para pós, grãos e sólidos em sachês três soldas, com produção de até 1.800 unidades por hora.'
   },

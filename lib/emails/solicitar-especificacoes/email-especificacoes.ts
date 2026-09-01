@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/seo/site';
+
 import type { SpecificationFormData } from '@/lib/schemas/specification-form';
 import { logger } from '@/lib/utils/logger';
 
@@ -63,7 +65,7 @@ export const createEmailTemplate = (data: SpecificationFormData) => {
   );
 
   // URL base do site (sempre com protocolo)
-  const siteUrl = process.env.SITE_URL || 'https://profills.com.br';
+  const siteUrl = SITE_URL;
 
   // Dados para o template
   const templateData = {

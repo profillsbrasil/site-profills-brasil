@@ -12,7 +12,7 @@ export const envasadoraSaches3SoldasTc3sl: MaquinaCatalogo = {
   headline:
     'Uma linha de alta produtividade para líquidos e secos em sachês três soldas de formato estreito.',
   seo: {
-    titulo: 'Envasadora de Sachês TC3SL | Profills',
+    titulo: 'Envasadora de Sachês TC3SL',
     descricao:
       'Linha TC3SL para líquidos e secos em sachês três soldas, com sistemas avançados de dosagem e produção de até 4.000 unidades por hora.'
   },

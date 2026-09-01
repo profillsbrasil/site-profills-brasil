@@ -1,8 +1,18 @@
+import type { Metadata } from 'next';
+
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { metadataDaPagina } from '@/lib/seo/metadata';
 
 import CarrosselServicos from './_components/carrosselServicos';
 import ContactForm from './_components/contact-form/ContactForm';
 import ListaServicos from './_components/listaServicos';
+
+export const metadata: Metadata = metadataDaPagina({
+  titulo: 'Serviços industriais personalizados',
+  descricao:
+    'Peças sob medida em inox, cortes, dobras e adaptações de linha. Conte o que a sua produção precisa e a engenharia da Profills projeta.',
+  path: '/servicos-personalizados'
+});
 
 export default function ServicosPersonalizados() {
   return (

@@ -86,7 +86,7 @@ describe('página de máquina', () => {
 
   it('gera metadata com título e descrição do docx', async () => {
     const meta = await generateMetadata({ params: paramsDoPiloto });
-    expect(meta.title).toBe('Envasadora Stand-Up Pouch Speed | Profills');
+    expect(meta.title).toBe('Envasadora Stand-Up Pouch Speed');
     expect(meta.description).toContain('5.400 unidades por hora');
   });
 

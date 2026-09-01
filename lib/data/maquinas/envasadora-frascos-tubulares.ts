@@ -12,7 +12,7 @@ export const envasadoraFrascosTubulares: MaquinaCatalogo = {
   headline:
     'Envase e fechamento automático de frascos tubulares de pequeno volume.',
   seo: {
-    titulo: 'Envasadora para Frascos Tubulares | Profills',
+    titulo: 'Envasadora para Frascos Tubulares',
     descricao:
       'Envasadora para frascos tubulares plásticos de 50 a 150 ml, com fechamento automático e produção de até 1.000 unidades por hora.'
   },

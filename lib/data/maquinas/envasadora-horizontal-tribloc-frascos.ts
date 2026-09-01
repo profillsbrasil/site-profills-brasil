@@ -11,7 +11,7 @@ export const envasadoraHorizontalTriblocFrascos: MaquinaCatalogo = {
   headline:
     'Alta produtividade em uma solução Tribloc para envase e fechamento automático de frascos.',
   seo: {
-    titulo: 'Envasadora Tribloc para Frascos | Profills',
+    titulo: 'Envasadora Tribloc para Frascos',
     descricao:
       'Envasadora automática Tribloc para líquidos, com 8, 12 ou 24 bicos e produção de até 5.000 frascos por hora.'
   },
