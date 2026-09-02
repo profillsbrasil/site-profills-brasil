@@ -1,3 +1,4 @@
+import { normalizarCodigo } from '@/lib/indicacao/codigo';
 import { sendGAEvent } from '@next/third-parties/google';
 
 export type FormularioLead =
@@ -14,7 +15,7 @@ function enviar(nomeGa: string, nomeMeta: string, params: Params) {
   try {
     sendGAEvent('event', nomeGa, params);
   } catch {
-    /* GA não carregado */
+    /* GA ausente só gera warn; o catch cobre `dataLayer` corrompido por extensão. */
   }
   try {
     window.fbq?.('trackCustom', nomeMeta, params);
@@ -23,8 +24,12 @@ function enviar(nomeGa: string, nomeMeta: string, params: Params) {
   }
 }
 
+/* Código fora do formato do CRM não vira evento: cardinalidade do GA4 é
+   finita e a dimensão `codigo_vendedor` só deve receber código válido. */
 export function registrarChegadaIndicacao(codigo: string) {
-  enviar('indicacao_chegada', 'IndicacaoChegada', { codigo_vendedor: codigo });
+  const valido = normalizarCodigo(codigo);
+  if (!valido) return;
+  enviar('indicacao_chegada', 'IndicacaoChegada', { codigo_vendedor: valido });
 }
 
 export function registrarLeadIndicacao(
@@ -32,7 +37,7 @@ export function registrarLeadIndicacao(
   codigo: string | null
 ) {
   enviar('indicacao_lead', 'IndicacaoLead', {
-    codigo_vendedor: codigo ?? 'nenhum',
+    codigo_vendedor: normalizarCodigo(codigo) ?? 'nenhum',
     formulario
   });
 }

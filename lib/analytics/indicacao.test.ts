@@ -37,6 +37,36 @@ describe('registrarChegadaIndicacao', () => {
   });
 });
 
+describe('validação do código antes de emitir', () => {
+  it('aceita código só de dígitos, no formato do CRM', () => {
+    registrarChegadaIndicacao('41999998888');
+
+    expect(ga).toHaveBeenCalledWith('event', 'indicacao_chegada', {
+      codigo_vendedor: '41999998888'
+    });
+  });
+
+  it('não dispara chegada quando o código está fora do formato', () => {
+    registrarChegadaIndicacao('MARIA.SILVA@X');
+
+    expect(ga).not.toHaveBeenCalled();
+    expect(window.fbq).not.toHaveBeenCalled();
+  });
+
+  it('lead com código fora do formato vira "nenhum"', () => {
+    registrarLeadIndicacao('contato', 'MARIA.SILVA@X');
+
+    expect(ga).toHaveBeenCalledWith('event', 'indicacao_lead', {
+      codigo_vendedor: 'nenhum',
+      formulario: 'contato'
+    });
+    expect(window.fbq).toHaveBeenCalledWith('trackCustom', 'IndicacaoLead', {
+      codigo_vendedor: 'nenhum',
+      formulario: 'contato'
+    });
+  });
+});
+
 describe('registrarLeadIndicacao', () => {
   it('manda o evento de lead com código e formulário', () => {
     registrarLeadIndicacao('catalogo', 'MARIA-10');
