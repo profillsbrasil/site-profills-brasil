@@ -5,7 +5,8 @@ import {
   assinarIndicacao,
   lerIndicacao,
   opcoesCookieIndicacao,
-  precisaRenovar
+  precisaRenovar,
+  temSegredoIndicacao
 } from './cookie-server';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
@@ -23,6 +24,7 @@ beforeAll(() => {
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.unstubAllEnvs();
 });
 
 describe('cookie-server', () => {
@@ -79,5 +81,18 @@ describe('cookie-server', () => {
       sameSite: 'lax',
       httpOnly: false
     });
+  });
+
+  it('secure só fora de development', () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    expect(opcoesCookieIndicacao().secure).toBe(false);
+    vi.stubEnv('NODE_ENV', 'production');
+    expect(opcoesCookieIndicacao().secure).toBe(true);
+  });
+
+  it('temSegredoIndicacao acompanha a env', () => {
+    expect(temSegredoIndicacao()).toBe(true);
+    vi.stubEnv('INDICACAO_COOKIE_SECRET', '');
+    expect(temSegredoIndicacao()).toBe(false);
   });
 });

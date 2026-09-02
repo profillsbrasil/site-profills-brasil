@@ -2,6 +2,7 @@ import { IndicacaoProvider } from '@/components/indicacao/indicacaoProvider';
 import { render, screen } from '@testing-library/react';
 
 import Footer from './footer';
+import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/components/ui/blur-fade', () => ({
@@ -45,6 +46,32 @@ describe('Footer', () => {
       'href',
       expect.stringContaining('wa.me/5541997851998')
     );
+  });
+
+  it('no HTML do servidor o card Vendas/Peças sai sem href nem e-mail', () => {
+    const html = renderToString(
+      <IndicacaoProvider>
+        <Footer />
+      </IndicacaoProvider>
+    );
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    const vendas = doc.querySelector(
+      '[aria-label="Conversar no WhatsApp com Vendas/Peças"]'
+    );
+    expect(vendas).not.toBeNull();
+    expect(vendas?.hasAttribute('href')).toBe(false);
+    expect(html).not.toContain('comercial@profillsdobrasil.com.br');
+
+    expect(
+      doc
+        .querySelector(
+          '[aria-label="Conversar no WhatsApp com Suporte e Assistência Técnica"]'
+        )
+        ?.getAttribute('href')
+    ).toContain('wa.me');
+    expect(html).toContain('mailto:suporte@profillsdobrasil.com.br');
+    expect(html).toContain('mailto:compras@profillsdobrasil.com.br');
   });
 
   it('com Indicação troca só o card Vendas/Peças', () => {

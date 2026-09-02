@@ -138,6 +138,21 @@ describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
     );
   });
 
+  it('manda para a caixa padrão quando não há Indicação', async () => {
+    vi.mocked(resolverDestinatario).mockResolvedValue({
+      para: 'caixa@profills.test',
+      vendedor: null
+    });
+    vi.mocked(sendMock).mockResolvedValue(undefined as never);
+
+    const res = await post(req(payload));
+    expect(res.status).toBe(200);
+    expect(sendMock).toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'teste@example.com' }),
+      expect.objectContaining({ para: 'caixa@profills.test', vendedor: null })
+    );
+  });
+
   it('responde 500 quando o envio de e-mail falha', async () => {
     vi.mocked(sendMock).mockRejectedValue(new Error('SMTP indisponível'));
     const res = await post(req(payload));
@@ -167,6 +182,26 @@ describe('POST /api/download-catalog', () => {
         contato: null
       }
     });
+  });
+
+  it('manda para a caixa padrão quando não há Indicação', async () => {
+    vi.mocked(resolverDestinatario).mockResolvedValue({
+      para: 'caixa@profills.test',
+      vendedor: null
+    });
+    const res = await postCatalogo(
+      req({
+        name: 'Teste',
+        document: '52998224725',
+        phone: '(41) 99999-9999',
+        email: 'teste@example.com'
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(sendLeadNotification).toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'teste@example.com' }),
+      expect.objectContaining({ para: 'caixa@profills.test', vendedor: null })
+    );
   });
 
   it('manda a notificação interna para o destinatário resolvido', async () => {
