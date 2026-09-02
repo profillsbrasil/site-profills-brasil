@@ -1,8 +1,17 @@
 'use client';
 
-import { createContext, useContext, useSyncExternalStore } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useSyncExternalStore
+} from 'react';
 import type { ReactNode } from 'react';
 
+import {
+  marcarChegadaNaSessao,
+  registrarChegadaIndicacao
+} from '@/lib/analytics/indicacao';
 import {
   extrairTokenIndicacao,
   lerCookieIndicacaoDoBrowser
@@ -48,6 +57,16 @@ function estadoServidor() {
 
 export function IndicacaoProvider({ children }: { children: ReactNode }) {
   const estado = useSyncExternalStore(assinar, lerEstado, estadoServidor);
+
+  /* Chegada pelo link do vendedor: só no cliente, uma vez por sessão do
+     navegador. `estado` só troca de referência quando o token do cookie
+     muda, então o efeito não repete a cada render. */
+  useEffect(() => {
+    if (estado.status !== 'indicado') return;
+    const codigo = estado.vendedor.codigo;
+    if (marcarChegadaNaSessao(codigo)) registrarChegadaIndicacao(codigo);
+  }, [estado]);
+
   return (
     <IndicacaoContext.Provider value={estado}>
       {children}
