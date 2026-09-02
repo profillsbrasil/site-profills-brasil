@@ -108,7 +108,7 @@ export const CONTATO_PADRAO = {
 - `useContatoComercial()` devolve `{ pronto: boolean, telefone: string, whatsapp: (mensagem) => string, email: string }`:
   - `sem-indicacao`: dados de `CONTATO_PADRAO.vendas`, `pronto = true`.
   - `indicado`: e-mail do Vendedor; telefone e WhatsApp do Vendedor quando `contato` existe, senão os padrão; `pronto = true`.
-  - `hidratando`: dados padrão e `pronto = false`. Só quem tem cookie fica nesse estado por tempo perceptível; o componente esconde o texto do número e desabilita o link enquanto `pronto` for falso. Para não penalizar quem não tem cookie, o provider resolve o estado de forma síncrona no primeiro efeito de cliente.
+  - `hidratando`: dados padrão e `pronto = false`. O componente esconde o texto do número e desabilita o link enquanto `pronto` for falso. Todo visitante fica em `hidratando` até a hidratação; a decisão 9 aceita esse intervalo.
 - O grupo `(standalone)` não recebe o provider.
 
 ### 4.6 Pontos de UI
@@ -144,6 +144,7 @@ export const CONTATO_PADRAO = {
 | Vendedor sem `contato`                        | E-mail do Vendedor, telefone padrão                                           |
 | Lead com cookie cujo código já não resolve    | Caixa padrão, sem "Indicado por"                                              |
 | Envs ausentes                                 | Site normal, sem Indicação                                                    |
+| Segredo do cookie ausente                     | Proxy não grava nem apaga cookie; `?ref` ainda é removido da URL              |
 
 ## 6. Testes
 
