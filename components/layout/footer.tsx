@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { BlurFade } from '@/components/ui/blur-fade';
+import { CONTATO_PADRAO } from '@/lib/data/contatos';
+import { waLink } from '@/lib/utils/whatsapp';
 import logoProfills from '@/public/logo-branco.png';
 import logoCartoonsRanca from '@/public/profills-cartoons-ranca.png';
 
@@ -13,29 +15,19 @@ import { GridPattern } from './gridPatternBg';
 import { WhatsAppIcon, socialLinks } from './socialLinks';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
-// Números por setor (só nos links wa.me — nunca renderizados na tela).
-// TODO: trocar Suporte e Compras quando o comercial confirmar os números.
-const WHATSAPP_VENDAS = '5541997851998';
-const WHATSAPP_SUPORTE = '5541997851998';
-const WHATSAPP_COMPRAS = '5541997851998';
-
-function waLink(numero: string, mensagem: string) {
-  return `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-}
-
 const contacts = [
   {
     title: 'Vendas/Peças',
     icon: Phone,
     links: [
       {
-        href: 'mailto:comercial@profillsdobrasil.com.br',
+        href: `mailto:${CONTATO_PADRAO.vendas.email}`,
         icon: Mail,
         label: 'comercial@profillsdobrasil.com.br'
       },
       {
         href: waLink(
-          WHATSAPP_VENDAS,
+          CONTATO_PADRAO.vendas.telefone,
           'Olá! Vim pelo site da Profills e quero falar com Vendas/Peças.'
         ),
         icon: WhatsAppIcon,
@@ -50,13 +42,13 @@ const contacts = [
     icon: Mail,
     links: [
       {
-        href: 'mailto:suporte@profillsdobrasil.com.br',
+        href: `mailto:${CONTATO_PADRAO.suporte.email}`,
         icon: Mail,
         label: 'suporte@profillsdobrasil.com.br'
       },
       {
         href: waLink(
-          WHATSAPP_SUPORTE,
+          CONTATO_PADRAO.suporte.telefone,
           'Olá! Vim pelo site da Profills e preciso de suporte técnico.'
         ),
         icon: WhatsAppIcon,
@@ -71,13 +63,13 @@ const contacts = [
     icon: MapPin,
     links: [
       {
-        href: 'mailto:compras@profillsdobrasil.com.br',
+        href: `mailto:${CONTATO_PADRAO.compras.email}`,
         icon: Mail,
         label: 'compras@profillsdobrasil.com.br'
       },
       {
         href: waLink(
-          WHATSAPP_COMPRAS,
+          CONTATO_PADRAO.compras.telefone,
           'Olá! Vim pelo site da Profills e quero falar com Compras.'
         ),
         icon: WhatsAppIcon,

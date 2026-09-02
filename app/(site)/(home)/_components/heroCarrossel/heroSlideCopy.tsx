@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import { WhatsAppIcon } from '@/components/layout/socialLinks';
 import { cn } from '@/lib/utils';
+import { WHATSAPP_VENDAS, waLink } from '@/lib/utils/whatsapp';
 
 import type { SlideMaquina } from './slideData';
 import { ArrowRight } from 'lucide-react';
@@ -22,9 +23,10 @@ const bloco = {
   entrar: { y: '0%', transition: { duration: 0.52, ease: EASE_ENTRADA } }
 };
 
-const WHATSAPP_URL = `https://wa.me/5541997851998?text=${encodeURIComponent(
+const WHATSAPP_URL = waLink(
+  WHATSAPP_VENDAS,
   'Olá! Vim pelo site da Profills e quero falar com um especialista.'
-)}`;
+);
 
 /* Máscara do Reveal: o bloco sobe de dentro de um recorte overflow-hidden */
 function Mascara({
