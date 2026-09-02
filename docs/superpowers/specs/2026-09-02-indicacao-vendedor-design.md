@@ -158,3 +158,27 @@ export const CONTATO_PADRAO = {
 ## 7. Fora de escopo
 
 Card do consultor, banner de cookies, rate limit no CRM, `cacheComponents`, números reais de Suporte e Compras (TODO existente), link do botão do FAQ.
+
+## 8. Analytics (2026-09-02)
+
+Duas coisas são medidas por vendedor: a chegada pelo link `?ref=` e o lead atribuído a ele.
+
+| Onde | Chegada                                   | Lead                                               |
+| ---- | ----------------------------------------- | -------------------------------------------------- |
+| GA4  | `indicacao_chegada` `{ codigo_vendedor }` | `indicacao_lead` `{ codigo_vendedor, formulario }` |
+| Meta | `IndicacaoChegada` `{ codigo_vendedor }`  | `IndicacaoLead` `{ codigo_vendedor, formulario }`  |
+
+`formulario` é um de `contato`, `catalogo`, `montar-maquina`, `monte-fabrica`, `especificacoes`.
+
+Decisões fechadas com o dono do produto:
+
+1. Registrar duas coisas por vendedor: chegada pelo link e lead atribuído.
+2. Só o código do vendedor vai para GA e Meta. Nunca nome, e-mail, telefone do vendedor nem dado do lead.
+3. Meta: só eventos customizados (`fbq('trackCustom', ...)`); o evento padrão `Lead` não é disparado.
+4. A chegada conta uma vez por sessão do navegador, marcada em `sessionStorage` na chave `indicacao_registrada:<CODIGO>`.
+5. O lead conta só quando o handler de fato mandou o e-mail ao vendedor; o handler devolve `indicacao: { codigo } | null` no JSON de sucesso.
+6. Lead sem indicação também dispara, com `codigo_vendedor: 'nenhum'`.
+
+O disparo vive em `lib/analytics/indicacao.ts`: GA ou Pixel ausentes viram no-op, analytics nunca quebra a página. A chegada sai do `IndicacaoProvider` (efeito de cliente, depois da hidratação); o lead sai de cada hook de formulário, no caminho de sucesso.
+
+`codigo_vendedor` e `formulario` precisam ser registrados como dimensões personalizadas de escopo de evento no admin do GA4; depois disso os relatórios levam de 24 a 48 h para mostrar os valores.
