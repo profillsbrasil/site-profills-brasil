@@ -14,6 +14,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
 import {
   type SpecificationFormData,
   specificationFormSchema
@@ -71,6 +72,12 @@ export default function SpecificationModal({
       if (!response.ok) {
         throw new Error('Erro ao enviar solicitação');
       }
+
+      const result = await response.json().catch(() => ({}));
+      registrarLeadIndicacao(
+        'especificacoes',
+        result?.indicacao?.codigo ?? null
+      );
 
       toast.success(
         <p className='font-bold'>Solicitação enviada com sucesso!</p>,

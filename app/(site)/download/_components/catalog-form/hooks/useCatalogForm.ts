@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
 import {
   type CatalogRequestData,
   catalogRequestSchema
@@ -43,6 +44,9 @@ export function useCatalogForm() {
           payload?.message || 'Não foi possível enviar. Tente novamente.'
         );
       }
+
+      const corpo = await res.json().catch(() => ({}));
+      registrarLeadIndicacao('catalogo', corpo?.indicacao?.codigo ?? null);
 
       setSubmittedEmail(values.email);
       setStatus('success');
