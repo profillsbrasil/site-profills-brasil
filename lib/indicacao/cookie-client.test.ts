@@ -1,4 +1,7 @@
-import { lerCookieIndicacaoDoBrowser } from './cookie-client';
+import {
+  extrairTokenIndicacao,
+  lerCookieIndicacaoDoBrowser
+} from './cookie-client';
 import { describe, expect, it } from 'vitest';
 
 function jwtFalso(payload: unknown) {
@@ -13,6 +16,21 @@ const payload = {
   contato: '11987654321',
   consultadoEm: '2026-09-02T12:00:00.000Z'
 };
+
+describe('extrairTokenIndicacao', () => {
+  it('devolve só o valor do cookie da Indicação', () => {
+    const token = jwtFalso(payload);
+    expect(extrairTokenIndicacao(`_ga=abc; profills_indicacao=${token}`)).toBe(
+      token
+    );
+    expect(extrairTokenIndicacao('_ga=abc; outro=1')).toBeNull();
+    expect(extrairTokenIndicacao('')).toBeNull();
+  });
+
+  it('não confunde com um cookie de nome parecido', () => {
+    expect(extrairTokenIndicacao('nao_profills_indicacao=x')).toBeNull();
+  });
+});
 
 describe('lerCookieIndicacaoDoBrowser', () => {
   it('lê o payload do cookie, com acento, entre outros cookies', () => {

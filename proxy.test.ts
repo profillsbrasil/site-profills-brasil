@@ -8,7 +8,7 @@ import {
   lerIndicacao
 } from '@/lib/indicacao/cookie-server';
 
-import proxy from './proxy';
+import proxy, { config } from './proxy';
 import {
   afterEach,
   beforeAll,
@@ -58,6 +58,30 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
+/* Quem avalia o matcher é o Next; aqui só compilamos a string para provar
+   que o negative lookahead separa `/api/...` de uma rota que começa com api. */
+describe('config.matcher', () => {
+  const re = new RegExp(`^${config.matcher[0]}$`);
+
+  it('deixa de fora API, assets e arquivos com extensão', () => {
+    for (const rota of [
+      '/api/contact',
+      '/_next/static/x.js',
+      '/sitemap.xml',
+      '/robots.txt',
+      '/logo.png'
+    ]) {
+      expect(re.test(rota)).toBe(false);
+    }
+  });
+
+  it('pega páginas, inclusive as que começam com api', () => {
+    for (const rota of ['/', '/sobre', '/maquinas/envasadora', '/apicultura']) {
+      expect(re.test(rota)).toBe(true);
+    }
+  });
+});
+
 describe('proxy com ?ref', () => {
   it('grava o cookie e redireciona para a URL sem ref, mantendo os outros parâmetros', async () => {
     vi.mocked(buscarVendedorPorCodigo).mockResolvedValue({
@@ -99,7 +123,7 @@ describe('proxy com ?ref', () => {
     expect(buscarVendedorPorCodigo).not.toHaveBeenCalled();
   });
 
-  it('404 ou CRM indisponível: redireciona e não mexe no cookie anterior', async () => {
+  it('404 ou CRM indisponível: redireciona sem gravar cookie', async () => {
     for (const tipo of ['nao-encontrado', 'indisponivel'] as const) {
       vi.mocked(buscarVendedorPorCodigo).mockResolvedValue({ tipo });
       const res = await proxy(

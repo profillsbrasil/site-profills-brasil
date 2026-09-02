@@ -1,4 +1,7 @@
-import { renderTemplate } from '@/lib/emails/_shared/template-engine';
+import {
+  escaparHtml,
+  renderTemplate
+} from '@/lib/emails/_shared/template-engine';
 import { createTransporter } from '@/lib/emails/_shared/transporter';
 import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { ContactFormData } from '@/lib/schemas/contact-form';
@@ -109,7 +112,7 @@ export const sendContactEmail = async (
     },
     to: destinatario.para,
     subject: `Orçamento - ${projectDetails.material[0]} (${projectDetails.service[0]}) - ${data.email}`,
-    html: createContactEmailTemplate(data, indicadoPor),
+    html: createContactEmailTemplate(data, escaparHtml(indicadoPor)),
     // Versão em texto plano como fallback
     text: `
 Nova Solicitação de Orçamento - Profills

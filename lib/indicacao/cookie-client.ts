@@ -9,6 +9,15 @@ function base64UrlParaTexto(b64url: string): string {
   return new TextDecoder().decode(bytes);
 }
 
+/** Valor bruto do cookie da Indicação dentro de um `document.cookie`. */
+export function extrairTokenIndicacao(cookieHeader: string): string | null {
+  const par = cookieHeader
+    .split(';')
+    .map((p) => p.trim())
+    .find((p) => p.startsWith(`${NOME}=`));
+  return par ? par.slice(NOME.length + 1) : null;
+}
+
 /**
  * Decodifica o payload do cookie sem verificar a assinatura: o browser só
  * mostra o que está lá, e o servidor verifica antes de usar em qualquer envio.
@@ -16,13 +25,9 @@ function base64UrlParaTexto(b64url: string): string {
 export function lerCookieIndicacaoDoBrowser(
   cookieHeader: string
 ): IndicacaoPayload | null {
-  const par = cookieHeader
-    .split(';')
-    .map((p) => p.trim())
-    .find((p) => p.startsWith(`${NOME}=`));
-  if (!par) return null;
+  const token = extrairTokenIndicacao(cookieHeader);
+  if (!token) return null;
 
-  const token = par.slice(NOME.length + 1);
   const partes = token.split('.');
   if (partes.length !== 3) return null;
 

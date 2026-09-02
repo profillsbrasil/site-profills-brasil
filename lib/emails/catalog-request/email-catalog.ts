@@ -1,4 +1,7 @@
-import { renderTemplate } from '@/lib/emails/_shared/template-engine';
+import {
+  escaparHtml,
+  renderTemplate
+} from '@/lib/emails/_shared/template-engine';
 import { createTransporter } from '@/lib/emails/_shared/transporter';
 import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { CatalogRequestData } from '@/lib/schemas/catalog-request';
@@ -80,7 +83,7 @@ export async function sendLeadNotification(
     phone: data.phone,
     email: data.email,
     timestamp,
-    indicadoPor
+    indicadoPor: escaparHtml(indicadoPor)
   });
 
   const text = [

@@ -26,7 +26,7 @@ function avisarSemSegredo() {
    robots e a imagem OG ficam de fora. */
 export const config = {
   matcher: [
-    '/((?!api|_next|sitemap\\.xml|robots\\.txt|opengraph-image|.*\\..*).*)'
+    '/((?!api/|_next/|sitemap\\.xml$|robots\\.txt$|opengraph-image|.*\\..*).*)'
   ]
 };
 

@@ -129,6 +129,17 @@ describe.each(casos)('envio $nome', ({ enviar }) => {
     expect(opts.text).toContain('Indicado por: Maria Silva (MARIA-10)');
   });
 
+  it('escapa o nome do vendedor no HTML', async () => {
+    await enviar({
+      para: 'maria@profills.com.br',
+      vendedor: { ...vendedor, nome: 'Maria <b>X</b>' }
+    });
+    const opts = sendMail.mock.calls[0][0];
+    expect(opts.html).toContain('&lt;b&gt;');
+    expect(opts.html).not.toContain('<b>X');
+    expect(opts.text).toContain('Maria <b>X</b> (MARIA-10)');
+  });
+
   it('manda para a caixa padrão sem "Indicado por"', async () => {
     await enviar(paraCaixa);
     const opts = sendMail.mock.calls[0][0];

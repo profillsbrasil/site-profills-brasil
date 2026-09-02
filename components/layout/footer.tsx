@@ -24,7 +24,7 @@ const contatosFixos = [
       {
         href: `mailto:${CONTATO_PADRAO.suporte.email}`,
         icon: Mail,
-        label: 'suporte@profillsdobrasil.com.br'
+        label: CONTATO_PADRAO.suporte.email
       },
       {
         href: waLink(
@@ -45,7 +45,7 @@ const contatosFixos = [
       {
         href: `mailto:${CONTATO_PADRAO.compras.email}`,
         icon: Mail,
-        label: 'compras@profillsdobrasil.com.br'
+        label: CONTATO_PADRAO.compras.email
       },
       {
         href: waLink(

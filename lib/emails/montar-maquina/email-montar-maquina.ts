@@ -1,3 +1,4 @@
+import { escaparHtml } from '@/lib/emails/_shared/template-engine';
 import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { MontarMaquinaFormData } from '@/lib/schemas/montar-maquina-form';
 import { SITE_URL } from '@/lib/seo/site';
@@ -111,7 +112,7 @@ export const sendMontarMaquinaEmail = async (
     },
     to: destinatario.para,
     subject: `Monte sua Máquina - ${data.nome} - ${data.email}`,
-    html: createMontarMaquinaEmailTemplate(data, indicadoPor),
+    html: createMontarMaquinaEmailTemplate(data, escaparHtml(indicadoPor)),
     text: `
 Nova Solicitação - Monte sua Máquina - Profills
 ${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}

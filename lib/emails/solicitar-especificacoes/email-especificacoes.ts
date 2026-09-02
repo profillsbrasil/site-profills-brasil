@@ -1,3 +1,4 @@
+import { escaparHtml } from '@/lib/emails/_shared/template-engine';
 import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { SpecificationFormData } from '@/lib/schemas/specification-form';
 import { SITE_URL } from '@/lib/seo/site';
@@ -112,7 +113,7 @@ export const sendSpecificationEmail = async (
     },
     to: destinatario.para,
     subject: `Especificações da ${data.maquinaNome} - ${data.nome}`,
-    html: createEmailTemplate(data, indicadoPor),
+    html: createEmailTemplate(data, escaparHtml(indicadoPor)),
     // Versão em texto plano como fallback
     text: `
 Nova Solicitação de Especificações - Profills

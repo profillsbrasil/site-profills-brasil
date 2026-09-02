@@ -3,7 +3,10 @@
 import { createContext, useContext, useSyncExternalStore } from 'react';
 import type { ReactNode } from 'react';
 
-import { lerCookieIndicacaoDoBrowser } from '@/lib/indicacao/cookie-client';
+import {
+  extrairTokenIndicacao,
+  lerCookieIndicacaoDoBrowser
+} from '@/lib/indicacao/cookie-client';
 import type { IndicacaoPayload } from '@/lib/indicacao/tipos';
 
 export type EstadoIndicacao =
@@ -16,21 +19,25 @@ const SEM_INDICACAO: EstadoIndicacao = { status: 'sem-indicacao' };
 
 const IndicacaoContext = createContext<EstadoIndicacao>(SEM_INDICACAO);
 
-/* useSyncExternalStore exige snapshot estável: cacheia por string do cookie. */
-let ultimoCookie: string | null = null;
+/* useSyncExternalStore exige snapshot estável: cacheia pelo valor do cookie
+   da Indicação, não pelo `document.cookie` inteiro — analytics e afins
+   escrevem cookies o tempo todo e invalidariam o cache à toa. */
+let ultimoToken: string | null = null;
 let ultimoEstado: EstadoIndicacao = SEM_INDICACAO;
 
 function lerEstado(): EstadoIndicacao {
   const cookie = document.cookie;
-  if (cookie === ultimoCookie) return ultimoEstado;
+  const token = extrairTokenIndicacao(cookie);
+  if (token === ultimoToken) return ultimoEstado;
   const vendedor = lerCookieIndicacaoDoBrowser(cookie);
-  ultimoCookie = cookie;
+  ultimoToken = token;
   ultimoEstado = vendedor ? { status: 'indicado', vendedor } : SEM_INDICACAO;
   return ultimoEstado;
 }
 
-/* O cookie só muda por navegação completa (o proxy redireciona), então não
-   há evento para assinar: o snapshot é relido a cada render. */
+/* Não há evento de mudança de cookie para assinar. O cookie pode mudar numa
+   resposta de navegação client-side; a UI só reflete no próximo render ou
+   reload, e isso é aceito (decisão 9 da spec). */
 function assinar() {
   return () => {};
 }

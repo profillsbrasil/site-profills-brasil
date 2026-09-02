@@ -1,3 +1,4 @@
+import { escaparHtml } from '@/lib/emails/_shared/template-engine';
 import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { MonteFabricaFormData } from '@/lib/schemas/monte-fabrica-form';
 import { SITE_URL } from '@/lib/seo/site';
@@ -123,7 +124,7 @@ export const sendMonteFabricaEmail = async (
     },
     to: destinatario.para,
     subject: `Monte sua Fábrica - ${data.empresa} - ${data.email}`,
-    html: createMonteFabricaEmailTemplate(data, indicadoPor),
+    html: createMonteFabricaEmailTemplate(data, escaparHtml(indicadoPor)),
     // Versão em texto plano como fallback
     text: `
 Nova Solicitação - Monte sua Fábrica - Profills
