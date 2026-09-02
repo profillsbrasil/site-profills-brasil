@@ -175,10 +175,14 @@ Decisões fechadas com o dono do produto:
 1. Registrar duas coisas por vendedor: chegada pelo link e lead atribuído.
 2. Só o código do vendedor vai para GA e Meta. Nunca nome, e-mail, telefone do vendedor nem dado do lead.
 3. Meta: só eventos customizados (`fbq('trackCustom', ...)`); o evento padrão `Lead` não é disparado.
-4. A chegada conta uma vez por sessão do navegador, marcada em `sessionStorage` na chave `indicacao_registrada:<CODIGO>`.
+4. A chegada conta uma vez por aba (`sessionStorage` é por aba), marcada na chave `indicacao_registrada:<CODIGO>`. Visitante com cookie que abre aba nova, ou que volta dias depois, conta de novo — é assim por decisão do produto.
 5. O lead conta só quando o handler de fato mandou o e-mail ao vendedor; o handler devolve `indicacao: { codigo } | null` no JSON de sucesso.
 6. Lead sem indicação também dispara, com `codigo_vendedor: 'nenhum'`.
 
 O disparo vive em `lib/analytics/indicacao.ts`: GA ou Pixel ausentes viram no-op, analytics nunca quebra a página. A chegada sai do `IndicacaoProvider` (efeito de cliente, depois da hidratação); o lead sai de cada hook de formulário, no caminho de sucesso.
+
+O `IndicacaoProvider` só existe no grupo `(site)`: páginas do grupo `(standalone)` (landings) não disparam chegada, mesmo com o cookie posto. O lead, esse sim, sai de qualquer formulário que use os hooks instrumentados.
+
+Antes de emitir, o código passa pelo formato do CRM (`lib/indicacao/codigo.ts`, `^[A-Z0-9-]{3,20}$`): código fora do formato não vira chegada, e no lead vira `codigo_vendedor: 'nenhum'` — a dimensão do GA4 não recebe lixo de querystring.
 
 `codigo_vendedor` e `formulario` precisam ser registrados como dimensões personalizadas de escopo de evento no admin do GA4; depois disso os relatórios levam de 24 a 48 h para mostrar os valores.

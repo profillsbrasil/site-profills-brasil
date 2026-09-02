@@ -58,9 +58,16 @@ function estadoServidor() {
 export function IndicacaoProvider({ children }: { children: ReactNode }) {
   const estado = useSyncExternalStore(assinar, lerEstado, estadoServidor);
 
-  /* Chegada pelo link do vendedor: só no cliente, uma vez por sessão do
-     navegador. `estado` só troca de referência quando o token do cookie
-     muda, então o efeito não repete a cada render. */
+  /* Chegada pelo link do vendedor: só no cliente, uma vez por aba
+     (`sessionStorage` é por aba). Visitante com cookie que abre aba nova, ou
+     que volta dias depois, conta de novo — decisão do produto. `estado` só
+     troca de referência quando o token do cookie muda, então o efeito não
+     repete a cada render.
+
+     O evento só chega ao GA porque este efeito roda depois de o
+     `GoogleAnalytics` criar o `dataLayer`: o `useSyncExternalStore` força um
+     segundo commit e o efeito cai nele. `sendGAEvent` sem `dataLayer`
+     descarta o evento com um warn, não enfileira. */
   useEffect(() => {
     if (estado.status !== 'indicado') return;
     const codigo = estado.vendedor.codigo;
