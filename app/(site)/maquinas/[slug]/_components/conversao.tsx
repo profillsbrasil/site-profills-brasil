@@ -1,6 +1,6 @@
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { BotaoEspecialista } from '@/components/indicacao/botaoEspecialista';
 import type { MaquinaCatalogo } from '@/lib/data/maquinas';
-import { WHATSAPP_VENDAS, waLink } from '@/lib/utils/whatsapp';
 
 import SpecificationModal from './specificationModal';
 
@@ -21,13 +21,10 @@ export function Conversao({ maquina }: { maquina: MaquinaCatalogo }) {
             maquinaSlug={maquina.slug}
             maquinaNome={maquina.nome}
           />
-          <a
-            href={waLink(WHATSAPP_VENDAS, mensagem)}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-muted-foreground hover:text-foreground inline-flex h-12 items-center rounded-xs border border-[rgba(148,178,235,0.4)] px-6 font-semibold transition-colors'>
-            Falar com um especialista
-          </a>
+          <BotaoEspecialista
+            mensagem={mensagem}
+            className='text-muted-foreground hover:text-foreground inline-flex h-12 items-center rounded-xs border border-[rgba(148,178,235,0.4)] px-6 font-semibold transition-colors'
+          />
         </div>
       </AnimatedContainer>
     </section>

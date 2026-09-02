@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { BotaoEspecialista } from '@/components/indicacao/botaoEspecialista';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { JsonLd } from '@/components/seo/jsonLd';
 import { getMaquinaBySlug, maquinasCatalogo } from '@/lib/data/maquinas';
 import { breadcrumbSchema, maquinaSchema } from '@/lib/seo/schemas';
 import { OG_IMAGE, SITE_LOCALE, SITE_NAME } from '@/lib/seo/site';
-import { WHATSAPP_VENDAS, waLink } from '@/lib/utils/whatsapp';
 
 import { AplicacoesProdutos } from './_components/aplicacoesProdutos';
 import { Conversao } from './_components/conversao';
@@ -115,16 +115,10 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
               maquinaSlug={maquina.slug}
               maquinaNome={maquina.nome}
             />
-            <a
-              href={waLink(
-                WHATSAPP_VENDAS,
-                `Olá! Tenho interesse na ${maquina.nome}.`
-              )}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-muted-foreground hover:text-foreground inline-flex h-12 items-center rounded-xs border border-[rgba(148,178,235,0.4)] px-6 text-sm font-semibold transition-colors'>
-              Falar com um especialista
-            </a>
+            <BotaoEspecialista
+              mensagem={`Olá! Tenho interesse na ${maquina.nome}.`}
+              className='text-muted-foreground hover:text-foreground inline-flex h-12 items-center rounded-xs border border-[rgba(148,178,235,0.4)] px-6 text-sm font-semibold transition-colors'
+            />
             {maquina.video && (
               <a
                 href='#video'
