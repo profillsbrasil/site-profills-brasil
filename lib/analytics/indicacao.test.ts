@@ -140,6 +140,11 @@ describe('espera GA e Pixel ficarem prontos', () => {
     expect(ga).toHaveBeenCalledWith('event', 'indicacao_chegada', {
       codigo_vendedor: 'MARIA-10'
     });
+
+    vi.advanceTimersByTime(20000);
+
+    expect(ga).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('espera o Pixel aparecer', () => {
@@ -157,6 +162,11 @@ describe('espera GA e Pixel ficarem prontos', () => {
     expect(window.fbq).toHaveBeenCalledWith('trackCustom', 'IndicacaoChegada', {
       codigo_vendedor: 'MARIA-10'
     });
+
+    vi.advanceTimersByTime(20000);
+
+    expect(window.fbq).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('desiste em silêncio depois de 10 s', () => {
@@ -166,7 +176,10 @@ describe('espera GA e Pixel ficarem prontos', () => {
 
     expect(() => registrarChegadaIndicacao('MARIA-10')).not.toThrow();
 
-    vi.advanceTimersByTime(15000);
+    vi.advanceTimersByTime(9500);
+    expect(vi.getTimerCount()).toBe(2); // GA e Pixel pollam em paralelo
+
+    vi.advanceTimersByTime(500);
 
     expect(ga).not.toHaveBeenCalled();
     expect(window.fbq).toBeUndefined();
@@ -186,6 +199,11 @@ describe('espera GA e Pixel ficarem prontos', () => {
     vi.advanceTimersByTime(250);
 
     expect(window.fbq).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(20000);
+
+    expect(window.fbq).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
   });
 });
 

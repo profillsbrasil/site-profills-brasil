@@ -11,13 +11,14 @@ export type FormularioLead =
 type Params = Record<string, string>;
 
 const INTERVALO_MS = 250;
-const TENTATIVAS = 40; // 10 s
+const TENTATIVAS = 40; // cerca de 10 s (40 tentativas a cada 250 ms)
 
 /* GA e Pixel são instalados por scripts `afterInteractive`, que podem rodar
    depois do efeito que chama este módulo. `sendGAEvent` sem `dataLayer`
    descarta com warn (não enfileira) e `fbq` ausente é no-op, então cada lado
    espera o próprio script existir. Sem GA ou Pixel configurados, desiste em
-   silêncio depois de 10 s. Nunca lança. */
+   silêncio depois de cerca de 10 s (40 tentativas a cada 250 ms). Nunca
+   lança. */
 function quandoPronto(pronto: () => boolean, acao: () => void) {
   let tentativas = 0;
   const tentar = () => {
@@ -37,11 +38,17 @@ function quandoPronto(pronto: () => boolean, acao: () => void) {
     }
     tentativas += 1;
     if (tentativas >= TENTATIVAS) return;
-    window.setTimeout(tentar, INTERVALO_MS);
+    try {
+      window.setTimeout(tentar, INTERVALO_MS);
+    } catch {
+      /* sem `window` (SSR, ambiente sem timers): desiste */
+    }
   };
   tentar();
 }
 
+/* Acoplado ao dataLayerName padrão do @next/third-parties; se o layout
+   passar outro nome, ajustar aqui. */
 function gaPronto() {
   return typeof window.gtag === 'function' && Array.isArray(window.dataLayer);
 }
