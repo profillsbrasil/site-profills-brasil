@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useContatoComercial } from '@/components/indicacao/useContatoComercial';
 import { BlurFade } from '@/components/ui/blur-fade';
 import { CONTATO_PADRAO } from '@/lib/data/contatos';
 import { waLink } from '@/lib/utils/whatsapp';
@@ -15,28 +16,7 @@ import { GridPattern } from './gridPatternBg';
 import { WhatsAppIcon, socialLinks } from './socialLinks';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
-const contacts = [
-  {
-    title: 'Vendas/Peças',
-    icon: Phone,
-    links: [
-      {
-        href: `mailto:${CONTATO_PADRAO.vendas.email}`,
-        icon: Mail,
-        label: 'comercial@profillsdobrasil.com.br'
-      },
-      {
-        href: waLink(
-          CONTATO_PADRAO.vendas.telefone,
-          'Olá! Vim pelo site da Profills e quero falar com Vendas/Peças.'
-        ),
-        icon: WhatsAppIcon,
-        label: 'Conversar no WhatsApp',
-        ariaLabel: 'Conversar no WhatsApp com Vendas/Peças',
-        external: true
-      }
-    ]
-  },
+const contatosFixos = [
   {
     title: 'Suporte e Assistência Técnica',
     icon: Mail,
@@ -84,6 +64,29 @@ const contacts = [
 export default function Footer() {
   const [copiedCnpj, setCopiedCnpj] = useState(false);
   const resetTimerRef = useRef<number | null>(null);
+  const comercial = useContatoComercial();
+
+  const cardVendas = {
+    title: 'Vendas/Peças',
+    icon: Phone,
+    links: [
+      {
+        href: `mailto:${comercial.email}`,
+        icon: Mail,
+        label: comercial.email
+      },
+      {
+        href: comercial.whatsapp(
+          'Olá! Vim pelo site da Profills e quero falar com Vendas/Peças.'
+        ),
+        icon: WhatsAppIcon,
+        label: 'Conversar no WhatsApp',
+        ariaLabel: 'Conversar no WhatsApp com Vendas/Peças',
+        external: true
+      }
+    ]
+  };
+  const contacts = [cardVendas, ...contatosFixos];
 
   useEffect(() => {
     return () => {
@@ -166,22 +169,28 @@ export default function Footer() {
                 </div>
                 <div className='flex flex-col space-y-2 md:space-y-3'>
                   {contact.links.map(
-                    ({ href, icon: LinkIcon, label, ariaLabel, external }) => (
-                      <Link
-                        key={href}
-                        href={href}
-                        aria-label={ariaLabel}
-                        {...(external && {
-                          target: '_blank',
-                          rel: 'noopener noreferrer'
-                        })}
-                        className='group/link flex items-center gap-2 text-[#b6c5e2] transition-colors hover:text-accent md:gap-3'>
-                        <LinkIcon className='h-4 w-4 text-accent/60 transition-colors group-hover/link:text-accent md:h-4 md:w-4' />
-                        <span className='text-xs font-medium md:text-sm'>
-                          {label}
-                        </span>
-                      </Link>
-                    )
+                    ({ href, icon: LinkIcon, label, ariaLabel, external }) => {
+                      const aguardando =
+                        contact.title === 'Vendas/Peças' && !comercial.pronto;
+                      return (
+                        <a
+                          key={ariaLabel ?? label}
+                          href={aguardando ? undefined : href}
+                          aria-label={ariaLabel}
+                          aria-disabled={aguardando || undefined}
+                          {...(external &&
+                            !aguardando && {
+                              target: '_blank',
+                              rel: 'noopener noreferrer'
+                            })}
+                          className='group/link flex items-center gap-2 text-[#b6c5e2] transition-colors hover:text-accent md:gap-3'>
+                          <LinkIcon className='h-4 w-4 text-accent/60 transition-colors group-hover/link:text-accent md:h-4 md:w-4' />
+                          <span className='min-h-4 text-xs font-medium md:text-sm'>
+                            {aguardando && label.includes('@') ? '' : label}
+                          </span>
+                        </a>
+                      );
+                    }
                   )}
                 </div>
               </div>
