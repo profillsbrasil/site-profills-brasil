@@ -40,10 +40,17 @@ beforeEach(() => {
   vi.mocked(registrarLeadIndicacao).mockClear();
   vi.mocked(sendGAEvent).mockReset();
   vi.mocked(toast.error).mockClear();
+  /* registrarLeadIndicacao chama a implementação real, que só dispara na
+     hora se GA já estiver "pronto"; sem isso a tentativa cai num
+     setTimeout real e sobra timer pendente entre os testes. */
+  window.gtag = vi.fn();
+  window.dataLayer = [];
 });
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  delete window.gtag;
+  delete window.dataLayer;
 });
 
 describe('useCatalogForm', () => {
