@@ -16,11 +16,15 @@ const ga = vi.mocked(sendGAEvent);
 beforeEach(() => {
   ga.mockReset();
   window.fbq = vi.fn();
+  window.gtag = vi.fn();
+  window.dataLayer = [];
   window.sessionStorage.clear();
 });
 
 afterEach(() => {
   delete window.fbq;
+  delete window.gtag;
+  delete window.dataLayer;
   window.sessionStorage.clear();
 });
 
@@ -107,6 +111,99 @@ describe('registrarLeadIndicacao', () => {
 
     expect(() => registrarLeadIndicacao('contato', 'MARIA-10')).not.toThrow();
     expect(window.fbq).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('espera GA e Pixel ficarem prontos', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('espera o GA aparecer', () => {
+    delete window.gtag;
+    delete window.dataLayer;
+
+    registrarChegadaIndicacao('MARIA-10');
+
+    expect(ga).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1000);
+    window.gtag = vi.fn();
+    window.dataLayer = [];
+    vi.advanceTimersByTime(250);
+
+    expect(ga).toHaveBeenCalledTimes(1);
+    expect(ga).toHaveBeenCalledWith('event', 'indicacao_chegada', {
+      codigo_vendedor: 'MARIA-10'
+    });
+
+    vi.advanceTimersByTime(20000);
+
+    expect(ga).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('espera o Pixel aparecer', () => {
+    delete window.fbq;
+
+    registrarChegadaIndicacao('MARIA-10');
+
+    expect(window.fbq).toBeUndefined();
+
+    vi.advanceTimersByTime(1000);
+    window.fbq = vi.fn();
+    vi.advanceTimersByTime(250);
+
+    expect(window.fbq).toHaveBeenCalledTimes(1);
+    expect(window.fbq).toHaveBeenCalledWith('trackCustom', 'IndicacaoChegada', {
+      codigo_vendedor: 'MARIA-10'
+    });
+
+    vi.advanceTimersByTime(20000);
+
+    expect(window.fbq).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('desiste em silêncio depois de 10 s', () => {
+    delete window.gtag;
+    delete window.dataLayer;
+    delete window.fbq;
+
+    expect(() => registrarChegadaIndicacao('MARIA-10')).not.toThrow();
+
+    vi.advanceTimersByTime(9500);
+    expect(vi.getTimerCount()).toBe(2); // GA e Pixel pollam em paralelo
+
+    vi.advanceTimersByTime(500);
+
+    expect(ga).not.toHaveBeenCalled();
+    expect(window.fbq).toBeUndefined();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('os dois lados são independentes', () => {
+    delete window.fbq;
+
+    registrarChegadaIndicacao('MARIA-10');
+
+    expect(ga).toHaveBeenCalledTimes(1);
+    expect(window.fbq).toBeUndefined();
+
+    vi.advanceTimersByTime(2000);
+    window.fbq = vi.fn();
+    vi.advanceTimersByTime(250);
+
+    expect(window.fbq).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(20000);
+
+    expect(window.fbq).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
   });
 });
 

@@ -40,10 +40,20 @@ beforeEach(() => {
   vi.mocked(registrarLeadIndicacao).mockClear();
   vi.mocked(sendGAEvent).mockReset();
   vi.mocked(toast.error).mockClear();
+  /* registrarLeadIndicacao chama a implementação real, que só dispara na
+     hora se GA, dataLayer e Pixel já estiverem "prontos"; os três stubs
+     deixam a primeira tentativa síncrona, sem sobrar timer pendente (do GA
+     ou do Meta) entre os testes. */
+  window.gtag = vi.fn();
+  window.dataLayer = [];
+  window.fbq = vi.fn();
 });
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  delete window.gtag;
+  delete window.dataLayer;
+  delete window.fbq;
 });
 
 describe('useCatalogForm', () => {

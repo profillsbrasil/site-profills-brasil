@@ -64,10 +64,11 @@ export function IndicacaoProvider({ children }: { children: ReactNode }) {
      troca de referência quando o token do cookie muda, então o efeito não
      repete a cada render.
 
-     O evento só chega ao GA porque este efeito roda depois de o
-     `GoogleAnalytics` criar o `dataLayer`: o `useSyncExternalStore` força um
-     segundo commit e o efeito cai nele. `sendGAEvent` sem `dataLayer`
-     descarta o evento com um warn, não enfileira. */
+     A ordem entre este efeito e os scripts inline de GA e Pixel não é
+     garantida (na hidratação normal o segundo commit do
+     `useSyncExternalStore` cai depois deles; num render de cliente após
+     falha de hidratação, não). Por isso `lib/analytics/indicacao.ts` espera
+     cada script existir antes de disparar. */
   useEffect(() => {
     if (estado.status !== 'indicado') return;
     const codigo = estado.vendedor.codigo;

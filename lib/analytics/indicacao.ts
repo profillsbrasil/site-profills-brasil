@@ -10,18 +10,56 @@ export type FormularioLead =
 
 type Params = Record<string, string>;
 
-/* Nunca deixa analytics quebrar a página: GA ou Pixel ausentes viram no-op. */
+const INTERVALO_MS = 250;
+const TENTATIVAS = 40; // cerca de 10 s (40 tentativas a cada 250 ms)
+
+/* GA e Pixel são instalados por scripts `afterInteractive`, que podem rodar
+   depois do efeito que chama este módulo. `sendGAEvent` sem `dataLayer`
+   descarta com warn (não enfileira) e `fbq` ausente é no-op, então cada lado
+   espera o próprio script existir. Sem GA ou Pixel configurados, desiste em
+   silêncio depois de cerca de 10 s (40 tentativas a cada 250 ms). Nunca
+   lança. */
+function quandoPronto(pronto: () => boolean, acao: () => void) {
+  let tentativas = 0;
+  const tentar = () => {
+    let ok = false;
+    try {
+      ok = pronto();
+    } catch {
+      ok = false;
+    }
+    if (ok) {
+      try {
+        acao();
+      } catch {
+        /* dataLayer corrompido por extensão, fbq quebrado: não derruba a página */
+      }
+      return;
+    }
+    tentativas += 1;
+    if (tentativas >= TENTATIVAS) return;
+    try {
+      window.setTimeout(tentar, INTERVALO_MS);
+    } catch {
+      /* sem `window` (SSR, ambiente sem timers): desiste */
+    }
+  };
+  tentar();
+}
+
+/* Acoplado ao dataLayerName padrão do @next/third-parties; se o layout
+   passar outro nome, ajustar aqui. */
+function gaPronto() {
+  return typeof window.gtag === 'function' && Array.isArray(window.dataLayer);
+}
+
+function metaPronto() {
+  return typeof window.fbq === 'function';
+}
+
 function enviar(nomeGa: string, nomeMeta: string, params: Params) {
-  try {
-    sendGAEvent('event', nomeGa, params);
-  } catch {
-    /* GA ausente só gera warn; o catch cobre `dataLayer` corrompido por extensão. */
-  }
-  try {
-    window.fbq?.('trackCustom', nomeMeta, params);
-  } catch {
-    /* Pixel não carregado */
-  }
+  quandoPronto(gaPronto, () => sendGAEvent('event', nomeGa, params));
+  quandoPronto(metaPronto, () => window.fbq?.('trackCustom', nomeMeta, params));
 }
 
 /* Código fora do formato do CRM não vira evento: cardinalidade do GA4 é
