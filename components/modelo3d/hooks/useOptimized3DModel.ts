@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ModelViewerElement } from '@google/model-viewer';
+
 import { isWebGLAvailable } from './webglSupport';
 
 // Cache global para modelos 3D já carregados
@@ -30,6 +31,8 @@ export function useOptimized3DModel({
 
   // Detecta suporte a WebGL uma vez no client.
   useEffect(() => {
+    // Só dá para sondar o WebGL no client, depois do mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setWebglSupported(isWebGLAvailable());
   }, []);
 
@@ -62,10 +65,14 @@ export function useOptimized3DModel({
       : false;
 
     if (eager && isLayoutVisible) {
+      // Lê getClientRects() do DOM (sistema externo) para ignorar a árvore
+      // invisível do hero mobile/desktop
+      /* eslint-disable react-hooks/set-state-in-effect */
       setIsVisible(true);
       if (!hasBeenLoaded) {
         setShouldRender(true);
       }
+      /* eslint-enable react-hooks/set-state-in-effect */
     }
 
     const observer = new IntersectionObserver(

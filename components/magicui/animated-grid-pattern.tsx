@@ -13,8 +13,7 @@ import { cn } from '@/lib/utils';
 
 import { motion } from 'motion/react';
 
-export interface AnimatedGridPatternProps
-  extends ComponentPropsWithoutRef<'svg'> {
+export interface AnimatedGridPatternProps extends ComponentPropsWithoutRef<'svg'> {
   width?: number;
   height?: number;
   x?: number;
@@ -79,6 +78,8 @@ export function AnimatedGridPattern({
   // Update squares to animate in
   useEffect(() => {
     if (dimensions.width && dimensions.height) {
+      // Depende das dimensões medidas pelo ResizeObserver (sistema externo)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSquares(generateSquares(numSquares));
     }
   }, [dimensions, numSquares, generateSquares]);

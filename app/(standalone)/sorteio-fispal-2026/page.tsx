@@ -188,7 +188,8 @@ export default function SorteioFispal2026() {
           <BlurFade delay={0.4} inView>
             <p className='mt-5 max-w-xl text-base leading-relaxed text-white/85 md:text-lg'>
               Concorra a uma{' '}
-              <strong className='font-semibold text-white'>TV 65"</strong>, uma{' '}
+              <strong className='font-semibold text-white'>TV 65&quot;</strong>,
+              uma{' '}
               <strong className='font-semibold text-white'>
                 Churrasqueira Champions Grill
               </strong>{' '}
