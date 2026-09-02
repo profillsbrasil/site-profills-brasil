@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
 import {
   type ContactFormData,
   contactFormSchema,
@@ -166,6 +167,8 @@ export function useContactForm() {
       }
 
       console.log('✅ Solicitação enviada com sucesso:', result);
+
+      registrarLeadIndicacao('contato', result?.indicacao?.codigo ?? null);
 
       // Feedback visual de sucesso
       toast.success('Solicitação enviada com sucesso!', {

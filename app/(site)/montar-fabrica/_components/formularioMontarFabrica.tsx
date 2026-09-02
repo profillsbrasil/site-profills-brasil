@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
 import imgFabricaCompleta from '@/lib/images/extras/FabricaRemderNewB.png';
 import {
   type MonteFabricaFormData,
@@ -57,6 +58,11 @@ export default function FormularioMontarFabrica() {
       }
 
       console.log('✅ Solicitação enviada com sucesso:', result);
+
+      registrarLeadIndicacao(
+        'monte-fabrica',
+        result?.indicacao?.codigo ?? null
+      );
 
       toast.success('Solicitação enviada com sucesso!', {
         description:

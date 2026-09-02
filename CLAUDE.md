@@ -45,6 +45,7 @@ lib/crm/                  ← cliente server-only da API do CRM (referral code)
 lib/indicacao/            ← cookie assinado, tipos e destinatário do lead
 components/indicacao/     ← IndicacaoProvider, useContatoComercial, BotaoEspecialista
 lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte, compras)
+lib/analytics/            ← eventos de GA4 e Meta (só código do vendedor, nunca dado pessoal)
 ```
 
 ## Onde colocar cada coisa
@@ -97,4 +98,5 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 - `text-animate` existe em `ui/` e `magicui/` — verificar qual variante a rota vizinha já usa antes de importar.
 - Tema é light-mode único com seções dark (`bg-secondary`) — não há toggle dark/light.
 - Conteúdo do site é em pt-BR.
+- Eventos de Indicação só saem de `lib/analytics/`; nomes e parâmetros são contrato com o admin do GA4 (dimensões `codigo_vendedor`, `formulario`). O PageView do Pixel e o `page_view` do GA continuam em `components/layout/metaPixel.tsx` e no `GoogleAnalytics` do root layout.
 - Contato comercial (telefone, WhatsApp, e-mail de vendas) nunca é hardcoded: vem de `useContatoComercial()` no client ou de `CONTATO_PADRAO` no servidor, porque a Indicação (`?ref=`) troca esses valores por visitante. Suporte, Compras e JSON-LD usam sempre `CONTATO_PADRAO`.

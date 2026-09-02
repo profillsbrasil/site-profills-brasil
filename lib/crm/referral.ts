@@ -1,3 +1,4 @@
+import { normalizarCodigo } from '@/lib/indicacao/codigo';
 import type { VendedorIndicacao } from '@/lib/indicacao/tipos';
 import { logger } from '@/lib/utils/logger';
 
@@ -9,8 +10,6 @@ export type ResultadoBusca =
   | { tipo: 'nao-encontrado' }
   | { tipo: 'indisponivel' };
 
-/** Mesmo formato que o CRM aceita; validar aqui evita rede para lixo de querystring. */
-const FORMATO_CODIGO = /^[A-Z0-9-]{3,20}$/;
 const CACHE_MS = 5 * 60 * 1000;
 const TIMEOUT_MS = 4000;
 /** Teto de entradas do cache; o processo é longo e o código vem de fora. */
@@ -57,12 +56,9 @@ export function tamanhoCacheReferral(): number {
   return cache.size;
 }
 
-export function normalizarCodigo(
-  valor: string | null | undefined
-): string | null {
-  const codigo = (valor ?? '').trim().toUpperCase();
-  return FORMATO_CODIGO.test(codigo) ? codigo : null;
-}
+/* Reexportado para não quebrar quem já importava daqui; a regra mora em
+   `lib/indicacao/codigo.ts`, que o cliente também pode importar. */
+export { normalizarCodigo };
 
 /**
  * Consulta o vendedor dono do código. Nunca lança: qualquer falha do CRM

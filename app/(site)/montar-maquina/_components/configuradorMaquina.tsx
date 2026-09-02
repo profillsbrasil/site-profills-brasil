@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
 // Importar imagens das embalagens
 import embalagemEspeciais from '@/lib/images/embalagensPequenas/especiais.png';
 import embalagemFardo from '@/lib/images/embalagensPequenas/fardo.png';
@@ -112,6 +113,11 @@ export default function ConfiguradorMaquina() {
       if (!response.ok) {
         throw new Error(result?.message || 'Erro ao enviar solicitação');
       }
+
+      registrarLeadIndicacao(
+        'montar-maquina',
+        result?.indicacao?.codigo ?? null
+      );
 
       toast.success('Solicitação enviada com sucesso!', {
         description:
