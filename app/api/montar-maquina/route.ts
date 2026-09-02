@@ -21,7 +21,11 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         message: 'Solicitação enviada com sucesso!',
-        data: { id: Date.now(), timestamp: new Date().toISOString() }
+        data: { id: Date.now(), timestamp: new Date().toISOString() },
+        /* Só o código: o client usa para o evento de analytics. */
+        indicacao: destinatario.vendedor
+          ? { codigo: destinatario.vendedor.referral_code }
+          : null
       },
       { status: 200 }
     );

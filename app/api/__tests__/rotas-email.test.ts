@@ -131,6 +131,7 @@ describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
     const corpo = await res.json();
     expect(res.status).toBe(200);
     expect(corpo.success).toBe(true);
+    expect(corpo.indicacao).toEqual({ codigo: 'MARIA-10' });
     expect(sendMock).toHaveBeenCalledTimes(1);
     expect(sendMock).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'teste@example.com' }),
@@ -146,7 +147,9 @@ describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
     vi.mocked(sendMock).mockResolvedValue(undefined as never);
 
     const res = await post(req(payload));
+    const corpo = await res.json();
     expect(res.status).toBe(200);
+    expect(corpo.indicacao).toBeNull();
     expect(sendMock).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'teste@example.com' }),
       expect.objectContaining({ para: 'caixa@profills.test', vendedor: null })
@@ -198,6 +201,7 @@ describe('POST /api/download-catalog', () => {
       })
     );
     expect(res.status).toBe(200);
+    expect((await res.json()).indicacao).toBeNull();
     expect(sendLeadNotification).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'teste@example.com' }),
       expect.objectContaining({ para: 'caixa@profills.test', vendedor: null })
@@ -214,6 +218,7 @@ describe('POST /api/download-catalog', () => {
       })
     );
     expect(res.status).toBe(200);
+    expect((await res.json()).indicacao).toEqual({ codigo: 'MARIA-10' });
     expect(sendLeadNotification).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'teste@example.com' }),
       expect.objectContaining({ para: 'maria@profills.com.br' })

@@ -32,7 +32,16 @@ export async function POST(request: NextRequest) {
       sendLeadNotification(data, destinatario)
     ]);
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true,
+        /* Só o código: o client usa para o evento de analytics. */
+        indicacao: destinatario.vendedor
+          ? { codigo: destinatario.vendedor.referral_code }
+          : null
+      },
+      { status: 200 }
+    );
   } catch (error) {
     logger.error('Erro ao processar solicitação de catálogo:', error);
 
