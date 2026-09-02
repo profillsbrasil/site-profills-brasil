@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { sendMontarMaquinaEmail } from '@/lib/emails/montar-maquina/email-montar-maquina';
+import { resolverDestinatario } from '@/lib/indicacao/destinatario';
 import { montarMaquinaFormSchema } from '@/lib/schemas/montar-maquina-form';
 import { logger } from '@/lib/utils/logger';
 
@@ -9,11 +10,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const validatedData = montarMaquinaFormSchema.parse(body);
+    const destinatario = await resolverDestinatario(request);
 
     /* Sem try/catch aqui: falha de envio precisa virar 500 para o visitante
        ver o erro — engolir e responder sucesso perdia a solicitação em
        silêncio. O catch externo loga e responde. */
-    await sendMontarMaquinaEmail(validatedData);
+    await sendMontarMaquinaEmail(validatedData, destinatario);
 
     return NextResponse.json(
       {

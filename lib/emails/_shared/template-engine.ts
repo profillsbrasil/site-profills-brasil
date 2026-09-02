@@ -1,3 +1,19 @@
+const ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+};
+
+/**
+ * Escapa texto que vai para o HTML do e-mail. O template engine substitui
+ * placeholders sem escapar nada, então quem traz valor de fora (o nome do
+ * Vendedor, vindo do CRM) passa por aqui antes.
+ */
+export const escaparHtml = (valor: string): string =>
+  valor.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+
 export const renderTemplate = (
   template: string,
   data: Record<string, string | string[] | undefined>

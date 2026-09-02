@@ -39,25 +39,31 @@ public/                   ← só o que precisa de URL direta: videos/, embalage
 private/downloads/        ← arquivos NÃO públicos (catálogo 77MB), servidos via api/download/[token] com JWT
 types/                    ← declarações globais (model-viewer.d.ts)
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
+
+proxy.ts                  ← captura ?ref, grava o cookie de Indicação e redireciona para a URL limpa (spec 2026-09-02)
+lib/crm/                  ← cliente server-only da API do CRM (referral code)
+lib/indicacao/            ← cookie assinado, tipos e destinatário do lead
+components/indicacao/     ← IndicacaoProvider, useContatoComercial, BotaoEspecialista
+lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte, compras)
 ```
 
 ## Onde colocar cada coisa
 
-| Vou adicionar…             | Vai em…                                                                                                        |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Componente shadcn          | `bunx shadcn@latest add <nome>` → `components/ui/`                                                              |
-| Componente Magic UI        | `bunx shadcn@latest add @magicui/<nome>` → `components/magicui/`                                                |
-| Componente de uma rota só  | `app/(site)/<rota>/_components/` (forms complexos ganham subpasta com `components/` interno)                    |
-| Componente reutilizável    | Wrapper genérico → `components/` raiz (padrão: `AnimatedContainer`) · bloco composto → `blocks/` · casca → `layout/` |
-| Imagem usada em componente | `lib/images/<categoria>/` + import estático (`import img from '@/lib/images/...'`) — nunca string de path. Exceções legadas em `public/images/` (`gt3000.png`) |
-| Imagem/asset com URL fixa  | `public/` (og-image, favicon, logo referenciado por URL)                                                        |
-| Vídeo                      | `public/videos/`. Padrão de referência (hero): trio webm + mp4 + poster webp, `preload='metadata'`. Há exceção legada com mp4 único (`servico-personalizado.mp4`) |
+| Vou adicionar…             | Vai em…                                                                                                                                                                |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Componente shadcn          | `bunx shadcn@latest add <nome>` → `components/ui/`                                                                                                                     |
+| Componente Magic UI        | `bunx shadcn@latest add @magicui/<nome>` → `components/magicui/`                                                                                                       |
+| Componente de uma rota só  | `app/(site)/<rota>/_components/` (forms complexos ganham subpasta com `components/` interno)                                                                           |
+| Componente reutilizável    | Wrapper genérico → `components/` raiz (padrão: `AnimatedContainer`) · bloco composto → `blocks/` · casca → `layout/`                                                   |
+| Imagem usada em componente | `lib/images/<categoria>/` + import estático (`import img from '@/lib/images/...'`) — nunca string de path. Exceções legadas em `public/images/` (`gt3000.png`)         |
+| Imagem/asset com URL fixa  | `public/` (og-image, favicon, logo referenciado por URL)                                                                                                               |
+| Vídeo                      | `public/videos/`. Padrão de referência (hero): trio webm + mp4 + poster webp, `preload='metadata'`. Há exceção legada com mp4 único (`servico-personalizado.mp4`)      |
 | Modelo 3D                  | `public/embalagens-3d/*.glb`, < 2MB (exceção legada: `caixa-teste-3d.glb` na raiz de `public/`) — renderizar via `components/modelo3d/`, nunca `<model-viewer>` direto |
-| Texto/copy de página       | Hardcoded no componente da rota (arrays `const` no topo); listas grandes → `lib/data/`                          |
-| Formulário novo            | Schema zod em `lib/schemas/` + `app/api/<nome>/route.ts` + template em `lib/emails/<nome>/` (usar `_shared/`)   |
-| Util/helper                | `lib/utils/` com teste `.test.ts` ao lado                                                                       |
-| Tipos globais/declarações  | `types/*.d.ts`                                                                                                  |
-| Arquivo para download      | Público → `public/`; controlado → `private/downloads/` + token (`lib/utils/jwt-catalog.ts`)                     |
+| Texto/copy de página       | Hardcoded no componente da rota (arrays `const` no topo); listas grandes → `lib/data/`                                                                                 |
+| Formulário novo            | Schema zod em `lib/schemas/` + `app/api/<nome>/route.ts` + template em `lib/emails/<nome>/` (usar `_shared/`)                                                          |
+| Util/helper                | `lib/utils/` com teste `.test.ts` ao lado                                                                                                                              |
+| Tipos globais/declarações  | `types/*.d.ts`                                                                                                                                                         |
+| Arquivo para download      | Público → `public/`; controlado → `private/downloads/` + token (`lib/utils/jwt-catalog.ts`)                                                                            |
 
 Testes vivem sempre ao lado do código (`*.test.tsx` ou `__tests__/`).
 
@@ -75,7 +81,8 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 - `PRODUCT.md` — design, voz da marca, paleta, anti-referências. Ler antes de qualquer decisão visual.
 - `components/modelo3d/DocModelos3d.md` — como adicionar/otimizar modelos 3D e configurar câmera.
 - `skills-lock.json` — skills de repo instaladas (magic-ui, shadcn, vercel-react-best-practices).
-- `.env.example` — as 5 env vars dos forms/downloads (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`); copiar para `.env` local.
+- `.env.example` — as 8 env vars dos forms, downloads e Indicação (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`, `CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET`); copiar para `.env` local.
+- `CONTEXT.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs.
 
 ## Armadilhas não-óbvias
 
@@ -90,3 +97,4 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 - `text-animate` existe em `ui/` e `magicui/` — verificar qual variante a rota vizinha já usa antes de importar.
 - Tema é light-mode único com seções dark (`bg-secondary`) — não há toggle dark/light.
 - Conteúdo do site é em pt-BR.
+- Contato comercial (telefone, WhatsApp, e-mail de vendas) nunca é hardcoded: vem de `useContatoComercial()` no client ou de `CONTATO_PADRAO` no servidor, porque a Indicação (`?ref=`) troca esses valores por visitante. Suporte, Compras e JSON-LD usam sempre `CONTATO_PADRAO`.

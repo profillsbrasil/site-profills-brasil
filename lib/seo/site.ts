@@ -3,6 +3,7 @@
  * O host canônico é www.profills.com. O apex profills.com responde 308 para ele;
  * profills.com.br é domínio legado e não serve o site por HTTPS.
  */
+import { CONTATO_PADRAO } from '@/lib/data/contatos';
 
 export const SITE_URL = (
   process.env.SITE_URL || 'https://www.profills.com'
@@ -17,9 +18,9 @@ export const SITE_LOCALE = 'pt_BR';
 
 export const CNPJ = '02.202.294/0001-60';
 
-export const TELEFONE_VENDAS = '+5541997851998';
+export const TELEFONE_VENDAS = `+${CONTATO_PADRAO.vendas.telefone}`;
 
-export const EMAIL_COMERCIAL = 'comercial@profillsdobrasil.com.br';
+export const EMAIL_COMERCIAL = CONTATO_PADRAO.vendas.email;
 
 export const REDES_SOCIAIS = [
   'https://www.facebook.com/profillsbrasil/',

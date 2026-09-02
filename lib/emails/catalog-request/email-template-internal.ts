@@ -31,6 +31,9 @@ export const template = `<!doctype html>
             <tr><td class="label">Telefone</td><td>{{phone}}</td></tr>
             <tr><td class="label">E-mail</td><td>{{email}}</td></tr>
             <tr><td class="label">Data/Hora</td><td>{{timestamp}}</td></tr>
+            {{#if indicadoPor}}
+            <tr><td class="label">Indicado por</td><td>{{indicadoPor}}</td></tr>
+            {{/if}}
           </table>
         </div>
         <div class="footer">Sistema Profills — registro automático de leads</div>

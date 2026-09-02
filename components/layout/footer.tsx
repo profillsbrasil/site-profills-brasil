@@ -5,7 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useContatoComercial } from '@/components/indicacao/useContatoComercial';
 import { BlurFade } from '@/components/ui/blur-fade';
+import { CONTATO_PADRAO } from '@/lib/data/contatos';
+import { waLink } from '@/lib/utils/whatsapp';
 import logoProfills from '@/public/logo-branco.png';
 import logoCartoonsRanca from '@/public/profills-cartoons-ranca.png';
 
@@ -13,50 +16,19 @@ import { GridPattern } from './gridPatternBg';
 import { WhatsAppIcon, socialLinks } from './socialLinks';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
-// Números por setor (só nos links wa.me — nunca renderizados na tela).
-// TODO: trocar Suporte e Compras quando o comercial confirmar os números.
-const WHATSAPP_VENDAS = '5541997851998';
-const WHATSAPP_SUPORTE = '5541997851998';
-const WHATSAPP_COMPRAS = '5541997851998';
-
-function waLink(numero: string, mensagem: string) {
-  return `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-}
-
-const contacts = [
-  {
-    title: 'Vendas/Peças',
-    icon: Phone,
-    links: [
-      {
-        href: 'mailto:comercial@profillsdobrasil.com.br',
-        icon: Mail,
-        label: 'comercial@profillsdobrasil.com.br'
-      },
-      {
-        href: waLink(
-          WHATSAPP_VENDAS,
-          'Olá! Vim pelo site da Profills e quero falar com Vendas/Peças.'
-        ),
-        icon: WhatsAppIcon,
-        label: 'Conversar no WhatsApp',
-        ariaLabel: 'Conversar no WhatsApp com Vendas/Peças',
-        external: true
-      }
-    ]
-  },
+const contatosFixos = [
   {
     title: 'Suporte e Assistência Técnica',
     icon: Mail,
     links: [
       {
-        href: 'mailto:suporte@profillsdobrasil.com.br',
+        href: `mailto:${CONTATO_PADRAO.suporte.email}`,
         icon: Mail,
-        label: 'suporte@profillsdobrasil.com.br'
+        label: CONTATO_PADRAO.suporte.email
       },
       {
         href: waLink(
-          WHATSAPP_SUPORTE,
+          CONTATO_PADRAO.suporte.telefone,
           'Olá! Vim pelo site da Profills e preciso de suporte técnico.'
         ),
         icon: WhatsAppIcon,
@@ -71,13 +43,13 @@ const contacts = [
     icon: MapPin,
     links: [
       {
-        href: 'mailto:compras@profillsdobrasil.com.br',
+        href: `mailto:${CONTATO_PADRAO.compras.email}`,
         icon: Mail,
-        label: 'compras@profillsdobrasil.com.br'
+        label: CONTATO_PADRAO.compras.email
       },
       {
         href: waLink(
-          WHATSAPP_COMPRAS,
+          CONTATO_PADRAO.compras.telefone,
           'Olá! Vim pelo site da Profills e quero falar com Compras.'
         ),
         icon: WhatsAppIcon,
@@ -92,6 +64,29 @@ const contacts = [
 export default function Footer() {
   const [copiedCnpj, setCopiedCnpj] = useState(false);
   const resetTimerRef = useRef<number | null>(null);
+  const comercial = useContatoComercial();
+
+  const cardVendas = {
+    title: 'Vendas/Peças',
+    icon: Phone,
+    links: [
+      {
+        href: `mailto:${comercial.email}`,
+        icon: Mail,
+        label: comercial.email
+      },
+      {
+        href: comercial.whatsapp(
+          'Olá! Vim pelo site da Profills e quero falar com Vendas/Peças.'
+        ),
+        icon: WhatsAppIcon,
+        label: 'Conversar no WhatsApp',
+        ariaLabel: 'Conversar no WhatsApp com Vendas/Peças',
+        external: true
+      }
+    ]
+  };
+  const contacts = [cardVendas, ...contatosFixos];
 
   useEffect(() => {
     return () => {
@@ -174,22 +169,28 @@ export default function Footer() {
                 </div>
                 <div className='flex flex-col space-y-2 md:space-y-3'>
                   {contact.links.map(
-                    ({ href, icon: LinkIcon, label, ariaLabel, external }) => (
-                      <Link
-                        key={href}
-                        href={href}
-                        aria-label={ariaLabel}
-                        {...(external && {
-                          target: '_blank',
-                          rel: 'noopener noreferrer'
-                        })}
-                        className='group/link flex items-center gap-2 text-[#b6c5e2] transition-colors hover:text-accent md:gap-3'>
-                        <LinkIcon className='h-4 w-4 text-accent/60 transition-colors group-hover/link:text-accent md:h-4 md:w-4' />
-                        <span className='text-xs font-medium md:text-sm'>
-                          {label}
-                        </span>
-                      </Link>
-                    )
+                    ({ href, icon: LinkIcon, label, ariaLabel, external }) => {
+                      const aguardando =
+                        contact.title === 'Vendas/Peças' && !comercial.pronto;
+                      return (
+                        <a
+                          key={ariaLabel ?? label}
+                          href={aguardando ? undefined : href}
+                          aria-label={ariaLabel}
+                          aria-disabled={aguardando || undefined}
+                          {...(external &&
+                            !aguardando && {
+                              target: '_blank',
+                              rel: 'noopener noreferrer'
+                            })}
+                          className='group/link flex items-center gap-2 text-[#b6c5e2] transition-colors hover:text-accent md:gap-3'>
+                          <LinkIcon className='h-4 w-4 text-accent/60 transition-colors group-hover/link:text-accent md:h-4 md:w-4' />
+                          <span className='min-h-4 text-xs font-medium md:text-sm'>
+                            {aguardando && label.includes('@') ? '' : label}
+                          </span>
+                        </a>
+                      );
+                    }
                   )}
                 </div>
               </div>

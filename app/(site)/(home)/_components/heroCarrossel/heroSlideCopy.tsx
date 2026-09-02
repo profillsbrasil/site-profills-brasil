@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 
 import Link from 'next/link';
 
+import { useContatoComercial } from '@/components/indicacao/useContatoComercial';
 import { WhatsAppIcon } from '@/components/layout/socialLinks';
 import { cn } from '@/lib/utils';
 
@@ -21,10 +22,6 @@ const bloco = {
   inicial: { y: '112%' },
   entrar: { y: '0%', transition: { duration: 0.52, ease: EASE_ENTRADA } }
 };
-
-const WHATSAPP_URL = `https://wa.me/5541997851998?text=${encodeURIComponent(
-  'Olá! Vim pelo site da Profills e quero falar com um especialista.'
-)}`;
 
 /* Máscara do Reveal: o bloco sobe de dentro de um recorte overflow-hidden */
 function Mascara({
@@ -66,6 +63,10 @@ export function HeroSlideCopy({
   estatico = false
 }: HeroSlideCopyProps) {
   const Titulo = primeiro ? 'h1' : 'h2';
+  const comercial = useContatoComercial();
+  const whatsappUrl = comercial.whatsapp(
+    'Olá! Vim pelo site da Profills e quero falar com um especialista.'
+  );
 
   const conteudo = (
     <>
@@ -139,9 +140,12 @@ export function HeroSlideCopy({
 
       <Mascara estatico={estatico}>
         <a
-          href={WHATSAPP_URL}
-          target='_blank'
-          rel='noopener noreferrer'
+          href={comercial.pronto ? whatsappUrl : undefined}
+          aria-disabled={!comercial.pronto || undefined}
+          {...(comercial.pronto && {
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          })}
           className='mt-3 inline-flex items-center gap-2 text-sm font-medium text-[#b6c5e2] transition-colors hover:text-white'>
           <WhatsAppIcon className='size-4 text-[#25d366]' />
           Falar com um especialista

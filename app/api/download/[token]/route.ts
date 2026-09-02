@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server';
 
-import fs from 'node:fs';
-import path from 'node:path';
-
 import { verifyCatalogToken } from '@/lib/utils/jwt-catalog';
 import { logger } from '@/lib/utils/logger';
+
+import fs from 'node:fs';
+import path from 'node:path';
 
 const PDF_PATH = path.join(
   process.cwd(),

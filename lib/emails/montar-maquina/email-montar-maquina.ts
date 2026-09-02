@@ -1,11 +1,11 @@
-import { SITE_URL } from '@/lib/seo/site';
-
+import { escaparHtml } from '@/lib/emails/_shared/template-engine';
+import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { MontarMaquinaFormData } from '@/lib/schemas/montar-maquina-form';
+import { SITE_URL } from '@/lib/seo/site';
 import { logger } from '@/lib/utils/logger';
 
-import nodemailer from 'nodemailer';
-
 import { template as htmlEmailTemplate } from './email-template';
+import nodemailer from 'nodemailer';
 
 export const createTransporter = () => {
   return nodemailer.createTransport({
@@ -65,7 +65,8 @@ const renderTemplate = (
 };
 
 export const createMontarMaquinaEmailTemplate = (
-  data: MontarMaquinaFormData
+  data: MontarMaquinaFormData,
+  indicadoPor = ''
 ) => {
   const currentDate = new Date().toLocaleString('pt-BR', {
     timeZone: 'America/Sao_Paulo'
@@ -79,6 +80,7 @@ export const createMontarMaquinaEmailTemplate = (
     preheader: `Nova solicitação para montagem de máquina de ${data.nome}`,
     saudacao: 'Monte sua Máquina',
     timestamp: `Solicitação recebida em: ${currentDate}`,
+    indicadoPor,
     nome: data.nome,
     email: data.email,
     telefone: data.contato,
@@ -93,20 +95,27 @@ export const createMontarMaquinaEmailTemplate = (
   return renderTemplate(htmlTemplate, templateData);
 };
 
-export const sendMontarMaquinaEmail = async (data: MontarMaquinaFormData) => {
+export const sendMontarMaquinaEmail = async (
+  data: MontarMaquinaFormData,
+  destinatario: Destinatario
+) => {
   const transporter = createTransporter();
+
+  const indicadoPor = destinatario.vendedor
+    ? `${destinatario.vendedor.nome} (${destinatario.vendedor.referral_code})`
+    : '';
 
   const mailOptions = {
     from: {
       name: 'Site Profills',
       address: process.env.GMAIL_USER_SENDER!
     },
-    to: process.env.GMAIL_USER_RECEIVER!,
+    to: destinatario.para,
     subject: `Monte sua Máquina - ${data.nome} - ${data.email}`,
-    html: createMontarMaquinaEmailTemplate(data),
+    html: createMontarMaquinaEmailTemplate(data, escaparHtml(indicadoPor)),
     text: `
 Nova Solicitação - Monte sua Máquina - Profills
-
+${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}
 Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
 
 DADOS DE CONTATO:

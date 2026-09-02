@@ -177,6 +177,8 @@ export const template = `<!doctype html>
                     <td class="content">
                       {{#if timestamp}}
                       <div class="timestamp">{{timestamp}}</div>
+                      {{/if}} {{#if indicadoPor}}
+                      <div class="timestamp">Indicado por: {{indicadoPor}}</div>
                       {{/if}}
 
                       <h2 class="section-title">Dados de Contato</h2>
