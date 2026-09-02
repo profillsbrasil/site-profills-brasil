@@ -1,5 +1,17 @@
 import type { NextRequest } from 'next/server';
 
+import { sendLeadNotification } from '@/lib/emails/catalog-request/email-catalog';
+import { sendContactEmail } from '@/lib/emails/contact-form/email-contact';
+import { sendMontarMaquinaEmail } from '@/lib/emails/montar-maquina/email-montar-maquina';
+import { sendMonteFabricaEmail } from '@/lib/emails/monte-fabrica/email-monte-fabrica';
+import { sendSpecificationEmail } from '@/lib/emails/solicitar-especificacoes/email-especificacoes';
+import { resolverDestinatario } from '@/lib/indicacao/destinatario';
+
+import { POST as postContact } from '../contact/route';
+import { POST as postCatalogo } from '../download-catalog/route';
+import { POST as postMontarMaquina } from '../montar-maquina/route';
+import { POST as postMonteFabrica } from '../monte-fabrica/route';
+import { POST as postSpecifications } from '../specifications/route';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 /* Falha de envio de e-mail NÃO pode virar "sucesso" para o visitante:
@@ -23,16 +35,9 @@ vi.mock('@/lib/emails/contact-form/email-contact', () => ({
 vi.mock('@/lib/utils/logger', () => ({
   logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
 }));
-
-import { sendContactEmail } from '@/lib/emails/contact-form/email-contact';
-import { sendMontarMaquinaEmail } from '@/lib/emails/montar-maquina/email-montar-maquina';
-import { sendMonteFabricaEmail } from '@/lib/emails/monte-fabrica/email-monte-fabrica';
-import { sendSpecificationEmail } from '@/lib/emails/solicitar-especificacoes/email-especificacoes';
-
-import { POST as postContact } from '../contact/route';
-import { POST as postMontarMaquina } from '../montar-maquina/route';
-import { POST as postMonteFabrica } from '../monte-fabrica/route';
-import { POST as postSpecifications } from '../specifications/route';
+vi.mock('@/lib/indicacao/destinatario', () => ({
+  resolverDestinatario: vi.fn()
+}));
 
 function req(payload: unknown): NextRequest {
   return new Request('http://localhost/api/teste', {
@@ -108,6 +113,16 @@ const casos = [
 describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
   beforeEach(() => {
     vi.mocked(sendMock).mockReset();
+    vi.mocked(resolverDestinatario).mockReset();
+    vi.mocked(resolverDestinatario).mockResolvedValue({
+      para: 'maria@profills.com.br',
+      vendedor: {
+        nome: 'Maria',
+        email: 'maria@profills.com.br',
+        referral_code: 'MARIA-10',
+        contato: null
+      }
+    });
   });
 
   it('responde 200 quando o e-mail é enviado', async () => {
@@ -117,6 +132,10 @@ describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
     expect(res.status).toBe(200);
     expect(corpo.success).toBe(true);
     expect(sendMock).toHaveBeenCalledTimes(1);
+    expect(sendMock).toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'teste@example.com' }),
+      expect.objectContaining({ para: 'maria@profills.com.br' })
+    );
   });
 
   it('responde 500 quando o envio de e-mail falha', async () => {
@@ -125,5 +144,44 @@ describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
     const corpo = await res.json();
     expect(res.status).toBe(500);
     expect(corpo.success).toBe(false);
+  });
+});
+
+vi.mock('@/lib/emails/catalog-request/email-catalog', () => ({
+  sendClientCatalogEmail: vi.fn().mockResolvedValue(undefined),
+  sendLeadNotification: vi.fn().mockResolvedValue(undefined)
+}));
+vi.mock('@/lib/utils/jwt-catalog', () => ({
+  signCatalogToken: vi.fn().mockResolvedValue('token')
+}));
+
+describe('POST /api/download-catalog', () => {
+  beforeEach(() => {
+    vi.mocked(resolverDestinatario).mockReset();
+    vi.mocked(resolverDestinatario).mockResolvedValue({
+      para: 'maria@profills.com.br',
+      vendedor: {
+        nome: 'Maria',
+        email: 'maria@profills.com.br',
+        referral_code: 'MARIA-10',
+        contato: null
+      }
+    });
+  });
+
+  it('manda a notificação interna para o destinatário resolvido', async () => {
+    const res = await postCatalogo(
+      req({
+        name: 'Teste',
+        document: '52998224725',
+        phone: '(41) 99999-9999',
+        email: 'teste@example.com'
+      })
+    );
+    expect(res.status).toBe(200);
+    expect(sendLeadNotification).toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'teste@example.com' }),
+      expect.objectContaining({ para: 'maria@profills.com.br' })
+    );
   });
 });

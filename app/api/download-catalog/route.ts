@@ -1,12 +1,12 @@
-import { SITE_URL } from '@/lib/seo/site';
-
 import { NextRequest, NextResponse } from 'next/server';
 
 import {
   sendClientCatalogEmail,
   sendLeadNotification
 } from '@/lib/emails/catalog-request/email-catalog';
+import { resolverDestinatario } from '@/lib/indicacao/destinatario';
 import { catalogRequestSchema } from '@/lib/schemas/catalog-request';
+import { SITE_URL } from '@/lib/seo/site';
 import { signCatalogToken } from '@/lib/utils/jwt-catalog';
 import { logger } from '@/lib/utils/logger';
 
@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const data = catalogRequestSchema.parse(body);
+    const destinatario = await resolverDestinatario(request);
 
     const token = await signCatalogToken(
       { email: data.email, name: data.name },
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
         email: data.email,
         downloadUrl
       }),
-      sendLeadNotification(data)
+      sendLeadNotification(data, destinatario)
     ]);
 
     return NextResponse.json({ success: true }, { status: 200 });

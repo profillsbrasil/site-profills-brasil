@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { sendMonteFabricaEmail } from '@/lib/emails/monte-fabrica/email-monte-fabrica';
+import { resolverDestinatario } from '@/lib/indicacao/destinatario';
 import { monteFabricaFormSchema } from '@/lib/schemas/monte-fabrica-form';
 import { logger } from '@/lib/utils/logger';
 
@@ -8,11 +9,12 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validatedData = monteFabricaFormSchema.parse(body);
+    const destinatario = await resolverDestinatario(request);
 
     /* Sem try/catch aqui: falha de envio precisa virar 500 para o visitante
        ver o erro — engolir e responder sucesso perdia a solicitação em
        silêncio. O catch externo loga e responde. */
-    await sendMonteFabricaEmail(validatedData);
+    await sendMonteFabricaEmail(validatedData, destinatario);
 
     return NextResponse.json(
       {
