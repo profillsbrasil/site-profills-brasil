@@ -70,6 +70,18 @@ describe('resolverDestinatario', () => {
     }
   });
 
+  it('vendedor com e-mail inválido: caixa padrão', async () => {
+    vi.mocked(buscarVendedorPorCodigo).mockResolvedValue({
+      tipo: 'encontrado',
+      vendedor: { ...vendedor, email: 'a@b.com, evil@x.com' }
+    });
+    const token = await assinarIndicacao(vendedor);
+    await expect(resolverDestinatario(req(token))).resolves.toEqual({
+      para: 'caixa@profills.test',
+      vendedor: null
+    });
+  });
+
   it('cookie adulterado: caixa padrão, sem consultar', async () => {
     await expect(resolverDestinatario(req('a.b.c'))).resolves.toEqual({
       para: 'caixa@profills.test',

@@ -4,7 +4,8 @@ import {
   formatarTelefoneBR,
   limparCacheReferral,
   linkWhatsApp,
-  normalizarCodigo
+  normalizarCodigo,
+  tamanhoCacheReferral
 } from './referral';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -123,6 +124,43 @@ describe('buscarVendedorPorCodigo', () => {
     vi.setSystemTime(new Date('2026-09-02T12:05:01Z'));
     await buscarVendedorPorCodigo('MARIA-10');
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('200 com envelope ou campo inválido vira indisponivel e não cacheia', async () => {
+    const envelope = mockFetch(200, { success: true, data: vendedor });
+    vi.stubGlobal('fetch', envelope);
+    await expect(buscarVendedorPorCodigo('MARIA-10')).resolves.toEqual({
+      tipo: 'indisponivel'
+    });
+    await buscarVendedorPorCodigo('MARIA-10');
+    expect(envelope).toHaveBeenCalledTimes(2);
+
+    limparCacheReferral();
+    vi.stubGlobal('fetch', mockFetch(200, { ...vendedor, email: null }));
+    await expect(buscarVendedorPorCodigo('MARIA-10')).resolves.toEqual({
+      tipo: 'indisponivel'
+    });
+  });
+
+  it('200 com chaves extras devolve só os campos conhecidos', async () => {
+    vi.stubGlobal(
+      'fetch',
+      mockFetch(200, { ...vendedor, senha: 'x', interno: { id: 1 } })
+    );
+    await expect(buscarVendedorPorCodigo('MARIA-10')).resolves.toEqual({
+      tipo: 'encontrado',
+      vendedor
+    });
+  });
+
+  it('mantém o cache dentro do teto de 500 entradas', async () => {
+    vi.stubGlobal('fetch', mockFetch(404, { error: 'not_found' }));
+    for (let i = 0; i < 501; i++) {
+      await buscarVendedorPorCodigo(`COD-${i}`);
+    }
+    expect(tamanhoCacheReferral()).toBeLessThanOrEqual(500);
+    limparCacheReferral();
+    expect(tamanhoCacheReferral()).toBe(0);
   });
 
   it('não cacheia indisponivel', async () => {

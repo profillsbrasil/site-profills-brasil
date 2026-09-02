@@ -13,6 +13,14 @@ function segredo() {
   return new TextEncoder().encode(valor);
 }
 
+/**
+ * Há segredo configurado? Sem ele o proxy não grava nem apaga cookie: uma
+ * assinatura ilegível por falta de chave não é um cookie adulterado.
+ */
+export function temSegredoIndicacao(): boolean {
+  return Boolean(process.env.INDICACAO_COOKIE_SECRET);
+}
+
 export function opcoesCookieIndicacao() {
   return {
     path: '/' as const,

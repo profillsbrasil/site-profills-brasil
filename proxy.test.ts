@@ -55,6 +55,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.unstubAllEnvs();
 });
 
 describe('proxy com ?ref', () => {
@@ -83,6 +84,15 @@ describe('proxy com ?ref', () => {
 
   it('código inválido: redireciona sem consultar e sem cookie', async () => {
     const res = await proxy(req('http://localhost:3000/?ref=ab'));
+    expect(res.status).toBe(302);
+    expect(res.headers.get('location')).toBe('http://localhost:3000/');
+    expect(res.cookies.get(INDICACAO_COOKIE)).toBeUndefined();
+    expect(buscarVendedorPorCodigo).not.toHaveBeenCalled();
+  });
+
+  it('sem INDICACAO_COOKIE_SECRET: redireciona limpo, sem CRM e sem cookie', async () => {
+    vi.stubEnv('INDICACAO_COOKIE_SECRET', '');
+    const res = await proxy(req('http://localhost:3000/?ref=MARIA-10'));
     expect(res.status).toBe(302);
     expect(res.headers.get('location')).toBe('http://localhost:3000/');
     expect(res.cookies.get(INDICACAO_COOKIE)).toBeUndefined();
@@ -165,6 +175,15 @@ describe('proxy sem ?ref', () => {
     );
     expect(res.status).toBe(200);
     expect(res.cookies.get(INDICACAO_COOKIE)?.value).toBe('');
+  });
+
+  it('sem INDICACAO_COOKIE_SECRET não apaga o cookie de quem já tem', async () => {
+    const token = await assinarIndicacao(vendedor, new Date());
+    vi.stubEnv('INDICACAO_COOKIE_SECRET', '');
+    const res = await proxy(req('http://localhost:3000/sobre', token));
+    expect(res.status).toBe(200);
+    expect(res.cookies.get(INDICACAO_COOKIE)).toBeUndefined();
+    expect(buscarVendedorPorCodigo).not.toHaveBeenCalled();
   });
 
   it('nunca bloqueia a página quando algo lança', async () => {
