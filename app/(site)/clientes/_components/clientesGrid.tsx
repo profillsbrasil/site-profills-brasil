@@ -20,14 +20,17 @@ export default function ClientesGrid() {
     if (!q) return listaClientes;
     return listaClientes.filter(
       (cliente) =>
-        cliente.slug.includes(q) ||
-        normalizeQuery(cliente.name).includes(q)
+        cliente.slug.includes(q) || normalizeQuery(cliente.name).includes(q)
     );
   }, [query]);
 
-  useEffect(() => {
+  // Query nova reinicia a paginação. Ajuste de estado durante o render em
+  // vez de effect: evita um render extra com a contagem antiga.
+  const [queryAnterior, setQueryAnterior] = useState(query);
+  if (query !== queryAnterior) {
+    setQueryAnterior(query);
     setVisibleCount(CHUNK_SIZE);
-  }, [query]);
+  }
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -61,8 +64,7 @@ export default function ClientesGrid() {
           <BlurFade key={`empty-${query}`} delay={0.05} direction='up' inView>
             <div className='border-border/40 mx-auto mt-10 max-w-md rounded-md border border-dashed bg-background/60 p-6 text-center'>
               <p className='text-sm text-muted-foreground'>
-                Nenhum cliente encontrado para
-                {' '}
+                Nenhum cliente encontrado para{' '}
                 <span className='text-foreground font-medium'>“{query}”</span>.
               </p>
             </div>

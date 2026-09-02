@@ -1,8 +1,8 @@
 'use client';
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Button } from '@/components/ui/button';
@@ -19,8 +19,7 @@ function normalizar(texto: string) {
   return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-function MaquinasContent() {
-  const searchParams = useSearchParams();
+export default function CatalogoMaquinas() {
   const router = useRouter();
   const pathname = usePathname();
   const [categoriaFiltro, setCategoriaFiltro] = useState<string>('Todas');
@@ -49,8 +48,13 @@ function MaquinasContent() {
     router.replace(newUrl, { scroll: false });
   };
 
-  // Lê os parâmetros da URL e aplica os filtros
+  // Lê os filtros da URL uma vez, depois da hidratação. Não usa
+  // useSearchParams de propósito: o hook aborta o prerender estático e o HTML
+  // de /maquinas saía sem os cards (issue #30). A URL só muda por
+  // router.replace daqui mesmo, então uma leitura no mount basta.
+  /* eslint-disable react-hooks/set-state-in-effect -- sincroniza com a URL, sistema externo */
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
     const categoriaFromUrl = searchParams.get('categoria');
     const embalagemFromUrl = searchParams.get('embalagem');
     const buscaFromUrl = searchParams.get('q');
@@ -76,11 +80,19 @@ function MaquinasContent() {
     if (buscaFromUrl) {
       setBusca(buscaFromUrl);
     }
-  }, [searchParams]);
+  }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Digitação atualiza a listagem na hora; a URL só depois de uma pausa,
-  // para o replace do router não rodar a cada tecla
+  // para o replace do router não rodar a cada tecla. Pula o mount: ali o
+  // closure ainda tem o estado inicial ('Todas') e o replace apagava o
+  // filtro que veio da URL.
+  const montou = useRef(false);
   useEffect(() => {
+    if (!montou.current) {
+      montou.current = true;
+      return;
+    }
     const timer = setTimeout(() => {
       updateUrl(categoriaFiltro, embalagemFiltro, busca);
     }, 300);
@@ -246,18 +258,5 @@ function MaquinasContent() {
         )}
       </div>
     </div>
-  );
-}
-
-export default function CatalogoMaquinas() {
-  return (
-    <Suspense
-      fallback={
-        <div className='tema-navy bg-background flex min-h-screen w-full items-center justify-center'>
-          <div className='text-muted-foreground'>Carregando...</div>
-        </div>
-      }>
-      <MaquinasContent />
-    </Suspense>
   );
 }

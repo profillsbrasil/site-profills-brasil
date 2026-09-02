@@ -1,6 +1,6 @@
 'use client';
 
-import { ElementType, memo } from 'react';
+import { ElementType, memo, useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -318,7 +318,7 @@ const TextAnimateBase = ({
   accessible = true,
   ...props
 }: TextAnimateProps) => {
-  const MotionComponent = motion.create(Component);
+  const MotionComponent = useMemo(() => motion.create(Component), [Component]);
 
   let segments: string[] = [];
   switch (by) {
@@ -384,6 +384,7 @@ const TextAnimateBase = ({
 
   return (
     <AnimatePresence mode='popLayout'>
+      {/* eslint-disable-next-line react-hooks/static-components -- `as` é prop, o motion.create fica memoizado por Component */}
       <MotionComponent
         variants={finalVariants.container as Variants}
         initial='hidden'

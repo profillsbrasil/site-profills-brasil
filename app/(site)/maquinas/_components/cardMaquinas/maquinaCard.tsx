@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Image from 'next/image';
 
@@ -27,12 +27,6 @@ export default function MaquinaCard({
 
   const [imgLoaded, setImgLoaded] = useState(false);
   const [pkgLoaded, setPkgLoaded] = useState(false);
-
-  // Reset dos estados quando a máquina muda (importante para filtros)
-  useEffect(() => {
-    setImgLoaded(false);
-    setPkgLoaded(false);
-  }, [maquina.slug]);
 
   // Delay escalonado para animação suave (máximo 0.3s para melhor performance)
   const animationDelay = Math.min(index * 0.03, 0.3);

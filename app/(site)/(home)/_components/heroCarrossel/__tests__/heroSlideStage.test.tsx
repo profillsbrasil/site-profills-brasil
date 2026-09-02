@@ -34,7 +34,7 @@ vi.mock('next/image', () => ({
     className?: string;
     style?: React.CSSProperties;
   }) => (
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+    // eslint-disable-next-line @next/next/no-img-element
     <img alt={alt} className={className} style={style} />
   )
 }));

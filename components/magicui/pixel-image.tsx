@@ -57,6 +57,8 @@ export const PixelImage = ({
   }, [customGrid, grid]);
 
   useEffect(() => {
+    // Dispara a animação de entrada só depois do mount (evita flash no SSR)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsVisible(true);
     const t = setTimeout(() => setShowColor(true), colorRevealDelay);
     return () => clearTimeout(t);
@@ -73,6 +75,8 @@ export const PixelImage = ({
         ${(col + 1) * (100 / cols)}% ${(row + 1) * (100 / rows)}%,
         ${col * (100 / cols)}% ${(row + 1) * (100 / rows)}%
       )`;
+      // Delay aleatório por peça é intencional; memo fixa o sorteio por grid
+      // eslint-disable-next-line react-hooks/purity
       const delay = Math.random() * maxAnimationDelay;
       return { clipPath, delay };
     });

@@ -38,6 +38,7 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 fbq('init', '${pixelId}');`}
       </Script>
       <noscript>
+        {/* eslint-disable-next-line @next/next/no-img-element -- pixel de 1px, não é conteúdo */}
         <img
           height='1'
           width='1'

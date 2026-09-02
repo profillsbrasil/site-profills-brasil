@@ -81,9 +81,9 @@ export default function RootLayout({
         {children}
         <JsonLd data={organizacaoSchema()} />
         <JsonLd data={websiteSchema()} />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
+        {metaPixelId && <MetaPixel pixelId={metaPixelId} />}
       </body>
-      {gaId && <GoogleAnalytics gaId={gaId} />}
-      {metaPixelId && <MetaPixel pixelId={metaPixelId} />}
     </html>
   );
 }

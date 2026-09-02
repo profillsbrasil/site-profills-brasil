@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -32,7 +32,6 @@ import { cn } from '@/lib/utils';
 
 import {
   type ContactFormData,
-  type MachineRecommendation,
   getBestMachineRecommendation,
   initialContactFormData
 } from './combinacaoMaquinas';
@@ -64,25 +63,19 @@ const productTypes = [
 export default function ConfiguradorMaquina() {
   const [selectedPackaging, setSelectedPackaging] = useState<string>('');
   const [selectedProductType, setSelectedProductType] = useState<string>('');
-  const [recommendation, setRecommendation] =
-    useState<MachineRecommendation | null>(null);
   const [contactForm, setContactForm] = useState<ContactFormData>(
     initialContactFormData
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Verificar compatibilidade quando seleções mudarem
-  useEffect(() => {
-    if (selectedPackaging && selectedProductType) {
-      const bestRecommendation = getBestMachineRecommendation(
-        selectedPackaging,
-        selectedProductType
-      );
-      setRecommendation(bestRecommendation);
-    } else {
-      setRecommendation(null);
-    }
-  }, [selectedPackaging, selectedProductType]);
+  // Recomendação é derivada das seleções: memo em vez de estado + effect
+  const recommendation = useMemo(
+    () =>
+      selectedPackaging && selectedProductType
+        ? getBestMachineRecommendation(selectedPackaging, selectedProductType)
+        : null,
+    [selectedPackaging, selectedProductType]
+  );
 
   const handleContactFormChange = (
     field: keyof ContactFormData,

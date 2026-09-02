@@ -1,6 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-
 import { isWebGLAvailable, resetWebGLCache } from './webglSupport';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 afterEach(() => {
   resetWebGLCache();
@@ -11,7 +10,7 @@ afterEach(() => {
 describe('isWebGLAvailable', () => {
   it('retorna true quando o canvas fornece um contexto webgl', () => {
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
-      {} as unknown as WebGL2RenderingContext
+      {} as never
     );
     expect(isWebGLAvailable()).toBe(true);
   });
