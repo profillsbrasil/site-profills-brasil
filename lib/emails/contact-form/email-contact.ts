@@ -1,10 +1,11 @@
-import { SITE_URL } from '@/lib/seo/site';
-
-import type { ContactFormData } from '@/lib/schemas/contact-form';
-import { createTransporter } from '@/lib/emails/_shared/transporter';
 import { renderTemplate } from '@/lib/emails/_shared/template-engine';
-import { template as contactTemplate } from './email-template';
+import { createTransporter } from '@/lib/emails/_shared/transporter';
+import type { Destinatario } from '@/lib/indicacao/destinatario';
+import type { ContactFormData } from '@/lib/schemas/contact-form';
+import { SITE_URL } from '@/lib/seo/site';
 import { logger } from '@/lib/utils/logger';
+
+import { template as contactTemplate } from './email-template';
 
 // Função para formatar o material, serviço e acabamento como arrays
 const formatProjectDetails = (data: ContactFormData) => {
@@ -33,7 +34,10 @@ const formatProjectDetails = (data: ContactFormData) => {
 };
 
 // Template HTML para o e-mail usando arquivos externos
-export const createContactEmailTemplate = (data: ContactFormData) => {
+export const createContactEmailTemplate = (
+  data: ContactFormData,
+  indicadoPor = ''
+) => {
   const currentDate = new Date().toLocaleString('pt-BR', {
     timeZone: 'America/Sao_Paulo'
   });
@@ -62,6 +66,7 @@ export const createContactEmailTemplate = (data: ContactFormData) => {
     preheader: `Nova solicitação de orçamento de ${data.email}`,
     saudacao: 'Solicitação de Orçamento',
     timestamp: `Solicitação recebida em: ${currentDate}`,
+    indicadoPor,
     email: data.email,
     phone: data.phone,
     cep: data.cep,
@@ -86,23 +91,29 @@ export const createContactEmailTemplate = (data: ContactFormData) => {
 };
 
 // Função para enviar e-mail
-export const sendContactEmail = async (data: ContactFormData) => {
+export const sendContactEmail = async (
+  data: ContactFormData,
+  destinatario: Destinatario
+) => {
   const transporter = createTransporter();
 
   const projectDetails = formatProjectDetails(data);
+  const indicadoPor = destinatario.vendedor
+    ? `${destinatario.vendedor.nome} (${destinatario.vendedor.referral_code})`
+    : '';
 
   const mailOptions = {
     from: {
       name: 'Site Profills',
       address: process.env.GMAIL_USER_SENDER!
     },
-    to: process.env.GMAIL_USER_RECEIVER!,
+    to: destinatario.para,
     subject: `Orçamento - ${projectDetails.material[0]} (${projectDetails.service[0]}) - ${data.email}`,
-    html: createContactEmailTemplate(data),
+    html: createContactEmailTemplate(data, indicadoPor),
     // Versão em texto plano como fallback
     text: `
 Nova Solicitação de Orçamento - Profills
-
+${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}
 Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
 
 DADOS DE CONTATO:

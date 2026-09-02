@@ -1,11 +1,10 @@
-import { SITE_URL } from '@/lib/seo/site';
-
+import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { MonteFabricaFormData } from '@/lib/schemas/monte-fabrica-form';
+import { SITE_URL } from '@/lib/seo/site';
 import { logger } from '@/lib/utils/logger';
 
-import nodemailer from 'nodemailer';
-
 import { template as htmlEmailTemplate } from './email-template';
+import nodemailer from 'nodemailer';
 
 export const createTransporter = () => {
   return nodemailer.createTransport({
@@ -71,7 +70,10 @@ const renderTemplate = (
 };
 
 // Template HTML para o e-mail usando arquivos externos
-export const createMonteFabricaEmailTemplate = (data: MonteFabricaFormData) => {
+export const createMonteFabricaEmailTemplate = (
+  data: MonteFabricaFormData,
+  indicadoPor = ''
+) => {
   const currentDate = new Date().toLocaleString('pt-BR', {
     timeZone: 'America/Sao_Paulo'
   });
@@ -88,6 +90,7 @@ export const createMonteFabricaEmailTemplate = (data: MonteFabricaFormData) => {
     preheader: `Nova solicitação para montagem de fábrica de ${data.empresa}`,
     saudacao: 'Monte sua Fábrica',
     timestamp: `Solicitação recebida em: ${currentDate}`,
+    indicadoPor,
     nome: data.nome,
     email: data.email,
     telefone: data.telefone,
@@ -103,21 +106,28 @@ export const createMonteFabricaEmailTemplate = (data: MonteFabricaFormData) => {
 };
 
 // Função para enviar e-mail
-export const sendMonteFabricaEmail = async (data: MonteFabricaFormData) => {
+export const sendMonteFabricaEmail = async (
+  data: MonteFabricaFormData,
+  destinatario: Destinatario
+) => {
   const transporter = createTransporter();
+
+  const indicadoPor = destinatario.vendedor
+    ? `${destinatario.vendedor.nome} (${destinatario.vendedor.referral_code})`
+    : '';
 
   const mailOptions = {
     from: {
       name: 'Site Profills',
       address: process.env.GMAIL_USER_SENDER!
     },
-    to: process.env.GMAIL_USER_RECEIVER!,
+    to: destinatario.para,
     subject: `Monte sua Fábrica - ${data.empresa} - ${data.email}`,
-    html: createMonteFabricaEmailTemplate(data),
+    html: createMonteFabricaEmailTemplate(data, indicadoPor),
     // Versão em texto plano como fallback
     text: `
 Nova Solicitação - Monte sua Fábrica - Profills
-
+${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}
 Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
 
 DADOS DE CONTATO:

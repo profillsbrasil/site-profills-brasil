@@ -1,6 +1,6 @@
-import { SITE_URL } from '@/lib/seo/site';
-
+import type { Destinatario } from '@/lib/indicacao/destinatario';
 import type { SpecificationFormData } from '@/lib/schemas/specification-form';
+import { SITE_URL } from '@/lib/seo/site';
 import { logger } from '@/lib/utils/logger';
 
 import { styles as cssEmailStyles } from './email-styles';
@@ -49,7 +49,10 @@ const renderTemplate = (
 };
 
 // Template HTML para o e-mail usando arquivos externos
-export const createEmailTemplate = (data: SpecificationFormData) => {
+export const createEmailTemplate = (
+  data: SpecificationFormData,
+  indicadoPor = ''
+) => {
   const currentDate = new Date().toLocaleString('pt-BR', {
     timeZone: 'America/Sao_Paulo'
   });
@@ -73,6 +76,7 @@ export const createEmailTemplate = (data: SpecificationFormData) => {
     preheader: `Nova solicitação de especificações para ${data.maquinaNome}`,
     saudacao: 'Solicitação de Especificações',
     timestamp: `Solicitação recebida em: ${currentDate}`,
+    indicadoPor,
     nome: data.nome,
     email: data.email,
     telefone: data.telefone,
@@ -91,21 +95,28 @@ export const createEmailTemplate = (data: SpecificationFormData) => {
 };
 
 // Função para enviar e-mail
-export const sendSpecificationEmail = async (data: SpecificationFormData) => {
+export const sendSpecificationEmail = async (
+  data: SpecificationFormData,
+  destinatario: Destinatario
+) => {
   const transporter = createTransporter();
+
+  const indicadoPor = destinatario.vendedor
+    ? `${destinatario.vendedor.nome} (${destinatario.vendedor.referral_code})`
+    : '';
 
   const mailOptions = {
     from: {
       name: 'Site Profills',
       address: process.env.GMAIL_USER_SENDER!
     },
-    to: process.env.GMAIL_USER_RECEIVER!,
+    to: destinatario.para,
     subject: `Especificações da ${data.maquinaNome} - ${data.nome}`,
-    html: createEmailTemplate(data),
+    html: createEmailTemplate(data, indicadoPor),
     // Versão em texto plano como fallback
     text: `
 Nova Solicitação de Especificações - Profills
-
+${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}
 Data/Hora: ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}
 
 MÁQUINA SOLICITADA:

@@ -232,6 +232,10 @@ export const template = `<!doctype html>
                     <td class="content">
                       {{#if timestamp}}
                       <div class="timestamp fallback-font">{{timestamp}}</div>
+                      {{/if}} {{#if indicadoPor}}
+                      <div class="timestamp fallback-font">
+                        Indicado por: {{indicadoPor}}
+                      </div>
                       {{/if}} {{#if maquinaNome}}
                       <div class="highlight">
                         <p class="highlight-title fallback-font">
