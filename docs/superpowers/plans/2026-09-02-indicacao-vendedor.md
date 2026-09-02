@@ -994,7 +994,7 @@ describe('proxy sem ?ref', () => {
   it('renovação com 404 apaga o cookie; indisponível mantém', async () => {
     const token = await assinarIndicacao(
       vendedor,
-      new Date('2026-08-01T00:00:00Z')
+      new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
     );
 
     vi.mocked(buscarVendedorPorCodigo).mockResolvedValue({
@@ -1021,7 +1021,7 @@ describe('proxy sem ?ref', () => {
   it('nunca bloqueia a página quando algo lança', async () => {
     const token = await assinarIndicacao(
       vendedor,
-      new Date('2026-08-01T00:00:00Z')
+      new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
     );
     vi.mocked(buscarVendedorPorCodigo).mockRejectedValue(new Error('boom'));
     const res = await proxy(req('http://localhost:3000/sobre', token));
