@@ -2,14 +2,22 @@ import { act } from 'react';
 
 import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
 import type { CatalogRequestData } from '@/lib/schemas/catalog-request';
+import { sendGAEvent } from '@next/third-parties/google';
 import { renderHook } from '@testing-library/react';
 
 import { useCatalogForm } from './useCatalogForm';
+import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/lib/analytics/indicacao', () => ({
-  registrarLeadIndicacao: vi.fn()
-}));
+/* Espião em cima da função REAL: as asserções de argumento continuam valendo e
+   o caso "analytics falha" exercita o engolir-erro de verdade, sem depender de
+   try/catch nos 5 call sites. */
+vi.mock('@/lib/analytics/indicacao', async (importOriginal) => {
+  const real =
+    await importOriginal<typeof import('@/lib/analytics/indicacao')>();
+  return { registrarLeadIndicacao: vi.fn(real.registrarLeadIndicacao) };
+});
+vi.mock('@next/third-parties/google', () => ({ sendGAEvent: vi.fn() }));
 vi.mock('sonner', () => ({
   toast: { error: vi.fn(), success: vi.fn() }
 }));
@@ -30,6 +38,8 @@ function respostaOk(corpo: unknown) {
 
 beforeEach(() => {
   vi.mocked(registrarLeadIndicacao).mockClear();
+  vi.mocked(sendGAEvent).mockReset();
+  vi.mocked(toast.error).mockClear();
 });
 
 afterEach(() => {
@@ -85,6 +95,29 @@ describe('useCatalogForm', () => {
     });
 
     expect(registrarLeadIndicacao).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalled();
     expect(result.current.status).toBe('idle');
+  });
+
+  it('analytics quebrado não derruba o envio', async () => {
+    vi.mocked(sendGAEvent).mockImplementation(() => {
+      throw new Error('dataLayer corrompido');
+    });
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue(
+          respostaOk({ success: true, indicacao: { codigo: 'MARIA-10' } })
+        )
+    );
+
+    const { result } = renderHook(() => useCatalogForm());
+    await act(async () => {
+      await result.current.onSubmit(valores);
+    });
+
+    expect(result.current.status).toBe('success');
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });
