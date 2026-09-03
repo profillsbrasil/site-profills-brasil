@@ -44,6 +44,14 @@ _Avoid_: contato fixo, contato interno
 Envio de qualquer um dos formulários do site (orçamento, catálogo, montar máquina, monte fábrica, especificações) por um visitante.
 _Avoid_: contato, mensagem, pedido
 
+**Chegada**:
+Registro, no GA4 e no Meta, de uma aba do navegador em que o Visitante indicado carregou o site; conta uma vez por aba enquanto a Indicação durar.
+_Avoid_: clique no link, visita, sessão
+
+**Lead atribuído**:
+Lead cujo e-mail foi de fato enviado ao Vendedor da Indicação, depois de o servidor revalidar o Código de indicação no CRM; só ele conta como lead do Vendedor no analytics.
+_Avoid_: lead com cookie, lead indicado
+
 **Caixa padrão**:
 E-mail institucional que recebe todo Lead sem Indicação válida.
 _Avoid_: receiver, e-mail da Profills
