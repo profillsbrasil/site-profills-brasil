@@ -39,6 +39,8 @@ public/                   ← só o que precisa de URL direta: videos/, embalage
 private/downloads/        ← arquivos NÃO públicos (catálogo 77MB), servidos via api/download/[token] com JWT
 types/                    ← declarações globais (model-viewer.d.ts)
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
+docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação)
+docs/indicacao-verificacao.md ← guia: como testar a Indicação em produção e onde ler os números no GA4 e no Meta
 
 proxy.ts                  ← captura ?ref, grava o cookie de Indicação e redireciona para a URL limpa (spec 2026-09-02)
 lib/crm/                  ← cliente server-only da API do CRM (referral code)
@@ -99,4 +101,5 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 - Tema é light-mode único com seções dark (`bg-secondary`) — não há toggle dark/light.
 - Conteúdo do site é em pt-BR.
 - Eventos de Indicação só saem de `lib/analytics/`; nomes e parâmetros são contrato com o admin do GA4 (dimensões `codigo_vendedor`, `formulario`). O PageView do Pixel e o `page_view` do GA continuam em `components/layout/metaPixel.tsx` e no `GoogleAnalytics` do root layout.
+- Verificar analytics em produção exige navegador comum: browser automatizado (`HeadlessChrome`) é descartado pelo Pixel antes de sair pela rede e cai na exclusão automática de bots do GA4 (o hit sai com 204 e não aparece no relatório); o Brave do dono bloqueia o `gtag.js` mesmo com Shields desligado. Detalhes em `docs/indicacao-verificacao.md`.
 - Contato comercial (telefone, WhatsApp, e-mail de vendas) nunca é hardcoded: vem de `useContatoComercial()` no client ou de `CONTATO_PADRAO` no servidor, porque a Indicação (`?ref=`) troca esses valores por visitante. Suporte, Compras e JSON-LD usam sempre `CONTATO_PADRAO`.
