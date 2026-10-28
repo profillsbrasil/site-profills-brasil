@@ -34,6 +34,7 @@ import hotDogExpresso from '@/lib/images/logoClientes/hot-dog-expresso2-move.png
 import imperador from '@/lib/images/logoClientes/imperador.png';
 import jusitaLanches from '@/lib/images/logoClientes/jusita-lanches.jpg';
 import kls from '@/lib/images/logoClientes/kls2.png';
+import lactalis from '@/lib/images/logoClientes/lactalis.png';
 import lifeSucos from '@/lib/images/logoClientes/life-sucos.jpg';
 import lsc from '@/lib/images/logoClientes/lsc-melhor.png';
 import maraPolpa from '@/lib/images/logoClientes/mara-polpa.png';
@@ -72,7 +73,12 @@ export type Cliente = {
 
 export const listaClientes: Cliente[] = [
   { id: 1, name: 'Açaí Amazonas', slug: 'acai-amazonas', image: acaiAmazonas },
-  { id: 2, name: 'Agropecuária Lopes', slug: 'agropecuaria-lopes', image: agropecuariaLopes },
+  {
+    id: 2,
+    name: 'Agropecuária Lopes',
+    slug: 'agropecuaria-lopes',
+    image: agropecuariaLopes
+  },
   { id: 3, name: 'Amazon Polpa', slug: 'amazon-polpa', image: amazonPolpa },
   { id: 4, name: 'Ambev', slug: 'ambev', image: ambev },
   { id: 5, name: 'Apimigot', slug: 'apimigot', image: apimigot },
@@ -80,11 +86,26 @@ export const listaClientes: Cliente[] = [
   { id: 7, name: 'Bandolin', slug: 'bandolin', image: bandolin },
   { id: 8, name: 'Basecol Mix', slug: 'basecol-mix', image: basecolMix },
   { id: 9, name: 'Bony Açaí', slug: 'bony-acai', image: bonyAcai },
-  { id: 10, name: 'Botanic Brasil', slug: 'botanic-brasil', image: botanicBrasil },
+  {
+    id: 10,
+    name: 'Botanic Brasil',
+    slug: 'botanic-brasil',
+    image: botanicBrasil
+  },
   { id: 11, name: 'C-Vale', slug: 'c-vale', image: cVale },
   { id: 12, name: 'Cliente', slug: 'cliente', image: cliente },
-  { id: 13, name: 'Confraria do Sanduba', slug: 'confraria-do-sanduba', image: confrariaDoSanduba },
-  { id: 14, name: 'Cosméticos Tigo', slug: 'cosmeticos-tigo', image: cosmeticosTigo },
+  {
+    id: 13,
+    name: 'Confraria do Sanduba',
+    slug: 'confraria-do-sanduba',
+    image: confrariaDoSanduba
+  },
+  {
+    id: 14,
+    name: 'Cosméticos Tigo',
+    slug: 'cosmeticos-tigo',
+    image: cosmeticosTigo
+  },
   { id: 15, name: 'Daimpério', slug: 'daimperio', image: daimperio },
   { id: 16, name: 'Dental Clean', slug: 'dental-clean', image: dentalClean },
   { id: 17, name: 'Desfrut', slug: 'desfrut', image: desfrut },
@@ -96,43 +117,89 @@ export const listaClientes: Cliente[] = [
   { id: 23, name: 'Frooty', slug: 'frooty', image: frooty },
   { id: 24, name: 'Frutinho', slug: 'frutinho', image: frutinho },
   { id: 25, name: 'FTW', slug: 'ftw', image: ftw },
-  { id: 26, name: 'Futinho Sorvetes', slug: 'futinho-sorvetes', image: futinhoSorvetes },
+  {
+    id: 26,
+    name: 'Futinho Sorvetes',
+    slug: 'futinho-sorvetes',
+    image: futinhoSorvetes
+  },
   { id: 27, name: 'Gelauzinho', slug: 'gelauzinho', image: gelauzinho },
   { id: 28, name: 'Gelo Tech', slug: 'gelo-tech', image: geloTech },
-  { id: 29, name: 'Grupo Macunaíma', slug: 'grupo-macunaima', image: grupoMacunaima },
+  {
+    id: 29,
+    name: 'Grupo Macunaíma',
+    slug: 'grupo-macunaima',
+    image: grupoMacunaima
+  },
   { id: 30, name: 'Guardiã', slug: 'guardia', image: guardia },
-  { id: 31, name: 'Hot Dog Expresso Move', slug: 'hot-dog-expresso-move', image: hotDogExpresso },
+  {
+    id: 31,
+    name: 'Hot Dog Expresso Move',
+    slug: 'hot-dog-expresso-move',
+    image: hotDogExpresso
+  },
   { id: 32, name: 'Imperador', slug: 'imperador', image: imperador },
-  { id: 33, name: 'Jusita Lanches', slug: 'jusita-lanches', image: jusitaLanches },
+  {
+    id: 33,
+    name: 'Jusita Lanches',
+    slug: 'jusita-lanches',
+    image: jusitaLanches
+  },
   { id: 34, name: 'KLS', slug: 'kls', image: kls },
-  { id: 35, name: 'Life Sucos', slug: 'life-sucos', image: lifeSucos },
-  { id: 36, name: 'LSC', slug: 'lsc', image: lsc },
-  { id: 37, name: 'Mara Polpa', slug: 'mara-polpa', image: maraPolpa },
-  { id: 38, name: 'Max Muscles', slug: 'max-muscles', image: maxMuscles },
-  { id: 39, name: 'Mix Bebidas', slug: 'mix-bebidas', image: mixBebidas },
-  { id: 40, name: 'Nala Mix', slug: 'nala-mix', image: nalaMix },
-  { id: 41, name: 'Nossa Fruta Brasil', slug: 'nossa-fruta-brasil', image: nossaFrutaBrasil },
-  { id: 42, name: 'Petruz', slug: 'petruz', image: petruz },
-  { id: 43, name: 'Pipolândia', slug: 'pipolandia', image: pipolandia },
-  { id: 44, name: 'Polpa Norte', slug: 'polpa-norte', image: polpaNorte },
-  { id: 45, name: 'Polpas Rio Grande', slug: 'polpas-rio-grande', image: polpasRioGrande },
-  { id: 46, name: 'Ponto do Açaí', slug: 'ponto-do-acai', image: pontoDoAcai },
-  { id: 47, name: 'Quaay', slug: 'quaay', image: quaay },
-  { id: 48, name: 'Qualifrut', slug: 'qualifrut', image: qualifrut },
-  { id: 49, name: 'Raxs Açaí', slug: 'raxs-acai', image: raxsAcai },
-  { id: 50, name: 'Sabor da Roça', slug: 'sabor-da-roca', image: saborDaRoca },
-  { id: 51, name: 'Sabor Real', slug: 'sabor-real', image: saborReal },
-  { id: 52, name: 'SB Produtos Naturais', slug: 'sb-produtos-naturais', image: sbProdutosNaturais },
-  { id: 53, name: 'Snackout', slug: 'snackout', image: snackout },
-  { id: 54, name: 'Sorvetes Apaicere', slug: 'sorvetes-apaicere', image: sorvetesApaicere },
-  { id: 55, name: 'STR', slug: 'str', image: str },
-  { id: 56, name: 'Sucorrico', slug: 'sucorrico', image: sucorrico },
-  { id: 57, name: 'Tambaú', slug: 'tambau', image: tambau },
-  { id: 58, name: 'TRK', slug: 'trk', image: trk },
-  { id: 59, name: 'Verduranet', slug: 'verduranet', image: verduranet },
-  { id: 60, name: 'Vitanat Açaí', slug: 'vitanat-acai', image: vitanatAcai },
-  { id: 61, name: 'Xingu Fruit', slug: 'xingu-fruit', image: xinguFruit },
-  { id: 62, name: 'Zunn Vida Saudável', slug: 'zunn-vida-saudavel', image: zunn }
+  { id: 35, name: 'Lactalis', slug: 'lactalis', image: lactalis },
+  { id: 36, name: 'Life Sucos', slug: 'life-sucos', image: lifeSucos },
+  { id: 37, name: 'LSC', slug: 'lsc', image: lsc },
+  { id: 38, name: 'Mara Polpa', slug: 'mara-polpa', image: maraPolpa },
+  { id: 39, name: 'Max Muscles', slug: 'max-muscles', image: maxMuscles },
+  { id: 40, name: 'Mix Bebidas', slug: 'mix-bebidas', image: mixBebidas },
+  { id: 41, name: 'Nala Mix', slug: 'nala-mix', image: nalaMix },
+  {
+    id: 42,
+    name: 'Nossa Fruta Brasil',
+    slug: 'nossa-fruta-brasil',
+    image: nossaFrutaBrasil
+  },
+  { id: 43, name: 'Petruz', slug: 'petruz', image: petruz },
+  { id: 44, name: 'Pipolândia', slug: 'pipolandia', image: pipolandia },
+  { id: 45, name: 'Polpa Norte', slug: 'polpa-norte', image: polpaNorte },
+  {
+    id: 46,
+    name: 'Polpas Rio Grande',
+    slug: 'polpas-rio-grande',
+    image: polpasRioGrande
+  },
+  { id: 47, name: 'Ponto do Açaí', slug: 'ponto-do-acai', image: pontoDoAcai },
+  { id: 48, name: 'Quaay', slug: 'quaay', image: quaay },
+  { id: 49, name: 'Qualifrut', slug: 'qualifrut', image: qualifrut },
+  { id: 50, name: 'Raxs Açaí', slug: 'raxs-acai', image: raxsAcai },
+  { id: 51, name: 'Sabor da Roça', slug: 'sabor-da-roca', image: saborDaRoca },
+  { id: 52, name: 'Sabor Real', slug: 'sabor-real', image: saborReal },
+  {
+    id: 53,
+    name: 'SB Produtos Naturais',
+    slug: 'sb-produtos-naturais',
+    image: sbProdutosNaturais
+  },
+  { id: 54, name: 'Snackout', slug: 'snackout', image: snackout },
+  {
+    id: 55,
+    name: 'Sorvetes Apaicere',
+    slug: 'sorvetes-apaicere',
+    image: sorvetesApaicere
+  },
+  { id: 56, name: 'STR', slug: 'str', image: str },
+  { id: 57, name: 'Sucorrico', slug: 'sucorrico', image: sucorrico },
+  { id: 58, name: 'Tambaú', slug: 'tambau', image: tambau },
+  { id: 59, name: 'TRK', slug: 'trk', image: trk },
+  { id: 60, name: 'Verduranet', slug: 'verduranet', image: verduranet },
+  { id: 61, name: 'Vitanat Açaí', slug: 'vitanat-acai', image: vitanatAcai },
+  { id: 62, name: 'Xingu Fruit', slug: 'xingu-fruit', image: xinguFruit },
+  {
+    id: 63,
+    name: 'Zunn Vida Saudável',
+    slug: 'zunn-vida-saudavel',
+    image: zunn
+  }
 ];
 
 export function normalizeQuery(input: string): string {
