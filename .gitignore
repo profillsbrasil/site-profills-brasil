@@ -51,3 +51,6 @@ next-env.d.ts
 .playwright-mcp/
 .env.local
 .env.local
+
+# worktrees de agentes: cada um traz um .oxlintrc.json que o oxlint carregaria
+.claude/worktrees/
