@@ -11,7 +11,7 @@
     "lint:fix": "oxlint --type-aware --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "lefthook install",
+    "prepare": "git rev-parse --git-dir >/dev/null 2>&1 || exit 0; lefthook install",
     "clear": "rm -rf node_modules && rm -rf .next && rm -rf .turbo && rm -rf pnpm-lock.yaml && rm -rf bun.lock && rm -rf bun.lockb && rm -rf package-lock.json && rm -rf yarn.lock "
   },
   "dependencies": {
