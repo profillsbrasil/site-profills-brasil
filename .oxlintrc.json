@@ -13,7 +13,8 @@
     "promise"
   ],
   "jsPlugins": [
-    { "name": "profills", "specifier": "./tools/oxlint/profills/index.ts" }
+    { "name": "profills", "specifier": "./tools/oxlint/profills/index.ts" },
+    { "name": "anti-slop", "specifier": "./tools/oxlint/anti-slop/index.ts" }
   ],
   "categories": {
     "correctness": "error"
@@ -41,7 +42,8 @@
     ".pi/**",
     ".roo/**",
     ".superpowers/**",
-    ".windsurf/**"
+    ".windsurf/**",
+    "tools/oxlint/anti-slop/**"
   ],
   "rules": {
     // Paridade com eslint-config-next (core-web-vitals + typescript).
@@ -170,7 +172,18 @@
     "profills/video-completo": "error",
     "profills/opacity-scroll-em-funcao": "error",
     "profills/dynamic-3d-sem-ssr": "error",
-    "profills/sem-3d-direto": "error"
+    "profills/sem-3d-direto": "error",
+
+    // Plugin vendorizado (tools/oxlint/anti-slop): padrões de código de baixa evidência.
+    // oxc/no-accumulating-spread, a regra nativa que o acompanha, já está acima.
+    "anti-slop/no-reduce-accumulator-copy": "error",
+    "anti-slop/no-object-parameters": "error",
+    "anti-slop/no-reflect-apply": "error",
+    "anti-slop/no-reflect-get": "error",
+    "anti-slop/no-shape-in-symbol-names": "error",
+    "anti-slop/no-unknown-returns": "error",
+    "anti-slop/no-unknown-type-aliases": "error",
+    "anti-slop/no-widen-then-assert": "error"
   },
   "overrides": [
     {

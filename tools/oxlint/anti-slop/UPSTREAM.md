@@ -4,7 +4,7 @@
 - Commit: `13909c9e07590f5a85d93c62712259fe14a883f7`
 - Caminho de origem: `skills/install-anti-slop/assets/anti-slop/`
 - Destino: `tools/oxlint/anti-slop/`, copiado pelo `scripts/install.mjs` da skill `install-anti-slop`.
-- Conferência: `diff -r` entre o destino e a origem no commit acima não mostra diferença (13 de novembro de 2026).
+- Conferência: `diff -r` entre o destino e a origem no commit acima só mostra os arquivos locais listados em "Desvios intencionais" (13 de novembro de 2026).
 
 ## Arquivos
 
@@ -17,7 +17,8 @@ A origem não traz os testes das regras (`*.test.ts`); eles ficam só no reposit
 
 ## Desvios intencionais
 
-- Nenhum arquivo foi alterado em relação à origem.
+- Nenhum arquivo da origem foi alterado.
+- `package.json` é local e só declara `"type": "module"`, como em `tools/oxlint/profills/`. Sem ele, o Node avisa `MODULE_TYPELESS_PACKAGE_JSON` a cada lint.
 - O plugin `anti-slop-effect` não está registrado.
 - A pasta fica fora do Prettier (`.prettierignore`) e do lint do site (`ignorePatterns`), porque segue o estilo do upstream (tabs, aspas duplas).
 
