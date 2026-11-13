@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { logger } from '@/lib/utils/logger';
+
 import { ModelViewerElement } from '@google/model-viewer';
 
 import { isWebGLAvailable } from './webglSupport';
@@ -119,7 +121,7 @@ export function useOptimized3DModel({
         setIsLoaded(true);
         setHasBeenLoaded(true);
       } catch (error) {
-        console.error('Erro ao carregar model-viewer:', error);
+        logger.error('Erro ao carregar model-viewer:', error);
       }
     };
 
@@ -191,7 +193,7 @@ export function useOptimized3DModel({
 
   const handleModelError = useCallback(
     (error: Error) => {
-      console.error('Erro ao carregar modelo 3D:', error);
+      logger.error('Erro ao carregar modelo 3D:', error);
       modelCache.delete(src);
     },
     [src]

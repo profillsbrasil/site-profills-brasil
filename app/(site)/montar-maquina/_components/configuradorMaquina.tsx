@@ -30,6 +30,7 @@ import embalagemPouch from '@/lib/images/embalagensPequenas/pouch.png';
 import embalagemSache from '@/lib/images/embalagensPequenas/sache.png';
 import produtoSolido from '@/lib/images/embalagensPequenas/solidos.png';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/utils/logger';
 
 import {
   type ContactFormData,
@@ -127,7 +128,7 @@ export default function ConfiguradorMaquina() {
 
       setContactForm(initialContactFormData);
     } catch (error) {
-      console.error('Erro ao enviar solicitação Montar Máquina:', error);
+      logger.error('Erro ao enviar solicitação Montar Máquina:', error);
       toast.error('Erro ao enviar solicitação', {
         description:
           error instanceof Error

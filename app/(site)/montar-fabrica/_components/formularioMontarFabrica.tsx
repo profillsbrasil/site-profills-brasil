@@ -17,6 +17,7 @@ import {
   monteFabricaFormSchema
 } from '@/lib/schemas/monte-fabrica-form';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/utils/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ArrowRight, Building2, Mail, Phone, User } from 'lucide-react';
@@ -41,7 +42,7 @@ export default function FormularioMontarFabrica() {
   const onSubmit = async (data: MonteFabricaFormData) => {
     setIsSubmitting(true);
     try {
-      console.log('Enviando dados do formulário:', data);
+      logger.info('Enviando dados do formulário:', data);
 
       const response = await fetch('/api/monte-fabrica', {
         method: 'POST',
@@ -57,7 +58,7 @@ export default function FormularioMontarFabrica() {
         throw new Error(result.message || 'Erro ao enviar solicitação');
       }
 
-      console.log('✅ Solicitação enviada com sucesso:', result);
+      logger.info('✅ Solicitação enviada com sucesso:', result);
 
       registrarLeadIndicacao(
         'monte-fabrica',
@@ -72,7 +73,7 @@ export default function FormularioMontarFabrica() {
 
       reset();
     } catch (error) {
-      console.error('❌ Erro ao enviar solicitação:', error);
+      logger.error('❌ Erro ao enviar solicitação:', error);
 
       toast.error('Erro ao enviar solicitação', {
         description:
