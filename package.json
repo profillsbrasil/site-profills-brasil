@@ -11,6 +11,7 @@
     "lint:fix": "oxlint --type-aware --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "prepare": "lefthook install",
     "clear": "rm -rf node_modules && rm -rf .next && rm -rf .turbo && rm -rf pnpm-lock.yaml && rm -rf bun.lock && rm -rf bun.lockb && rm -rf package-lock.json && rm -rf yarn.lock "
   },
   "dependencies": {
@@ -64,6 +65,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "jsdom": "^29.1.1",
+    "lefthook": "2.2.2",
     "oxlint": "1.93.0",
     "oxlint-tsgolint": "7.0.2007",
     "prettier": "3.8.3",
