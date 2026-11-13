@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/utils/logger';
 
+import { useReducedMotion } from 'motion/react';
 import type { GlobeMethods } from 'react-globe.gl';
 import * as THREE from 'three';
 
@@ -52,11 +53,29 @@ function loadCountries(): Promise<CountryFeature[]> {
   return pendingCountries;
 }
 
-export function Globe({ className }: { className?: string }) {
+type Controles = {
+  autoRotate: boolean;
+  autoRotateSpeed: number;
+  enableZoom: boolean;
+  enablePan: boolean;
+};
+
+/**
+ * Globo 3D pesado (three + react-globe.gl): quem usa decide quando montar,
+ * importando este módulo só quando o bloco entra na tela.
+ */
+export function Globe({
+  className,
+  onPronto
+}: {
+  className?: string;
+  /** Chamado quando o globo termina de carregar e pinta o primeiro quadro */
+  onPronto?: () => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
+  const reduzirMovimento = Boolean(useReducedMotion());
   const [size, setSize] = useState({ w: 0, h: 0 });
-  const [shouldMount, setShouldMount] = useState(false);
   const [ready, setReady] = useState(false);
   const [countries, setCountries] = useState<CountryFeature[]>([]);
 
@@ -70,26 +89,10 @@ export function Globe({ className }: { className?: string }) {
       if (w > 0 && h > 0) setSize({ w, h });
     });
     ro.observe(el);
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldMount(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: '200px' }
-    );
-    io.observe(el);
-
-    return () => {
-      ro.disconnect();
-      io.disconnect();
-    };
+    return () => ro.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!shouldMount) return;
     let cancelled = false;
     void loadCountries().then((features) => {
       if (!cancelled) setCountries(features);
@@ -97,17 +100,11 @@ export function Globe({ className }: { className?: string }) {
     return () => {
       cancelled = true;
     };
-  }, [shouldMount]);
+  }, []);
 
   useEffect(() => {
     if (!ready || !globeRef.current) return;
-    const ctrls = globeRef.current.controls() as {
-      autoRotate: boolean;
-      autoRotateSpeed: number;
-      enableZoom: boolean;
-      enablePan: boolean;
-    };
-    ctrls.autoRotate = true;
+    const ctrls = globeRef.current.controls() as Controles;
     ctrls.autoRotateSpeed = 0.5;
     ctrls.enableZoom = false;
     ctrls.enablePan = false;
@@ -119,12 +116,37 @@ export function Globe({ className }: { className?: string }) {
       }
     ).renderer();
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  }, [ready]);
 
-    const onVisibility = () => {
-      ctrls.autoRotate = document.visibilityState === 'visible';
+  useEffect(() => {
+    if (!ready || !globeRef.current) return;
+    (globeRef.current.controls() as Controles).autoRotate = !reduzirMovimento;
+  }, [ready, reduzirMovimento]);
+
+  // Fora da tela ou com a aba oculta, o laço de render para (giro incluso)
+  useEffect(() => {
+    const globo = globeRef.current;
+    const el = containerRef.current;
+    if (!ready || !globo || !el) return;
+
+    let naTela = true;
+    const aplicar = () => {
+      if (naTela && document.visibilityState === 'visible') {
+        globo.resumeAnimation();
+      } else {
+        globo.pauseAnimation();
+      }
     };
-    document.addEventListener('visibilitychange', onVisibility);
-    return () => document.removeEventListener('visibilitychange', onVisibility);
+    const io = new IntersectionObserver(([entry]) => {
+      naTela = entry.isIntersecting;
+      aplicar();
+    });
+    io.observe(el);
+    document.addEventListener('visibilitychange', aplicar);
+    return () => {
+      io.disconnect();
+      document.removeEventListener('visibilitychange', aplicar);
+    };
   }, [ready]);
 
   const globeMaterial = useMemo(
@@ -152,7 +174,7 @@ export function Globe({ className }: { className?: string }) {
     <div
       ref={containerRef}
       className={cn('relative size-full overflow-hidden', className)}>
-      {shouldMount && size.w > 0 && size.h > 0 && (
+      {size.w > 0 && size.h > 0 && (
         <Globe3D
           ref={globeRef}
           width={size.w}
@@ -163,9 +185,12 @@ export function Globe({ className }: { className?: string }) {
           atmosphereColor={ACCENT}
           atmosphereAltitude={0.08}
           showGraticules={false}
-          animateIn
+          animateIn={!reduzirMovimento}
           waitForGlobeReady
-          onGlobeReady={() => setReady(true)}
+          onGlobeReady={() => {
+            setReady(true);
+            onPronto?.();
+          }}
           enablePointerInteraction={false}
           rendererConfig={rendererConfig}
           polygonsData={countries}

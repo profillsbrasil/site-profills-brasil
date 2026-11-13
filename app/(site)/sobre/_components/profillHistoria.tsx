@@ -1,11 +1,16 @@
 'use client';
 
+import { useRef, useState } from 'react';
+
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
 import { Highlighter } from '@/components/magicui/highlighter';
 import { BlurFade } from '@/components/ui/blur-fade';
+import { cn } from '@/lib/utils';
 import logo from '@/public/logo.png';
+
+import { useInView } from 'motion/react';
 
 const Globe = dynamic(
   () =>
@@ -14,19 +19,34 @@ const Globe = dynamic(
 );
 
 export default function ProfillHistoria() {
+  const visualRef = useRef<HTMLDivElement>(null);
+  // O módulo do globo (three + react-globe.gl) só baixa quando o bloco entra na tela
+  const naTela = useInView(visualRef, { once: true });
+  const [globoPronto, setGloboPronto] = useState(false);
+
   return (
     <section
       aria-labelledby='titulo-historia'
       className='flex h-full w-full max-w-7xl flex-col items-center justify-center gap-5 pt-4 pb-2 md:flex-row md:gap-5 md:pt-0 md:pb-10'>
-      {/* Visual: globo + marca */}
-      <div className='relative flex h-80 w-full select-none md:aspect-square md:h-auto md:w-1/2'>
-        <Globe className='absolute inset-0' />
+      {/* Visual: globo + marca. O bloco reserva o espaço do globo desde o HTML */}
+      <div
+        ref={visualRef}
+        className='relative flex h-80 w-full select-none md:aspect-square md:h-auto md:w-1/2'>
+        {naTela && (
+          <Globe
+            onPronto={() => setGloboPronto(true)}
+            className={cn(
+              'absolute inset-0 transition-opacity duration-300 motion-reduce:transition-none',
+              !globoPronto && 'opacity-0'
+            )}
+          />
+        )}
         <Image
           src={logo}
           alt='Nossa História'
-          className='absolute top-1/2 left-1/2 h-fit w-1/2 -translate-x-1/2 -translate-y-1/2 select-none md:w-3/4'
+          className='pointer-events-none absolute top-1/2 left-1/2 h-fit w-1/2 -translate-x-1/2 -translate-y-1/2 select-none md:w-3/4'
         />
-        <h1 className='absolute top-[53%] left-1/2 w-full -translate-x-1/2 text-center text-xl font-bold tracking-wider md:top-5 md:left-2/3 md:-translate-x-1/3 md:text-left md:text-2xl'>
+        <h1 className='pointer-events-none absolute top-[53%] left-1/2 w-full -translate-x-1/2 text-center text-xl font-bold tracking-wider md:top-5 md:left-2/3 md:-translate-x-1/3 md:text-left md:text-2xl'>
           Embalando o Mundo!
         </h1>
       </div>

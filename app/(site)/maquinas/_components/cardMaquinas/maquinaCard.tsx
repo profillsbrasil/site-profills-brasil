@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { EntradaTopo } from '@/components/entradaTopo';
 import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 
 interface MaquinaCardProps {
@@ -33,15 +34,12 @@ export default function MaquinaCard({
 
   // Delay escalonado para animação suave (máximo 0.3s para melhor performance)
   const animationDelay = Math.min(index * 0.03, 0.3);
-  const loading = index < CARDS_NA_PRIMEIRA_DOBRA ? 'eager' : 'lazy';
+  const naPrimeiraDobra = index < CARDS_NA_PRIMEIRA_DOBRA;
+  const loading = naPrimeiraDobra ? 'eager' : 'lazy';
+  const classeCard = 'group flex h-[28rem] w-full flex-col md:h-[32rem]';
 
-  return (
-    <AnimatedContainer
-      delay={animationDelay}
-      trigger={filtersApplied ? 'mount' : 'inView'} // Usa "mount" quando filtros aplicados da URL
-      once={!filtersApplied} // Permite reanimação quando filtros mudam
-      amount={0.1} // Dispara quando 10% do elemento está visível
-      className={`group flex h-[28rem] w-full flex-col md:h-[32rem]`}>
+  const conteudo = (
+    <>
       {/* Moldura blueprint: mídia no quadro tracejado com cantoneiras accent */}
       <div
         className={`relative h-[86%] w-full rounded-t-xs border border-dashed border-[rgba(148,178,235,0.3)] px-2 transition-colors duration-300 group-hover:border-[rgba(148,178,235,0.55)]`}>
@@ -65,7 +63,7 @@ export default function MaquinaCard({
               className={`${
                 maquina.imagens.maquinaClassName ||
                 'h-full w-full object-contain'
-              } transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              } transition-opacity duration-300 ${naPrimeiraDobra || imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
             <Image
               src={maquina.imagens.embalagem}
@@ -77,7 +75,7 @@ export default function MaquinaCard({
               className={`${
                 maquina.imagens.embalagemClassName ||
                 'absolute right-3 bottom-0 h-1/2 w-auto max-w-[65%] object-contain'
-              } transition-opacity duration-300 ${pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              } transition-opacity duration-300 ${naPrimeiraDobra || pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
           </>
         ) : (
@@ -102,6 +100,26 @@ export default function MaquinaCard({
           {subtituloDe(maquina)}
         </p>
       </div>
+    </>
+  );
+
+  // Filtro aplicado remonta os cards: aí a entrada de montagem continua
+  if (naPrimeiraDobra && !filtersApplied) {
+    return (
+      <EntradaTopo ordem={index} className={classeCard}>
+        {conteudo}
+      </EntradaTopo>
+    );
+  }
+
+  return (
+    <AnimatedContainer
+      delay={animationDelay}
+      trigger={filtersApplied ? 'mount' : 'inView'} // Usa "mount" quando filtros aplicados da URL
+      once={!filtersApplied} // Permite reanimação quando filtros mudam
+      amount={0.1} // Dispara quando 10% do elemento está visível
+      className={classeCard}>
+      {conteudo}
     </AnimatedContainer>
   );
 }

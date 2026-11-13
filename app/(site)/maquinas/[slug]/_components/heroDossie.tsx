@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { EntradaTopo } from '@/components/entradaTopo';
 import { NumberTicker } from '@/components/magicui/number-ticker';
 import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 import { cn } from '@/lib/utils';
@@ -34,7 +34,7 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
     : linhasBase;
 
   return (
-    <AnimatedContainer trigger='mount' className='pt-8 md:pt-12'>
+    <EntradaTopo className='pt-8 md:pt-12'>
       <section className='relative border border-dashed border-[rgba(148,178,235,0.35)] p-5 md:p-8'>
         <Cantoneiras />
         <div className='flex items-center justify-between border-b border-dashed border-[rgba(148,178,235,0.25)] pb-3'>
@@ -120,6 +120,6 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
           )}
         </div>
       </section>
-    </AnimatedContainer>
+    </EntradaTopo>
   );
 }

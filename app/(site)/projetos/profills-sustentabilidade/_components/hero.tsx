@@ -1,8 +1,7 @@
 import Image from 'next/image';
 
-import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { EntradaTopo } from '@/components/entradaTopo';
 import { Highlighter } from '@/components/magicui/highlighter';
-import { BlurFade } from '@/components/ui/blur-fade';
 import imgSustentabilidade from '@/lib/images/projetos/Sustentabilidade.jpg';
 
 import { GraduationCap, Heart, Leaf, TrendingUp } from 'lucide-react';
@@ -12,7 +11,7 @@ export default function Hero() {
     <section
       aria-labelledby='titulo-profills-sustentabilidade'
       className='flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0'>
-      <BlurFade delay={0.1} inView>
+      <EntradaTopo>
         <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
           <Image
             src={imgSustentabilidade}
@@ -22,7 +21,7 @@ export default function Hero() {
             sizes='(min-width: 1152px) 1152px, 100vw'
           />
         </div>
-      </BlurFade>
+      </EntradaTopo>
 
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
@@ -35,7 +34,7 @@ export default function Hero() {
           </h1>
         </Highlighter>
 
-        <BlurFade delay={0.2} inView>
+        <EntradaTopo ordem={1}>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
               Nossa missão é{' '}
@@ -61,10 +60,10 @@ export default function Hero() {
               de processamento e envase de alimentos.
             </p>
           </div>
-        </BlurFade>
+        </EntradaTopo>
 
         {/* Features Cards */}
-        <AnimatedContainer className='w-full'>
+        <EntradaTopo ordem={2} className='w-full'>
           <div className='grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-5'>
             <div className='group flex items-center gap-3 rounded-xs border border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
               <Heart className='h-8 w-8 text-green-600 transition-all duration-300 group-hover:scale-105' />
@@ -95,7 +94,7 @@ export default function Hero() {
               </div>
             </div>
           </div>
-        </AnimatedContainer>
+        </EntradaTopo>
       </div>
     </section>
   );

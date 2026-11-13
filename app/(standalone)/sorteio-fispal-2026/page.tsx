@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { EntradaTopo } from '@/components/entradaTopo';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { InstagramIcon } from '@/components/layout/socialLinks';
 import {
@@ -12,7 +13,6 @@ import {
 } from '@/components/ui/accordion';
 import { BlurFade } from '@/components/ui/blur-fade';
 import { Button } from '@/components/ui/button';
-import { TextAnimate } from '@/components/ui/text-animate';
 import logoProfills from '@/public/logo-branco.png';
 
 import {
@@ -165,29 +165,25 @@ export default function SorteioFispal2026() {
 
         {/* Conteúdo do hero ancorado embaixo */}
         <div className='relative z-10 mx-auto mt-auto w-full max-w-6xl px-4 pb-16 md:px-6 md:pb-24'>
-          <BlurFade delay={0.1} inView>
+          <EntradaTopo>
             <div className='inline-flex items-center gap-2 rounded-xs border border-accent/40 bg-secondary/85 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg backdrop-blur-sm'>
               <Calendar className='text-accent size-3.5' aria-hidden />
               Sorteio em {DATA_SORTEIO}
             </div>
-          </BlurFade>
+          </EntradaTopo>
 
-          <h1 className='mt-5 flex max-w-3xl flex-col gap-1 text-balance text-4xl font-bold leading-[1.05] text-white md:text-6xl lg:text-7xl'>
-            <TextAnimate
-              animation='blurInUp'
-              by='word'
-              as='span'
-              once
-              startOnView
-              className='text-4xl font-bold leading-[1.05] md:text-6xl lg:text-7xl'>
-              Sorteio Profills
-            </TextAnimate>
-            <span className='text-accent text-4xl font-bold leading-[1.05] md:text-6xl lg:text-7xl'>
-              FISPAL 2026
-            </span>
-          </h1>
+          <EntradaTopo ordem={1}>
+            <h1 className='mt-5 flex max-w-3xl flex-col gap-1 text-balance text-4xl font-bold leading-[1.05] text-white md:text-6xl lg:text-7xl'>
+              <span className='text-4xl font-bold leading-[1.05] md:text-6xl lg:text-7xl'>
+                Sorteio Profills
+              </span>
+              <span className='text-accent text-4xl font-bold leading-[1.05] md:text-6xl lg:text-7xl'>
+                FISPAL 2026
+              </span>
+            </h1>
+          </EntradaTopo>
 
-          <BlurFade delay={0.4} inView>
+          <EntradaTopo ordem={2}>
             <p className='mt-5 max-w-xl text-base leading-relaxed text-white/85 md:text-lg'>
               Concorra a uma{' '}
               <strong className='font-semibold text-white'>TV 65&quot;</strong>,
@@ -201,9 +197,9 @@ export default function SorteioFispal2026() {
               </strong>
               . Inscreva-se pelo WhatsApp e cumpra as 4 tarefas no Instagram.
             </p>
-          </BlurFade>
+          </EntradaTopo>
 
-          <BlurFade delay={0.5} inView>
+          <EntradaTopo ordem={3}>
             <div className='mt-8 flex flex-wrap items-center gap-3'>
               <Button
                 asChild
@@ -218,7 +214,7 @@ export default function SorteioFispal2026() {
                 Ou escaneie o QR no estande Profills.
               </p>
             </div>
-          </BlurFade>
+          </EntradaTopo>
         </div>
       </section>
 
