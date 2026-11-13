@@ -110,6 +110,7 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
                 src={maquina.imagens.maquina}
                 alt={`${maquina.nomeCompleto} Profills`}
                 priority
+                sizes='(min-width: 1280px) 634px, (min-width: 768px) 55vw, 100vw'
                 className={cn(
                   'md:-my-16 max-h-[320px] w-auto object-contain drop-shadow-[0_18px_28px_rgba(0,0,0,0.45)] md:max-h-[480px]',
                   maquina.imagens.maquinaClassName

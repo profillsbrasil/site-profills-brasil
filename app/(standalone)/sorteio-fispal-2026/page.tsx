@@ -157,6 +157,7 @@ export default function SorteioFispal2026() {
               src={logoProfills}
               alt='Profills'
               priority
+              sizes='314px'
               className='h-9 w-auto md:h-11'
             />
           </Link>
