@@ -9,6 +9,7 @@ Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind v4 · s
 - `bun run lint` / `bun run lint:fix` — Oxlint type-aware com a config em `.oxlintrc.json`; cada regra desligada leva o motivo num comentário ali
 - `bun run format` — Prettier (ordena classes Tailwind e imports automaticamente)
 - Pre-commit (lefthook, instalado pelo `prepare` no `bun install`) roda oxlint e `prettier --check` só nos arquivos staged
+- Atualizar o anti-slop: seguir `references/update.md` da skill `install-anti-slop` do upstream (comparar numa pasta temporária, nunca rodar o instalador sobre `tools/oxlint/anti-slop/`) e registrar o commit novo no `UPSTREAM.md` dela
 
 ## Mapa do repositório
 
@@ -39,8 +40,9 @@ lib/
 
 public/                   ← só o que precisa de URL direta: videos/, embalagens-3d/*.glb, logos, geojson
 private/downloads/        ← arquivos NÃO públicos (catálogo 77MB), servidos via api/download/[token] com JWT
-types/                    ← declarações globais (model-viewer.d.ts)
+types/                    ← declarações globais (model-viewer.d.ts, css-variaveis.d.ts para `--var` no style)
 tools/oxlint/profills/    ← plugin local do Oxlint: regras de carregamento (sizes, eager, vídeo, opacity de scroll, 3D)
+tools/oxlint/anti-slop/   ← plugin anti-slop vendorizado de dmmulroy/anti-slop; não editar à mão, origem e desvios no UPSTREAM.md
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
 docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação)
 docs/indicacao-verificacao.md ← guia: como testar a Indicação em produção e onde ler os números no GA4 e no Meta
