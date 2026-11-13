@@ -1,12 +1,12 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-
-vi.mock('./webglSupport', () => ({
-  isWebGLAvailable: vi.fn(),
-}));
 
 import { useOptimized3DModel } from './useOptimized3DModel';
 import { isWebGLAvailable } from './webglSupport';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('./webglSupport', () => ({
+  isWebGLAvailable: vi.fn()
+}));
 
 const mockedIsWebGLAvailable = vi.mocked(isWebGLAvailable);
 
@@ -33,5 +33,38 @@ describe('useOptimized3DModel', () => {
     );
 
     await waitFor(() => expect(result.current.webglSupported).toBe(true));
+  });
+
+  it('não deixa o timer de render pendente depois de desmontar', () => {
+    mockedIsWebGLAvailable.mockReturnValue(false);
+    let avisar: IntersectionObserverCallback = () => {};
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(cb: IntersectionObserverCallback) {
+          avisar = cb;
+        }
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      }
+    );
+    vi.useFakeTimers();
+    try {
+      const { unmount } = renderHook(() =>
+        useOptimized3DModel({ src: '/timer.glb' })
+      );
+      avisar(
+        [{ isIntersecting: true } as IntersectionObserverEntry],
+        {} as IntersectionObserver
+      );
+      const antes = vi.getTimerCount();
+      unmount();
+      // O desmonte agenda só a limpeza do cache de 5 s; o timer de 100 ms sai.
+      expect(vi.getTimerCount()).toBe(antes);
+    } finally {
+      vi.useRealTimers();
+      vi.unstubAllGlobals();
+    }
   });
 });

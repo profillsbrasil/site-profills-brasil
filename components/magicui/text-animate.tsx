@@ -4,7 +4,8 @@ import { ElementType, memo, useMemo } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { AnimatePresence, MotionProps, Variants, motion } from 'motion/react';
+import { AnimatePresence, MotionProps, Variants } from 'motion/react';
+import * as m from 'motion/react-m';
 
 type AnimationType = 'text' | 'word' | 'character' | 'line';
 type AnimationVariant =
@@ -318,7 +319,7 @@ const TextAnimateBase = ({
   accessible = true,
   ...props
 }: TextAnimateProps) => {
-  const MotionComponent = useMemo(() => motion.create(Component), [Component]);
+  const MotionComponent = useMemo(() => m.create(Component), [Component]);
 
   let segments: string[] = [];
   switch (by) {
@@ -384,7 +385,7 @@ const TextAnimateBase = ({
 
   return (
     <AnimatePresence mode='popLayout'>
-      {/* eslint-disable-next-line react-hooks/static-components -- `as` é prop, o motion.create fica memoizado por Component */}
+      {/* eslint-disable-next-line react-hooks/static-components -- `as` é prop, o m.create fica memoizado por Component */}
       <MotionComponent
         variants={finalVariants.container as Variants}
         initial='hidden'
@@ -397,7 +398,7 @@ const TextAnimateBase = ({
         {...props}>
         {accessible && <span className='sr-only'>{children}</span>}
         {segments.map((segment, i) => (
-          <motion.span
+          <m.span
             key={`${by}-${segment}-${i}`}
             variants={finalVariants.item}
             custom={i * staggerTimings[by]}
@@ -408,7 +409,7 @@ const TextAnimateBase = ({
             )}
             aria-hidden={accessible ? true : undefined}>
             {segment}
-          </motion.span>
+          </m.span>
         ))}
       </MotionComponent>
     </AnimatePresence>

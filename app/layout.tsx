@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import MetaPixel from '@/components/layout/metaPixel';
+import { MotionProvider } from '@/components/motionProvider';
 import { JsonLd } from '@/components/seo/jsonLd';
 import { Toaster } from '@/components/ui/sonner';
 import { organizacaoSchema, websiteSchema } from '@/lib/seo/schemas';
@@ -78,7 +79,7 @@ export default function RootLayout({
           Pular para o conteúdo
         </a>
         <Toaster richColors />
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         <JsonLd data={organizacaoSchema()} />
         <JsonLd data={websiteSchema()} />
         {gaId && <GoogleAnalytics gaId={gaId} />}

@@ -76,6 +76,7 @@ export function useOptimized3DModel({
       /* eslint-enable react-hooks/set-state-in-effect */
     }
 
+    let renderTimeout: ReturnType<typeof setTimeout> | undefined;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -83,7 +84,8 @@ export function useOptimized3DModel({
             setIsVisible(true);
             // Só renderiza na primeira vez ou se nunca foi carregado
             if (!hasBeenLoaded) {
-              setTimeout(() => setShouldRender(true), 100);
+              clearTimeout(renderTimeout);
+              renderTimeout = setTimeout(() => setShouldRender(true), 100);
             }
           } else {
             setIsVisible(false);
@@ -100,6 +102,7 @@ export function useOptimized3DModel({
     }
 
     return () => {
+      clearTimeout(renderTimeout);
       if (observedElement) {
         observer.unobserve(observedElement);
       }

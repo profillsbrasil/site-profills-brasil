@@ -10,6 +10,7 @@ Substituir o hero atual da home (scroll-driven: seção de 200vh com sticky, ví
 
 - `ScrollExpandMedia` / `DesktopHero` / `MobileHero` em `app/(site)/(home)/_components/scrollExpansionHero.tsx` (as duas árvores mobile/desktop, o mecanismo sticky de 200vh, o gotcha do ScrollTimeline)
 - Vídeo `videoCurto.webm/.mp4` e o modelo 3D `caixa-teste-3d.glb` deixam de ser usados no hero (arquivos permanecem no repo; remoção é decisão à parte)
+  - Nota de 13 de novembro de 2026: `videoCurto.webm`, `videoCurto.mp4` e `videoCurto-poster.webp` foram removidos do repo.
 - `HeroShowcase` (mini-carrossel de texto) e `ScrollHint` do hero
 
 ## O que entra

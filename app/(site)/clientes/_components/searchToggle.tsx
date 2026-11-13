@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import { AnimatePresence, motion } from 'motion/react';
-
 import { Search, X } from 'lucide-react';
+import { AnimatePresence } from 'motion/react';
+import * as m from 'motion/react-m';
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
@@ -22,7 +22,7 @@ export default function SearchToggle({ query, onChange }: Props) {
     <div className='flex items-center justify-end'>
       <AnimatePresence mode='wait' initial={false}>
         {expanded ? (
-          <motion.div
+          <m.div
             key='input'
             initial={{ width: 34, opacity: 0 }}
             animate={{ width: 220, opacity: 1 }}
@@ -53,9 +53,9 @@ export default function SearchToggle({ query, onChange }: Props) {
                 <X className='size-4' />
               </button>
             )}
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.button
+          <m.button
             key='icon'
             type='button'
             aria-label='Abrir busca'
@@ -66,7 +66,7 @@ export default function SearchToggle({ query, onChange }: Props) {
             transition={{ duration: 0.2, ease: EASE_OUT_EXPO }}
             className='bg-secondary hover:bg-secondary/90 flex size-9 items-center justify-center rounded-md text-secondary-foreground shadow-md transition-colors'>
             <Search className='size-4' />
-          </motion.button>
+          </m.button>
         )}
       </AnimatePresence>
     </div>

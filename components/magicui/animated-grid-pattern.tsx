@@ -11,7 +11,7 @@ import {
 
 import { cn } from '@/lib/utils';
 
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 export interface AnimatedGridPatternProps extends ComponentPropsWithoutRef<'svg'> {
   width?: number;
@@ -134,7 +134,7 @@ export function AnimatedGridPattern({
       <rect width='100%' height='100%' fill={`url(#${id})`} />
       <svg x={x} y={y} className='overflow-visible'>
         {squares.map(({ pos: [x, y], id }, index) => (
-          <motion.rect
+          <m.rect
             initial={{ opacity: 0 }}
             animate={{ opacity: maxOpacity }}
             transition={{

@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { type CatalogRequestData } from '@/lib/schemas/catalog-request';
 import { cn } from '@/lib/utils';
 
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
 
@@ -22,7 +22,7 @@ const maskedInputClass =
 
 export function CatalogFields({ control, errors }: CatalogFieldsProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
@@ -50,10 +50,7 @@ export function CatalogFields({ control, errors }: CatalogFieldsProps) {
                 {...field}
                 id='name'
                 placeholder='João Silva ou Indústria XYZ Ltda'
-                className={cn(
-                  fieldClass,
-                  errors.name && '!border-red-400/70'
-                )}
+                className={cn(fieldClass, errors.name && '!border-red-400/70')}
               />
             )}
           />
@@ -135,10 +132,7 @@ export function CatalogFields({ control, errors }: CatalogFieldsProps) {
                 id='email'
                 type='email'
                 placeholder='seu@email.com'
-                className={cn(
-                  fieldClass,
-                  errors.email && '!border-red-400/70'
-                )}
+                className={cn(fieldClass, errors.email && '!border-red-400/70')}
               />
             )}
           />
@@ -147,6 +141,6 @@ export function CatalogFields({ control, errors }: CatalogFieldsProps) {
           )}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

@@ -2,15 +2,15 @@
 
 import Image from 'next/image';
 
-import { motion } from 'motion/react';
-
 import type { Cliente } from '@/lib/data/listaClientes';
+
+import * as m from 'motion/react-m';
 
 const EASE_OUT_QUART = [0.25, 1, 0.5, 1] as const;
 
 export default function ClienteCard({ cliente }: { cliente: Cliente }) {
   return (
-    <motion.div
+    <m.div
       whileHover={{ scale: 1.05 }}
       transition={{ duration: 0.2, ease: EASE_OUT_QUART }}
       className='flex aspect-[1.6/1] w-full items-center justify-center p-4'>
@@ -21,6 +21,6 @@ export default function ClienteCard({ cliente }: { cliente: Cliente }) {
         className='h-full w-full object-contain'
         placeholder='blur'
       />
-    </motion.div>
+    </m.div>
   );
 }

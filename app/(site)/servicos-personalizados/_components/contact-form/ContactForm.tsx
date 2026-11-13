@@ -11,8 +11,8 @@ import { FormStep2 } from './components/FormStep2';
 import { FormStep3 } from './components/FormStep3';
 import { ProgressIndicator } from './components/ProgressIndicator';
 import { useContactForm } from './hooks/useContactForm';
-import { motion } from 'motion/react';
 import { ArrowLeft, CircleCheck } from 'lucide-react';
+import * as m from 'motion/react-m';
 
 export default function ContactForm() {
   const {
@@ -89,14 +89,14 @@ export default function ContactForm() {
 
           {/* Botões de navegação */}
           <div className='w-full'>
-            <motion.div
+            <m.div
               className='flex items-center gap-3'
               animate={{
                 justifyContent: currentStep === 1 ? 'center' : 'space-between'
               }}>
               {/* Botão Voltar */}
               {currentStep > 1 && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, width: 0, scale: 0.8 }}
                   animate={{ opacity: 1, width: 'auto', scale: 1 }}
                   transition={{
@@ -115,7 +115,7 @@ export default function ContactForm() {
                     <ArrowLeft size={16} />
                     Voltar
                   </Button>
-                </motion.div>
+                </m.div>
               )}
 
               {/* Botão Continuar/Finalizar */}
@@ -129,7 +129,7 @@ export default function ContactForm() {
                 )}>
                 <div className='flex w-full items-center justify-center gap-2 text-sm font-semibold text-white'>
                   {currentStep === 3 && !isSubmitting && (
-                    <motion.div
+                    <m.div
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{
@@ -139,7 +139,7 @@ export default function ContactForm() {
                         mass: 0.5
                       }}>
                       <CircleCheck size={16} />
-                    </motion.div>
+                    </m.div>
                   )}
                   {isSubmitting
                     ? 'Enviando...'
@@ -148,7 +148,7 @@ export default function ContactForm() {
                       : 'Continuar'}
                 </div>
               </Button>
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </div>

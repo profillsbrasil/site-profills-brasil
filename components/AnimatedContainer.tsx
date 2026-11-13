@@ -2,7 +2,8 @@
 
 import type React from 'react';
 
-import { motion, useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 type TriggerMode = 'inView' | 'mount';
 
@@ -35,25 +36,25 @@ export function AnimatedContainer({
   if (trigger === 'mount') {
     // Garante que aparece sempre, mesmo em tabs/modais/carrosséis
     return (
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay, duration: 0.6, ease: 'easeOut' }}
         className={className}>
         {children}
-      </motion.div>
+      </m.div>
     );
   }
 
   // Modo padrão: anima ao entrar na viewport (sem margin negativa)
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, amount }}
       transition={{ delay, duration: 0.4, ease: 'easeOut' }}
       className={className}>
       {children}
-    </motion.div>
+    </m.div>
   );
 }

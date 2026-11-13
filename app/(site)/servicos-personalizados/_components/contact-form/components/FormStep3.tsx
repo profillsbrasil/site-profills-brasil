@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ContactFormData } from '@/lib/schemas/contact-form';
 import { cn } from '@/lib/utils';
 
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 
 interface FormStep3Props {
@@ -39,7 +39,7 @@ const finishes = [
 
 export function FormStep3({ control, errors }: FormStep3Props) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -161,6 +161,6 @@ export function FormStep3({ control, errors }: FormStep3Props) {
           />
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

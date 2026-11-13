@@ -6,6 +6,7 @@ import { metadataDaPagina } from '@/lib/seo/metadata';
 import CarrosselServicos from './_components/carrosselServicos';
 import ContactForm from './_components/contact-form/ContactForm';
 import ListaServicos from './_components/listaServicos';
+import { VideoServicos } from './_components/videoServicos';
 
 export const metadata: Metadata = metadataDaPagina({
   titulo: 'Serviços industriais personalizados',
@@ -21,14 +22,7 @@ export default function ServicosPersonalizados() {
         Serviços industriais personalizados da Profills
       </h1>
       <GridPattern />
-      <video
-        src='/videos/servico-personalizado.mp4'
-        autoPlay
-        loop
-        muted
-        playsInline
-        className='z-10 mb-3 h-48 w-full rounded-xs object-fill md:h-full md:object-cover'
-      />
+      <VideoServicos />
       <CarrosselServicos />
 
       <div className='z-10 flex h-full w-full max-w-6xl flex-col items-center justify-center px-4'>

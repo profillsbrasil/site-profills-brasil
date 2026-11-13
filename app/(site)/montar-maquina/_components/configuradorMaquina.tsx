@@ -38,7 +38,7 @@ import {
   initialContactFormData
 } from './combinacaoMaquinas';
 import { Drill } from 'lucide-react';
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
 
@@ -158,7 +158,7 @@ export default function ConfiguradorMaquina() {
           </Highlighter>{' '}
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -167,10 +167,10 @@ export default function ConfiguradorMaquina() {
             Preencha os dados abaixo e descubra qual a máquina ideal para o seu
             produto.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Selection Sections */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -186,7 +186,7 @@ export default function ConfiguradorMaquina() {
             <div className='grid grid-cols-2 gap-2 md:gap-4'>
               {packagingOptions.map((option, index) => {
                 return (
-                  <motion.div
+                  <m.div
                     key={option.id}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -214,7 +214,7 @@ export default function ConfiguradorMaquina() {
                         </span>
                       </div>
                     </Card>
-                  </motion.div>
+                  </m.div>
                 );
               })}
             </div>
@@ -231,7 +231,7 @@ export default function ConfiguradorMaquina() {
             <div className='grid grid-cols-2 gap-2 md:gap-4'>
               {productTypes.map((type, index) => {
                 return (
-                  <motion.div
+                  <m.div
                     key={type.id}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -266,15 +266,15 @@ export default function ConfiguradorMaquina() {
                         </span>
                       </div>
                     </Card>
-                  </motion.div>
+                  </m.div>
                 );
               })}
             </div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Product Details / Contact Form */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -535,7 +535,7 @@ export default function ConfiguradorMaquina() {
               </>
             )}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );

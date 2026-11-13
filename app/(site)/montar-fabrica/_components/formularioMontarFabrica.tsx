@@ -21,7 +21,7 @@ import { logger } from '@/lib/utils/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ArrowRight, Building2, Mail, Phone, User } from 'lucide-react';
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 import { Controller, useForm } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
@@ -111,7 +111,8 @@ export default function FormularioMontarFabrica() {
           <div className='mb-6 h-full w-full md:mb-0 md:w-2/3'>
             <Image
               src={imgFabricaCompleta}
-              loading='eager'
+              preload
+              sizes='(min-width: 768px) 67vw, 100vw'
               alt='Monte sua fábrica'
               className='h-full w-full object-contain'
             />
@@ -119,7 +120,7 @@ export default function FormularioMontarFabrica() {
 
           {/* Texto explicativo - Mobile primeiro */}
           <div className='z-20 h-full w-full md:w-1/3 md:pr-10'>
-            <motion.div
+            <m.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -149,7 +150,7 @@ export default function FormularioMontarFabrica() {
                 <span className='text-accent font-semibold'>o seu negócio</span>
                 .
               </p>
-            </motion.div>
+            </m.div>
           </div>
         </div>
         {/* Segunda seção - Formulário e informações */}
@@ -157,7 +158,7 @@ export default function FormularioMontarFabrica() {
           <div className='relative mx-auto w-full max-w-7xl'>
             <div className='flex flex-col gap-6 md:flex-row md:gap-12'>
               {/* Coluna do formulário */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
@@ -318,10 +319,10 @@ export default function FormularioMontarFabrica() {
                     )}
                   </Button>
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Coluna de informações */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
@@ -400,7 +401,7 @@ export default function FormularioMontarFabrica() {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             </div>
           </div>
         </div>

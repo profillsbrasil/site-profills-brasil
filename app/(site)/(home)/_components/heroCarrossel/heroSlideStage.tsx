@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 
 import type { SlideMaquina } from './slideData';
 import type { Variants } from 'motion/react';
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 const EASE_ENTRADA = [0.19, 1, 0.22, 1] as const;
 
@@ -75,7 +75,7 @@ export function HeroSlideStage({
   }
 
   return (
-    <motion.div
+    <m.div
       className='absolute inset-0'
       custom={direcao}
       variants={drift}
@@ -83,6 +83,6 @@ export function HeroSlideStage({
       animate='entrar'
       exit='sair'>
       {conteudo}
-    </motion.div>
+    </m.div>
   );
 }

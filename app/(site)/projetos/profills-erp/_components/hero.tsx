@@ -16,7 +16,8 @@ export default function Hero() {
         <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
           <Image
             src={imgErp}
-            loading='eager'
+            preload
+            sizes='(min-width: 1152px) 1152px, 100vw'
             alt='Profills ERP - Gestão Integrada em Nuvem'
             className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
           />

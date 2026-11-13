@@ -1,15 +1,12 @@
 'use client';
 
-import { useTheme } from 'next-themes';
-
 import { Toaster as Sonner, ToasterProps } from 'sonner';
 
+// O site é light-mode único, sem provider de tema.
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = 'system' } = useTheme();
-
   return (
     <Sonner
-      theme={theme as ToasterProps['theme']}
+      theme='light'
       className='toaster group'
       style={
         {

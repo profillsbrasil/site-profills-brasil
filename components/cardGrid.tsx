@@ -5,7 +5,8 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 import { Cpu, Fingerprint, Zap } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 const features = [
   {
@@ -49,7 +50,7 @@ export default function CardGrid() {
 
 type ViewAnimationProps = {
   delay?: number;
-  className?: React.ComponentProps<typeof motion.div>['className'];
+  className?: React.ComponentProps<typeof m.div>['className'];
   children: React.ReactNode;
 };
 
@@ -65,14 +66,14 @@ function AnimatedContainer({
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ translateY: -8, opacity: 0 }}
       whileInView={{ translateY: 0, opacity: 1 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.8 }}
       className={className}>
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 

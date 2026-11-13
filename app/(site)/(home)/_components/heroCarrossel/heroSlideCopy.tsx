@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 
 import type { SlideMaquina } from './slideData';
 import { ArrowRight } from 'lucide-react';
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 const EASE_ENTRADA = [0.19, 1, 0.22, 1] as const;
 
@@ -29,7 +29,7 @@ function Mascara({
   estatico = false
 }: {
   children: ReactNode;
-  /** Reduced motion: sem motion.span nem variants */
+  /** Reduced motion: sem m.span nem variants */
   estatico?: boolean;
 }) {
   if (estatico) {
@@ -42,9 +42,9 @@ function Mascara({
 
   return (
     <span className='block overflow-hidden'>
-      <motion.span variants={bloco} className='block'>
+      <m.span variants={bloco} className='block'>
         {children}
-      </motion.span>
+      </m.span>
     </span>
   );
 }
@@ -159,12 +159,12 @@ export function HeroSlideCopy({
   }
 
   return (
-    <motion.div
+    <m.div
       variants={cascata}
       initial='inicial'
       animate='entrar'
       exit={{ opacity: 0, transition: { duration: 0.12, ease: 'easeIn' } }}>
       {conteudo}
-    </motion.div>
+    </m.div>
   );
 }
