@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { ContactFormData } from '@/lib/schemas/contact-form';
 import { cn } from '@/lib/utils';
 
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
 
@@ -23,7 +23,7 @@ export function FormStep1({
   onCepComplete
 }: FormStep1Props) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -133,6 +133,6 @@ export function FormStep1({
           )}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

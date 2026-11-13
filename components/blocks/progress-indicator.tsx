@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 import { CircleCheck } from 'lucide-react';
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 const ProgressIndicator = () => {
   const [step, setStep] = useState(1);
@@ -40,7 +40,7 @@ const ProgressIndicator = () => {
           />
         ))}
 
-        <motion.div
+        <m.div
           initial={{ scaleX: 0.125 }}
           animate={{ scaleX: progressScale }}
           style={{ transformOrigin: 'left' }}
@@ -61,7 +61,7 @@ const ProgressIndicator = () => {
             !isExpanded && 'justify-between'
           )}>
           {!isExpanded && (
-            <motion.button
+            <m.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{
@@ -74,9 +74,9 @@ const ProgressIndicator = () => {
               onClick={handleBack}
               className='flex w-16 items-center justify-center rounded-full bg-muted px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted/80'>
               Voltar
-            </motion.button>
+            </m.button>
           )}
-          <motion.button
+          <m.button
             onClick={handleContinue}
             animate={{
               flex: isExpanded ? 1 : 'inherit'
@@ -87,7 +87,7 @@ const ProgressIndicator = () => {
             )}>
             <div className='flex items-center justify-center gap-2 text-sm font-[600]'>
               {step === 3 && (
-                <motion.div
+                <m.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{
@@ -97,11 +97,11 @@ const ProgressIndicator = () => {
                     mass: 0.5
                   }}>
                   <CircleCheck size={16} />
-                </motion.div>
+                </m.div>
               )}
               {step === 3 ? 'Finalizar' : 'Continuar'}
             </div>
-          </motion.button>
+          </m.button>
         </div>
       </div>
     </div>

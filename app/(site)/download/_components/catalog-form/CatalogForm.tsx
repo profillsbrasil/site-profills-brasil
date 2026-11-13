@@ -6,7 +6,8 @@ import { CatalogFields } from './components/CatalogFields';
 import { SuccessPanel } from './components/SuccessPanel';
 import { useCatalogForm } from './hooks/useCatalogForm';
 import { ArrowRight, Loader2 } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
+import * as m from 'motion/react-m';
 
 export function CatalogForm() {
   const { form, status, submittedEmail, onSubmit, restart } = useCatalogForm();
@@ -19,7 +20,7 @@ export function CatalogForm() {
   const submitting = status === 'submitting';
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -58,6 +59,6 @@ export function CatalogForm() {
           </form>
         )}
       </AnimatePresence>
-    </motion.div>
+    </m.div>
   );
 }

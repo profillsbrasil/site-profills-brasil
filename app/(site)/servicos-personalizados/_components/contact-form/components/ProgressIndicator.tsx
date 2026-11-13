@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 interface ProgressIndicatorProps {
   currentStep: number;
@@ -26,7 +26,7 @@ export function ProgressIndicator({
       ))}
 
       {/* Barra de progresso animada */}
-      <motion.div
+      <m.div
         initial={{ width: '12px' }}
         animate={{
           width:

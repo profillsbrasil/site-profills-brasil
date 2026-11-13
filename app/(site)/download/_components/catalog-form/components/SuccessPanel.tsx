@@ -1,7 +1,7 @@
 'use client';
 
 import { CheckCircle2 } from 'lucide-react';
-import { motion } from 'motion/react';
+import * as m from 'motion/react-m';
 
 interface SuccessPanelProps {
   email: string;
@@ -10,7 +10,7 @@ interface SuccessPanelProps {
 
 export function SuccessPanel({ email, onRestart }: SuccessPanelProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 16, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -16 }}
@@ -41,6 +41,6 @@ export function SuccessPanel({ email, onRestart }: SuccessPanelProps) {
         className='text-xs font-medium text-blue-300 underline-offset-4 hover:underline'>
         Solicitar para outro email
       </button>
-    </motion.div>
+    </m.div>
   );
 }

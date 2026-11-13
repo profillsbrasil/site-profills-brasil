@@ -105,6 +105,11 @@
           {
             "name": "next-themes",
             "message": "O site é light-mode único, sem provider de tema. Fixe o tema no componente."
+          },
+          {
+            "name": "motion/react",
+            "importNames": ["motion"],
+            "message": "motion traz todas as features. Use `import * as m from 'motion/react-m'` (o LazyMotion do layout raiz carrega domAnimation)."
           }
         ],
         "patterns": [
@@ -184,6 +189,11 @@
               {
                 "name": "next-themes",
                 "message": "O site é light-mode único, sem provider de tema. Fixe o tema no componente."
+              },
+              {
+                "name": "motion/react",
+                "importNames": ["motion"],
+                "message": "motion traz todas as features. Use `import * as m from 'motion/react-m'` (o LazyMotion do layout raiz carrega domAnimation)."
               },
               {
                 "name": "@/lib/data/maquinas",
