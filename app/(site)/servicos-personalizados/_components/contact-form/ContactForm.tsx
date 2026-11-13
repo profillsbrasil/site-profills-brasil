@@ -11,8 +11,8 @@ import { FormStep2 } from './components/FormStep2';
 import { FormStep3 } from './components/FormStep3';
 import { ProgressIndicator } from './components/ProgressIndicator';
 import { useContactForm } from './hooks/useContactForm';
-import { motion } from 'motion/react';
 import { ArrowLeft, CircleCheck } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export default function ContactForm() {
   const {
