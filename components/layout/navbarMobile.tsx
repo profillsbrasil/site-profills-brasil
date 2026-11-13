@@ -21,7 +21,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer';
-import { categoriasCatalogo } from '@/lib/data/maquinas';
+import { categoriasCatalogo } from '@/lib/data/maquinas/types';
 import logoProfills from '@/public/logo-branco.png';
 
 import { socialLinks } from './socialLinks';
@@ -172,6 +172,7 @@ export default function NavbarMobile() {
             src={logoProfills}
             alt='Logo Profills'
             priority
+            sizes='314px'
             className='h-8 w-auto object-contain'
           />
         </Link>

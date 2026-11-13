@@ -15,8 +15,11 @@ import {
   NavigationMenuTrigger
 } from '@/components/layout/customNavigationMenu';
 import { ICONE_CATEGORIA } from '@/components/layout/iconesCategorias';
-import { categoriasCatalogo, maquinasCatalogo } from '@/lib/data/maquinas';
-import type { CategoriaCatalogo } from '@/lib/data/maquinas';
+import type { VitrinesDoMenu } from '@/lib/data/maquinas/menu';
+import {
+  type CategoriaCatalogo,
+  categoriasCatalogo
+} from '@/lib/data/maquinas/types';
 import servicosPersonalizados from '@/lib/images/extras/cortador.jpg';
 import pecasImg from '@/lib/images/extras/pecas-producao.png';
 import logoProfills from '@/public/logo-branco.png';
@@ -93,24 +96,15 @@ const projetos: {
   }
 ];
 
-/* Vitrine do popout de Máquinas: primeira máquina com foto da categoria
-   (ordem do registry). Categoria só de engenharia (sem fotos) retorna
-   undefined — a vitrine mostra o placeholder, nunca máquina de outra
-   categoria. */
-function maquinaVitrine(categoria: CategoriaCatalogo | null) {
-  return maquinasCatalogo.find(
-    (m) => m.imagens && (categoria === null || m.categoria === categoria)
-  );
-}
-
-export default function NavbarDesktop() {
+export default function NavbarDesktop({
+  vitrines
+}: {
+  vitrines: VitrinesDoMenu;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [categoriaVitrine, setCategoriaVitrine] =
     useState<CategoriaCatalogo | null>(null);
-  const vitrine = maquinaVitrine(categoriaVitrine);
-  const subtituloVitrine = vitrine
-    ? (vitrine.nomeCompleto.split(' - ')[1] ?? vitrine.categoria)
-    : '';
+  const vitrine = vitrines[categoriaVitrine ?? 'todas'];
 
   useEffect(() => {
     let ticking = false;
@@ -144,6 +138,7 @@ export default function NavbarDesktop() {
               src={logoProfills}
               alt='Logo Profills'
               priority
+              sizes='314px'
               className='h-full'
             />
           </Link>
@@ -205,14 +200,13 @@ export default function NavbarDesktop() {
                     aria-hidden
                     className='border-accent absolute -right-px -bottom-px z-10 h-2 w-2 border-r border-b'
                   />
-                  {vitrine?.imagens ? (
+                  {vitrine ? (
                     <div
                       key={vitrine.slug}
                       className='animate-in fade-in flex min-h-0 flex-1 flex-col duration-200 motion-reduce:animate-none'>
                       <Image
-                        src={vitrine.imagens.maquina}
+                        src={vitrine.imagem}
                         alt={vitrine.nome}
-                        loading='eager'
                         className='min-h-0 w-full flex-1 object-contain p-3'
                       />
                       <div className='border-t border-dashed border-[rgba(148,178,235,0.22)] bg-slate-900/60 px-3 py-2'>
@@ -220,7 +214,7 @@ export default function NavbarDesktop() {
                           {vitrine.nome}
                         </p>
                         <p className='text-muted-foreground/70 font-mono text-[10px] tracking-wider uppercase'>
-                          {subtituloVitrine}
+                          {vitrine.subtitulo}
                         </p>
                       </div>
                     </div>
