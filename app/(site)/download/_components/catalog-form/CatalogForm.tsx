@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { CatalogFields } from './components/CatalogFields';
 import { SuccessPanel } from './components/SuccessPanel';
 import { useCatalogForm } from './hooks/useCatalogForm';
-import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Loader2 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 
 export function CatalogForm() {
   const { form, status, submittedEmail, onSubmit, restart } = useCatalogForm();

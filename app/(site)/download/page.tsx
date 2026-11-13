@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import type { Metadata } from 'next';
 import Image from 'next/image';
 
@@ -5,7 +7,7 @@ import fabricaBg from '@/lib/images/extras/FabricaRemderNew.png';
 import { metadataDaPagina } from '@/lib/seo/metadata';
 
 import { CatalogForm } from './_components/catalog-form/CatalogForm';
-import { ExpiredBanner } from './_components/catalog-form/components/ExpiredBanner';
+import { ExpiredBannerDaUrl } from './_components/catalog-form/components/ExpiredBannerDaUrl';
 
 export const metadata: Metadata = metadataDaPagina({
   titulo: 'Solicitar o catálogo 2026',
@@ -14,16 +16,7 @@ export const metadata: Metadata = metadataDaPagina({
   path: '/download'
 });
 
-type SearchParams = Promise<{ error?: 'expired' | 'invalid' }>;
-
-export default async function DownloadPage({
-  searchParams
-}: {
-  searchParams: SearchParams;
-}) {
-  const { error } = await searchParams;
-  const validError = error === 'expired' || error === 'invalid' ? error : null;
-
+export default function DownloadPage() {
   return (
     <main className='relative flex min-h-screen w-full items-center justify-center overflow-hidden'>
       <Image
@@ -38,7 +31,9 @@ export default async function DownloadPage({
       <div className='absolute inset-0 bg-gradient-to-b from-slate-900/65 to-slate-950/85' />
 
       <div className='relative z-10 flex w-full flex-col items-center px-4 py-16 sm:py-24'>
-        {validError && <ExpiredBanner reason={validError} />}
+        <Suspense fallback={null}>
+          <ExpiredBannerDaUrl />
+        </Suspense>
         <CatalogForm />
       </div>
     </main>

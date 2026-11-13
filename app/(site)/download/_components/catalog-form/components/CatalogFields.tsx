@@ -50,10 +50,7 @@ export function CatalogFields({ control, errors }: CatalogFieldsProps) {
                 {...field}
                 id='name'
                 placeholder='João Silva ou Indústria XYZ Ltda'
-                className={cn(
-                  fieldClass,
-                  errors.name && '!border-red-400/70'
-                )}
+                className={cn(fieldClass, errors.name && '!border-red-400/70')}
               />
             )}
           />
@@ -135,10 +132,7 @@ export function CatalogFields({ control, errors }: CatalogFieldsProps) {
                 id='email'
                 type='email'
                 placeholder='seu@email.com'
-                className={cn(
-                  fieldClass,
-                  errors.email && '!border-red-400/70'
-                )}
+                className={cn(fieldClass, errors.email && '!border-red-400/70')}
               />
             )}
           />
