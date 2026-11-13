@@ -246,10 +246,8 @@ export default function FormularioMontarFabrica() {
                             <IMaskInput
                               id='telefone'
                               mask={['(00) 0000-0000', '(00) 00000-0000']}
-                              value={field.value as unknown as string}
-                              onAccept={(val: unknown) =>
-                                field.onChange(String(val))
-                              }
+                              value={field.value}
+                              onAccept={(val) => field.onChange(String(val))}
                               placeholder='(11) 99999-9999'
                               type='tel'
                               inputMode='numeric'

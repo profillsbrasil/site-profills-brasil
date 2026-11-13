@@ -73,8 +73,8 @@ export function CatalogFields({ control, errors }: CatalogFieldsProps) {
                   { mask: '000.000.000-00', maxLength: 11 },
                   { mask: '00.000.000/0000-00' }
                 ]}
-                value={field.value as unknown as string}
-                onAccept={(val: unknown) => field.onChange(String(val))}
+                value={field.value}
+                onAccept={(val) => field.onChange(String(val))}
                 placeholder='000.000.000-00 ou 00.000.000/0000-00'
                 inputMode='numeric'
                 className={cn(
@@ -101,8 +101,8 @@ export function CatalogFields({ control, errors }: CatalogFieldsProps) {
               <IMaskInput
                 id='phone'
                 mask={['(00) 0000-0000', '(00) 00000-0000']}
-                value={field.value as unknown as string}
-                onAccept={(val: unknown) => field.onChange(String(val))}
+                value={field.value}
+                onAccept={(val) => field.onChange(String(val))}
                 placeholder='(11) 99999-9999'
                 type='tel'
                 inputMode='numeric'

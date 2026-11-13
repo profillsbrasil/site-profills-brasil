@@ -9,12 +9,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
 import {
   type SpecificationFormData,
+  type SpecificationFormInput,
   specificationFormSchema
 } from '@/lib/schemas/specification-form';
 import { logger } from '@/lib/utils/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Controller, Resolver, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
 
@@ -42,10 +43,8 @@ export default function SpecificationForm({
     control,
     getValues,
     setFocus
-  } = useForm<SpecificationFormData>({
-    resolver: zodResolver(
-      specificationFormSchema
-    ) as Resolver<SpecificationFormData>,
+  } = useForm<SpecificationFormInput, unknown, SpecificationFormData>({
+    resolver: zodResolver(specificationFormSchema),
     defaultValues: {
       ...rascunho.current,
       maquinaSlug,
@@ -159,8 +158,8 @@ export default function SpecificationForm({
               <IMaskInput
                 id='telefone'
                 mask={['(00) 0000-0000', '(00) 00000-0000']}
-                value={field.value as unknown as string}
-                onAccept={(val: unknown) => field.onChange(String(val))}
+                value={field.value}
+                onAccept={(val) => field.onChange(String(val))}
                 placeholder='(11) 99999-9999'
                 type='tel'
                 inputMode='numeric'

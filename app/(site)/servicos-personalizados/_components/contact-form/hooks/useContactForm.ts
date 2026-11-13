@@ -70,10 +70,10 @@ export function useContactForm() {
   // Validação por etapa
   const validateStep = async (step: number): Promise<boolean> => {
     const values = form.getValues();
+    let fieldsToValidate: (keyof ContactFormData)[] = [];
 
     try {
       let schema;
-      let fieldsToValidate: (keyof ContactFormData)[] = [];
 
       switch (step) {
         case 1:
@@ -105,7 +105,12 @@ export function useContactForm() {
       if (error instanceof z.ZodError) {
         // Define os erros específicos da etapa
         error.issues.forEach((issue) => {
-          const fieldName = issue.path[0] as keyof ContactFormData;
+          // O schema da etapa só tem os campos de fieldsToValidate.
+          const fieldName = fieldsToValidate.find(
+            (campo) => campo === issue.path[0]
+          );
+
+          if (fieldName === undefined) return;
           form.setError(fieldName, {
             type: 'manual',
             message: issue.message
