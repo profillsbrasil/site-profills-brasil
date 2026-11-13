@@ -58,11 +58,11 @@ function quandoPronto(pronto: () => boolean, acao: () => void) {
 /* Acoplado ao dataLayerName padrão do @next/third-parties; se o layout
    passar outro nome, ajustar aqui. */
 function gaPronto() {
-  return typeof window.gtag === 'function' && Array.isArray(window.dataLayer);
+  return window.gtag instanceof Function && Array.isArray(window.dataLayer);
 }
 
 function metaPronto() {
-  return typeof window.fbq === 'function';
+  return window.fbq instanceof Function;
 }
 
 function enviar(nomeGa: string, nomeMeta: string, params: Params) {

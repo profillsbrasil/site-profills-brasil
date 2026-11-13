@@ -1,5 +1,6 @@
 import type { IndicacaoPayload, VendedorIndicacao } from './tipos';
 import { SignJWT, jwtVerify } from 'jose';
+import { z } from 'zod';
 
 export const INDICACAO_COOKIE = 'profills_indicacao';
 
@@ -55,18 +56,13 @@ export async function assinarIndicacao(
     .sign(segredo());
 }
 
-function ehPayload(valor: unknown): valor is IndicacaoPayload {
-  if (!valor || typeof valor !== 'object') return false;
-  const o = valor as Record<string, unknown>;
-
-  return (
-    typeof o.codigo === 'string' &&
-    typeof o.nome === 'string' &&
-    typeof o.email === 'string' &&
-    (typeof o.contato === 'string' || o.contato === null) &&
-    typeof o.consultadoEm === 'string'
-  );
-}
+const payloadSchema = z.object({
+  codigo: z.string(),
+  nome: z.string(),
+  email: z.string(),
+  contato: z.string().nullable(),
+  consultadoEm: z.string()
+}) satisfies z.ZodType<IndicacaoPayload>;
 
 /** Verifica assinatura e validade; qualquer problema vira null. */
 export async function lerIndicacao(
@@ -79,10 +75,9 @@ export async function lerIndicacao(
       algorithms: ['HS256']
     });
 
-    if (!ehPayload(payload)) return null;
-    const { codigo, nome, email, contato, consultadoEm } = payload;
+    const lido = payloadSchema.safeParse(payload);
 
-    return { codigo, nome, email, contato, consultadoEm };
+    return lido.success ? lido.data : null;
   } catch {
     return null;
   }

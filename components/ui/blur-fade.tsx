@@ -30,7 +30,7 @@ interface BlurFadeProps extends MotionProps {
 }
 
 const getFilter = (v: Variants[string]) =>
-  typeof v === 'function' ? undefined : v.filter;
+  v instanceof Function ? undefined : v.filter;
 
 export function BlurFade({
   children,
@@ -73,6 +73,16 @@ export function BlurFade({
     visibleFilter != null &&
     hiddenFilter !== visibleFilter;
 
+  const transicaoBase = {
+    delay: 0.04 + delay,
+    duration,
+    ease: 'easeOut' as const
+  };
+
+  const transition = shouldTransitionFilter
+    ? { ...transicaoBase, filter: { duration } }
+    : transicaoBase;
+
   return (
     <AnimatePresence>
       <m.div
@@ -81,12 +91,7 @@ export function BlurFade({
         animate={isInView ? 'visible' : 'hidden'}
         exit='hidden'
         variants={combinedVariants}
-        transition={{
-          delay: 0.04 + delay,
-          duration,
-          ease: 'easeOut',
-          ...(shouldTransitionFilter ? { filter: { duration } } : {})
-        }}
+        transition={transition}
         className={className}
         {...props}>
         {children}
