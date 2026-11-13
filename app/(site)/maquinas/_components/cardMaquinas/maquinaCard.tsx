@@ -18,6 +18,7 @@ const CARDS_NA_PRIMEIRA_DOBRA = 6;
 // Subtítulo do card: parte após ' - ' de nomeCompleto; sem separador, cai na categoria
 function subtituloDe(maquina: MaquinaCatalogo): string {
   const [, subtitulo] = maquina.nomeCompleto.split(' - ');
+
   return subtitulo ?? maquina.categoria;
 }
 

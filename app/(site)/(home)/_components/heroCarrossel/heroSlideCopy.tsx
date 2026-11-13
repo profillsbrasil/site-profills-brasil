@@ -64,6 +64,7 @@ export function HeroSlideCopy({
 }: HeroSlideCopyProps) {
   const Titulo = primeiro ? 'h1' : 'h2';
   const comercial = useContatoComercial();
+
   const whatsappUrl = comercial.whatsapp(
     'Olá! Vim pelo site da Profills e quero falar com um especialista.'
   );

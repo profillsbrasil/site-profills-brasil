@@ -10,7 +10,6 @@ interface GridPatternMobileProps extends React.SVGProps<SVGSVGElement> {
   squares?: Array<[x: number, y: number]>;
   strokeDasharray?: string;
   className?: string;
-  [key: string]: unknown;
 }
 
 export function GridPatternMobile({

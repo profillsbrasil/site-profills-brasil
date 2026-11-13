@@ -25,10 +25,12 @@ export function NumberTicker({
 }: NumberTickerProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === 'down' ? value : startValue);
+
   const springValue = useSpring(motionValue, {
     damping: 60,
     stiffness: 100
   });
+
   const isInView = useInView(ref, { once: true, margin: '0px' });
 
   useEffect(() => {
@@ -36,6 +38,7 @@ export function NumberTicker({
       const timer = setTimeout(() => {
         motionValue.set(direction === 'down' ? startValue : value);
       }, delay * 1000);
+
       return () => clearTimeout(timer);
     }
   }, [motionValue, isInView, delay, value, direction, startValue]);

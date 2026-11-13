@@ -1,15 +1,20 @@
 import type { IndicacaoPayload, VendedorIndicacao } from './tipos';
 import { SignJWT, jwtVerify } from 'jose';
+import { z } from 'zod';
 
 export const INDICACAO_COOKIE = 'profills_indicacao';
+
 /** 30 dias, em segundos (Max-Age). */
 export const INDICACAO_MAX_AGE = 30 * 24 * 60 * 60;
+
 /** Renova os dados do vendedor pelo CRM depois de 24 h. */
 export const RENOVACAO_MS = 24 * 60 * 60 * 1000;
 
 function segredo() {
   const valor = process.env.INDICACAO_COOKIE_SECRET;
+
   if (!valor) throw new Error('INDICACAO_COOKIE_SECRET não está definido');
+
   return new TextEncoder().encode(valor);
 }
 
@@ -43,6 +48,7 @@ export async function assinarIndicacao(
     contato: vendedor.contato,
     consultadoEm: agora.toISOString()
   };
+
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt(Math.floor(agora.getTime() / 1000))
@@ -50,30 +56,28 @@ export async function assinarIndicacao(
     .sign(segredo());
 }
 
-function ehPayload(valor: unknown): valor is IndicacaoPayload {
-  if (!valor || typeof valor !== 'object') return false;
-  const o = valor as Record<string, unknown>;
-  return (
-    typeof o.codigo === 'string' &&
-    typeof o.nome === 'string' &&
-    typeof o.email === 'string' &&
-    (typeof o.contato === 'string' || o.contato === null) &&
-    typeof o.consultadoEm === 'string'
-  );
-}
+const payloadSchema = z.object({
+  codigo: z.string(),
+  nome: z.string(),
+  email: z.string(),
+  contato: z.string().nullable(),
+  consultadoEm: z.string()
+}) satisfies z.ZodType<IndicacaoPayload>;
 
 /** Verifica assinatura e validade; qualquer problema vira null. */
 export async function lerIndicacao(
   token: string | undefined
 ): Promise<IndicacaoPayload | null> {
   if (!token) return null;
+
   try {
     const { payload } = await jwtVerify(token, segredo(), {
       algorithms: ['HS256']
     });
-    if (!ehPayload(payload)) return null;
-    const { codigo, nome, email, contato, consultadoEm } = payload;
-    return { codigo, nome, email, contato, consultadoEm };
+
+    const lido = payloadSchema.safeParse(payload);
+
+    return lido.success ? lido.data : null;
   } catch {
     return null;
   }
@@ -84,6 +88,8 @@ export function precisaRenovar(
   agora: Date = new Date()
 ): boolean {
   const consultado = Date.parse(payload.consultadoEm);
+
   if (Number.isNaN(consultado)) return true;
+
   return agora.getTime() - consultado > RENOVACAO_MS;
 }

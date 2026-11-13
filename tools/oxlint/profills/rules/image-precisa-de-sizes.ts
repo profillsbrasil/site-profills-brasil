@@ -22,16 +22,20 @@ export const imagePrecisaDeSizesRule = defineRule({
   },
   create(context) {
     let image: string | null = null;
+
     return {
       Program(node) {
         image = importPadrao(node, 'next/image');
       },
       JSXOpeningElement(node) {
         if (image === null || nomeDoElemento(node) !== image) return;
+
         if (temSpread(node) || atributo(node, 'sizes') !== null) return;
+
         const prop = ['fill', 'priority', 'preload'].find((p) =>
           atributoLigado(node, p)
         );
+
         if (prop !== undefined) {
           context.report({ node, messageId: 'semSizes', data: { prop } });
         }

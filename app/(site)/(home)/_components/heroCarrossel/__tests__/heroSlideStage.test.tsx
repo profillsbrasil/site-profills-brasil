@@ -1,28 +1,8 @@
-import type { HTMLAttributes, ReactNode } from 'react';
-
 import { render, screen } from '@testing-library/react';
 
 import { HeroSlideStage } from '../heroSlideStage';
 import { SLIDES } from '../slideData';
 import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('motion/react', () => ({
-  motion: {
-    div: ({
-      children,
-      custom: _c,
-      variants: _v,
-      initial: _i,
-      animate: _a,
-      exit: _e,
-      transition: _t,
-      ...props
-    }: HTMLAttributes<HTMLDivElement> &
-      Record<string, unknown> & { children?: ReactNode }) => (
-      <div {...props}>{children}</div>
-    )
-  }
-}));
 
 vi.mock('next/image', () => ({
   default: ({

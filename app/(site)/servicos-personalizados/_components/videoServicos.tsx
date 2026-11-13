@@ -10,19 +10,25 @@ export function VideoServicos() {
 
   useEffect(() => {
     const video = ref.current;
+
     if (!video) return;
+
     const tocar = () =>
-      video.play().catch((error: unknown) => {
+      video.play().catch((cause: unknown) => {
         // pause() antes do play() terminar rejeita com AbortError; é esperado.
-        if (error instanceof DOMException && error.name === 'AbortError') {
+        if (cause instanceof DOMException && cause.name === 'AbortError') {
           return;
         }
-        logger.warn('Vídeo de serviços não iniciou:', error);
+
+        logger.warn('Vídeo de serviços não iniciou:', cause);
       });
+
     if (typeof IntersectionObserver === 'undefined') {
       void tocar();
+
       return;
     }
+
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         void tocar();
@@ -30,7 +36,9 @@ export function VideoServicos() {
         video.pause();
       }
     });
+
     observer.observe(video);
+
     return () => observer.disconnect();
   }, []);
 

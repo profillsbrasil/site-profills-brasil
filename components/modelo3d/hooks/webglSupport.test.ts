@@ -9,6 +9,8 @@ afterEach(() => {
 
 describe('isWebGLAvailable', () => {
   it('retorna true quando o canvas fornece um contexto webgl', () => {
+    // SAFETY: isWebGLAvailable só compara o retorno de getContext com null;
+    // o jsdom não cria WebGLRenderingContext.
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
       {} as never
     );

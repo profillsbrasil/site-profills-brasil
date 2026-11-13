@@ -65,9 +65,11 @@ const productTypes = [
 export default function ConfiguradorMaquina() {
   const [selectedPackaging, setSelectedPackaging] = useState<string>('');
   const [selectedProductType, setSelectedProductType] = useState<string>('');
+
   const [contactForm, setContactForm] = useState<ContactFormData>(
     initialContactFormData
   );
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Recomendação é derivada das seleções: memo em vez de estado + effect
@@ -455,7 +457,7 @@ export default function ConfiguradorMaquina() {
                                 mask={['(00) 0000-0000', '(00) 00000-0000']}
                                 placeholder='(11) 99999-9999'
                                 value={contactForm.contato}
-                                onAccept={(value: unknown) =>
+                                onAccept={(value) =>
                                   handleContactFormChange(
                                     'contato',
                                     String(value)

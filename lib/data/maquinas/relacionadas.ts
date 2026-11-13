@@ -17,6 +17,7 @@ function cmpCapacidade(
   if (referencia == null || a == null || b == null) return 0;
   const difA = Math.abs(a - referencia) / Math.max(a, referencia);
   const difB = Math.abs(b - referencia) / Math.max(b, referencia);
+
   return difA - difB;
 }
 
@@ -35,6 +36,7 @@ export function getMaquinasRelacionadas(
   opcoes: { limite?: number; minimo?: number } = {}
 ): MaquinaRelacionada[] {
   const { limite, minimo } = opcoes;
+
   const candidatas = todas.filter(
     (m): m is MaquinaRelacionada =>
       m.slug !== maquina.slug && m.imagens !== undefined
@@ -62,6 +64,7 @@ export function getMaquinasRelacionadas(
   const mesmaCategoria = ordenar(
     candidatas.filter((m) => m.categoria === maquina.categoria)
   );
+
   const outras = ordenar(
     candidatas.filter(
       (m) =>
@@ -71,11 +74,14 @@ export function getMaquinasRelacionadas(
   );
 
   const resultado = [...mesmaCategoria, ...outras];
+
   if (minimo != null && resultado.length < minimo) {
     const complemento = candidatas
       .filter((m) => !resultado.includes(m))
       .slice(0, minimo - resultado.length);
+
     resultado.push(...complemento);
   }
+
   return limite == null ? resultado : resultado.slice(0, limite);
 }

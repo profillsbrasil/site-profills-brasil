@@ -11,6 +11,7 @@ import { AnimatePresence } from 'motion/react';
 
 export function CatalogForm() {
   const { form, status, submittedEmail, onSubmit, restart } = useCatalogForm();
+
   const {
     control,
     handleSubmit,

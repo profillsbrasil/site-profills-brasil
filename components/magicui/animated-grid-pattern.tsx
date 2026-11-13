@@ -39,6 +39,7 @@ export function AnimatedGridPattern({
   const id = useId();
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
   const [squares, setSquares] = useState<
     Array<{ id: number; pos: [number, number] }>
   >([]);
@@ -96,6 +97,7 @@ export function AnimatedGridPattern({
     });
 
     const currentContainer = containerRef.current;
+
     if (currentContainer) {
       resizeObserver.observe(currentContainer);
     }

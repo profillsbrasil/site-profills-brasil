@@ -50,6 +50,7 @@ export function InteractiveGridPattern({
       {Array.from({ length: horizontal * vertical }).map((_, index) => {
         const x = (index % horizontal) * width;
         const y = Math.floor(index / horizontal) * height;
+
         return (
           <rect
             key={index}

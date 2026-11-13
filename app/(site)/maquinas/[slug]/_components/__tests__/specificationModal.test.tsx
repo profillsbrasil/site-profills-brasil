@@ -70,10 +70,10 @@ describe('SpecificationModal', () => {
   });
 
   it('envia o payload com maquinaSlug para máquina sem legacyId', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ success: true })
-    });
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(Response.json({ success: true }));
+
     vi.stubGlobal('fetch', fetchMock);
 
     const user = userEvent.setup();
@@ -106,7 +106,7 @@ describe('SpecificationModal', () => {
     });
 
     const [, options] = fetchMock.mock.calls[0];
-    const body = JSON.parse(options.body as string);
+    const body = JSON.parse(await new Response(options?.body).text());
     expect(body).toMatchObject({
       maquinaSlug: 'linha-producao-completa-envase',
       maquinaNome: 'Linha de Produção Ponta a Ponta'
@@ -143,6 +143,7 @@ describe('SpecificationModal', () => {
         maquinaNome='Linha de Produção Ponta a Ponta'
       />
     );
+
     const abrir = screen.getByRole('button', {
       name: /Solicitar proposta técnica e comercial/i
     });
@@ -196,6 +197,7 @@ describe('SpecificationModal', () => {
       status: 500,
       json: async () => ({ success: false })
     });
+
     vi.stubGlobal('fetch', fetchMock);
 
     await enviarFormulario();

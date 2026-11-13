@@ -2,9 +2,11 @@ import { SignJWT, errors, jwtVerify } from 'jose';
 
 const getSecret = () => {
   const secret = process.env.CATALOG_TOKEN_SECRET;
+
   if (!secret) {
     throw new Error('CATALOG_TOKEN_SECRET não está definido');
   }
+
   return new TextEncoder().encode(secret);
 };
 
@@ -28,13 +30,12 @@ export type VerifyResult =
   | { ok: true; payload: CatalogTokenPayload }
   | { ok: false; reason: 'expired' | 'invalid' };
 
-export async function verifyCatalogToken(
-  token: string
-): Promise<VerifyResult> {
+export async function verifyCatalogToken(token: string): Promise<VerifyResult> {
   try {
     const { payload } = await jwtVerify(token, getSecret(), {
       algorithms: ['HS256']
     });
+
     return {
       ok: true,
       payload: {
@@ -46,6 +47,7 @@ export async function verifyCatalogToken(
     if (err instanceof errors.JWTExpired) {
       return { ok: false, reason: 'expired' };
     }
+
     return { ok: false, reason: 'invalid' };
   }
 }

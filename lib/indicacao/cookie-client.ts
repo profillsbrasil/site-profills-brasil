@@ -6,6 +6,7 @@ function base64UrlParaTexto(b64url: string): string {
   const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
   const preenchido = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
   const bytes = Uint8Array.from(atob(preenchido), (c) => c.charCodeAt(0));
+
   return new TextDecoder().decode(bytes);
 }
 
@@ -15,6 +16,7 @@ export function extrairTokenIndicacao(cookieHeader: string): string | null {
     .split(';')
     .map((p) => p.trim())
     .find((p) => p.startsWith(`${NOME}=`));
+
   return par ? par.slice(NOME.length + 1) : null;
 }
 
@@ -26,33 +28,43 @@ export function lerCookieIndicacaoDoBrowser(
   cookieHeader: string
 ): IndicacaoPayload | null {
   const token = extrairTokenIndicacao(cookieHeader);
+
   if (!token) return null;
 
   const partes = token.split('.');
+
   if (partes.length !== 3) return null;
 
   try {
-    const dados = JSON.parse(base64UrlParaTexto(partes[1])) as Record<
-      string,
-      unknown
-    >;
-    if (
-      typeof dados.codigo !== 'string' ||
-      typeof dados.nome !== 'string' ||
-      typeof dados.email !== 'string' ||
-      (typeof dados.contato !== 'string' && dados.contato !== null) ||
-      typeof dados.consultadoEm !== 'string'
-    ) {
-      return null;
-    }
+    // Um payload null lança TypeError dentro do predicate e cai no catch.
+    const dados = JSON.parse(base64UrlParaTexto(partes[1]));
+
+    if (!ehPayloadIndicacao(dados)) return null;
+
     return {
       codigo: dados.codigo,
       nome: dados.nome,
       email: dados.email,
-      contato: dados.contato as string | null,
+      contato: dados.contato,
       consultadoEm: dados.consultadoEm
     };
   } catch {
     return null;
   }
+}
+
+function ehPayloadIndicacao(valor: {
+  codigo?: unknown;
+  nome?: unknown;
+  email?: unknown;
+  contato?: unknown;
+  consultadoEm?: unknown;
+}): valor is IndicacaoPayload {
+  return (
+    typeof valor.codigo === 'string' &&
+    typeof valor.nome === 'string' &&
+    typeof valor.email === 'string' &&
+    (typeof valor.contato === 'string' || valor.contato === null) &&
+    typeof valor.consultadoEm === 'string'
+  );
 }

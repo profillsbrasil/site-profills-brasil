@@ -37,10 +37,12 @@ let ultimoEstado: EstadoIndicacao = SEM_INDICACAO;
 function lerEstado(): EstadoIndicacao {
   const cookie = document.cookie;
   const token = extrairTokenIndicacao(cookie);
+
   if (token === ultimoToken) return ultimoEstado;
   const vendedor = lerCookieIndicacaoDoBrowser(cookie);
   ultimoToken = token;
   ultimoEstado = vendedor ? { status: 'indicado', vendedor } : SEM_INDICACAO;
+
   return ultimoEstado;
 }
 
@@ -72,6 +74,7 @@ export function IndicacaoProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (estado.status !== 'indicado') return;
     const codigo = estado.vendedor.codigo;
+
     if (marcarChegadaNaSessao(codigo)) registrarChegadaIndicacao(codigo);
   }, [estado]);
 

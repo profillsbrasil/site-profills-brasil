@@ -61,6 +61,7 @@ describe('RootLayout', () => {
     const aninhamento = erros
       .filter((e) => e.includes('cannot be a child'))
       .filter((e) => !e.includes('<html> div'));
+
     expect(aninhamento).toEqual([]);
   });
 });

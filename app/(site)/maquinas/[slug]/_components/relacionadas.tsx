@@ -26,6 +26,7 @@ export function Relacionadas({ maquina }: { maquina: MaquinaCatalogo }) {
   const relacionadas = getMaquinasRelacionadas(maquina, maquinasCatalogo, {
     minimo: MINIMO_CARROSSEL
   });
+
   if (relacionadas.length === 0) return null;
 
   return (

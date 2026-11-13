@@ -33,9 +33,11 @@ export async function generateMetadata({
 }: MaquinaPageProps): Promise<Metadata> {
   const { slug } = await params;
   const maquina = getMaquinaBySlug(slug);
+
   if (!maquina) return {};
   const url = `/maquinas/${maquina.slug}`;
   const tituloComMarca = `${maquina.seo.titulo} | ${SITE_NAME}`;
+
   // Máquina de engenharia não tem foto; sem este fallback a página sairia sem
   // og:image, porque declarar openGraph aqui substitui o objeto herdado do root.
   const imagem = maquina.imagens
@@ -72,6 +74,7 @@ export async function generateMetadata({
 export default async function MaquinaPage({ params }: MaquinaPageProps) {
   const { slug } = await params;
   const maquina = getMaquinaBySlug(slug);
+
   if (!maquina) notFound();
 
   const secoes = [

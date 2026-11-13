@@ -5,6 +5,7 @@ const tester = new RuleTester({
   cwd: '/repo',
   languageOptions: { parserOptions: { lang: 'tsx' } }
 });
+
 const rota = '/repo/app/(site)/sobre/_components/historia.tsx';
 
 tester.run('profills/sem-3d-direto', sem3dDiretoRule, {

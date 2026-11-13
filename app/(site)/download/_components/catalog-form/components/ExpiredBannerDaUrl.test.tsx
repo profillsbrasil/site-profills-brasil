@@ -1,16 +1,20 @@
-import { useSearchParams } from 'next/navigation';
+import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
 
 import { render, screen } from '@testing-library/react';
 
 import { ExpiredBannerDaUrl } from './ExpiredBannerDaUrl';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('next/navigation', () => ({ useSearchParams: vi.fn() }));
+vi.mock('next/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next/navigation')>()),
+  useSearchParams: vi.fn()
+}));
 
 function comUrl(query: string) {
   vi.mocked(useSearchParams).mockReturnValue(
-    new URLSearchParams(query) as unknown as ReturnType<typeof useSearchParams>
+    new ReadonlyURLSearchParams(query)
   );
+
   return render(<ExpiredBannerDaUrl />);
 }
 

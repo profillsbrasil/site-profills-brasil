@@ -5,6 +5,7 @@ import { sendMontarMaquinaEmail } from '@/lib/emails/montar-maquina/email-montar
 import { sendMonteFabricaEmail } from '@/lib/emails/monte-fabrica/email-monte-fabrica';
 import { sendSpecificationEmail } from '@/lib/emails/solicitar-especificacoes/email-especificacoes';
 import type { Destinatario } from '@/lib/indicacao/destinatario';
+import { logger } from '@/lib/utils/logger';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -13,13 +14,17 @@ const sendMail = vi.fn().mockResolvedValue({ messageId: 'id' });
 vi.mock('@/lib/emails/_shared/transporter', () => ({
   createTransporter: () => ({ sendMail })
 }));
+
 vi.mock('nodemailer', () => ({
   default: { createTransport: () => ({ sendMail }) },
   createTransport: () => ({ sendMail })
 }));
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
 
 const vendedor: NonNullable<Destinatario['vendedor']> = {
   nome: 'Maria Silva',
@@ -27,6 +32,7 @@ const vendedor: NonNullable<Destinatario['vendedor']> = {
   referral_code: 'MARIA-10',
   contato: null
 };
+
 const paraVendedor: Destinatario = { para: 'maria@profills.com.br', vendedor };
 const paraCaixa: Destinatario = { para: 'caixa@profills.test', vendedor: null };
 
@@ -49,7 +55,7 @@ const casos = [
           service: 'corte',
           finish: 'polido',
           details: 'x'
-        } as never,
+        },
         d
       )
   },
@@ -65,7 +71,7 @@ const casos = [
           detalhes: 'x',
           selectedPackaging: 'Sachê',
           selectedProductType: 'Líquido'
-        } as never,
+        },
         d
       )
   },
@@ -79,7 +85,7 @@ const casos = [
           telefone: '(41) 99999-9999',
           empresa: 'E',
           mensagem: 'x'
-        } as never,
+        },
         d
       )
   },
@@ -95,7 +101,7 @@ const casos = [
           maquinaSlug: 'x',
           maquinaNome: 'X',
           observacoes: ''
-        } as never,
+        },
         d
       )
   },
@@ -108,7 +114,7 @@ const casos = [
           document: '000',
           phone: '(41) 99999-9999',
           email: 'lead@x.com'
-        } as never,
+        },
         d
       )
   }

@@ -24,7 +24,9 @@ function vitrineDe(categoria: CategoriaCatalogo | null): VitrineMenu | null {
   const maquina = maquinasCatalogo.find(
     (m) => m.imagens && (categoria === null || m.categoria === categoria)
   );
+
   if (!maquina?.imagens) return null;
+
   return {
     slug: maquina.slug,
     nome: maquina.nome,
@@ -36,9 +38,13 @@ function vitrineDe(categoria: CategoriaCatalogo | null): VitrineMenu | null {
 // Roda no servidor (layout do grupo (site)): a navbar recebe só este
 // registro, sem o catálogo completo no bundle de toda rota.
 export function montarVitrinesDoMenu(): VitrinesDoMenu {
+  // SAFETY: o laço abaixo grava toda chave de categoriasCatalogo antes do
+  // return, então o objeto devolvido tem todas as chaves de VitrinesDoMenu.
   const vitrines = { todas: vitrineDe(null) } as VitrinesDoMenu;
+
   for (const categoria of categoriasCatalogo) {
     vitrines[categoria] = vitrineDe(categoria);
   }
+
   return vitrines;
 }

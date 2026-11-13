@@ -29,10 +29,13 @@ export async function resolverDestinatario(
   const payload = await lerIndicacao(
     request.cookies.get(INDICACAO_COOKIE)?.value
   );
+
   if (!payload) return padrao;
 
   const busca = await buscarVendedorPorCodigo(payload.codigo);
+
   if (busca.tipo !== 'encontrado') return padrao;
+
   /* Guarda barata contra cabeçalho injetado no `to`: o helper do CRM já
      valida o formato, e aqui nada além de um e-mail vira destinatário. */
   if (!z.email().safeParse(busca.vendedor.email).success) return padrao;

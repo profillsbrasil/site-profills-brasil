@@ -13,6 +13,7 @@ describe('jwt-catalog', () => {
       { email: 'cliente@exemplo.com', name: 'Cliente Teste' },
       '7d'
     );
+
     const result = await verifyCatalogToken(token);
     expect(result).toMatchObject({
       ok: true,

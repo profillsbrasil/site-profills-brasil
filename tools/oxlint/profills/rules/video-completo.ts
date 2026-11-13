@@ -20,9 +20,11 @@ export const videoCompletoRule = defineRule({
     return {
       JSXOpeningElement(node) {
         if (nomeDoElemento(node) !== 'video' || temSpread(node)) return;
+
         if (atributo(node, 'poster') === null) {
           context.report({ node, messageId: 'semPoster' });
         }
+
         if (
           atributoLigado(node, 'autoPlay') &&
           atributo(node, 'preload') === null

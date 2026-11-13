@@ -1,4 +1,6 @@
 // @vitest-environment node
+import { logger } from '@/lib/utils/logger';
+
 import {
   buscarVendedorPorCodigo,
   formatarTelefoneBR,
@@ -9,10 +11,11 @@ import {
 } from './referral';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
 
 const vendedor = {
   nome: 'Maria Silva',
@@ -21,7 +24,15 @@ const vendedor = {
   contato: '11987654321'
 };
 
-function mockFetch(status: number, body: unknown) {
+type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | Json[]
+  | { [chave: string]: Json };
+
+function mockFetch(status: number, body: Json) {
   return vi.fn().mockResolvedValue({
     ok: status >= 200 && status < 300,
     status,
@@ -95,6 +106,7 @@ describe('buscarVendedorPorCodigo', () => {
         tipo: 'indisponivel'
       });
     }
+
     limparCacheReferral();
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('rede')));
     await expect(buscarVendedorPorCodigo('MARIA-10')).resolves.toEqual({
@@ -155,9 +167,11 @@ describe('buscarVendedorPorCodigo', () => {
 
   it('mantém o cache dentro do teto de 500 entradas', async () => {
     vi.stubGlobal('fetch', mockFetch(404, { error: 'not_found' }));
+
     for (let i = 0; i < 501; i++) {
       await buscarVendedorPorCodigo(`COD-${i}`);
     }
+
     expect(tamanhoCacheReferral()).toBeLessThanOrEqual(500);
     limparCacheReferral();
     expect(tamanhoCacheReferral()).toBe(0);

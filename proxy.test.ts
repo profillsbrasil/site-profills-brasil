@@ -7,6 +7,7 @@ import {
   assinarIndicacao,
   lerIndicacao
 } from '@/lib/indicacao/cookie-server';
+import { logger } from '@/lib/utils/logger';
 
 import proxy, { config } from './proxy';
 import {
@@ -19,15 +20,18 @@ import {
   vi
 } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
+
 vi.mock('@/lib/crm/referral', async () => {
   const real =
     await vi.importActual<typeof import('@/lib/crm/referral')>(
       '@/lib/crm/referral'
     );
+
   return { ...real, buscarVendedorPorCodigo: vi.fn() };
 });
 
@@ -88,6 +92,7 @@ describe('proxy com ?ref', () => {
       tipo: 'encontrado',
       vendedor
     });
+
     const res = await proxy(
       req('http://localhost:3000/maquinas?q=pouch&ref=maria-10')
     );
@@ -96,9 +101,11 @@ describe('proxy com ?ref', () => {
     expect(res.headers.get('location')).toBe(
       'http://localhost:3000/maquinas?q=pouch'
     );
+
     const payload = await lerIndicacao(
       res.cookies.get(INDICACAO_COOKIE)?.value
     );
+
     expect(payload).toMatchObject({
       codigo: 'MARIA-10',
       email: 'maria@profills.com.br'
@@ -126,9 +133,11 @@ describe('proxy com ?ref', () => {
   it('404 ou CRM indisponível: redireciona sem gravar cookie', async () => {
     for (const tipo of ['nao-encontrado', 'indisponivel'] as const) {
       vi.mocked(buscarVendedorPorCodigo).mockResolvedValue({ tipo });
+
       const res = await proxy(
         req('http://localhost:3000/?ref=OUTRO-1', 'antigo')
       );
+
       expect(res.status).toBe(302);
       expect(res.cookies.get(INDICACAO_COOKIE)).toBeUndefined();
     }
@@ -153,10 +162,12 @@ describe('proxy sem ?ref', () => {
   it('cookie com mais de 24 h: renova pelo CRM e regrava', async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-09-02T12:00:00Z'));
+
     const token = await assinarIndicacao(
       vendedor,
       new Date('2026-09-01T11:00:00Z')
     );
+
     vi.mocked(buscarVendedorPorCodigo).mockResolvedValue({
       tipo: 'encontrado',
       vendedor: { ...vendedor, contato: '11900000000' }
@@ -165,9 +176,11 @@ describe('proxy sem ?ref', () => {
     const res = await proxy(req('http://localhost:3000/sobre', token));
 
     expect(res.status).toBe(200);
+
     const payload = await lerIndicacao(
       res.cookies.get(INDICACAO_COOKIE)?.value
     );
+
     expect(payload).toMatchObject({
       contato: '11900000000',
       consultadoEm: '2026-09-02T12:00:00.000Z'
@@ -197,6 +210,7 @@ describe('proxy sem ?ref', () => {
     const res = await proxy(
       req('http://localhost:3000/sobre', 'lixo.lixo.lixo')
     );
+
     expect(res.status).toBe(200);
     expect(res.cookies.get(INDICACAO_COOKIE)?.value).toBe('');
   });
@@ -215,6 +229,7 @@ describe('proxy sem ?ref', () => {
       vendedor,
       new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
     );
+
     vi.mocked(buscarVendedorPorCodigo).mockRejectedValue(new Error('boom'));
     const res = await proxy(req('http://localhost:3000/sobre', token));
     expect(res.status).toBe(200);

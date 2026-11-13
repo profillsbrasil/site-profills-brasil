@@ -2,15 +2,18 @@
 import { NextRequest } from 'next/server';
 
 import { buscarVendedorPorCodigo } from '@/lib/crm/referral';
+import { logger } from '@/lib/utils/logger';
 
 import { INDICACAO_COOKIE, assinarIndicacao } from './cookie-server';
 import { resolverDestinatario } from './destinatario';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
+
 vi.mock('@/lib/crm/referral', () => ({ buscarVendedorPorCodigo: vi.fn() }));
 
 const vendedor = {
@@ -61,6 +64,7 @@ describe('resolverDestinatario', () => {
 
   it('cookie válido mas CRM 404 ou indisponível: caixa padrão', async () => {
     const token = await assinarIndicacao(vendedor);
+
     for (const tipo of ['nao-encontrado', 'indisponivel'] as const) {
       vi.mocked(buscarVendedorPorCodigo).mockResolvedValue({ tipo });
       await expect(resolverDestinatario(req(token))).resolves.toEqual({

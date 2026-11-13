@@ -19,6 +19,11 @@ function normalizar(texto: string) {
   return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
+/* Filtro vindo da URL ou do estado é texto livre; a lista é de literais. */
+function contem(lista: readonly string[], valor: string) {
+  return lista.includes(valor);
+}
+
 export default function CatalogoMaquinas() {
   const router = useRouter();
   const pathname = usePathname();
@@ -59,21 +64,11 @@ export default function CatalogoMaquinas() {
     const embalagemFromUrl = searchParams.get('embalagem');
     const buscaFromUrl = searchParams.get('q');
 
-    if (
-      categoriaFromUrl &&
-      categoriasCatalogo.includes(
-        categoriaFromUrl as (typeof categoriasCatalogo)[number]
-      )
-    ) {
+    if (categoriaFromUrl && contem(categoriasCatalogo, categoriaFromUrl)) {
       setCategoriaFiltro(categoriaFromUrl);
     }
 
-    if (
-      embalagemFromUrl &&
-      tiposEmbalagem.includes(
-        embalagemFromUrl as (typeof tiposEmbalagem)[number]
-      )
-    ) {
+    if (embalagemFromUrl && contem(tiposEmbalagem, embalagemFromUrl)) {
       setEmbalagemFiltro(embalagemFromUrl);
     }
 
@@ -91,11 +86,14 @@ export default function CatalogoMaquinas() {
   useEffect(() => {
     if (!montou.current) {
       montou.current = true;
+
       return;
     }
+
     const timer = setTimeout(() => {
       updateUrl(categoriaFiltro, embalagemFiltro, busca);
     }, 300);
+
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [busca]);
@@ -118,9 +116,11 @@ export default function CatalogoMaquinas() {
     return maquinasCatalogo.filter((maquina) => {
       const categoriaPassa =
         categoriaFiltro === 'Todas' || maquina.categoria === categoriaFiltro;
+
       const embalagemPassa =
         embalagemFiltro === 'Todas' ||
         maquina.embalagensCompativeis.includes(embalagemFiltro);
+
       const buscaPassa =
         termoBusca === '' ||
         normalizar(`${maquina.nome} ${maquina.nomeCompleto}`).includes(
@@ -141,6 +141,7 @@ export default function CatalogoMaquinas() {
       }
     });
     const lista = Array.from(set);
+
     // Mantém ordem base de tiposEmbalagem para UX consistente
     return tiposEmbalagem.filter((t) => lista.includes(t));
   }, [categoriaFiltro]);
@@ -153,23 +154,35 @@ export default function CatalogoMaquinas() {
     const passaEmbalagem = (m: (typeof maquinasCatalogo)[number]) =>
       embalagemFiltro === 'Todas' ||
       m.embalagensCompativeis.includes(embalagemFiltro);
+
     const passaBusca = (m: (typeof maquinasCatalogo)[number]) =>
       termoBusca === '' ||
       normalizar(`${m.nome} ${m.nomeCompleto}`).includes(termoBusca);
-    const contagem: Record<string, number> = {
-      Todas: maquinasCatalogo.filter((m) => passaEmbalagem(m) && passaBusca(m))
-        .length
-    };
+
+    const contagem = new Map([
+      [
+        'Todas',
+        maquinasCatalogo.filter((m) => passaEmbalagem(m) && passaBusca(m))
+          .length
+      ]
+    ]);
+
     for (const categoria of categoriasCatalogo) {
       const daCategoria = maquinasCatalogo.filter(
         (m) => m.categoria === categoria
       );
+
       const embalagemMantida =
         embalagemFiltro === 'Todas' || daCategoria.some(passaEmbalagem);
-      contagem[categoria] = daCategoria.filter(
-        (m) => (!embalagemMantida || passaEmbalagem(m)) && passaBusca(m)
-      ).length;
+
+      contagem.set(
+        categoria,
+        daCategoria.filter(
+          (m) => (!embalagemMantida || passaEmbalagem(m)) && passaBusca(m)
+        ).length
+      );
     }
+
     return contagem;
   }, [embalagemFiltro, termoBusca]);
 
@@ -185,11 +198,11 @@ export default function CatalogoMaquinas() {
                 m.categoria === categoria && m.embalagensCompativeis.includes(t)
             )
           );
-    const embalagem = tiposDaCategoria.includes(
-      embalagemFiltro as (typeof tiposEmbalagem)[number]
-    )
+
+    const embalagem = contem(tiposDaCategoria, embalagemFiltro)
       ? embalagemFiltro
       : 'Todas';
+
     setCategoriaFiltro(categoria);
     setEmbalagemFiltro(embalagem);
     updateUrl(categoria, embalagem, busca);

@@ -19,14 +19,17 @@ describe('integridade do registry de máquinas', () => {
 
   it('máquinas padrão têm specs e imagens; engenharia tem conteudoEngenharia', () => {
     const padrao = maquinasCatalogo.filter((m) => m.tipoPagina === 'padrao');
+
     const engenharia = maquinasCatalogo.filter(
       (m) => m.tipoPagina === 'engenharia'
     );
+
     for (const m of padrao) {
       expect(m.specsMaquina.length, m.slug).toBeGreaterThan(0);
       expect(m.specsEmbalagem.length, m.slug).toBeGreaterThan(0);
       expect(m.imagens, m.slug).toBeDefined();
     }
+
     for (const m of engenharia) {
       expect(m.conteudoEngenharia, m.slug).toBeDefined();
     }
@@ -59,6 +62,7 @@ describe('integridade do registry de máquinas', () => {
       ...Array.from({ length: 17 }, (_, i) => i + 1),
       ...Array.from({ length: 15 }, (_, i) => i + 19)
     ];
+
     for (const id of idsEsperados) {
       const redirect = maquinaRedirects.find((r) => r.legacyId === id);
       expect(redirect, `id ${id} sem redirect`).toBeDefined();
@@ -67,6 +71,7 @@ describe('integridade do registry de máquinas', () => {
         `destino do id ${id} (${redirect!.slug}) não existe no registry`
       ).toBeDefined();
     }
+
     // id 18 (Doypack removida) não tem entrada — vai direto para /maquinas no next.config
     expect(maquinaRedirects.some((r) => r.legacyId === 18)).toBe(false);
   });

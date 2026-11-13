@@ -13,6 +13,7 @@ import {
 import * as m from 'motion/react-m';
 
 type AnimationType = 'text' | 'word' | 'character' | 'line';
+
 type AnimationVariant =
   | 'fadeIn'
   | 'blurIn'
@@ -347,6 +348,7 @@ const TextAnimateBase = ({
   const MotionComponent = motionElements[Component];
 
   let segments: string[] = [];
+
   switch (by) {
     case 'word':
       segments = children.split(/(\s+)/);
@@ -411,7 +413,7 @@ const TextAnimateBase = ({
   return (
     <AnimatePresence mode='popLayout'>
       <MotionComponent
-        variants={finalVariants.container as Variants}
+        variants={finalVariants.container}
         initial='hidden'
         whileInView={startOnView ? 'show' : undefined}
         animate={startOnView ? undefined : 'show'}

@@ -33,7 +33,7 @@ interface FiltrosProps {
   embalagemFiltro: string;
   busca: string;
   tiposVisiveis: readonly string[];
-  contagemPorCategoria: Record<string, number>;
+  contagemPorCategoria: ReadonlyMap<string, number>;
   totalFiltrado: number;
   onCategoria: (categoria: string) => void;
   onEmbalagem: (tipo: string) => void;
@@ -121,7 +121,10 @@ function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
         {(['Todas', ...categoriasCatalogo] as const).map((categoria) => {
           const Icone =
             categoria === 'Todas' ? Layers : ICONE_CATEGORIA[categoria];
+
           const ativo = categoriaFiltro === categoria;
+          const contagem = contagemPorCategoria.get(categoria) ?? 0;
+
           return (
             <button
               key={categoria}
@@ -142,14 +145,10 @@ function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
                   'font-mono text-[10px]',
                   ativo ? 'text-white/70' : 'text-muted-foreground/60'
                 )}>
-                {contagemPorCategoria[categoria] ?? 0}
+                {contagem}
               </span>
               <span className='sr-only'>
-                ({contagemPorCategoria[categoria] ?? 0}{' '}
-                {(contagemPorCategoria[categoria] ?? 0) === 1
-                  ? 'máquina'
-                  : 'máquinas'}
-                )
+                ({contagem} {contagem === 1 ? 'máquina' : 'máquinas'})
               </span>
             </button>
           );
@@ -180,6 +179,7 @@ function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
 /** Painel-placa único de filtros da listagem — desktop. */
 export function FiltrosSidebar(props: FiltrosProps) {
   const { totalFiltrado, onLimpar } = props;
+
   return (
     <aside className='sticky top-[4.5rem] z-10 mt-8 ml-3 hidden w-80 shrink-0 self-start md:block'>
       {/* Placa da busca: instrumento separado, acima do console de filtros */}
@@ -221,6 +221,7 @@ export function FiltrosSidebar(props: FiltrosProps) {
 export function FiltrosMobile(props: FiltrosProps) {
   const { totalFiltrado, onLimpar } = props;
   const [aberto, setAberto] = useState(false);
+
   const ativos =
     Number(props.categoriaFiltro !== 'Todas') +
     Number(props.embalagemFiltro !== 'Todas') +

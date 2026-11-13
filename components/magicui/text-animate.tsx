@@ -8,6 +8,7 @@ import { AnimatePresence, MotionProps, Variants } from 'motion/react';
 import * as m from 'motion/react-m';
 
 type AnimationType = 'text' | 'word' | 'character' | 'line';
+
 type AnimationVariant =
   | 'fadeIn'
   | 'blurIn'
@@ -322,6 +323,7 @@ const TextAnimateBase = ({
   const MotionComponent = useMemo(() => m.create(Component), [Component]);
 
   let segments: string[] = [];
+
   switch (by) {
     case 'word':
       segments = children.split(/(\s+)/);
@@ -387,7 +389,7 @@ const TextAnimateBase = ({
     <AnimatePresence mode='popLayout'>
       {/* eslint-disable-next-line react-hooks/static-components -- `as` é prop, o m.create fica memoizado por Component */}
       <MotionComponent
-        variants={finalVariants.container as Variants}
+        variants={finalVariants.container}
         initial='hidden'
         whileInView={startOnView ? 'show' : undefined}
         animate={startOnView ? undefined : 'show'}

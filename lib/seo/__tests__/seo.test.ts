@@ -98,6 +98,7 @@ describe('JSON-LD', () => {
       { nome: 'Início', path: '/' },
       { nome: 'Máquinas', path: '/maquinas' }
     ]);
+
     expect(trilha.itemListElement[0].position).toBe(1);
     expect(trilha.itemListElement[1].item).toBe(`${SITE_URL}/maquinas`);
   });
@@ -111,6 +112,7 @@ describe('JSON-LD', () => {
     const faq = faqSchema([
       { pergunta: 'Vocês instalam?', resposta: 'Sim.', topicos: ['No local.'] }
     ]);
+
     expect(faq.mainEntity[0].acceptedAnswer.text).toBe('Sim. No local.');
   });
 });

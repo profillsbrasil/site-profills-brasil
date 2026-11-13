@@ -1,4 +1,5 @@
 import { IndicacaoProvider } from '@/components/indicacao/indicacaoProvider';
+import type { IndicacaoPayload } from '@/lib/indicacao/tipos';
 import { render, screen } from '@testing-library/react';
 
 import Footer from './footer';
@@ -8,13 +9,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/components/ui/blur-fade', () => ({
   BlurFade: ({ children }: { children: React.ReactNode }) => <>{children}</>
 }));
+
 vi.mock('./gridPatternBg', () => ({ GridPattern: () => null }));
+
 // next/image exige width/height quando o import estático vira string no jsdom;
 // mesmo mock usado nos testes de listagem/relacionadas.
 vi.mock('next/image', () => ({ default: 'img' }));
 
-function jwtFalso(payload: unknown) {
+function jwtFalso(payload: IndicacaoPayload) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
+
   return `${b64('{"alg":"HS256"}')}.${b64(JSON.stringify(payload))}.x`;
 }
 
@@ -39,9 +43,11 @@ describe('Footer', () => {
     expect(
       screen.getByText('suporte@profillsdobrasil.com.br')
     ).toBeInTheDocument();
+
     const vendas = screen.getByLabelText(
       'Conversar no WhatsApp com Vendas/Peças'
     );
+
     expect(vendas).toHaveAttribute(
       'href',
       expect.stringContaining('wa.me/5541997851998')
@@ -54,11 +60,13 @@ describe('Footer', () => {
         <Footer />
       </IndicacaoProvider>
     );
+
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
     const vendas = doc.querySelector(
       '[aria-label="Conversar no WhatsApp com Vendas/Peças"]'
     );
+
     expect(vendas).not.toBeNull();
     expect(vendas?.hasAttribute('href')).toBe(false);
     expect(html).not.toContain('comercial@profillsdobrasil.com.br');

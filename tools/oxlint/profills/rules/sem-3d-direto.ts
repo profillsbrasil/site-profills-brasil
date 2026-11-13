@@ -1,7 +1,7 @@
 import { defineRule } from '@oxlint/plugins';
 import type { ESTree } from '@oxlint/plugins';
 
-import { nomeDoElemento } from '../jsx.ts';
+import { ehTexto, nomeDoElemento } from '../jsx.ts';
 import {
   DOMINIO_3D,
   ehPacote3d,
@@ -25,8 +25,8 @@ export const sem3dDiretoRule = defineRule({
   create(context) {
     if (noDominio3d(relativoARaiz(context.cwd, context.filename))) return {};
 
-    function checar(node: ESTree.Node, fonte: unknown, soTipo: boolean) {
-      if (!soTipo && typeof fonte === 'string' && ehPacote3d(fonte)) {
+    function checar(node: ESTree.Node, fonte: string, soTipo: boolean) {
+      if (!soTipo && ehPacote3d(fonte)) {
         context.report({ node, messageId: 'import3d', data: { fonte } });
       }
     }
@@ -39,10 +39,11 @@ export const sem3dDiretoRule = defineRule({
             node.specifiers.every(
               (s) => s.type === 'ImportSpecifier' && s.importKind === 'type'
             ));
+
         checar(node, node.source.value, soTipo);
       },
       ImportExpression(node) {
-        if (node.source.type === 'Literal')
+        if (node.source.type === 'Literal' && ehTexto(node.source.value))
           checar(node, node.source.value, false);
       },
       ExportNamedDeclaration(node) {

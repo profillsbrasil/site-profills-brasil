@@ -1,17 +1,19 @@
 import type { ReactNode } from 'react';
 
+import type { IndicacaoPayload } from '@/lib/indicacao/tipos';
 import { renderHook } from '@testing-library/react';
 
 import { IndicacaoProvider } from './indicacaoProvider';
 import { useContatoComercial } from './useContatoComercial';
 import { afterEach, describe, expect, it } from 'vitest';
 
-function jwtFalso(payload: unknown) {
+function jwtFalso(payload: IndicacaoPayload) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
+
   return `${b64('{"alg":"HS256"}')}.${b64(JSON.stringify(payload))}.x`;
 }
 
-function setCookie(payload: unknown) {
+function setCookie(payload: IndicacaoPayload) {
   document.cookie = `profills_indicacao=${jwtFalso(payload)}; path=/`;
 }
 

@@ -10,6 +10,7 @@ describe('VisaoGeral', () => {
     expect(
       screen.getByText(/solução mecânica de alta velocidade/)
     ).toBeInTheDocument();
+
     for (const recurso of piloto.recursos) {
       expect(screen.getByText(recurso)).toBeInTheDocument();
     }

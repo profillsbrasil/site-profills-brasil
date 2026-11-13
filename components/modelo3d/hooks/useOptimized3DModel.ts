@@ -44,6 +44,7 @@ export function useOptimized3DModel({
 
     return () => {
       const currentCount = modelViewerInstances.get(src) || 0;
+
       if (currentCount <= 1) {
         modelViewerInstances.delete(src);
         // Remove do cache se não há mais instâncias
@@ -61,6 +62,7 @@ export function useOptimized3DModel({
   // Intersection Observer para lazy loading inteligente
   useEffect(() => {
     const observedElement = containerRef.current;
+
     const isLayoutVisible = observedElement
       ? observedElement.getClientRects().length > 0
       : false;
@@ -70,6 +72,7 @@ export function useOptimized3DModel({
       // invisível do hero mobile/desktop
       /* eslint-disable react-hooks/set-state-in-effect */
       setIsVisible(true);
+
       if (!hasBeenLoaded) {
         setShouldRender(true);
       }
@@ -77,11 +80,13 @@ export function useOptimized3DModel({
     }
 
     let renderTimeout: ReturnType<typeof setTimeout> | undefined;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
+
             // Só renderiza na primeira vez ou se nunca foi carregado
             if (!hasBeenLoaded) {
               clearTimeout(renderTimeout);
@@ -103,9 +108,11 @@ export function useOptimized3DModel({
 
     return () => {
       clearTimeout(renderTimeout);
+
       if (observedElement) {
         observer.unobserve(observedElement);
       }
+
       observer.disconnect();
     };
   }, [eager, threshold, rootMargin, hasBeenLoaded]);
@@ -120,6 +127,7 @@ export function useOptimized3DModel({
           await import('@google/model-viewer');
           modelCache.set('model-viewer-library', true);
         }
+
         setIsLoaded(true);
         setHasBeenLoaded(true);
       } catch (error) {
@@ -177,8 +185,10 @@ export function useOptimized3DModel({
         (sum, count) => sum + count,
         0
       );
+
       if (totalInstances === 0) {
         const existingStyle = document.getElementById(styleId);
+
         if (existingStyle) {
           document.head.removeChild(existingStyle);
         }
@@ -194,7 +204,7 @@ export function useOptimized3DModel({
   }, [src]);
 
   const handleModelError = useCallback(
-    (error: unknown) => {
+    (error: Event) => {
       logger.error('Erro ao carregar modelo 3D:', error);
       modelCache.delete(src);
     },

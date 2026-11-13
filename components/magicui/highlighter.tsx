@@ -30,13 +30,17 @@ interface HighlighterProps {
 
 function resolveColor(color: string): string {
   if (typeof window === 'undefined') return color;
+
   if (color.startsWith('var(')) {
     const varName = color.slice(4, -1).trim();
+
     const resolved = getComputedStyle(document.documentElement)
       .getPropertyValue(varName)
       .trim();
+
     return resolved || color;
   }
+
   return color;
 }
 
@@ -53,6 +57,7 @@ export function Highlighter({
   textColor = 'text-white'
 }: HighlighterProps) {
   const elementRef = useRef<HTMLSpanElement>(null);
+
   const isInView = useInView(elementRef, {
     once: true,
     margin: '-10%'
@@ -65,6 +70,7 @@ export function Highlighter({
     if (!shouldShow) return;
 
     const element = elementRef.current;
+
     if (!element) return;
 
     const resolvedColor = resolveColor(color);

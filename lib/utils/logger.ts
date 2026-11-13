@@ -1,9 +1,8 @@
-type LogLevel = 'silent' | 'error' | 'warn' | 'info' | 'debug';
+const LOG_LEVELS = ['silent', 'error', 'warn', 'info', 'debug'] as const;
+
+type LogLevel = (typeof LOG_LEVELS)[number];
 
 const env = process.env.NODE_ENV || 'development';
-const configuredLevel: LogLevel =
-  (process.env.LOG_LEVEL as LogLevel) ||
-  (env === 'production' ? 'error' : 'info');
 
 const levelPriority: Record<LogLevel, number> = {
   silent: 0,
@@ -13,29 +12,44 @@ const levelPriority: Record<LogLevel, number> = {
   debug: 4
 };
 
-function shouldLog(level: LogLevel) {
-  return levelPriority[level] <= levelPriority[configuredLevel];
+/* LOG_LEVEL fora da lista não tem prioridade: nenhuma comparação passa e
+   nada é logado. */
+function readConfiguredPriority() {
+  const fromEnv = process.env.LOG_LEVEL;
+
+  if (!fromEnv) return levelPriority[env === 'production' ? 'error' : 'info'];
+
+  const known = LOG_LEVELS.find((level) => level === fromEnv);
+
+  return known === undefined ? Number.NaN : levelPriority[known];
 }
 
-function formatMessage(level: string, message: unknown) {
+const configuredPriority = readConfiguredPriority();
+
+function shouldLog(level: LogLevel) {
+  return levelPriority[level] <= configuredPriority;
+}
+
+function formatMessage(level: string, message: string) {
   const timestamp = new Date().toISOString();
-  return `[${timestamp}] [${level}] ${String(message)}`;
+
+  return `[${timestamp}] [${level}] ${message}`;
 }
 
 export const logger = {
-  error: (message?: unknown, ...optionalParams: unknown[]) => {
+  error: (message: string, ...optionalParams: unknown[]) => {
     if (shouldLog('error'))
       console.error(formatMessage('error', message), ...optionalParams);
   },
-  warn: (message?: unknown, ...optionalParams: unknown[]) => {
+  warn: (message: string, ...optionalParams: unknown[]) => {
     if (shouldLog('warn'))
       console.warn(formatMessage('warn', message), ...optionalParams);
   },
-  info: (message?: unknown, ...optionalParams: unknown[]) => {
+  info: (message: string, ...optionalParams: unknown[]) => {
     if (shouldLog('info'))
       console.info(formatMessage('info', message), ...optionalParams);
   },
-  debug: (message?: unknown, ...optionalParams: unknown[]) => {
+  debug: (message: string, ...optionalParams: unknown[]) => {
     if (shouldLog('debug'))
       console.debug(formatMessage('debug', message), ...optionalParams);
   }

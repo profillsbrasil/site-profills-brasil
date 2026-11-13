@@ -20,6 +20,7 @@ const ProgressIndicator = () => {
     if (step === 2) {
       setIsExpanded(true);
     }
+
     if (step > 1) {
       setStep(step - 1);
     }

@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
       { email: data.email, name: data.name },
       '7d'
     );
+
     const siteUrl = SITE_URL;
     const downloadUrl = `${siteUrl}/api/download/${token}`;
 

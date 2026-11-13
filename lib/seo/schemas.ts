@@ -62,6 +62,7 @@ export function websiteSchema() {
  */
 export function maquinaSchema(maquina: MaquinaCatalogo) {
   const url = urlAbsoluta(`/maquinas/${maquina.slug}`);
+
   const specs = [...maquina.specsMaquina, ...maquina.specsEmbalagem].map(
     (spec) => ({
       '@type': 'PropertyValue',

@@ -36,6 +36,7 @@ describe('HeroDossie', () => {
     const { container } = render(
       <HeroDossie maquina={{ ...piloto, capacidadeMaxima: undefined }} />
     );
+
     expect(container.querySelector('[data-ticker]')).toBeNull();
   });
 
@@ -61,6 +62,7 @@ describe('HeroDossie', () => {
     const { container } = render(
       <HeroDossie maquina={{ ...piloto, destaqueHero: undefined }} />
     );
+
     expect(container.querySelector('[data-ticker]')).not.toBeNull();
     expect(screen.queryByText('Capacidade de produção')).toBeNull();
   });

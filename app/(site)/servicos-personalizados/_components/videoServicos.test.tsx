@@ -6,6 +6,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 let avisar: IntersectionObserverCallback = () => {};
 
 function naTela(visivel: boolean) {
+  // SAFETY: o callback de VideoServicos só lê `isIntersecting` da primeira
+  // entrada e não usa o observer; o jsdom não tem IntersectionObserverEntry.
   avisar(
     [{ isIntersecting: visivel } as IntersectionObserverEntry],
     {} as IntersectionObserver
@@ -20,6 +22,7 @@ describe('VideoServicos', () => {
 
   it('toca direto quando o navegador não tem IntersectionObserver', () => {
     vi.stubGlobal('IntersectionObserver', undefined);
+
     const play = vi
       .spyOn(HTMLMediaElement.prototype, 'play')
       .mockResolvedValue(undefined);
@@ -40,9 +43,11 @@ describe('VideoServicos', () => {
         disconnect() {}
       }
     );
+
     const play = vi
       .spyOn(HTMLMediaElement.prototype, 'play')
       .mockResolvedValue(undefined);
+
     const pause = vi
       .spyOn(HTMLMediaElement.prototype, 'pause')
       .mockImplementation(() => {});

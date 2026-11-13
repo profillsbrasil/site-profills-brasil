@@ -65,6 +65,7 @@ describe('cookie-server', () => {
       contato: null,
       consultadoEm: '2026-09-02T12:00:00.000Z'
     };
+
     expect(precisaRenovar(payload, new Date('2026-09-03T11:59:59Z'))).toBe(
       false
     );

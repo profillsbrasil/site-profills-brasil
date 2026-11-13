@@ -15,9 +15,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/lib/analytics/indicacao', async (importOriginal) => {
   const real =
     await importOriginal<typeof import('@/lib/analytics/indicacao')>();
+
   return { registrarLeadIndicacao: vi.fn(real.registrarLeadIndicacao) };
 });
+
 vi.mock('@next/third-parties/google', () => ({ sendGAEvent: vi.fn() }));
+
 vi.mock('sonner', () => ({
   toast: { error: vi.fn(), success: vi.fn() }
 }));
@@ -29,11 +32,13 @@ const valores: CatalogRequestData = {
   email: 'teste@example.com'
 };
 
-function respostaOk(corpo: unknown) {
-  return {
-    ok: true,
-    json: async () => corpo
-  } as Response;
+type CorpoDaRota = {
+  success: boolean;
+  indicacao: { codigo: string } | null;
+};
+
+function respostaOk(corpo: CorpoDaRota) {
+  return Response.json(corpo);
 }
 
 beforeEach(() => {
@@ -93,10 +98,9 @@ describe('useCatalogForm', () => {
   it('não registra lead quando a rota falha', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({
-        ok: false,
-        json: async () => ({ message: 'Erro' })
-      } as Response)
+      vi
+        .fn()
+        .mockResolvedValue(Response.json({ message: 'Erro' }, { status: 500 }))
     );
 
     const { result } = renderHook(() => useCatalogForm());

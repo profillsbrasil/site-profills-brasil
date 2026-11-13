@@ -38,27 +38,24 @@ let pendingCountries: Promise<CountryFeature[]> | null = null;
 
 function loadCountries(): Promise<CountryFeature[]> {
   if (cachedCountries) return Promise.resolve(cachedCountries);
+
   if (pendingCountries) return pendingCountries;
   pendingCountries = fetch(COUNTRIES_URL)
     .then((r) => r.json())
     .then((data: { features: CountryFeature[] }) => {
       cachedCountries = data.features;
+
       return cachedCountries;
     })
-    .catch((error: unknown) => {
-      logger.error('Erro ao carregar os países do globo:', error);
+    .catch((cause: unknown) => {
+      logger.error('Erro ao carregar os países do globo:', cause);
       pendingCountries = null;
+
       return [];
     });
+
   return pendingCountries;
 }
-
-type Controles = {
-  autoRotate: boolean;
-  autoRotateSpeed: number;
-  enableZoom: boolean;
-  enablePan: boolean;
-};
 
 /**
  * Globo 3D pesado (three + react-globe.gl): quem usa decide quando montar,
@@ -81,14 +78,18 @@ export function Globe({
 
   useEffect(() => {
     const el = containerRef.current;
+
     if (!el) return;
 
     const ro = new ResizeObserver(([entry]) => {
       const w = Math.round(entry.contentRect.width);
       const h = Math.round(entry.contentRect.height);
+
       if (w > 0 && h > 0) setSize({ w, h });
     });
+
     ro.observe(el);
+
     return () => ro.disconnect();
   }, []);
 
@@ -97,6 +98,7 @@ export function Globe({
     void loadCountries().then((features) => {
       if (!cancelled) setCountries(features);
     });
+
     return () => {
       cancelled = true;
     };
@@ -104,32 +106,31 @@ export function Globe({
 
   useEffect(() => {
     if (!ready || !globeRef.current) return;
-    const ctrls = globeRef.current.controls() as Controles;
+    const ctrls = globeRef.current.controls();
     ctrls.autoRotateSpeed = 0.5;
     ctrls.enableZoom = false;
     ctrls.enablePan = false;
     globeRef.current.pointOfView({ lat: -10, lng: -45, altitude: 2.4 });
 
-    const renderer = (
-      globeRef.current as unknown as {
-        renderer: () => { setPixelRatio: (r: number) => void };
-      }
-    ).renderer();
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    globeRef.current
+      .renderer()
+      .setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   }, [ready]);
 
   useEffect(() => {
     if (!ready || !globeRef.current) return;
-    (globeRef.current.controls() as Controles).autoRotate = !reduzirMovimento;
+    globeRef.current.controls().autoRotate = !reduzirMovimento;
   }, [ready, reduzirMovimento]);
 
   // Fora da tela ou com a aba oculta, o laço de render para (giro incluso)
   useEffect(() => {
     const globo = globeRef.current;
     const el = containerRef.current;
+
     if (!ready || !globo || !el) return;
 
     let naTela = true;
+
     const aplicar = () => {
       if (naTela && document.visibilityState === 'visible') {
         globo.resumeAnimation();
@@ -137,12 +138,15 @@ export function Globe({
         globo.pauseAnimation();
       }
     };
+
     const io = new IntersectionObserver(([entry]) => {
       naTela = entry.isIntersecting;
       aplicar();
     });
+
     io.observe(el);
     document.addEventListener('visibilitychange', aplicar);
+
     return () => {
       io.disconnect();
       document.removeEventListener('visibilitychange', aplicar);

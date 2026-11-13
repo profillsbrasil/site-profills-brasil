@@ -24,11 +24,13 @@ vi.mock('next/dynamic', () => ({
       }));
       const avisarPronto = useRef(onGlobeReady);
       useEffect(() => avisarPronto.current?.(), []);
+
       return <canvas data-testid='globo-3d' />;
     })
 }));
 
 let reduzirMovimento = false;
+
 vi.mock('motion/react', async (original) => ({
   ...(await original<typeof import('motion/react')>()),
   useReducedMotion: () => reduzirMovimento
@@ -79,6 +81,7 @@ async function montarPronto(onPronto = vi.fn()) {
   const tela = render(<Globe onPronto={onPronto} />);
   act(() => intersecao(true));
   await tela.findByTestId('globo-3d');
+
   return onPronto;
 }
 

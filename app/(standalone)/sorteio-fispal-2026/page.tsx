@@ -30,6 +30,7 @@ import {
 // Bot WhatsApp em produção no monorepo sistema-coleta-de-lead.
 const WHATSAPP_NUMERO = '5541998954229';
 const WHATSAPP_MENSAGEM = 'sorteio';
+
 const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(
   WHATSAPP_MENSAGEM
 )}`;
@@ -240,6 +241,7 @@ export default function SorteioFispal2026() {
             <ol className='grid gap-4 md:grid-cols-2 md:gap-5'>
               {passos.map((passo, i) => {
                 const Icone = passo.icone;
+
                 return (
                   <BlurFade
                     key={passo.titulo}
@@ -316,6 +318,7 @@ export default function SorteioFispal2026() {
             <ul className='grid gap-4 md:grid-cols-2 md:gap-5'>
               {regras.map((regra, i) => {
                 const Icone = regra.icone;
+
                 return (
                   <BlurFade
                     key={regra.titulo}

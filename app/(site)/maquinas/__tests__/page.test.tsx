@@ -21,6 +21,7 @@ describe('/maquinas (HTML servido)', () => {
 
   it('serve os 35 cards do catálogo no HTML, sem depender de hidratação', () => {
     expect(maquinasCatalogo.length).toBe(35);
+
     for (const maquina of maquinasCatalogo) {
       expect(html).toContain(`>${maquina.nome}<`);
     }
