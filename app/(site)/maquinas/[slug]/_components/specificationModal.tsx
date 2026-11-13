@@ -20,6 +20,7 @@ import {
   specificationFormSchema
 } from '@/lib/schemas/specification-form';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/utils/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Controller, Resolver, useForm } from 'react-hook-form';
@@ -93,7 +94,7 @@ export default function SpecificationModal({
       reset();
       setOpen(false);
     } catch (error) {
-      console.error('Erro ao enviar especificação:', error);
+      logger.error('Erro ao enviar especificação:', error);
 
       toast.error(<p className='font-bold'>Erro ao enviar solicitação</p>, {
         description: <p>Tente novamente em alguns instantes.</p>

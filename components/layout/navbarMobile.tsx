@@ -181,6 +181,7 @@ export default function NavbarMobile() {
         <Drawer direction='right'>
           <DrawerTrigger asChild>
             <button
+              type='button'
               aria-label='Abrir menu de navegação'
               className='flex h-11 w-11 items-center justify-center rounded-md bg-secondary-foreground/10 text-secondary-foreground transition-colors hover:bg-secondary-foreground/20'>
               <Menu className='h-6 w-6' />

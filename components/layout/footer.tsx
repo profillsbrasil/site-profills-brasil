@@ -16,6 +16,8 @@ import { GridPattern } from './gridPatternBg';
 import { WhatsAppIcon, socialLinks } from './socialLinks';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
+const ANO_ATUAL = new Date().getFullYear();
+
 const contatosFixos = [
   {
     title: 'Suporte e Assistência Técnica',
@@ -240,9 +242,8 @@ export default function Footer() {
             </div>
             <div className='mt-6 flex flex-col items-center justify-center gap-1 text-xs text-[#b6c5e2]/70 md:text-sm'>
               <p className='text-center'>
-                <span className='text-accent'>&copy;</span>{' '}
-                {new Date().getFullYear()} Profills Brasil. Todos os direitos
-                reservados.
+                <span className='text-accent'>&copy;</span> {ANO_ATUAL} Profills
+                Brasil. Todos os direitos reservados.
               </p>
               <button
                 type='button'

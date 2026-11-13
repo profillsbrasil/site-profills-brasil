@@ -6,7 +6,9 @@ Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind v4 · s
 
 - `bun dev` — dev server (Turbopack)
 - `bun run test` — Vitest (jsdom + Testing Library, setup em `vitest.setup.ts`)
-- `bun run lint` / `bun run format` — ESLint flat config / Prettier (ordena classes Tailwind e imports automaticamente)
+- `bun run lint` / `bun run lint:fix` — Oxlint type-aware com a config em `.oxlintrc.json`; cada regra desligada leva o motivo num comentário ali
+- `bun run format` — Prettier (ordena classes Tailwind e imports automaticamente)
+- Pre-commit (lefthook, instalado pelo `prepare` no `bun install`) roda oxlint e `prettier --check` só nos arquivos staged
 
 ## Mapa do repositório
 

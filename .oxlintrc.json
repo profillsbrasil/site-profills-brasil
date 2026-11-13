@@ -1,0 +1,171 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "react",
+    "nextjs",
+    "jsx-a11y",
+    "import",
+    "vitest",
+    "promise"
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  },
+  "ignorePatterns": [
+    ".next/**",
+    "out/**",
+    "build/**",
+    "coverage/**",
+    "next-env.d.ts",
+    ".agent/**",
+    ".agents/**",
+    ".claude/**",
+    ".codex/**",
+    ".continue/**",
+    ".cursor/**",
+    ".gemini/**",
+    ".impeccable/**",
+    ".opencode/**",
+    ".pi/**",
+    ".roo/**",
+    ".superpowers/**",
+    ".windsurf/**"
+  ],
+  "rules": {
+    // Paridade com eslint-config-next (core-web-vitals + typescript).
+    // O prefixo _ marca argumento ou variável descartada de propósito.
+    "eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "eslint/no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": false,
+        "allowTernary": false,
+        "allowTaggedTemplates": false
+      }
+    ],
+    "eslint/no-array-constructor": "error",
+    "eslint/no-var": "error",
+    "eslint/prefer-const": "error",
+    "eslint/prefer-rest-params": "error",
+    "eslint/prefer-spread": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "typescript/no-unsafe-function-type": "error",
+    "import/no-anonymous-default-export": "error",
+    "react/rules-of-hooks": "error",
+    "react/display-name": "error",
+    "react/jsx-no-comment-textnodes": "error",
+    "react/no-unescaped-entities": "error",
+    "react/require-render-return": "error",
+    "react/unsupported-syntax": "error",
+
+    // Footguns fora da categoria correctness.
+    "eslint/eqeqeq": ["error", "always", { "null": "ignore" }],
+    "eslint/no-await-in-loop": "error",
+    "eslint/array-callback-return": "error",
+    "eslint/no-promise-executor-return": "error",
+    "eslint/no-case-declarations": "error",
+    "eslint/no-prototype-builtins": "error",
+    "eslint/no-eval": "error",
+    "eslint/no-empty": "error",
+    "eslint/no-console": "error",
+    "eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "framer-motion",
+            "message": "Use 'motion/react' (pacote motion)."
+          }
+        ],
+        "patterns": [
+          {
+            "group": [
+              "**/interactiveGridPatternBg",
+              "**/magicui/grid-pattern",
+              "**/magicui/animated-grid-pattern",
+              "**/magicui/interactive-grid-pattern"
+            ],
+            "message": "Grid pattern morto. Use components/layout/gridPatternBg ou gridPatternBgMobile."
+          }
+        ]
+      }
+    ],
+    "import/no-cycle": "error",
+    "import/no-self-import": "error",
+    "react/jsx-no-target-blank": "error",
+    "react/jsx-no-script-url": "error",
+    "react/no-unstable-nested-components": "error",
+    "react/jsx-no-constructed-context-values": "error",
+    "react/checked-requires-onchange-or-readonly": "error",
+    "react/style-prop-object": "error",
+    "react/button-has-type": "error",
+    "react/no-unknown-property": "error",
+    "promise/no-multiple-resolved": "error",
+    "promise/no-promise-in-callback": "error",
+    "vitest/no-identical-title": "error",
+    "oxc/no-accumulating-spread": "error",
+
+    // Type-aware (exige --type-aware e oxlint-tsgolint).
+    // React ignora o retorno de handlers JSX; os handlers async do site
+    // tratam o próprio erro, então attributes fica fora da checagem.
+    "typescript/no-misused-promises": [
+      "error",
+      { "checksVoidReturn": { "attributes": false } }
+    ],
+    "typescript/prefer-promise-reject-errors": "error",
+    "typescript/only-throw-error": "error",
+
+    // O vitest aceita mensagem como segundo argumento de expect.
+    "vitest/valid-expect": ["error", { "maxArgs": 2 }],
+
+    // Regras de correctness desligadas por não apontarem bug neste repo.
+    // Tipar cada vi.fn() é preferência de tipagem em teste, sem efeito em runtime.
+    "vitest/require-mock-type-parameters": "off",
+    // role="region" e role="group" são ARIA válido; trocar por section ou
+    // fieldset muda o DOM e o fieldset traz borda padrão.
+    "jsx-a11y/prefer-tag-over-role": "off",
+    // Legenda exige arquivo de texto que o site não tem; ver videoMaquina.tsx.
+    "jsx-a11y/media-has-caption": "off",
+    // O autoFocus da busca de clientes só ocorre depois do clique que abre o campo.
+    "jsx-a11y/no-autofocus": "off"
+  },
+  "overrides": [
+    {
+      "files": ["lib/utils/logger.ts"],
+      "rules": {
+        "eslint/no-console": "off"
+      }
+    },
+    {
+      // Nos testes, cada volta do laço troca o stub global ou o mock antes do
+      // await; rodar em paralelo misturaria os stubs.
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        "eslint/no-await-in-loop": "off"
+      }
+    }
+  ]
+}

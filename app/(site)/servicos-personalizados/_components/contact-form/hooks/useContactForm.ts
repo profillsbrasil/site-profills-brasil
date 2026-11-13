@@ -11,6 +11,7 @@ import {
   step3Schema
 } from '@/lib/schemas/contact-form';
 import { fetchAddressByCep } from '@/lib/utils/cep-utils';
+import { logger } from '@/lib/utils/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useForm } from 'react-hook-form';
@@ -122,7 +123,7 @@ export function useContactForm() {
       // Força a revalidação dos campos para mostrar erros
       const fieldsToTrigger = getFieldsForStep(currentStep);
       fieldsToTrigger.forEach((field) => {
-        form.trigger(field);
+        void form.trigger(field);
       });
     }
   };
@@ -150,7 +151,7 @@ export function useContactForm() {
   // Envio do formulário
   const onSubmit = async (data: ContactFormData) => {
     try {
-      console.log('Enviando dados do formulário:', data);
+      logger.info('Enviando dados do formulário:', data);
 
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -166,7 +167,7 @@ export function useContactForm() {
         throw new Error(result.message || 'Erro ao enviar solicitação');
       }
 
-      console.log('✅ Solicitação enviada com sucesso:', result);
+      logger.info('✅ Solicitação enviada com sucesso:', result);
 
       registrarLeadIndicacao('contato', result?.indicacao?.codigo ?? null);
 
@@ -181,7 +182,7 @@ export function useContactForm() {
       form.reset();
       setCurrentStep(1);
     } catch (error) {
-      console.error('❌ Erro ao enviar solicitação:', error);
+      logger.error('❌ Erro ao enviar solicitação:', error);
 
       // Feedback visual de erro
       toast.error('Erro ao enviar solicitação', {

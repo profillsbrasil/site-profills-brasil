@@ -1,0 +1,8 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: oxlint
+      glob: '*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'
+      run: bunx oxlint --type-aware {staged_files}
+    - name: prettier
+      run: bunx prettier --check --ignore-unknown {staged_files}

@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { motion } from 'motion/react';
 import { CircleCheck } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const ProgressIndicator = () => {
   const [step, setStep] = useState(1);
@@ -17,7 +17,7 @@ const ProgressIndicator = () => {
   };
 
   const handleBack = () => {
-    if (step == 2) {
+    if (step === 2) {
       setIsExpanded(true);
     }
     if (step > 1) {
@@ -55,7 +55,11 @@ const ProgressIndicator = () => {
       </div>
 
       <div className='w-full max-w-sm'>
-        <div className={cn('flex items-center gap-1', !isExpanded && 'justify-between')}>
+        <div
+          className={cn(
+            'flex items-center gap-1',
+            !isExpanded && 'justify-between'
+          )}>
           {!isExpanded && (
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}

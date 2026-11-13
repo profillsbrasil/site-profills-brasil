@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import dynamic from 'next/dynamic';
-import type { GlobeMethods } from 'react-globe.gl';
-import * as THREE from 'three';
 
 import { cn } from '@/lib/utils';
+
+import type { GlobeMethods } from 'react-globe.gl';
+import * as THREE from 'three';
 
 const Globe3D = dynamic(() => import('react-globe.gl'), { ssr: false });
 
@@ -88,7 +89,7 @@ export function Globe({ className }: { className?: string }) {
   useEffect(() => {
     if (!shouldMount) return;
     let cancelled = false;
-    loadCountries().then((features) => {
+    void loadCountries().then((features) => {
       if (!cancelled) setCountries(features);
     });
     return () => {

@@ -79,8 +79,8 @@ const paramsDoPiloto = Promise.resolve({
 });
 
 describe('página de máquina', () => {
-  it('gera params estáticos para todas as máquinas do registry', async () => {
-    const params = await generateStaticParams();
+  it('gera params estáticos para todas as máquinas do registry', () => {
+    const params = generateStaticParams();
     expect(params).toContainEqual({ slug: 'envasadora-stand-up-pouch-speed' });
   });
 

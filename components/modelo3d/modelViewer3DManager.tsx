@@ -7,6 +7,8 @@ import React, {
   useContext
 } from 'react';
 
+import { logger } from '@/lib/utils/logger';
+
 // Context para compartilhar configurações globais dos modelos 3D
 interface ModelViewer3DContextType {
   preloadModel: (src: string) => Promise<void>;
@@ -59,7 +61,7 @@ export function ModelViewer3DProvider({
           }
         }, 5000);
       } catch (error) {
-        console.warn('Erro ao pré-carregar modelo:', error);
+        logger.warn('Erro ao pré-carregar modelo:', error);
       }
     },
     [maxCacheSize]
@@ -80,15 +82,18 @@ export function ModelViewer3DProvider({
   // Pré-carrega modelos importantes quando o provider é montado
   React.useEffect(() => {
     preloadImportantModels.forEach((src) => {
-      preloadModel(src);
+      void preloadModel(src);
     });
   }, [preloadImportantModels, preloadModel]);
 
-  const value = {
-    preloadModel,
-    isModelCached,
-    clearModelCache
-  };
+  const value = React.useMemo(
+    () => ({
+      preloadModel,
+      isModelCached,
+      clearModelCache
+    }),
+    [preloadModel, isModelCached, clearModelCache]
+  );
 
   return (
     <ModelViewer3DContext.Provider value={value}>
@@ -112,7 +117,7 @@ export function useModelPerformanceMonitor() {
   const logPerformance = useCallback(
     (modelSrc: string, action: string, duration?: number) => {
       if (process.env.NODE_ENV === 'development') {
-        console.log(
+        logger.info(
           `[3D Performance] ${action} - ${modelSrc}${duration ? ` (${duration}ms)` : ''}`
         );
       }

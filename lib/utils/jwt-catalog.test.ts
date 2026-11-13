@@ -1,7 +1,6 @@
 // @vitest-environment node
-import { beforeAll, describe, expect, it } from 'vitest';
-
 import { signCatalogToken, verifyCatalogToken } from './jwt-catalog';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 beforeAll(() => {
   process.env.CATALOG_TOKEN_SECRET =
@@ -15,28 +14,23 @@ describe('jwt-catalog', () => {
       '7d'
     );
     const result = await verifyCatalogToken(token);
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.payload.email).toBe('cliente@exemplo.com');
-      expect(result.payload.name).toBe('Cliente Teste');
-    }
+    expect(result).toMatchObject({
+      ok: true,
+      payload: { email: 'cliente@exemplo.com', name: 'Cliente Teste' }
+    });
   });
 
   it('retorna reason="expired" para token vencido', async () => {
-    const token = await signCatalogToken(
-      { email: 'a@b.com', name: 'X' },
-      '0s'
-    );
-    await new Promise((r) => setTimeout(r, 50));
+    const token = await signCatalogToken({ email: 'a@b.com', name: 'X' }, '0s');
+    await new Promise((r) => {
+      setTimeout(r, 50);
+    });
     const result = await verifyCatalogToken(token);
     expect(result).toEqual({ ok: false, reason: 'expired' });
   });
 
   it('retorna reason="invalid" para token adulterado', async () => {
-    const token = await signCatalogToken(
-      { email: 'a@b.com', name: 'X' },
-      '7d'
-    );
+    const token = await signCatalogToken({ email: 'a@b.com', name: 'X' }, '7d');
     const tampered = token.slice(0, -2) + 'aa';
     const result = await verifyCatalogToken(tampered);
     expect(result).toEqual({ ok: false, reason: 'invalid' });

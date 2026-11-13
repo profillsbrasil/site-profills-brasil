@@ -30,6 +30,8 @@ afterEach(() => {
 describe('cookie-server', () => {
   it('faz round-trip do vendedor com consultadoEm', async () => {
     const agora = new Date('2026-09-02T12:00:00Z');
+    vi.useFakeTimers();
+    vi.setSystemTime(agora);
     const token = await assinarIndicacao(vendedor, agora);
     await expect(lerIndicacao(token)).resolves.toEqual({
       codigo: 'MARIA-10',

@@ -165,7 +165,7 @@ declare global {
       /**
        * Controls the environmental reflection of the model. Normally if skybox-image is set, that image will also be used for the environment-image. Use environment-image to only set the reflection without affecting the background. If neither is specified, default neutral lighting will be applied. If 'legacy' is specified without a skybox, then our old default environment is applied instead.
        */
-      'environment-image'?: 'neutral' | 'legacy' | string;
+      'environment-image'?: string;
       /**
        * Controls the exposure of both the model and skybox, for use primarily with HDR environments.
        */
@@ -225,11 +225,10 @@ declare global {
       ref?: React.RefObject<ModelViewerElement | undefined>;
     };
   }
-  export interface ModelViewer
-    extends Omit<
-      React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
-      'ref'
-    > {
+  export interface ModelViewer extends Omit<
+    React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
+    'ref'
+  > {
     /**
      * The URL to the 3D model. Only glTF/GLB models are supported.
      */
@@ -384,7 +383,7 @@ declare global {
     /**
      * Controls the environmental reflection of the model. Normally if skybox-image is set, that image will also be used for the environment-image. Use environment-image to only set the reflection without affecting the background. If neither is specified, default neutral lighting will be applied. If 'legacy' is specified without a skybox, then our old default environment is applied instead.
      */
-    'environment-image'?: 'neutral' | 'legacy' | string;
+    'environment-image'?: string;
     /**
      * Controls the exposure of both the model and skybox, for use primarily with HDR environments.
      */
@@ -452,7 +451,7 @@ export function Embalagem3d() {
       await import('@google/model-viewer');
     };
 
-    loadModelViewer();
+    void loadModelViewer();
 
     // Remove a barra de progresso após o carregamento
     const style = document.createElement('style');
