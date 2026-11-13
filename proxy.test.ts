@@ -7,6 +7,7 @@ import {
   assinarIndicacao,
   lerIndicacao
 } from '@/lib/indicacao/cookie-server';
+import { logger } from '@/lib/utils/logger';
 
 import proxy, { config } from './proxy';
 import {
@@ -19,11 +20,11 @@ import {
   vi
 } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
 
 vi.mock('@/lib/crm/referral', async () => {
   const real =

@@ -1,6 +1,7 @@
 import { act } from 'react';
 
 import { registrarChegadaIndicacao } from '@/lib/analytics/indicacao';
+import type { IndicacaoPayload } from '@/lib/indicacao/tipos';
 
 import { IndicacaoProvider } from './indicacaoProvider';
 import { useContatoComercial } from './useContatoComercial';
@@ -15,7 +16,7 @@ vi.mock('@/lib/analytics/indicacao', async (importOriginal) => ({
   registrarChegadaIndicacao: vi.fn()
 }));
 
-function jwtFalso(payload: unknown) {
+function jwtFalso(payload: IndicacaoPayload) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
 
   return `${b64('{"alg":"HS256"}')}.${b64(JSON.stringify(payload))}.x`;
@@ -69,10 +70,13 @@ async function hidratar() {
   };
 }
 
+/* Flag que o React lê para aceitar act() fora do Testing Library. */
+declare global {
+  var IS_REACT_ACT_ENVIRONMENT: boolean | undefined;
+}
+
 beforeEach(() => {
-  (
-    globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
+  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
   vi.mocked(registrarChegadaIndicacao).mockClear();
 });
 

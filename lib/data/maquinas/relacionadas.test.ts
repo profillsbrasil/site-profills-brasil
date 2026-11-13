@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 // Fixture mínima: só os campos que o algoritmo lê importam para o teste.
 function fixture(overrides: Partial<MaquinaCatalogo>): MaquinaCatalogo {
-  return { ...piloto, ...overrides } as MaquinaCatalogo;
+  return { ...piloto, ...overrides };
 }
 
 describe('getMaquinasRelacionadas', () => {

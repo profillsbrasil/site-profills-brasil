@@ -1,10 +1,11 @@
+import type { IndicacaoPayload } from '@/lib/indicacao/tipos';
 import { render, screen } from '@testing-library/react';
 
 import { BotaoEspecialista } from './botaoEspecialista';
 import { IndicacaoProvider } from './indicacaoProvider';
 import { afterEach, describe, expect, it } from 'vitest';
 
-function jwtFalso(payload: unknown) {
+function jwtFalso(payload: IndicacaoPayload) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
 
   return `${b64('{"alg":"HS256"}')}.${b64(JSON.stringify(payload))}.x`;

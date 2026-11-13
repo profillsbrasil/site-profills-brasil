@@ -2,9 +2,11 @@ import {
   extrairTokenIndicacao,
   lerCookieIndicacaoDoBrowser
 } from './cookie-client';
+import type { IndicacaoPayload } from './tipos';
 import { describe, expect, it } from 'vitest';
 
-function jwtFalso(payload: unknown) {
+// Parcial: um dos casos grava payload sem os campos obrigatórios.
+function jwtFalso(payload: Partial<IndicacaoPayload>) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
 
   return `${b64('{"alg":"HS256"}')}.${b64(JSON.stringify(payload))}.assinatura`;

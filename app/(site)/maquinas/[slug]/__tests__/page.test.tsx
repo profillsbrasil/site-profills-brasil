@@ -45,7 +45,7 @@ vi.mock('@/lib/data/maquinas', async (importOriginal) => {
     nomeCompleto: 'Linha Engenharia Fake - Solução Integrada',
     tipoPagina: 'engenharia' as const,
     categoria: 'Linhas completas e automação' as const,
-    embalagensCompativeis: [] as string[],
+    embalagensCompativeis: [],
     imagens: undefined,
     conteudoEngenharia: {
       escopo: 'Escopo de teste da solução de engenharia integrada.',

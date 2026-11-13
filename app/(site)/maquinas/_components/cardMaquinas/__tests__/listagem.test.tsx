@@ -56,11 +56,13 @@ describe('listagem de máquinas no registry', () => {
       `a[href="/maquinas/${semImagem!.slug}"]`
     );
 
-    expect(link).not.toBeNull();
-    expect(
-      within(link as HTMLElement).queryAllByText(semImagem!.nome).length
-    ).toBeGreaterThan(0);
-    expect(link!.querySelectorAll('img').length).toBe(0);
+    expect(link).toBeInstanceOf(HTMLElement);
+
+    if (!(link instanceof HTMLElement)) return;
+    expect(within(link).queryAllByText(semImagem!.nome).length).toBeGreaterThan(
+      0
+    );
+    expect(link.querySelectorAll('img').length).toBe(0);
   });
 
   it('busca por texto filtra por nome ignorando acento e caixa', () => {

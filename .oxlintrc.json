@@ -186,7 +186,15 @@
     "anti-slop/no-widen-then-assert": "error",
     "anti-slop/require-readable-spacing": "error",
     "anti-slop/no-known-value-widening": "error",
-    "anti-slop/no-conditional-empty-object-spread": "error"
+    "anti-slop/no-unknown-parameters": "error",
+    "anti-slop/require-safety-comment-for-type-assertion": "error",
+    "anti-slop/no-conditional-empty-object-spread": "error",
+    "anti-slop/no-array-filter-map": "error",
+    "anti-slop/no-module-mocking": "error"
+    // Ainda sem registro: no-chained-type-assertions, no-runtime-typeof e
+    // no-unsafe-dictionary-type têm casos sem correção que preserve o runtime
+    // (stream das rotas do PDF, lib/indicacao/cookie-client.ts no bundle de
+    // toda página, literais do AST em tools/oxlint/profills).
   },
   "overrides": [
     {
@@ -244,6 +252,16 @@
       "files": ["**/*.test.ts", "**/*.test.tsx"],
       "rules": {
         "eslint/no-await-in-loop": "off"
+      }
+    },
+    {
+      // Os vi.mock que sobraram trocam next/image, next/navigation, next/dynamic,
+      // motion e módulos próprios (envio de e-mail, CRM, analytics, 3D) que o
+      // código de produção importa direto. Tirá-los exige injeção de dependência
+      // em produção; logger e server-only já saíram (spyOn e alias no vitest).
+      "files": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**"],
+      "rules": {
+        "anti-slop/no-module-mocking": "off"
       }
     }
   ]

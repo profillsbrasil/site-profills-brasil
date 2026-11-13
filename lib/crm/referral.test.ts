@@ -1,4 +1,6 @@
 // @vitest-environment node
+import { logger } from '@/lib/utils/logger';
+
 import {
   buscarVendedorPorCodigo,
   formatarTelefoneBR,
@@ -9,11 +11,11 @@ import {
 } from './referral';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
 
 const vendedor = {
   nome: 'Maria Silva',
@@ -22,7 +24,15 @@ const vendedor = {
   contato: '11987654321'
 };
 
-function mockFetch(status: number, body: unknown) {
+type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | Json[]
+  | { [chave: string]: Json };
+
+function mockFetch(status: number, body: Json) {
   return vi.fn().mockResolvedValue({
     ok: status >= 200 && status < 300,
     status,

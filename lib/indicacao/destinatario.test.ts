@@ -2,16 +2,17 @@
 import { NextRequest } from 'next/server';
 
 import { buscarVendedorPorCodigo } from '@/lib/crm/referral';
+import { logger } from '@/lib/utils/logger';
 
 import { INDICACAO_COOKIE, assinarIndicacao } from './cookie-server';
 import { resolverDestinatario } from './destinatario';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
 
 vi.mock('@/lib/crm/referral', () => ({ buscarVendedorPorCodigo: vi.fn() }));
 

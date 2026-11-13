@@ -57,6 +57,8 @@ describe('useOptimized3DModel', () => {
         useOptimized3DModel({ src: '/timer.glb' })
       );
 
+      // SAFETY: o callback do hook só lê `isIntersecting` de cada entrada e
+      // não usa o observer; o jsdom não tem IntersectionObserverEntry.
       avisar(
         [{ isIntersecting: true } as IntersectionObserverEntry],
         {} as IntersectionObserver

@@ -6,6 +6,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 let avisar: IntersectionObserverCallback = () => {};
 
 function naTela(visivel: boolean) {
+  // SAFETY: o callback de VideoServicos só lê `isIntersecting` da primeira
+  // entrada e não usa o observer; o jsdom não tem IntersectionObserverEntry.
   avisar(
     [{ isIntersecting: visivel } as IntersectionObserverEntry],
     {} as IntersectionObserver

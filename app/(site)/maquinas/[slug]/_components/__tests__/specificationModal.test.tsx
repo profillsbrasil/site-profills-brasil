@@ -70,10 +70,9 @@ describe('SpecificationModal', () => {
   });
 
   it('envia o payload com maquinaSlug para máquina sem legacyId', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ success: true })
-    });
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(Response.json({ success: true }));
 
     vi.stubGlobal('fetch', fetchMock);
 
@@ -107,7 +106,7 @@ describe('SpecificationModal', () => {
     });
 
     const [, options] = fetchMock.mock.calls[0];
-    const body = JSON.parse(options.body as string);
+    const body = JSON.parse(await new Response(options?.body).text());
     expect(body).toMatchObject({
       maquinaSlug: 'linha-producao-completa-envase',
       maquinaNome: 'Linha de Produção Ponta a Ponta'

@@ -1,4 +1,4 @@
-import type { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
 
 import { sendLeadNotification } from '@/lib/emails/catalog-request/email-catalog';
 import { sendContactEmail } from '@/lib/emails/contact-form/email-contact';
@@ -6,6 +6,7 @@ import { sendMontarMaquinaEmail } from '@/lib/emails/montar-maquina/email-montar
 import { sendMonteFabricaEmail } from '@/lib/emails/monte-fabrica/email-monte-fabrica';
 import { sendSpecificationEmail } from '@/lib/emails/solicitar-especificacoes/email-especificacoes';
 import { resolverDestinatario } from '@/lib/indicacao/destinatario';
+import { logger } from '@/lib/utils/logger';
 
 import { POST as postContact } from '../contact/route';
 import { POST as postCatalogo } from '../download-catalog/route';
@@ -36,21 +37,25 @@ vi.mock('@/lib/emails/contact-form/email-contact', () => ({
   sendContactEmail: vi.fn()
 }));
 
-vi.mock('@/lib/utils/logger', () => ({
-  logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
-}));
+beforeEach(() => {
+  for (const nivel of ['error', 'info', 'warn'] as const) {
+    vi.spyOn(logger, nivel).mockImplementation(() => {});
+  }
+});
 
 vi.mock('@/lib/indicacao/destinatario', () => ({
   resolverDestinatario: vi.fn()
 }));
 
-function req(payload: unknown): NextRequest {
-  return new Request('http://localhost/api/teste', {
+function req(payload: Readonly<Record<string, string | undefined>>) {
+  return new NextRequest('http://localhost/api/teste', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-  }) as unknown as NextRequest;
+  });
 }
+
+const envioOk = { success: true, messageId: 'teste' };
 
 const casos = [
   {
@@ -131,7 +136,7 @@ describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
   });
 
   it('responde 200 quando o e-mail é enviado', async () => {
-    vi.mocked(sendMock).mockResolvedValue(undefined as never);
+    vi.mocked(sendMock).mockResolvedValue(envioOk);
     const res = await post(req(payload));
     const corpo = await res.json();
     expect(res.status).toBe(200);
@@ -149,7 +154,7 @@ describe.each(casos)('POST /api/$nome', ({ post, sendMock, payload }) => {
       para: 'caixa@profills.test',
       vendedor: null
     });
-    vi.mocked(sendMock).mockResolvedValue(undefined as never);
+    vi.mocked(sendMock).mockResolvedValue(envioOk);
 
     const res = await post(req(payload));
     const corpo = await res.json();
