@@ -86,11 +86,14 @@ export function ModelViewer3DProvider({
     });
   }, [preloadImportantModels, preloadModel]);
 
-  const value = {
-    preloadModel,
-    isModelCached,
-    clearModelCache
-  };
+  const value = React.useMemo(
+    () => ({
+      preloadModel,
+      isModelCached,
+      clearModelCache
+    }),
+    [preloadModel, isModelCached, clearModelCache]
+  );
 
   return (
     <ModelViewer3DContext.Provider value={value}>

@@ -35,6 +35,7 @@ const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(
 )}`;
 
 const DATA_SORTEIO = '05/06/2026';
+const ANO_ATUAL = new Date().getFullYear();
 
 export const metadata: Metadata = {
   title: 'Sorteio FISPAL 2026',
@@ -391,7 +392,7 @@ export default function SorteioFispal2026() {
             />
             <p className='hidden md:block'>
               <span className='text-accent'>&copy;</span>{' '}
-              {new Date().getFullYear()} Profills Brasil. Sorteio FISPAL 2026.
+              {ANO_ATUAL} Profills Brasil. Sorteio FISPAL 2026.
             </p>
           </div>
         </footer>

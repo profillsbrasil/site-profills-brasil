@@ -17,7 +17,7 @@ const ProgressIndicator = () => {
   };
 
   const handleBack = () => {
-    if (step == 2) {
+    if (step === 2) {
       setIsExpanded(true);
     }
     if (step > 1) {
