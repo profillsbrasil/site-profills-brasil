@@ -111,7 +111,8 @@ export default function FormularioMontarFabrica() {
           <div className='mb-6 h-full w-full md:mb-0 md:w-2/3'>
             <Image
               src={imgFabricaCompleta}
-              loading='eager'
+              preload
+              sizes='(min-width: 768px) 67vw, 100vw'
               alt='Monte sua fábrica'
               className='h-full w-full object-contain'
             />

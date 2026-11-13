@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
-import { BlurFade } from '@/components/ui/blur-fade';
 import { Highlighter } from '@/components/magicui/highlighter';
+import { BlurFade } from '@/components/ui/blur-fade';
 import imgHub from '@/lib/images/projetos/HUB.jpg';
 
 import { Building2, Globe, MapPin, Zap } from 'lucide-react';
@@ -18,15 +18,14 @@ export default function Hero() {
             src={imgHub}
             alt='Profills Hub - Expansão Global e Marketplace'
             className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
-            loading='eager'
-            priority
+            preload
+            sizes='(min-width: 1152px) 1152px, 100vw'
           />
         </div>
       </BlurFade>
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
-          
           animationDuration={4000}
           textColor='text-2xl font-bold md:text-4xl'>
           <h1 id='titulo-profills-hub'>Profills Hub</h1>
@@ -36,28 +35,28 @@ export default function Hero() {
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
               À medida que nossas{' '}
-            <span className='text-accent font-semibold'>
-              operações e relacionamentos construídos nos últimos sete anos
-            </span>{' '}
-            se consolidam, olhamos além das fronteiras brasileiras e começamos a
-            focar no{' '}
-            <span className='text-accent font-semibold'>
-              mercado internacional
-            </span>
-            .
-          </p>
+              <span className='text-accent font-semibold'>
+                operações e relacionamentos construídos nos últimos sete anos
+              </span>{' '}
+              se consolidam, olhamos além das fronteiras brasileiras e começamos
+              a focar no{' '}
+              <span className='text-accent font-semibold'>
+                mercado internacional
+              </span>
+              .
+            </p>
 
-          <p>
-            Já contamos com uma{' '}
-            <span className='text-accent font-semibold'>
-              estrutura em todo o Brasil
-            </span>
-            , com filiais espalhadas pelo país, e{' '}
-            <span className='text-accent font-semibold'>
-              preparamos filiais internacionalmente
-            </span>{' '}
-            na Colômbia, República Dominicana, Estados Unidos e Emirados Árabes
-              Unidos.
+            <p>
+              Já contamos com uma{' '}
+              <span className='text-accent font-semibold'>
+                estrutura em todo o Brasil
+              </span>
+              , com filiais espalhadas pelo país, e{' '}
+              <span className='text-accent font-semibold'>
+                preparamos filiais internacionalmente
+              </span>{' '}
+              na Colômbia, República Dominicana, Estados Unidos e Emirados
+              Árabes Unidos.
             </p>
           </div>
         </BlurFade>

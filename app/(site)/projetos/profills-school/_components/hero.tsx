@@ -18,7 +18,8 @@ export default function Hero() {
             src={imgSchool}
             alt='Profills School - Educação Técnica de Qualidade'
             className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
-            loading='eager'
+            preload
+            sizes='(min-width: 1152px) 1152px, 100vw'
           />
         </div>
       </BlurFade>

@@ -18,7 +18,8 @@ export default function Hero() {
             src={imgLocacao}
             alt='Profills Locação - Máquinas por Assinatura'
             className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
-            loading='eager'
+            preload
+            sizes='(min-width: 1152px) 1152px, 100vw'
           />
         </div>
       </BlurFade>
