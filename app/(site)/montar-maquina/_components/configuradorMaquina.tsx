@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { EntradaTopo } from '@/components/entradaTopo';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Highlighter } from '@/components/magicui/highlighter';
 import { Button } from '@/components/ui/button';
@@ -38,7 +39,6 @@ import {
   initialContactFormData
 } from './combinacaoMaquinas';
 import { Drill } from 'lucide-react';
-import * as m from 'motion/react-m';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
 
@@ -158,22 +158,16 @@ export default function ConfiguradorMaquina() {
           </Highlighter>{' '}
         </div>
 
-        <m.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className='pb-6 text-center md:pb-12'>
+        <EntradaTopo className='pb-6 text-center md:pb-12'>
           <p className='mx-auto max-w-3xl text-sm text-pretty text-secondary-foreground/70 md:text-base'>
             Preencha os dados abaixo e descubra qual a máquina ideal para o seu
             produto.
           </p>
-        </m.div>
+        </EntradaTopo>
 
         {/* Selection Sections */}
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <EntradaTopo
+          ordem={1}
           className='mb-8 grid gap-6 md:mb-12 md:grid-cols-2 md:gap-8'>
           {/* Packaging Selection */}
           <div>
@@ -184,13 +178,9 @@ export default function ConfiguradorMaquina() {
             </div>
 
             <div className='grid grid-cols-2 gap-2 md:gap-4'>
-              {packagingOptions.map((option, index) => {
+              {packagingOptions.map((option) => {
                 return (
-                  <m.div
-                    key={option.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}>
+                  <div key={option.id}>
                     <Card
                       className={`cursor-pointer rounded-xs border-2 py-1 transition-all duration-300 hover:scale-105 hover:shadow-lg md:py-2 ${
                         selectedPackaging === option.id
@@ -214,7 +204,7 @@ export default function ConfiguradorMaquina() {
                         </span>
                       </div>
                     </Card>
-                  </m.div>
+                  </div>
                 );
               })}
             </div>
@@ -229,13 +219,9 @@ export default function ConfiguradorMaquina() {
             </div>
 
             <div className='grid grid-cols-2 gap-2 md:gap-4'>
-              {productTypes.map((type, index) => {
+              {productTypes.map((type) => {
                 return (
-                  <m.div
-                    key={type.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 + 0.4 }}>
+                  <div key={type.id}>
                     <Card
                       className={`cursor-pointer rounded-xs border-2 p-2 transition-all duration-300 hover:scale-105 hover:shadow-lg md:p-4 ${
                         selectedProductType === type.id
@@ -266,19 +252,15 @@ export default function ConfiguradorMaquina() {
                         </span>
                       </div>
                     </Card>
-                  </m.div>
+                  </div>
                 );
               })}
             </div>
           </div>
-        </m.div>
+        </EntradaTopo>
 
         {/* Product Details / Contact Form */}
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className='mb-8 md:mb-12'>
+        <EntradaTopo ordem={2} className='mb-8 md:mb-12'>
           <div className='flex h-full w-full flex-col'>
             {!selectedPackaging || !selectedProductType ? (
               // Estado inicial - convite para seleção
@@ -535,7 +517,7 @@ export default function ConfiguradorMaquina() {
               </>
             )}
           </div>
-        </m.div>
+        </EntradaTopo>
       </div>
     </div>
   );

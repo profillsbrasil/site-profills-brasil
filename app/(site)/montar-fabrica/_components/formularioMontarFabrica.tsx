@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 
+import { EntradaTopo } from '@/components/entradaTopo';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { Highlighter } from '@/components/magicui/highlighter';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,6 @@ import { logger } from '@/lib/utils/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ArrowRight, Building2, Mail, Phone, User } from 'lucide-react';
-import * as m from 'motion/react-m';
 import { Controller, useForm } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
 import { toast } from 'sonner';
@@ -120,10 +120,8 @@ export default function FormularioMontarFabrica() {
 
           {/* Texto explicativo - Mobile primeiro */}
           <div className='z-20 h-full w-full md:w-1/3 md:pr-10'>
-            <m.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+            <EntradaTopo
+              ordem={1}
               className='border-border/20 flex flex-col items-start justify-center rounded-xs border border-dashed bg-slate-900 p-4 shadow-xl shadow-black/10 md:p-5'>
               <h2 className='mb-3 text-xl font-bold text-white md:mb-4 md:text-3xl'>
                 Como funciona?
@@ -150,7 +148,7 @@ export default function FormularioMontarFabrica() {
                 <span className='text-accent font-semibold'>o seu negócio</span>
                 .
               </p>
-            </m.div>
+            </EntradaTopo>
           </div>
         </div>
         {/* Segunda seção - Formulário e informações */}
@@ -158,11 +156,7 @@ export default function FormularioMontarFabrica() {
           <div className='relative mx-auto w-full max-w-7xl'>
             <div className='flex flex-col gap-6 md:flex-row md:gap-12'>
               {/* Coluna do formulário */}
-              <m.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className='w-full md:w-1/2'>
+              <EntradaTopo ordem={2} className='w-full md:w-1/2'>
                 <div className='border-border/20 flex h-full flex-col justify-between rounded-xs border border-dashed bg-slate-900/80 p-4 shadow-xl backdrop-blur md:p-6'>
                   <form
                     onSubmit={handleSubmit(onSubmit)}
@@ -319,13 +313,11 @@ export default function FormularioMontarFabrica() {
                     )}
                   </Button>
                 </div>
-              </m.div>
+              </EntradaTopo>
 
               {/* Coluna de informações */}
-              <m.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
+              <EntradaTopo
+                ordem={3}
                 className='w-full space-y-4 md:w-1/2 md:space-y-6'>
                 <div className='border-border/20 rounded-xs border border-dashed bg-slate-900/80 p-4 shadow-xl backdrop-blur md:p-6'>
                   <h3 className='mb-3 text-lg font-bold text-white md:mb-4 md:text-xl'>
@@ -401,7 +393,7 @@ export default function FormularioMontarFabrica() {
                     </p>
                   </div>
                 </div>
-              </m.div>
+              </EntradaTopo>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { EntradaTopo } from '@/components/entradaTopo';
 import { Button } from '@/components/ui/button';
 
 import { CatalogFields } from './components/CatalogFields';
@@ -7,7 +8,6 @@ import { SuccessPanel } from './components/SuccessPanel';
 import { useCatalogForm } from './hooks/useCatalogForm';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
-import * as m from 'motion/react-m';
 
 export function CatalogForm() {
   const { form, status, submittedEmail, onSubmit, restart } = useCatalogForm();
@@ -20,12 +20,8 @@ export function CatalogForm() {
   const submitting = status === 'submitting';
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
-      className='w-full max-w-md rounded-2xl border border-white/15 bg-white/8 p-6 shadow-2xl backdrop-blur-xl sm:p-10'>
-      <AnimatePresence mode='wait'>
+    <EntradaTopo className='w-full max-w-md rounded-2xl border border-white/15 bg-white/8 p-6 shadow-2xl backdrop-blur-xl sm:p-10'>
+      <AnimatePresence mode='wait' initial={false}>
         {status === 'success' ? (
           <SuccessPanel
             key='success'
@@ -59,6 +55,6 @@ export function CatalogForm() {
           </form>
         )}
       </AnimatePresence>
-    </m.div>
+    </EntradaTopo>
   );
 }

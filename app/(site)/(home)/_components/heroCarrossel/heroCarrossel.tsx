@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import { EntradaTopo } from '@/components/entradaTopo';
 import { GridPattern } from '@/components/layout/gridPatternBg';
 import { cn } from '@/lib/utils';
 
@@ -48,12 +49,13 @@ export default function HeroCarrossel() {
       </div>
 
       <div className='relative z-10 mx-auto grid w-[min(1280px,94vw)] grid-cols-1 items-center gap-2 pt-4 pb-24 min-[900px]:grid-cols-2 min-[900px]:pb-16'>
-        {/* Coluna de texto — @container: fonte dos títulos compactos escala pela largura real da coluna */}
-        <div className='@container'>
+        {/* Coluna de texto — @container: fonte dos títulos compactos escala pela largura real da coluna.
+            initial={false}: o primeiro slide nasce no estado final no HTML; só as trocas animam */}
+        <EntradaTopo className='@container'>
           {estatico ? (
             <HeroSlideCopy slide={slide} primeiro={atual === 0} estatico />
           ) : (
-            <AnimatePresence mode='wait'>
+            <AnimatePresence mode='wait' initial={false}>
               <HeroSlideCopy
                 key={slide.id}
                 slide={slide}
@@ -61,10 +63,12 @@ export default function HeroCarrossel() {
               />
             </AnimatePresence>
           )}
-        </div>
+        </EntradaTopo>
 
         {/* Palco: anéis fixos, máquina troca */}
-        <div className='relative mt-6 h-[min(48vh,460px)] min-[900px]:mt-0 min-[900px]:max-[1180px]:h-[min(70vh,640px)] min-[900px]:h-[min(76vh,700px)] min-[900px]:translate-x-[6%]'>
+        <EntradaTopo
+          ordem={2}
+          className='relative mt-6 h-[min(48vh,460px)] min-[900px]:mt-0 min-[900px]:max-[1180px]:h-[min(70vh,640px)] min-[900px]:h-[min(76vh,700px)] min-[900px]:translate-x-[6%]'>
           <HeroRings estatico={estatico} pingKey={pingKey} />
           {estatico ? (
             <HeroSlideStage
@@ -74,7 +78,7 @@ export default function HeroCarrossel() {
               estatico
             />
           ) : (
-            <AnimatePresence mode='wait' custom={direcao}>
+            <AnimatePresence mode='wait' custom={direcao} initial={false}>
               <HeroSlideStage
                 key={slide.id}
                 slide={slide}
@@ -83,7 +87,7 @@ export default function HeroCarrossel() {
               />
             </AnimatePresence>
           )}
-        </div>
+        </EntradaTopo>
       </div>
 
       {/* Navegação do carrossel */}

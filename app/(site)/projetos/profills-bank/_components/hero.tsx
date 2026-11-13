@@ -1,8 +1,7 @@
 import Image from 'next/image';
 
-import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { EntradaTopo } from '@/components/entradaTopo';
 import { Highlighter } from '@/components/magicui/highlighter';
-import { BlurFade } from '@/components/ui/blur-fade';
 import imgBank from '@/lib/images/projetos/Bank.jpg';
 
 import { Building2, CreditCard, Globe, Shield } from 'lucide-react';
@@ -12,7 +11,7 @@ export default function Hero() {
     <section
       aria-labelledby='titulo-profills-bank'
       className='flex min-h-[70vh] w-full max-w-6xl flex-col items-center justify-evenly gap-6 md:min-h-[93vh] md:gap-0'>
-      <BlurFade delay={0.1} inView>
+      <EntradaTopo>
         <div className='flex h-full w-full flex-col items-center justify-center pt-5 md:pt-0'>
           <Image
             src={imgBank}
@@ -22,7 +21,7 @@ export default function Hero() {
             className='z-10 h-full w-full rounded-xs object-contain shadow-xl'
           />
         </div>
-      </BlurFade>
+      </EntradaTopo>
       <div className='flex h-full w-full flex-col items-center gap-6 md:gap-10'>
         <Highlighter
           action='underline'
@@ -31,7 +30,7 @@ export default function Hero() {
           <h1 id='titulo-profills-bank'>Profills Bank</h1>
         </Highlighter>
 
-        <BlurFade delay={0.2} inView>
+        <EntradaTopo ordem={1}>
           <div className='flex flex-col gap-4 text-sm leading-relaxed md:text-lg'>
             <p>
               A <span className='text-accent font-semibold'>Profills Bank</span>{' '}
@@ -56,10 +55,10 @@ export default function Hero() {
               .
             </p>
           </div>
-        </BlurFade>
+        </EntradaTopo>
 
         {/* Features Cards */}
-        <AnimatedContainer className='w-full'>
+        <EntradaTopo ordem={2} className='w-full'>
           <div className='grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-5'>
             <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>
               <Shield className='h-8 w-8 text-[#2d62ef] transition-all duration-300 group-hover:scale-105' />
@@ -90,7 +89,7 @@ export default function Hero() {
               </div>
             </div>
           </div>
-        </AnimatedContainer>
+        </EntradaTopo>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
+import { EntradaTopo } from '@/components/entradaTopo';
 import { Badge } from '@/components/ui/badge';
-import { BlurFade } from '@/components/ui/blur-fade';
 import logo from '@/public/logo.png';
 
 import { Award, Cpu, MapPin, Settings, Shield, Users } from 'lucide-react';
@@ -15,7 +15,7 @@ export default function CardsPerfil() {
 
       <div className='flex w-full flex-col gap-4 md:flex-row md:gap-6'>
         {/* Card 1 - Inovação e Tecnologia 4.0 */}
-        <BlurFade delay={0.1} inView className='w-full md:w-1/3'>
+        <EntradaTopo ordem={1} className='w-full md:w-1/3'>
           <div className='group bg-background relative flex h-full w-full flex-col overflow-hidden border border-dashed border-black/40 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-6'>
             <div className='flex flex-col items-start gap-4'>
               <div className='flex items-center gap-3'>
@@ -45,10 +45,10 @@ export default function CardsPerfil() {
               </div>
             </div>
           </div>
-        </BlurFade>
+        </EntradaTopo>
 
         {/* Card 2 - Qualidade e Certificações Internacionais */}
-        <BlurFade delay={0.2} inView className='w-full md:w-1/3'>
+        <EntradaTopo ordem={2} className='w-full md:w-1/3'>
           <div className='group bg-background relative flex h-full w-full flex-col overflow-hidden border border-dashed border-black/40 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-6'>
             <div className='flex flex-col items-start gap-4'>
               <div className='flex items-center gap-3'>
@@ -78,10 +78,10 @@ export default function CardsPerfil() {
               </div>
             </div>
           </div>
-        </BlurFade>
+        </EntradaTopo>
 
         {/* Card 3 - Experiência e Alcance Nacional */}
-        <BlurFade delay={0.3} inView className='w-full md:w-1/3'>
+        <EntradaTopo ordem={3} className='w-full md:w-1/3'>
           <div className='group bg-background relative flex h-full w-full flex-col overflow-hidden border border-dashed border-black/40 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-6'>
             <div className='flex flex-col items-start gap-4'>
               <div className='flex items-center gap-3'>
@@ -110,7 +110,7 @@ export default function CardsPerfil() {
               </div>
             </div>
           </div>
-        </BlurFade>
+        </EntradaTopo>
       </div>
     </div>
   );

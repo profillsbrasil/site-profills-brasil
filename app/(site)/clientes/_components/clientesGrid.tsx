@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { EntradaTopo } from '@/components/entradaTopo';
 import { BlurFade } from '@/components/ui/blur-fade';
 import { listaClientes, normalizeQuery } from '@/lib/data/listaClientes';
 
@@ -9,6 +10,9 @@ import ClienteCard from './clienteCard';
 import SearchToggle from './searchToggle';
 
 const CHUNK_SIZE = 12;
+
+// Três linhas da grade de 3 colunas no desktop e quatro e meia de 2 no mobile (390 px)
+const LOGOS_NA_PRIMEIRA_DOBRA = 9;
 
 export default function ClientesGrid() {
   const [query, setQuery] = useState('');
@@ -72,6 +76,13 @@ export default function ClientesGrid() {
         ) : (
           <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6'>
             {visible.map((cliente, index) => {
+              if (!query && index < LOGOS_NA_PRIMEIRA_DOBRA) {
+                return (
+                  <EntradaTopo key={cliente.id} ordem={3}>
+                    <ClienteCard cliente={cliente} />
+                  </EntradaTopo>
+                );
+              }
               const positionInChunk = index % CHUNK_SIZE;
               const delay = Math.min(positionInChunk * 0.04, 0.4);
               return (
