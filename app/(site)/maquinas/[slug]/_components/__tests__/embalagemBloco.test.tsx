@@ -1,3 +1,4 @@
+import type { Embalagem3d } from '@/lib/data/embalagens3d';
 import { envasadoraStandUpPouchSpeed as piloto } from '@/lib/data/maquinas/envasadora-stand-up-pouch-speed';
 import { render, screen } from '@testing-library/react';
 
@@ -10,12 +11,13 @@ vi.mock('next/image', () => ({
 
 vi.mock('next/dynamic', () => ({
   default: () =>
-    function Modelo3dMock(props: { modelSrc: string; cameraOrbit?: string }) {
+    function Modelo3dMock(props: { embalagem: Embalagem3d }) {
       return (
         <div
           data-testid='modelo-3d'
-          data-model-src={props.modelSrc}
-          data-camera-orbit={props.cameraOrbit}
+          data-model-src={props.embalagem.glb}
+          data-camera-orbit={props.embalagem.cameraOrbit}
+          data-poster={JSON.stringify(props.embalagem.poster)}
         />
       );
     }
@@ -31,6 +33,7 @@ describe('EmbalagemBloco', () => {
       '/embalagens-3d/pouch.glb'
     );
     expect(modelo3d).toHaveAttribute('data-camera-orbit', '27deg 80deg 100%');
+    expect(modelo3d.getAttribute('data-poster')).toMatch(/embalagens3d\/pouch/);
   });
 
   it('cai para a foto quando não há glb', () => {

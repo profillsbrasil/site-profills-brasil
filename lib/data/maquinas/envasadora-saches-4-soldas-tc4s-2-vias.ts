@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-saches-4-soldas-tc4s-2-vias.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-saches-4-soldas-tc4s-2-vias.webp';
 
@@ -54,10 +55,7 @@ export const envasadoraSaches4SoldasTc4s2Vias: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/sache-4-soldas.glb',
-    cameraOrbit: '32deg 86deg 100%'
-  },
+  embalagem3d: embalagens3d['sache-4-soldas'],
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

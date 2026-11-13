@@ -194,7 +194,7 @@ export function useOptimized3DModel({
   }, [src]);
 
   const handleModelError = useCallback(
-    (error: Error) => {
+    (error: unknown) => {
       logger.error('Erro ao carregar modelo 3D:', error);
       modelCache.delete(src);
     },

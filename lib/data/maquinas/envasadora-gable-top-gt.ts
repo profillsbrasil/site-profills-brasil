@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-gable-top-gt.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-gable-top-gt.webp';
 
@@ -53,10 +54,7 @@ export const envasadoraGableTopGt: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/gable-top.glb',
-    cameraOrbit: '45deg 75deg 100%'
-  },
+  embalagem3d: embalagens3d['gable-top'],
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

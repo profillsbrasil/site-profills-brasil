@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-saches-3-soldas-liquidos-tc3sc.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-saches-3-soldas-liquidos-tc3sc.webp';
 
@@ -53,10 +54,7 @@ export const envasadoraSaches3SoldasLiquidosTc3sc: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/3-soldas-duplo.glb',
-    cameraOrbit: '38deg 72deg 100%'
-  },
+  embalagem3d: embalagens3d['3-soldas-duplo'],
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

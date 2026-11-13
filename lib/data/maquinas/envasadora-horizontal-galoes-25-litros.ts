@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-horizontal-galoes-25-litros.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-horizontal-galoes-25-litros.webp';
 
@@ -48,10 +49,7 @@ export const envasadoraHorizontalGaloes25Litros: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/galao.glb',
-    cameraOrbit: '33deg 83deg 100%'
-  },
+  embalagem3d: embalagens3d.galao,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

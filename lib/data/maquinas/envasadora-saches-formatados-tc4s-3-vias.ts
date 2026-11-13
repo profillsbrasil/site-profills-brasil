@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-saches-formatados-tc4s-3-vias.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-saches-formatados-tc4s-3-vias.webp';
 
@@ -50,10 +51,7 @@ export const envasadoraSachesFormatadosTc4s3Vias: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/sache-especial.glb',
-    cameraOrbit: '41deg 74deg 100%'
-  },
+  embalagem3d: embalagens3d['sache-especial'],
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/empacotadeira-vertical-ptc-speed.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/empacotadeira-vertical-ptc-speed.webp';
 
@@ -58,10 +59,7 @@ export const empacotadeiraVerticalPtcSpeed: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/sache-saco.glb',
-    cameraOrbit: '29deg 84deg 100%'
-  },
+  embalagem3d: embalagens3d['sache-saco'],
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

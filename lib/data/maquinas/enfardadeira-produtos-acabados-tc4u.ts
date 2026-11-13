@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/enfardadeira-produtos-acabados-tc4u.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/enfardadeira-produtos-acabados-tc4u.webp';
 
@@ -49,10 +50,7 @@ export const enfardadeiraProdutosAcabadosTc4u: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/fardo.glb',
-    cameraOrbit: '52deg 68deg 100%'
-  },
+  embalagem3d: embalagens3d.fardo,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

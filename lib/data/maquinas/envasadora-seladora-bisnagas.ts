@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-seladora-bisnagas.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-seladora-bisnagas.webp';
 
@@ -53,10 +54,7 @@ export const envasadoraSeladoraBisnagas: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/bisnaga.glb',
-    cameraOrbit: '28deg 78deg 100%'
-  },
+  embalagem3d: embalagens3d.bisnaga,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

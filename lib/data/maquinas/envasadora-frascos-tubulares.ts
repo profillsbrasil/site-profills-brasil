@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-frascos-tubulares.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-frascos-tubulares.webp';
 
@@ -47,10 +48,7 @@ export const envasadoraFrascosTubulares: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/frascos-tubulares.glb',
-    cameraOrbit: '43deg 77deg 100%'
-  },
+  embalagem3d: embalagens3d['frascos-tubulares'],
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',
