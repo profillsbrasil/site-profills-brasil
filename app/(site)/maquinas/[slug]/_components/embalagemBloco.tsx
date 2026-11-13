@@ -46,8 +46,7 @@ export function EmbalagemBloco({ maquina }: { maquina: MaquinaCatalogo }) {
           {maquina.embalagem3d ? (
             <>
               <OptimizedEmbalagem3d
-                modelSrc={maquina.embalagem3d.glb}
-                cameraOrbit={maquina.embalagem3d.cameraOrbit}
+                embalagem={maquina.embalagem3d}
                 alt={`Embalagem produzida pela ${maquina.nome}`}
                 className='h-64 w-full md:h-80'
               />

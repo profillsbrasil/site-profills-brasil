@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
 import { TextAnimate } from '@/components/ui/text-animate';
+import { embalagens3d } from '@/lib/data/embalagens3d';
 
 const OptimizedEmbalagem3d = dynamic(
   () =>
@@ -20,103 +21,87 @@ const listaDeEmbalagens = [
   {
     title: '3 Soldas Duplo',
     description: 'Embalagem plana, estável e ideal para doses por porção.',
-    modelSrc: '/embalagens-3d/3-soldas-duplo.glb',
-    cameraOrbit: '38deg 72deg 100%'
+    embalagem: embalagens3d['3-soldas-duplo']
   },
   {
     title: 'Bisnaga',
     description: 'Formato maleável, perfeito para cremes, pastas e géis.',
-    modelSrc: '/embalagens-3d/bisnaga.glb',
-    cameraOrbit: '28deg 78deg 100%'
+    embalagem: embalagens3d.bisnaga
   },
   {
     title: 'Fardo',
     description: 'Conjunto agrupado para transporte e exposição em varejo.',
-    modelSrc: '/embalagens-3d/fardo.glb',
-    cameraOrbit: '52deg 68deg 100%'
+    embalagem: embalagens3d.fardo
   },
   {
     title: 'Flowpack',
     description: 'Invólucro contínuo, ideal para snacks e produtos unitários.',
-    modelSrc: '/embalagens-3d/flowpack.glb',
-    cameraOrbit: '18deg 82deg 100%'
+    embalagem: embalagens3d.flowpack
   },
   {
     title: 'Frascos Tubulares',
     description:
       'Formato alongado, excelente para shampoos, cosméticos e líquidos.',
-    modelSrc: '/embalagens-3d/frascos-tubulares.glb',
-    cameraOrbit: '43deg 77deg 100%'
+    embalagem: embalagens3d['frascos-tubulares']
   },
   {
     title: 'Galão',
     description: 'Volume ampliado para químicos, óleos e soluções líquidas.',
-    modelSrc: '/embalagens-3d/galao.glb',
-    cameraOrbit: '33deg 83deg 100%'
+    embalagem: embalagens3d.galao
   },
   {
     title: 'Garrafa',
     description: 'Indicada para bebidas, lácteos e líquidos de consumo diário.',
-    modelSrc: '/embalagens-3d/garrafas-02.glb',
-    cameraOrbit: '57deg 70deg 100%'
+    embalagem: embalagens3d.garrafa
   },
   {
     title: 'Pote',
     description: 'Estrutura rígida para alimentos, grãos, cremes e pastas.',
-    modelSrc: '/embalagens-3d/pote02.glb',
-    cameraOrbit: '270deg 40deg 100%'
+    embalagem: embalagens3d.pote
   },
   {
     title: 'Pouch',
     description: 'Embalagem flexível tipo stand-up para alimentos e líquidos.',
-    modelSrc: '/embalagens-3d/pouch.glb',
-    cameraOrbit: '27deg 80deg 100%'
+    embalagem: embalagens3d.pouch
   },
   {
     title: 'Sache 4 Soldas',
     description:
       'Sache retangular para doses individuais de produtos secos ou líquidos.',
-    modelSrc: '/embalagens-3d/sache-4-soldas.glb',
-    cameraOrbit: '32deg 86deg 100%'
+    embalagem: embalagens3d['sache-4-soldas']
   },
   {
     title: 'Sache Especial',
     description:
       'Formato diferenciado para ações promocionais e linhas premium.',
-    modelSrc: '/embalagens-3d/sache-especial.glb',
-    cameraOrbit: '41deg 74deg 100%'
+    embalagem: embalagens3d['sache-especial']
   },
   {
     title: 'UHT',
     description: 'Caixa cartonada para leite, sucos e bebidas esterilizadas.',
-    modelSrc: '/embalagens-3d/uht.glb',
-    cameraOrbit: '36deg 79deg 100%'
+    embalagem: embalagens3d.uht
   },
   {
     title: 'Sache Saco',
     description:
       'Bolsa flexível maior, ideal para refis e embalagens econômicas.',
-    modelSrc: '/embalagens-3d/sache-saco.glb',
-    cameraOrbit: '29deg 84deg 100%'
+    embalagem: embalagens3d['sache-saco']
   },
   {
     title: 'Stick',
     description: 'Formato estreito para porções individuais de pó ou líquidos.',
-    modelSrc: '/embalagens-3d/stick.glb',
-    cameraOrbit: '20deg 120deg 100%'
+    embalagem: embalagens3d.stick
   },
   {
     title: 'Gable Top',
     description:
       'Embalagem do tipo gable top, ideal para leite, sucos e bebidas.',
-    modelSrc: '/embalagens-3d/gable-top.glb',
-    cameraOrbit: '45deg 75deg 100%'
+    embalagem: embalagens3d['gable-top']
   },
   {
     title: 'Lata de Tinta',
     description: 'Embalagem metálica para armazenar e transportar tinta.',
-    modelSrc: '/embalagens-3d/lata-tinta.glb',
-    cameraOrbit: '190deg 66deg 100%'
+    embalagem: embalagens3d['lata-tinta']
   }
 ];
 
@@ -159,9 +144,8 @@ export default function ListaEmbalagens() {
                     className='absolute -right-px -bottom-px z-10 h-2 w-2 border-r border-b border-accent'
                   />
                   <OptimizedEmbalagem3d
-                    modelSrc={card.modelSrc}
+                    embalagem={card.embalagem}
                     alt={`Modelo 3D - ${card.title}`}
-                    cameraOrbit={card.cameraOrbit}
                     autoRotate={true}
                   />
                 </div>

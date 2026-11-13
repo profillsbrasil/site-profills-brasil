@@ -1,28 +1,25 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Image from 'next/image';
 
-import { WebGLFallback } from '@/components/modelo3d/WebGLFallback';
 import { useOptimized3DModel } from '@/components/modelo3d/hooks/useOptimized3DModel';
+import type { Embalagem3d } from '@/lib/data/embalagens3d';
+import { cn } from '@/lib/utils';
 
 interface OptimizedEmbalagem3dProps {
-  modelSrc?: string;
-  alt?: string;
+  embalagem: Embalagem3d;
+  alt: string;
   className?: string;
   autoRotate?: boolean;
-  cameraOrbit?: string;
-  placeholder?: React.ReactNode;
-  posterSrc?: string;
 }
 
 export function OptimizedEmbalagem3d({
-  modelSrc = '/caixa-teste-3d.glb',
-  alt = 'Modelo 3D - Embalagem',
+  embalagem,
+  alt,
   className = '',
-  autoRotate = true,
-  cameraOrbit = '40deg 75deg 105%',
-  placeholder,
-  posterSrc,
+  autoRotate = true
 }: OptimizedEmbalagem3dProps) {
   const {
     containerRef,
@@ -30,95 +27,87 @@ export function OptimizedEmbalagem3d({
     isVisible,
     isLoaded,
     shouldRender,
-    hasBeenLoaded,
     webglSupported,
     handleModelLoad,
     handleModelError
   } = useOptimized3DModel({
-    src: modelSrc,
+    src: embalagem.glb,
     threshold: 0.1,
     rootMargin: '100px'
   });
+  const montado = shouldRender && isLoaded && webglSupported !== false;
+  const [modeloPronto, setModeloPronto] = useState(false);
+
+  // O React não liga onLoad/onError em custom element (load e error não borbulham)
+  useEffect(() => {
+    const el = modelViewerRef.current;
+    if (!montado || !el) return;
+    const aoCarregar = () => {
+      setModeloPronto(true);
+      handleModelLoad();
+    };
+    const aoFalhar = (evento: Event) => handleModelError(evento);
+    el.addEventListener('load', aoCarregar);
+    el.addEventListener('error', aoFalhar);
+    return () => {
+      el.removeEventListener('load', aoCarregar);
+      el.removeEventListener('error', aoFalhar);
+    };
+  }, [montado, modelViewerRef, handleModelLoad, handleModelError]);
 
   return (
     <div
       ref={containerRef}
       className={`flex h-full w-full items-center justify-center ${className}`}>
-      {/* Model-viewer: Uma vez carregado, sempre renderizado mas com visibilidade controlada */}
-      {shouldRender && isLoaded && webglSupported !== false && (
-        // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
-        <model-viewer
-          ref={modelViewerRef}
-          src={modelSrc}
+      <div className='relative h-[250px] w-full'>
+        {montado && (
+          // @ts-expect-error O modelo 3D model-viewer não tem tipos nativos para React
+          <model-viewer
+            ref={modelViewerRef}
+            src={embalagem.glb}
+            alt={alt}
+            camera-controls
+            camera-orbit={embalagem.cameraOrbit}
+            min-camera-orbit='auto auto 50%'
+            max-camera-orbit='auto auto 200%'
+            disable-pan={true}
+            disable-zoom={true}
+            auto-rotate={autoRotate && isVisible} // Só roda animação se estiver visível
+            auto-rotate-delay='500'
+            environment-image='neutral'
+            shadow-intensity='1'
+            exposure='1'
+            interaction-prompt='none'
+            loading='lazy'
+            reveal='auto'
+            style={{
+              width: '100%',
+              height: '250px',
+              minHeight: '250px',
+              backgroundColor: 'transparent',
+              '--poster-color': 'transparent',
+              opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
+              pointerEvents: isVisible ? 'auto' : 'none' // Desabilita interação quando não visível
+            }}
+            className={`transition-all duration-300 ${
+              isVisible ? 'hover:scale-[1.02]' : ''
+            }`}>
+            {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
+          </model-viewer>
+        )}
+
+        <Image
+          src={embalagem.poster}
           alt={alt}
-          camera-controls
-          camera-orbit={cameraOrbit}
-          min-camera-orbit='auto auto 50%'
-          max-camera-orbit='auto auto 200%'
-          disable-pan={true}
-          disable-zoom={true}
-          auto-rotate={autoRotate && isVisible} // Só roda animação se estiver visível
-          auto-rotate-delay='500'
-          environment-image='neutral'
-          shadow-intensity='1'
-          exposure='1'
-          interaction-prompt='none'
-          loading='lazy'
-          reveal='auto'
-          onLoad={handleModelLoad}
-          onError={handleModelError}
-          style={{
-            width: '100%',
-            height: '250px',
-            minHeight: '250px',
-            backgroundColor: 'transparent',
-            '--poster-color': 'transparent',
-            opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
-            pointerEvents: isVisible ? 'auto' : 'none' // Desabilita interação quando não visível
-          }}
-          className={`transition-all duration-300 ${
-            isVisible ? 'hover:scale-[1.02]' : ''
-          }`}>
-          {/* @ts-expect-error Tag fechamento do model-viewer não tem tipos nativos para React */}
-        </model-viewer>
-      )}
-
-      {/* Placeholder: Só mostra se o modelo nunca foi carregado */}
-      {webglSupported !== false && (!shouldRender || !isLoaded) && (
-        <div
-          className='flex h-full w-full items-center justify-center'
-          style={{ minHeight: '250px' }}>
-          {placeholder ? (
-            placeholder
-          ) : posterSrc ? (
-            <Image
-              src={posterSrc}
-              alt={alt}
-              width={400}
-              height={400}
-              sizes='(max-width: 768px) 50vw, 25vw'
-              className='h-auto w-full object-contain'
-            />
-          ) : (
-            <div className='text-muted-foreground flex flex-col items-center justify-center space-y-2'>
-              {isVisible && !hasBeenLoaded ? (
-                <>
-                  <div className='h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent'></div>
-                  <span className='text-sm'>Carregando modelo 3D...</span>
-                </>
-              ) : (
-                <div className='flex h-32 w-32 items-center justify-center rounded-xs bg-muted'>
-                  <span className='text-xs text-muted-foreground'>Modelo 3D</span>
-                </div>
-              )}
-            </div>
+          aria-hidden={modeloPronto || undefined}
+          fill
+          sizes='231px'
+          className={cn(
+            'pointer-events-none object-contain transition-opacity duration-200 motion-reduce:transition-none',
+            modeloPronto && 'opacity-0'
           )}
-        </div>
-      )}
-
-      {webglSupported === false && !posterSrc && (
-        <WebGLFallback variant='light' />
-      )}
+        />
+      </div>
     </div>
   );
 }
