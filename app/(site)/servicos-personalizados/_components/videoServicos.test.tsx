@@ -15,6 +15,18 @@ function naTela(visivel: boolean) {
 describe('VideoServicos', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it('toca direto quando o navegador não tem IntersectionObserver', () => {
+    vi.stubGlobal('IntersectionObserver', undefined);
+    const play = vi
+      .spyOn(HTMLMediaElement.prototype, 'play')
+      .mockResolvedValue(undefined);
+
+    render(<VideoServicos />);
+
+    expect(play).toHaveBeenCalledTimes(1);
   });
 
   it('só toca quando entra na tela e pausa ao sair', () => {

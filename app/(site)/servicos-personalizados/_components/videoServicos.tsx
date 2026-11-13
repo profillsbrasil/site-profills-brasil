@@ -11,15 +11,21 @@ export function VideoServicos() {
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
+    const tocar = () =>
+      video.play().catch((error: unknown) => {
+        // pause() antes do play() terminar rejeita com AbortError; é esperado.
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+        logger.warn('Vídeo de serviços não iniciou:', error);
+      });
+    if (typeof IntersectionObserver === 'undefined') {
+      void tocar();
+      return;
+    }
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        video.play().catch((error: unknown) => {
-          // pause() antes do play() terminar rejeita com AbortError; é esperado.
-          if (error instanceof DOMException && error.name === 'AbortError') {
-            return;
-          }
-          logger.warn('Vídeo de serviços não iniciou:', error);
-        });
+        void tocar();
       } else {
         video.pause();
       }
