@@ -80,7 +80,7 @@ export function ModelViewer3DProvider({
   // Pré-carrega modelos importantes quando o provider é montado
   React.useEffect(() => {
     preloadImportantModels.forEach((src) => {
-      preloadModel(src);
+      void preloadModel(src);
     });
   }, [preloadImportantModels, preloadModel]);
 

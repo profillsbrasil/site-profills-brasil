@@ -12,7 +12,7 @@ declare global {
     reveal?: 'auto' | 'interaction' | 'manual';
 
     ar?: boolean;
-    arModes?: 'webxr scene-viewer quick-look' | string; // space-separated
+    arModes?: string; // space-separated, ex: "webxr scene-viewer quick-look"
     arScale?: 'auto' | 'fixed';
     arPlacement?: 'floor' | 'wall';
     disableAr?: boolean;
@@ -34,12 +34,12 @@ declare global {
     disableZoom?: boolean;
     disablePan?: boolean;
 
-    environmentImage?: 'neutral' | string; // HDR/EXR/etc
+    environmentImage?: string; // "neutral" ou URL de HDR/EXR/etc
     skyboxImage?: string; // imagem 360
     exposure?: number | string;
     shadowIntensity?: number | string;
     shadowSoftness?: number | string;
-    toneMapping?: 'neutral' | 'aces' | 'reinhard' | 'linsrgb' | string;
+    toneMapping?: string; // ex: "neutral", "aces", "reinhard", "linsrgb"
 
     interactionPrompt?: 'auto' | 'none' | 'when-focused';
     interactionPromptStyle?: 'basic' | 'wiggle';
@@ -83,7 +83,7 @@ declare global {
     reveal?: 'auto' | 'interaction' | 'manual';
 
     ar?: boolean;
-    'ar-modes'?: 'webxr scene-viewer quick-look' | string;
+    'ar-modes'?: string;
     'ar-scale'?: 'auto' | 'fixed';
     'ar-placement'?: 'floor' | 'wall';
     'disable-ar'?: boolean;
@@ -105,12 +105,12 @@ declare global {
     'disable-zoom'?: boolean;
     'disable-pan'?: boolean;
 
-    'environment-image'?: 'neutral' | string;
+    'environment-image'?: string;
     'skybox-image'?: string;
     exposure?: number | string;
     'shadow-intensity'?: number | string;
     'shadow-softness'?: number | string;
-    'tone-mapping'?: 'neutral' | 'aces' | 'reinhard' | 'linsrgb' | string;
+    'tone-mapping'?: string;
 
     'interaction-prompt'?: 'auto' | 'none' | 'when-focused';
     'interaction-prompt-style'?: 'basic' | 'wiggle';

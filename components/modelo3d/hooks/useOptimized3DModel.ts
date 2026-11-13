@@ -123,7 +123,7 @@ export function useOptimized3DModel({
       }
     };
 
-    loadModelViewer();
+    void loadModelViewer();
   }, [shouldRender, isLoaded, webglSupported]);
 
   // Cleanup de estilos compartilhado

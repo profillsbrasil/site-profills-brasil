@@ -88,7 +88,7 @@ export function Globe({ className }: { className?: string }) {
   useEffect(() => {
     if (!shouldMount) return;
     let cancelled = false;
-    loadCountries().then((features) => {
+    void loadCountries().then((features) => {
       if (!cancelled) setCountries(features);
     });
     return () => {

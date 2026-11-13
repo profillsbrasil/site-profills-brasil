@@ -122,7 +122,7 @@ export function useContactForm() {
       // Força a revalidação dos campos para mostrar erros
       const fieldsToTrigger = getFieldsForStep(currentStep);
       fieldsToTrigger.forEach((field) => {
-        form.trigger(field);
+        void form.trigger(field);
       });
     }
   };
