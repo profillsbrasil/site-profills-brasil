@@ -35,12 +35,16 @@ type MaquinaDestaque = MaquinaCatalogo & {
 
 // Falha alto em tempo de build se algum slug sumir do registry ou a máquina
 // perder as imagens — destaque da home sempre precisa de foto (spec §7).
-const featuredMachines: MaquinaDestaque[] = featuredSlugs.map((slug) => {
+function temImagens(m: MaquinaCatalogo | undefined): m is MaquinaDestaque {
+  return !!m && !!m.imagens;
+}
+
+const featuredMachines = featuredSlugs.map((slug) => {
   const m = getMaquinaBySlug(slug);
 
-  if (!m || !m.imagens) throw new Error(`destaque inválido: ${slug}`);
+  if (!temImagens(m)) throw new Error(`destaque inválido: ${slug}`);
 
-  return m as MaquinaDestaque;
+  return m;
 });
 
 // Subtítulo do card: parte após ' - ' de nomeCompleto; sem separador, cai na categoria

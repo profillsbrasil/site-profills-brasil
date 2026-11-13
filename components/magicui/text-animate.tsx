@@ -389,7 +389,7 @@ const TextAnimateBase = ({
     <AnimatePresence mode='popLayout'>
       {/* eslint-disable-next-line react-hooks/static-components -- `as` é prop, o m.create fica memoizado por Component */}
       <MotionComponent
-        variants={finalVariants.container as Variants}
+        variants={finalVariants.container}
         initial='hidden'
         whileInView={startOnView ? 'show' : undefined}
         animate={startOnView ? undefined : 'show'}

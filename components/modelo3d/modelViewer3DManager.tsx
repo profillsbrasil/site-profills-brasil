@@ -47,9 +47,7 @@ export function ModelViewer3DProvider({
 
         // Respeita capacidade máxima do cache
         if (modelCacheRef.current.size >= maxCacheSize) {
-          const oldestKey = modelCacheRef.current.keys().next().value as
-            | string
-            | undefined;
+          const oldestKey = modelCacheRef.current.keys().next().value;
 
           if (oldestKey) modelCacheRef.current.delete(oldestKey);
         }

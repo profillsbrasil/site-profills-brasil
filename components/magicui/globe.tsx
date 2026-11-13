@@ -47,8 +47,8 @@ function loadCountries(): Promise<CountryFeature[]> {
 
       return cachedCountries;
     })
-    .catch((error: unknown) => {
-      logger.error('Erro ao carregar os países do globo:', error);
+    .catch((cause: unknown) => {
+      logger.error('Erro ao carregar os países do globo:', cause);
       pendingCountries = null;
 
       return [];
@@ -56,13 +56,6 @@ function loadCountries(): Promise<CountryFeature[]> {
 
   return pendingCountries;
 }
-
-type Controles = {
-  autoRotate: boolean;
-  autoRotateSpeed: number;
-  enableZoom: boolean;
-  enablePan: boolean;
-};
 
 /**
  * Globo 3D pesado (three + react-globe.gl): quem usa decide quando montar,
@@ -113,24 +106,20 @@ export function Globe({
 
   useEffect(() => {
     if (!ready || !globeRef.current) return;
-    const ctrls = globeRef.current.controls() as Controles;
+    const ctrls = globeRef.current.controls();
     ctrls.autoRotateSpeed = 0.5;
     ctrls.enableZoom = false;
     ctrls.enablePan = false;
     globeRef.current.pointOfView({ lat: -10, lng: -45, altitude: 2.4 });
 
-    const renderer = (
-      globeRef.current as unknown as {
-        renderer: () => { setPixelRatio: (r: number) => void };
-      }
-    ).renderer();
-
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    globeRef.current
+      .renderer()
+      .setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   }, [ready]);
 
   useEffect(() => {
     if (!ready || !globeRef.current) return;
-    (globeRef.current.controls() as Controles).autoRotate = !reduzirMovimento;
+    globeRef.current.controls().autoRotate = !reduzirMovimento;
   }, [ready, reduzirMovimento]);
 
   // Fora da tela ou com a aba oculta, o laço de render para (giro incluso)

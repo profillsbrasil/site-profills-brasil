@@ -38,6 +38,8 @@ function vitrineDe(categoria: CategoriaCatalogo | null): VitrineMenu | null {
 // Roda no servidor (layout do grupo (site)): a navbar recebe só este
 // registro, sem o catálogo completo no bundle de toda rota.
 export function montarVitrinesDoMenu(): VitrinesDoMenu {
+  // SAFETY: o laço abaixo grava toda chave de categoriasCatalogo antes do
+  // return, então o objeto devolvido tem todas as chaves de VitrinesDoMenu.
   const vitrines = { todas: vitrineDe(null) } as VitrinesDoMenu;
 
   for (const categoria of categoriasCatalogo) {

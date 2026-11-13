@@ -22,6 +22,8 @@ export async function GET() {
   const stat = fs.statSync(PDF_PATH);
   const stream = fs.createReadStream(PDF_PATH);
 
+  // SAFETY: a rota roda no runtime nodejs, cujo Response aceita ReadStream
+  // (AsyncIterable de Buffer) como corpo; o BodyInit do DOM não declara isso.
   return new Response(stream as unknown as BodyInit, {
     status: 200,
     headers: {

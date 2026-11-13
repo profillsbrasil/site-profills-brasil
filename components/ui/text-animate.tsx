@@ -413,7 +413,7 @@ const TextAnimateBase = ({
   return (
     <AnimatePresence mode='popLayout'>
       <MotionComponent
-        variants={finalVariants.container as Variants}
+        variants={finalVariants.container}
         initial='hidden'
         whileInView={startOnView ? 'show' : undefined}
         animate={startOnView ? undefined : 'show'}

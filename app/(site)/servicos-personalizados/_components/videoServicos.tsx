@@ -14,13 +14,13 @@ export function VideoServicos() {
     if (!video) return;
 
     const tocar = () =>
-      video.play().catch((error: unknown) => {
+      video.play().catch((cause: unknown) => {
         // pause() antes do play() terminar rejeita com AbortError; é esperado.
-        if (error instanceof DOMException && error.name === 'AbortError') {
+        if (cause instanceof DOMException && cause.name === 'AbortError') {
           return;
         }
 
-        logger.warn('Vídeo de serviços não iniciou:', error);
+        logger.warn('Vídeo de serviços não iniciou:', cause);
       });
 
     if (typeof IntersectionObserver === 'undefined') {

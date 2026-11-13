@@ -25,8 +25,8 @@ export const sem3dDiretoRule = defineRule({
   create(context) {
     if (noDominio3d(relativoARaiz(context.cwd, context.filename))) return {};
 
-    function checar(node: ESTree.Node, fonte: unknown, soTipo: boolean) {
-      if (!soTipo && typeof fonte === 'string' && ehPacote3d(fonte)) {
+    function checar(node: ESTree.Node, fonte: string, soTipo: boolean) {
+      if (!soTipo && ehPacote3d(fonte)) {
         context.report({ node, messageId: 'import3d', data: { fonte } });
       }
     }
@@ -43,7 +43,10 @@ export const sem3dDiretoRule = defineRule({
         checar(node, node.source.value, soTipo);
       },
       ImportExpression(node) {
-        if (node.source.type === 'Literal')
+        if (
+          node.source.type === 'Literal' &&
+          typeof node.source.value === 'string'
+        )
           checar(node, node.source.value, false);
       },
       ExportNamedDeclaration(node) {

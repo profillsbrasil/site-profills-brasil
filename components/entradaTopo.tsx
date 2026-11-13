@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -21,7 +21,7 @@ export function EntradaTopo({
   return (
     <div
       className={cn('entrada-topo', className)}
-      style={ordem ? ({ '--ordem': ordem } as CSSProperties) : undefined}>
+      style={ordem ? { '--ordem': ordem } : undefined}>
       {children}
     </div>
   );

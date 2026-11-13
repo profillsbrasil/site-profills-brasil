@@ -14,7 +14,7 @@ export function atributo(
   node: ESTree.JSXOpeningElement,
   nome: string
 ): ESTree.JSXAttribute | null {
-  for (const a of node.attributes as Atributo[]) {
+  for (const a of node.attributes) {
     if (
       a.type === 'JSXAttribute' &&
       a.name.type === 'JSXIdentifier' &&
@@ -50,7 +50,7 @@ export function valorLiteral(a: ESTree.JSXAttribute): string | null {
 
   if (v === null) return null;
 
-  if (v.type === 'Literal') return typeof v.value === 'string' ? v.value : null;
+  if (v.type === 'Literal') return v.value;
 
   if (v.type !== 'JSXExpressionContainer') return null;
   const e = v.expression;

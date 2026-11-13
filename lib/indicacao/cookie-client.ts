@@ -36,6 +36,8 @@ export function lerCookieIndicacaoDoBrowser(
   if (partes.length !== 3) return null;
 
   try {
+    // SAFETY: JSON.parse devolve any; nenhum campo é usado antes da checagem
+    // de tipo logo abaixo, que devolve null se faltar algum.
     const dados = JSON.parse(base64UrlParaTexto(partes[1])) as Record<
       string,
       unknown
@@ -55,6 +57,7 @@ export function lerCookieIndicacaoDoBrowser(
       codigo: dados.codigo,
       nome: dados.nome,
       email: dados.email,
+      // SAFETY: o if acima já devolveu null quando contato não é string nem null.
       contato: dados.contato as string | null,
       consultadoEm: dados.consultadoEm
     };
