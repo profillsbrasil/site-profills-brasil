@@ -11,6 +11,9 @@ interface MaquinaCardProps {
   filtersApplied?: boolean; // Indica se os filtros foram aplicados da URL
 }
 
+// Duas linhas da grade de 3 colunas cobrem a primeira dobra no desktop e no mobile.
+const CARDS_NA_PRIMEIRA_DOBRA = 6;
+
 // Subtítulo do card: parte após ' - ' de nomeCompleto; sem separador, cai na categoria
 function subtituloDe(maquina: MaquinaCatalogo): string {
   const [, subtitulo] = maquina.nomeCompleto.split(' - ');
@@ -30,6 +33,7 @@ export default function MaquinaCard({
 
   // Delay escalonado para animação suave (máximo 0.3s para melhor performance)
   const animationDelay = Math.min(index * 0.03, 0.3);
+  const loading = index < CARDS_NA_PRIMEIRA_DOBRA ? 'eager' : 'lazy';
 
   return (
     <AnimatedContainer
@@ -56,7 +60,7 @@ export default function MaquinaCard({
               alt='Máquina'
               width={400}
               height={300}
-              loading={'eager'} // Primeiras 9 imagens carregam imediatamente
+              loading={loading}
               onLoad={() => setImgLoaded(true)}
               className={`${
                 maquina.imagens.maquinaClassName ||
@@ -68,7 +72,7 @@ export default function MaquinaCard({
               alt='Embalagem'
               width={200}
               height={150}
-              loading={'eager'} // Primeiras 9 imagens carregam imediatamente
+              loading={loading}
               onLoad={() => setPkgLoaded(true)}
               className={`${
                 maquina.imagens.embalagemClassName ||
