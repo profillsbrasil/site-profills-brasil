@@ -1,7 +1,7 @@
 import { defineRule } from '@oxlint/plugins';
 import type { ESTree } from '@oxlint/plugins';
 
-import { importPadrao } from '../jsx.ts';
+import { ehTexto, importPadrao } from '../jsx.ts';
 import { ehModulo3d } from '../modulos3d.ts';
 
 // Fonte do primeiro `import('x')` dentro do loader de `dynamic`.
@@ -36,7 +36,7 @@ function fonteDoImport(loader: ESTree.Node): string | null {
   }
 
   if (atual?.type === 'ImportExpression' && atual.source.type === 'Literal') {
-    return typeof atual.source.value === 'string' ? atual.source.value : null;
+    return ehTexto(atual.source.value) ? atual.source.value : null;
   }
 
   return null;

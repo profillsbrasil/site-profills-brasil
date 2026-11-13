@@ -190,11 +190,12 @@
     "anti-slop/require-safety-comment-for-type-assertion": "error",
     "anti-slop/no-conditional-empty-object-spread": "error",
     "anti-slop/no-array-filter-map": "error",
-    "anti-slop/no-module-mocking": "error"
-    // Ainda sem registro: no-chained-type-assertions, no-runtime-typeof e
-    // no-unsafe-dictionary-type têm casos sem correção que preserve o runtime
-    // (stream das rotas do PDF, lib/indicacao/cookie-client.ts no bundle de
-    // toda página, literais do AST em tools/oxlint/profills).
+    "anti-slop/no-module-mocking": "error",
+    "anti-slop/no-unsafe-dictionary-type": "error",
+    "anti-slop/no-chained-type-assertions": "error",
+    // typeof só dentro de type predicate nomeado: cookie-client.ts entra no JS
+    // de toda página e valida o cookie sem trazer o zod.
+    "anti-slop/no-runtime-typeof": ["error", { "allowInTypeGuards": true }]
   },
   "overrides": [
     {
@@ -262,6 +263,18 @@
       "files": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**"],
       "rules": {
         "anti-slop/no-module-mocking": "off"
+      }
+    },
+    {
+      // O Response do runtime nodejs aceita o ReadStream do PDF como corpo, mas
+      // o BodyInit do DOM não declara AsyncIterable. Readable.toWeb mudaria o
+      // runtime do download de 77 MB em produção.
+      "files": [
+        "app/(site)/catalogo.pdf/route.ts",
+        "app/api/download/[[]token]/route.ts"
+      ],
+      "rules": {
+        "anti-slop/no-chained-type-assertions": "off"
       }
     }
   ]

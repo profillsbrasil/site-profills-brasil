@@ -2,6 +2,10 @@ import type { ESTree } from '@oxlint/plugins';
 
 type Atributo = ESTree.JSXAttribute | ESTree.JSXSpreadAttribute;
 
+export function ehTexto(valor: unknown): valor is string {
+  return typeof valor === 'string';
+}
+
 export function nomeDoElemento(node: ESTree.JSXOpeningElement): string | null {
   return node.name.type === 'JSXIdentifier' ? node.name.name : null;
 }
@@ -55,7 +59,7 @@ export function valorLiteral(a: ESTree.JSXAttribute): string | null {
   if (v.type !== 'JSXExpressionContainer') return null;
   const e = v.expression;
 
-  if (e.type === 'Literal' && typeof e.value === 'string') return e.value;
+  if (e.type === 'Literal' && ehTexto(e.value)) return e.value;
 
   if (e.type === 'TemplateLiteral' && e.expressions.length === 0) {
     return e.quasis[0]?.value.cooked ?? null;

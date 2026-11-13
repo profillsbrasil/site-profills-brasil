@@ -1,7 +1,7 @@
 import { defineRule } from '@oxlint/plugins';
 import type { ESTree } from '@oxlint/plugins';
 
-import { nomeDoElemento } from '../jsx.ts';
+import { ehTexto, nomeDoElemento } from '../jsx.ts';
 import {
   DOMINIO_3D,
   ehPacote3d,
@@ -43,10 +43,7 @@ export const sem3dDiretoRule = defineRule({
         checar(node, node.source.value, soTipo);
       },
       ImportExpression(node) {
-        if (
-          node.source.type === 'Literal' &&
-          typeof node.source.value === 'string'
-        )
+        if (node.source.type === 'Literal' && ehTexto(node.source.value))
           checar(node, node.source.value, false);
       },
       ExportNamedDeclaration(node) {

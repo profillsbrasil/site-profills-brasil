@@ -36,32 +36,35 @@ export function lerCookieIndicacaoDoBrowser(
   if (partes.length !== 3) return null;
 
   try {
-    // SAFETY: JSON.parse devolve any; nenhum campo é usado antes da checagem
-    // de tipo logo abaixo, que devolve null se faltar algum.
-    const dados = JSON.parse(base64UrlParaTexto(partes[1])) as Record<
-      string,
-      unknown
-    >;
+    // Um payload null lança TypeError dentro do predicate e cai no catch.
+    const dados = JSON.parse(base64UrlParaTexto(partes[1]));
 
-    if (
-      typeof dados.codigo !== 'string' ||
-      typeof dados.nome !== 'string' ||
-      typeof dados.email !== 'string' ||
-      (typeof dados.contato !== 'string' && dados.contato !== null) ||
-      typeof dados.consultadoEm !== 'string'
-    ) {
-      return null;
-    }
+    if (!ehPayloadIndicacao(dados)) return null;
 
     return {
       codigo: dados.codigo,
       nome: dados.nome,
       email: dados.email,
-      // SAFETY: o if acima já devolveu null quando contato não é string nem null.
-      contato: dados.contato as string | null,
+      contato: dados.contato,
       consultadoEm: dados.consultadoEm
     };
   } catch {
     return null;
   }
+}
+
+function ehPayloadIndicacao(valor: {
+  codigo?: unknown;
+  nome?: unknown;
+  email?: unknown;
+  contato?: unknown;
+  consultadoEm?: unknown;
+}): valor is IndicacaoPayload {
+  return (
+    typeof valor.codigo === 'string' &&
+    typeof valor.nome === 'string' &&
+    typeof valor.email === 'string' &&
+    (typeof valor.contato === 'string' || valor.contato === null) &&
+    typeof valor.consultadoEm === 'string'
+  );
 }
