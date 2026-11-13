@@ -49,13 +49,42 @@ function loadCountries(): Promise<CountryFeature[]> {
   return pendingCountries;
 }
 
-export function Globe({ className }: { className?: string }) {
+export function Globe({
+  className,
+  girar = true,
+  pausarFora = false,
+  montarSoVisivel = false,
+  onPronto
+}: {
+  className?: string;
+  girar?: boolean;
+  pausarFora?: boolean;
+  montarSoVisivel?: boolean;
+  onPronto?: () => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [shouldMount, setShouldMount] = useState(false);
   const [ready, setReady] = useState(false);
   const [countries, setCountries] = useState<CountryFeature[]>([]);
+
+  useEffect(() => {
+    if (!pausarFora || !ready) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      const g = globeRef.current as unknown as {
+        pauseAnimation: () => void;
+        resumeAnimation: () => void;
+      };
+      if (e.isIntersecting) g.resumeAnimation();
+      else g.pauseAnimation();
+      el.dataset.pausado = String(!e.isIntersecting);
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [pausarFora, ready]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -75,7 +104,7 @@ export function Globe({ className }: { className?: string }) {
           io.disconnect();
         }
       },
-      { rootMargin: '200px' }
+      montarSoVisivel ? { threshold: 0.3 } : { rootMargin: '200px' }
     );
     io.observe(el);
 
@@ -83,7 +112,7 @@ export function Globe({ className }: { className?: string }) {
       ro.disconnect();
       io.disconnect();
     };
-  }, []);
+  }, [montarSoVisivel]);
 
   useEffect(() => {
     if (!shouldMount) return;
@@ -104,7 +133,8 @@ export function Globe({ className }: { className?: string }) {
       enableZoom: boolean;
       enablePan: boolean;
     };
-    ctrls.autoRotate = true;
+    ctrls.autoRotate = girar;
+    onPronto?.();
     ctrls.autoRotateSpeed = 0.5;
     ctrls.enableZoom = false;
     ctrls.enablePan = false;
@@ -118,11 +148,12 @@ export function Globe({ className }: { className?: string }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
 
     const onVisibility = () => {
-      ctrls.autoRotate = document.visibilityState === 'visible';
+      ctrls.autoRotate = girar && document.visibilityState === 'visible';
     };
     document.addEventListener('visibilitychange', onVisibility);
     return () => document.removeEventListener('visibilitychange', onVisibility);
-  }, [ready]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, girar]);
 
   const globeMaterial = useMemo(
     () =>

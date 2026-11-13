@@ -3,6 +3,8 @@
 import dynamic from 'next/dynamic';
 
 import { AnimatedContainer } from '@/components/AnimatedContainer';
+import { ListaEmbalagensProto } from '@/components/proto/listaEmbalagensProto';
+import { useVariante } from '@/components/proto/variante';
 import { TextAnimate } from '@/components/ui/text-animate';
 
 const OptimizedEmbalagem3d = dynamic(
@@ -121,6 +123,24 @@ const listaDeEmbalagens = [
 ];
 
 export default function ListaEmbalagens() {
+  const v = useVariante();
+  if (v > 0) {
+    return (
+      <section className='relative z-10 px-4 py-10'>
+        <div className='mx-auto max-w-6xl'>
+          <div className='items-left mb-6 flex flex-col text-left md:mb-5'>
+            <h2 className='text-2xl mb-3 flex gap-2 leading-tight font-bold md:text-3xl md:mb-2'>
+              Nossas Embalagens
+            </h2>
+            <p className='text-muted-foreground text-sm leading-relaxed md:text-base'>
+              Embalagens para produtos líquidos, pastosos e sólidos
+            </p>
+          </div>
+          <ListaEmbalagensProto v={v} lista={listaDeEmbalagens} />
+        </div>
+      </section>
+    );
+  }
   return (
     <section className='relative z-10 px-4 py-10'>
       <div className='mx-auto max-w-6xl'>

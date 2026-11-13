@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import {
+  ROTULOS_D1,
+  ROTULOS_D2,
+  lerVariante
+} from '@/components/proto/lerVariante';
+import { SeletorVariante, VarianteProvider } from '@/components/proto/variante';
 
 import CarrosselProdutos from './_components/carrosselProdutos';
 import CtaAjudarEmpresa from './_components/ctaAjudarEmpresa';
@@ -15,14 +21,26 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' }
 };
 
-export default function Home() {
+const ROTULOS_HOME = ROTULOS_D1.map(
+  (r, i) => `topo: ${r} · embalagens: ${ROTULOS_D2[i]}`
+);
+
+export default async function Home({
+  searchParams
+}: {
+  searchParams: Promise<{ v?: string }>;
+}) {
+  const v = lerVariante((await searchParams).v);
   return (
-    <div className='relative h-full w-full'>
-      <HeroCarrossel />
-      <section className='tema-navy relative z-20 min-h-screen border-t border-dashed border-[rgba(148,178,235,0.22)] bg-background text-foreground'>
-        <HomeContent />
-      </section>
-    </div>
+    <VarianteProvider v={v}>
+      <div className='relative h-full w-full'>
+        <HeroCarrossel />
+        <section className='tema-navy relative z-20 min-h-screen border-t border-dashed border-[rgba(148,178,235,0.22)] bg-background text-foreground'>
+          <HomeContent />
+        </section>
+      </div>
+      <SeletorVariante titulo='Topo + embalagens' rotulos={ROTULOS_HOME} />
+    </VarianteProvider>
   );
 }
 

@@ -35,14 +35,20 @@ interface HeroSlideStageProps {
   primeiro: boolean;
   /** Reduced motion: sem drift nem flutuação */
   estatico?: boolean;
+  /** Protótipo: classe CSS de entrada no ramo estático (sem JS) */
+  efeito?: string;
+  flutuar?: boolean;
 }
 
 export function HeroSlideStage({
   slide,
   direcao,
   primeiro,
-  estatico = false
+  estatico = false,
+  efeito,
+  flutuar
 }: HeroSlideStageProps) {
+  const flutua = flutuar ?? !estatico;
   const conteudo = (
     <>
       {/* sombra elíptica no "chão" */}
@@ -64,14 +70,20 @@ export function HeroSlideStage({
         sizes='(min-width: 900px) 20vw, 40vw'
         className={cn(
           'absolute bottom-[4%] z-[3] w-auto max-w-none object-contain drop-shadow-[0_18px_22px_rgba(2,6,23,0.6)]',
-          !estatico && 'animate-[hero-flutua_7s_ease-in-out_infinite]'
+          flutua && 'motion-safe:animate-[hero-flutua_7s_ease-in-out_infinite]'
         )}
       />
     </>
   );
 
   if (estatico) {
-    return <div className='absolute inset-0'>{conteudo}</div>;
+    return (
+      <div
+        className={cn('absolute inset-0', efeito)}
+        style={{ '--i': 2 } as React.CSSProperties}>
+        {conteudo}
+      </div>
+    );
   }
 
   return (

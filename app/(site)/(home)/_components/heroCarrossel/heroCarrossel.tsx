@@ -6,7 +6,9 @@ import { GridPattern } from '@/components/layout/gridPatternBg';
 import { cn } from '@/lib/utils';
 
 import { HeroRings } from './heroRings';
-import { HeroSlideCopy } from './heroSlideCopy';
+import { useVariante } from '@/components/proto/variante';
+
+import { type EfeitoCopy, HeroSlideCopy } from './heroSlideCopy';
 import { HeroSlideStage } from './heroSlideStage';
 import { AUTOPLAY_MS, SLIDES } from './slideData';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -16,13 +18,28 @@ function indice(n: number) {
   return String(n).padStart(2, '0');
 }
 
+const EFEITOS_D1: Record<
+  number,
+  { copy: EfeitoCopy; stage?: string }
+> = {
+  1: { copy: null },
+  2: { copy: null, stage: 'proto-drift' },
+  3: { copy: 'sobe', stage: 'proto-sobe' },
+  4: { copy: 'fade', stage: 'proto-fade' },
+  5: { copy: 'mascara', stage: 'proto-drift' },
+  6: { copy: 'realce' }
+};
+
 export default function HeroCarrossel() {
   const reduzirMovimento = useReducedMotion();
+  const v = useVariante();
   const [atual, setAtual] = useState(0);
   const [direcao, setDirecao] = useState<1 | -1>(1);
   const [pingKey, setPingKey] = useState(0);
+  const [jaTrocou, setJaTrocou] = useState(false);
 
   const trocar = useCallback((dir: 1 | -1) => {
+    setJaTrocou(true);
     setDirecao(dir);
     setAtual((i) => (i + dir + SLIDES.length) % SLIDES.length);
     setPingKey((k) => k + 1);
@@ -37,7 +54,8 @@ export default function HeroCarrossel() {
 
   const slide = SLIDES[atual];
   const proximo = SLIDES[(atual + 1) % SLIDES.length];
-  const estatico = Boolean(reduzirMovimento);
+  const efeitoProto = v >= 1 && !jaTrocou ? EFEITOS_D1[v] : null;
+  const estatico = Boolean(reduzirMovimento) || efeitoProto !== null;
 
   return (
     <section className='relative flex min-h-[min(100vh,880px)] items-center overflow-hidden bg-secondary pt-16'>
@@ -51,7 +69,12 @@ export default function HeroCarrossel() {
         {/* Coluna de texto — @container: fonte dos títulos compactos escala pela largura real da coluna */}
         <div className='@container'>
           {estatico ? (
-            <HeroSlideCopy slide={slide} primeiro={atual === 0} estatico />
+            <HeroSlideCopy
+              slide={slide}
+              primeiro={atual === 0}
+              estatico
+              efeito={efeitoProto?.copy ?? null}
+            />
           ) : (
             <AnimatePresence mode='wait'>
               <HeroSlideCopy
@@ -65,13 +88,15 @@ export default function HeroCarrossel() {
 
         {/* Palco: anéis fixos, máquina troca */}
         <div className='relative mt-6 h-[min(48vh,460px)] min-[900px]:mt-0 min-[900px]:max-[1180px]:h-[min(70vh,640px)] min-[900px]:h-[min(76vh,700px)] min-[900px]:translate-x-[6%]'>
-          <HeroRings estatico={estatico} pingKey={pingKey} />
+          <HeroRings estatico={Boolean(reduzirMovimento)} pingKey={pingKey} />
           {estatico ? (
             <HeroSlideStage
               slide={slide}
               direcao={direcao}
               primeiro={atual === 0}
               estatico
+              efeito={efeitoProto?.stage}
+              flutuar={!reduzirMovimento}
             />
           ) : (
             <AnimatePresence mode='wait' custom={direcao}>
@@ -95,7 +120,7 @@ export default function HeroCarrossel() {
             </b>{' '}
             / {indice(SLIDES.length)}
           </span>
-          {!estatico && (
+          {!reduzirMovimento && (
             <span className='h-0.5 w-[130px] overflow-hidden bg-[rgba(148,178,235,0.18)]'>
               <i
                 key={atual}

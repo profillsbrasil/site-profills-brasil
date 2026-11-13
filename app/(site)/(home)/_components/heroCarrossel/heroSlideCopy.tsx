@@ -24,18 +24,40 @@ const bloco = {
 };
 
 /* Máscara do Reveal: o bloco sobe de dentro de um recorte overflow-hidden */
+export type EfeitoCopy = 'sobe' | 'fade' | 'mascara' | 'realce' | null;
+
 function Mascara({
   children,
-  estatico = false
+  estatico = false,
+  efeito = null,
+  i = 0
 }: {
   children: ReactNode;
   /** Reduced motion: sem motion.span nem variants */
   estatico?: boolean;
+  efeito?: EfeitoCopy;
+  i?: number;
 }) {
   if (estatico) {
+    const classe =
+      efeito === 'sobe'
+        ? 'proto-sobe'
+        : efeito === 'fade'
+          ? 'proto-fade'
+          : efeito === 'mascara'
+            ? 'proto-mascara'
+            : '';
     return (
-      <span className='block overflow-hidden'>
-        <span className='block'>{children}</span>
+      <span
+        className={cn(
+          'block',
+          efeito !== 'sobe' && efeito !== 'fade' && 'overflow-hidden'
+        )}>
+        <span
+          className={cn('block', classe)}
+          style={{ '--i': i } as React.CSSProperties}>
+          {children}
+        </span>
       </span>
     );
   }
@@ -55,13 +77,17 @@ interface HeroSlideCopyProps {
   primeiro: boolean;
   /** Reduced motion: render direto, sem variants */
   estatico?: boolean;
+  /** Protótipo: animação CSS aplicada no ramo estático */
+  efeito?: EfeitoCopy;
 }
 
 export function HeroSlideCopy({
   slide,
   primeiro,
-  estatico = false
+  estatico = false,
+  efeito = null
 }: HeroSlideCopyProps) {
+  const m = (i: number) => ({ estatico, efeito, i });
   const Titulo = primeiro ? 'h1' : 'h2';
   const comercial = useContatoComercial();
   const whatsappUrl = comercial.whatsapp(
@@ -70,7 +96,7 @@ export function HeroSlideCopy({
 
   const conteudo = (
     <>
-      <Mascara estatico={estatico}>
+      <Mascara {...m(0)}>
         <span className='inline-flex items-baseline gap-2.5'>
           <span className='text-2xl font-extrabold tracking-tight text-accent'>
             {slide.nome}
@@ -92,23 +118,25 @@ export function HeroSlideCopy({
           // line-height e descartaria um leading declarado antes dele
           'leading-[1.06]'
         )}>
-        <Mascara estatico={estatico}>
+        <Mascara {...m(1)}>
           <span className='block whitespace-nowrap'>{slide.titulo[0]}</span>
         </Mascara>
-        <Mascara estatico={estatico}>
+        <Mascara {...m(2)}>
           <span className='block whitespace-nowrap text-accent'>
-            {slide.titulo[1]}
+            <span className={cn(estatico && efeito === 'realce' && 'proto-realce')}>
+              {slide.titulo[1]}
+            </span>
           </span>
         </Mascara>
       </Titulo>
 
-      <Mascara estatico={estatico}>
+      <Mascara {...m(3)}>
         <p className='mt-3 max-w-[44ch] text-base leading-relaxed text-[#b6c5e2]'>
           {slide.descricao}
         </p>
       </Mascara>
 
-      <Mascara estatico={estatico}>
+      <Mascara {...m(4)}>
         <span className='mt-5 flex w-fit items-stretch rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 max-[560px]:w-full max-[560px]:flex-col'>
           <span className='flex gap-6 px-6 py-4 max-[560px]:flex-wrap max-[560px]:gap-4 min-[900px]:max-[1180px]:gap-4 min-[900px]:max-[1180px]:px-4 min-[900px]:max-[1180px]:py-3'>
             {slide.specs.map((spec) => (
@@ -138,7 +166,7 @@ export function HeroSlideCopy({
         </span>
       </Mascara>
 
-      <Mascara estatico={estatico}>
+      <Mascara {...m(5)}>
         <a
           href={comercial.pronto ? whatsappUrl : undefined}
           aria-disabled={!comercial.pronto || undefined}

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 
 import { GridPattern } from '@/components/layout/gridPatternBg';
+import { ROTULOS_D3, lerVariante } from '@/components/proto/lerVariante';
+import { SeletorVariante, VarianteProvider } from '@/components/proto/variante';
 import { JsonLd } from '@/components/seo/jsonLd';
 import { metadataDaPagina } from '@/lib/seo/metadata';
 import { breadcrumbSchema, faqSchema } from '@/lib/seo/schemas';
@@ -18,8 +20,15 @@ export const metadata: Metadata = metadataDaPagina({
   path: '/sobre'
 });
 
-export default function Sobre() {
+export default async function Sobre({
+  searchParams
+}: {
+  searchParams: Promise<{ v?: string }>;
+}) {
+  const v = lerVariante((await searchParams).v);
   return (
+    <VarianteProvider v={v}>
+    <SeletorVariante titulo='Globo de /sobre' rotulos={ROTULOS_D3} />
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-8 md:py-10'>
       <JsonLd data={faqSchema(faqQuestoes)} />
       <JsonLd
@@ -37,5 +46,6 @@ export default function Sobre() {
       <ProfillFabrica />
       <CardFaq />
     </div>
+    </VarianteProvider>
   );
 }
