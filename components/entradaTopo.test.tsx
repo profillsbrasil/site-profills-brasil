@@ -95,6 +95,11 @@ describe('topo de página nasce visível no HTML do servidor', () => {
     expect(estilosQueEscondem(ui, escopo)).toEqual([]);
   });
 
+  it('MaquinaCard do topo mostra as fotos sem esperar o onLoad', () => {
+    const html = renderToString(<MaquinaCard maquina={maquina} index={0} />);
+    expect(html).not.toMatch(/class="[^"]*\bopacity-0\b/);
+  });
+
   it('MaquinaCard abaixo da dobra continua com a entrada ao rolar', () => {
     expect(
       estilosQueEscondem(<MaquinaCard maquina={maquina} index={8} />)

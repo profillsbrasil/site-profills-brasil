@@ -63,7 +63,7 @@ export default function MaquinaCard({
               className={`${
                 maquina.imagens.maquinaClassName ||
                 'h-full w-full object-contain'
-              } transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              } transition-opacity duration-300 ${naPrimeiraDobra || imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
             <Image
               src={maquina.imagens.embalagem}
@@ -75,7 +75,7 @@ export default function MaquinaCard({
               className={`${
                 maquina.imagens.embalagemClassName ||
                 'absolute right-3 bottom-0 h-1/2 w-auto max-w-[65%] object-contain'
-              } transition-opacity duration-300 ${pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              } transition-opacity duration-300 ${naPrimeiraDobra || pkgLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
           </>
         ) : (
