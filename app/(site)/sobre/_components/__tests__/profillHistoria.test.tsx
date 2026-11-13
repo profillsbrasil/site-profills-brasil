@@ -8,6 +8,7 @@ const globoMontou = vi.fn();
 vi.mock('@/components/magicui/globe', () => ({
   Globe: () => {
     globoMontou();
+
     return <div data-testid='globo' />;
   }
 }));

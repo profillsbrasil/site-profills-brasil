@@ -46,6 +46,7 @@ export function AplicacoesProdutos({
         <div className='flex flex-wrap gap-3 md:w-1/2 md:justify-end'>
           {aplicacoes.categorias.map((cat) => {
             const info = categoriasProdutoInfo[cat];
+
             return (
               <figure
                 key={cat}

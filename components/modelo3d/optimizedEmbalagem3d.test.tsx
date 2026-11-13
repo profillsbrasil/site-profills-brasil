@@ -47,6 +47,7 @@ describe('OptimizedEmbalagem3d', () => {
     const { container } = render(
       <OptimizedEmbalagem3d embalagem={embalagens3d.pouch} alt={alt} />
     );
+
     act(() => {
       container.querySelector('model-viewer')!.dispatchEvent(new Event('load'));
     });

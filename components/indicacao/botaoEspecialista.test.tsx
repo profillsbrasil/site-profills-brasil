@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 function jwtFalso(payload: unknown) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
+
   return `${b64('{"alg":"HS256"}')}.${b64(JSON.stringify(payload))}.x`;
 }
 
@@ -23,9 +24,11 @@ describe('BotaoEspecialista', () => {
         />
       </IndicacaoProvider>
     );
+
     const link = screen.getByRole('link', {
       name: 'Falar com um especialista'
     });
+
     expect(link).toHaveAttribute(
       'href',
       'https://wa.me/5541997851998?text=Ol%C3%A1!%20Tenho%20interesse%20na%20X.'

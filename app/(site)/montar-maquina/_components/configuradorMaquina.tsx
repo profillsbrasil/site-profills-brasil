@@ -65,9 +65,11 @@ const productTypes = [
 export default function ConfiguradorMaquina() {
   const [selectedPackaging, setSelectedPackaging] = useState<string>('');
   const [selectedProductType, setSelectedProductType] = useState<string>('');
+
   const [contactForm, setContactForm] = useState<ContactFormData>(
     initialContactFormData
   );
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Recomendação é derivada das seleções: memo em vez de estado + effect

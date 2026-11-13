@@ -48,6 +48,7 @@ export function BlurFade({
   const ref = useRef(null);
   const inViewResult = useInView(ref, { once: true, margin: inViewMargin });
   const isInView = !inView || inViewResult;
+
   const defaultVariants: Variants = {
     hidden: {
       [direction === 'left' || direction === 'right' ? 'x' : 'y']:
@@ -61,6 +62,7 @@ export function BlurFade({
       filter: `blur(0px)`
     }
   };
+
   const combinedVariants = variant ?? defaultVariants;
 
   const hiddenFilter = getFilter(combinedVariants.hidden);

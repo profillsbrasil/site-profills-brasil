@@ -106,6 +106,7 @@ const maquinas = [
   },
   ...categoriasCatalogo.map((categoria) => {
     const Icone = ICONE_CATEGORIA[categoria];
+
     return {
       title: categoria,
       href: `/maquinas?categoria=${encodeURIComponent(categoria)}`,

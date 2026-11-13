@@ -4,6 +4,7 @@ import { RuleTester } from 'oxlint/plugins-dev';
 const tester = new RuleTester({
   languageOptions: { parserOptions: { lang: 'tsx' } }
 });
+
 const imp = "import { motion, useScroll, useTransform } from 'motion/react';\n";
 const erro = { messageId: 'opacityArray' };
 

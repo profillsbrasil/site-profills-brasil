@@ -61,6 +61,7 @@ export default function BeneficiosSociedade() {
         <div className='mb-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
           {beneficios.map((beneficio, index) => {
             const IconComponent = beneficio.icon;
+
             return (
               <div
                 key={index}

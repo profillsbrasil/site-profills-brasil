@@ -20,6 +20,7 @@ describe('VideoServicos', () => {
 
   it('toca direto quando o navegador não tem IntersectionObserver', () => {
     vi.stubGlobal('IntersectionObserver', undefined);
+
     const play = vi
       .spyOn(HTMLMediaElement.prototype, 'play')
       .mockResolvedValue(undefined);
@@ -40,9 +41,11 @@ describe('VideoServicos', () => {
         disconnect() {}
       }
     );
+
     const play = vi
       .spyOn(HTMLMediaElement.prototype, 'play')
       .mockResolvedValue(undefined);
+
     const pause = vi
       .spyOn(HTMLMediaElement.prototype, 'pause')
       .mockImplementation(() => {});

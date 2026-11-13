@@ -39,6 +39,7 @@ export const sem3dDiretoRule = defineRule({
             node.specifiers.every(
               (s) => s.type === 'ImportSpecifier' && s.importKind === 'type'
             ));
+
         checar(node, node.source.value, soTipo);
       },
       ImportExpression(node) {

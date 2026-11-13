@@ -1,17 +1,14 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import Footer from './footer';
 import NavbarMobile from './navbarMobile';
-import {
-  InstagramIcon,
-  LinkedInIcon,
-  YouTubeIcon,
-} from './socialLinks';
+import { InstagramIcon, LinkedInIcon, YouTubeIcon } from './socialLinks';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/image', () => ({
-  default: 'img',
+  default: 'img'
 }));
 
 class MockIntersectionObserver {
@@ -21,6 +18,7 @@ class MockIntersectionObserver {
 }
 
 vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
+
 vi.stubGlobal('matchMedia', () => ({
   matches: false,
   media: '',
@@ -29,14 +27,15 @@ vi.stubGlobal('matchMedia', () => ({
   removeListener: vi.fn(),
   addEventListener: vi.fn(),
   removeEventListener: vi.fn(),
-  dispatchEvent: vi.fn(),
+  dispatchEvent: vi.fn()
 }));
 
 const writeTextMock = vi.fn().mockResolvedValue(undefined);
+
 Object.assign(navigator, {
   clipboard: {
-    writeText: writeTextMock,
-  },
+    writeText: writeTextMock
+  }
 });
 
 beforeEach(() => {
@@ -46,10 +45,10 @@ beforeEach(() => {
 describe('lucide social icon regression', () => {
   it('loads footer and mobile navbar modules without missing brand icon exports', async () => {
     await expect(import('./footer')).resolves.toMatchObject({
-      default: expect.any(Function),
+      default: expect.any(Function)
     });
     await expect(import('./navbarMobile')).resolves.toMatchObject({
-      default: expect.any(Function),
+      default: expect.any(Function)
     });
   });
 
@@ -66,22 +65,20 @@ describe('lucide social icon regression', () => {
   it('renders larger social icons in footer and mobile navbar', () => {
     const { unmount } = render(createElement(Footer));
 
-    expect(
-      screen
-        .getByLabelText('Instagram')
-        .querySelector('svg')
-    ).toHaveClass('size-8', 'md:size-10');
+    expect(screen.getByLabelText('Instagram').querySelector('svg')).toHaveClass(
+      'size-8',
+      'md:size-10'
+    );
 
     unmount();
 
     render(createElement(NavbarMobile));
     fireEvent.click(screen.getByLabelText('Abrir menu de navegação'));
 
-    expect(
-      screen
-        .getByLabelText('Instagram')
-        .querySelector('svg')
-    ).toHaveClass('h-6', 'w-6');
+    expect(screen.getByLabelText('Instagram').querySelector('svg')).toHaveClass(
+      'h-6',
+      'w-6'
+    );
   });
 
   it('highlights the copyright symbol and copies the cnpj on click', async () => {

@@ -28,11 +28,13 @@ const renderTemplate = (
   const eachRegex = /\{\{#each\s+(\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g;
   rendered = rendered.replace(eachRegex, (match, arrayName, content) => {
     const array = data[arrayName];
+
     if (Array.isArray(array) && array.length > 0) {
       return array
         .map((item) => content.replace(/\{\{this\}\}/g, item))
         .join('');
     }
+
     return '';
   });
 
@@ -40,10 +42,12 @@ const renderTemplate = (
   const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
   rendered = rendered.replace(ifRegex, (match, condition, content) => {
     const value = data[condition];
+
     // Mostra o conteúdo se a variável existe, não está vazia e não é undefined
     if (Array.isArray(value)) {
       return value.length > 0 ? content : '';
     }
+
     return value !== undefined && value !== null && String(value).trim() !== ''
       ? content
       : '';
@@ -53,6 +57,7 @@ const renderTemplate = (
   Object.keys(data).forEach((key) => {
     const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
     const value = data[key];
+
     if (Array.isArray(value)) {
       rendered = rendered.replace(regex, value.join(', '));
     } else {
@@ -157,6 +162,7 @@ Este e-mail foi gerado automaticamente pelo sistema Profills.
 
   try {
     const result = await transporter.sendMail(mailOptions);
+
     return { success: true, messageId: result.messageId };
   } catch (error) {
     logger.error('❌ Erro ao enviar e-mail Monte sua Fábrica:', error);

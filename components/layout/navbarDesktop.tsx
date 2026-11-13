@@ -102,12 +102,15 @@ export default function NavbarDesktop({
   vitrines: VitrinesDoMenu;
 }) {
   const [scrolled, setScrolled] = useState(false);
+
   const [categoriaVitrine, setCategoriaVitrine] =
     useState<CategoriaCatalogo | null>(null);
+
   const vitrine = vitrines[categoriaVitrine ?? 'todas'];
 
   useEffect(() => {
     let ticking = false;
+
     const handleScroll = () => {
       if (ticking) return;
       ticking = true;
@@ -116,8 +119,10 @@ export default function NavbarDesktop({
         ticking = false;
       });
     };
+
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -178,6 +183,7 @@ export default function NavbarDesktop({
                   />
                   {categoriasCatalogo.map((categoria) => {
                     const Icone = ICONE_CATEGORIA[categoria];
+
                     return (
                       <ListItem
                         key={categoria}

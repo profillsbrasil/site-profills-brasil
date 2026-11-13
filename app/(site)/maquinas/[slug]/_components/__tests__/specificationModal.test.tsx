@@ -74,6 +74,7 @@ describe('SpecificationModal', () => {
       ok: true,
       json: async () => ({ success: true })
     });
+
     vi.stubGlobal('fetch', fetchMock);
 
     const user = userEvent.setup();
@@ -143,6 +144,7 @@ describe('SpecificationModal', () => {
         maquinaNome='Linha de Produção Ponta a Ponta'
       />
     );
+
     const abrir = screen.getByRole('button', {
       name: /Solicitar proposta técnica e comercial/i
     });
@@ -196,6 +198,7 @@ describe('SpecificationModal', () => {
       status: 500,
       json: async () => ({ success: false })
     });
+
     vi.stubGlobal('fetch', fetchMock);
 
     await enviarFormulario();

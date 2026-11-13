@@ -8,6 +8,7 @@ import { compostosJuntos } from '@/lib/utils/nbsp';
 
 function Cantoneiras() {
   const base = 'absolute h-2.5 w-2.5 border-accent';
+
   return (
     <>
       <span className={cn(base, '-top-px -left-px border-t-2 border-l-2')} />
@@ -29,6 +30,7 @@ export function HeroDossie({ maquina, children }: HeroDossieProps) {
   const linhasBase = maquina.destaqueHero ?? maquina.specsMaquina.slice(0, 3);
   const capacidadeMaxima = maquina.capacidadeMaxima;
   const temTicker = capacidadeMaxima != null;
+
   const linhas = temTicker
     ? linhasBase.filter((l) => !l.rotulo.startsWith('Capacidade')).slice(0, 2)
     : linhasBase;

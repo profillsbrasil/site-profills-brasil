@@ -12,11 +12,14 @@ function resolver(
   id: ESTree.Node & { name: string }
 ): Variable | null {
   let scope: Scope | null = sourceCode.getScope(id);
+
   while (scope !== null) {
     const v = scope.set.get(id.name);
+
     if (v !== undefined) return v;
     scope = scope.upper;
   }
+
   return null;
 }
 
@@ -41,10 +44,12 @@ export const opacityScrollEmFuncaoRule = defineRule({
   },
   create(context) {
     const sourceCode = context.sourceCode;
+
     const hooks = {
       useScroll: new Set<string>(),
       useTransform: new Set<string>()
     };
+
     // Variáveis com o progresso do scroll e variáveis com o objeto de useScroll().
     const progresso = new Set<Variable>();
     const objetoScroll = new Set<Variable>();
@@ -68,6 +73,7 @@ export const opacityScrollEmFuncaoRule = defineRule({
     ): boolean {
       if (n?.type !== 'Identifier') return false;
       const v = resolver(sourceCode, n);
+
       return v !== null && variaveis.has(v);
     }
 
@@ -75,12 +81,14 @@ export const opacityScrollEmFuncaoRule = defineRule({
       if (arg?.type === 'MemberExpression') {
         return apontaPara(arg.object, objetoScroll);
       }
+
       return apontaPara(arg, progresso);
     }
 
     function ehTransformArray(n: ESTree.Node | null | undefined): boolean {
       if (!ehChamadaDe(n, 'useTransform') || n?.type !== 'CallExpression')
         return false;
+
       return (
         n.arguments[1]?.type === 'ArrayExpression' &&
         ehProgresso(n.arguments[0])
@@ -90,10 +98,12 @@ export const opacityScrollEmFuncaoRule = defineRule({
     return {
       ImportDeclaration(node) {
         if (!FONTES_MOTION.has(String(node.source.value))) return;
+
         for (const s of node.specifiers) {
           if (s.type !== 'ImportSpecifier' || s.imported.type !== 'Identifier')
             continue;
           const nome = s.imported.name;
+
           if (nome === 'useScroll' || nome === 'useTransform')
             hooks[nome].add(s.local.name);
         }
@@ -102,9 +112,12 @@ export const opacityScrollEmFuncaoRule = defineRule({
         if (ehChamadaDe(node.init, 'useScroll')) {
           const alvo =
             node.id.type === 'ObjectPattern' ? progresso : objetoScroll;
+
           for (const v of sourceCode.getDeclaredVariables(node)) alvo.add(v);
+
           return;
         }
+
         if (node.id.type === 'Identifier' && ehTransformArray(node.init)) {
           for (const v of sourceCode.getDeclaredVariables(node))
             transformsArray.add(v);
@@ -117,6 +130,7 @@ export const opacityScrollEmFuncaoRule = defineRule({
         for (const valor of usosEmOpacity) {
           const ruim =
             ehTransformArray(valor) || apontaPara(valor, transformsArray);
+
           if (ruim) context.report({ node: valor, messageId: 'opacityArray' });
         }
       }

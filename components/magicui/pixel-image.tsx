@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 type Grid = { rows: number; cols: number };
+
 const DEFAULT_GRIDS: Record<string, Grid> = {
   '6x4': { rows: 4, cols: 6 },
   '8x8': { rows: 8, cols: 8 },
@@ -14,6 +15,7 @@ const DEFAULT_GRIDS: Record<string, Grid> = {
   '4x6': { rows: 6, cols: 4 },
   '3x8': { rows: 8, cols: 3 }
 };
+
 type PredefinedGridKey = keyof typeof DEFAULT_GRIDS;
 
 interface PixelImageProps {
@@ -61,23 +63,28 @@ export const PixelImage = ({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsVisible(true);
     const t = setTimeout(() => setShowColor(true), colorRevealDelay);
+
     return () => clearTimeout(t);
   }, [colorRevealDelay]);
 
   const pieces = useMemo(() => {
     const total = rows * cols;
+
     return Array.from({ length: total }, (_, index) => {
       const row = Math.floor(index / cols);
       const col = index % cols;
+
       const clipPath = `polygon(
         ${col * (100 / cols)}% ${row * (100 / rows)}%,
         ${(col + 1) * (100 / cols)}% ${row * (100 / rows)}%,
         ${(col + 1) * (100 / cols)}% ${(row + 1) * (100 / rows)}%,
         ${col * (100 / cols)}% ${(row + 1) * (100 / rows)}%
       )`;
+
       // Delay aleatório por peça é intencional; memo fixa o sorteio por grid
       // eslint-disable-next-line react-hooks/purity
       const delay = Math.random() * maxAnimationDelay;
+
       return { clipPath, delay };
     });
   }, [rows, cols, maxAnimationDelay]);

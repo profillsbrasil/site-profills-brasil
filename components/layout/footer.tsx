@@ -88,6 +88,7 @@ export default function Footer() {
       }
     ]
   };
+
   const contacts = [cardVendas, ...contatosFixos];
 
   useEffect(() => {
@@ -174,6 +175,7 @@ export default function Footer() {
                     ({ href, icon: LinkIcon, label, ariaLabel, external }) => {
                       const aguardando =
                         contact.title === 'Vendas/Peças' && !comercial.pronto;
+
                       return (
                         <a
                           key={ariaLabel ?? label}

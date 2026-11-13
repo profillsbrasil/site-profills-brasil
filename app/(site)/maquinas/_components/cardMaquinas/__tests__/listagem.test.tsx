@@ -25,16 +25,20 @@ describe('listagem de máquinas no registry', () => {
 
   it('filtro por categoria "Stand-up pouch" mostra só as máquinas dessa categoria', () => {
     const { container } = render(<Maquinas />);
+
     const [botao] = screen.getAllByRole('button', {
       name: /^Stand-up pouch/
     });
+
     fireEvent.click(botao);
 
     const esperado = maquinasCatalogo.filter(
       (m) => m.categoria === 'Stand-up pouch'
     );
+
     const links = container.querySelectorAll('a[href^="/maquinas/"]');
     expect(links.length).toBe(esperado.length);
+
     for (const m of esperado) {
       expect(
         container.querySelector(`a[href="/maquinas/${m.slug}"]`)
@@ -47,9 +51,11 @@ describe('listagem de máquinas no registry', () => {
     expect(semImagem).toBeDefined();
 
     const { container } = render(<Maquinas />);
+
     const link = container.querySelector(
       `a[href="/maquinas/${semImagem!.slug}"]`
     );
+
     expect(link).not.toBeNull();
     expect(
       within(link as HTMLElement).queryAllByText(semImagem!.nome).length
@@ -59,14 +65,17 @@ describe('listagem de máquinas no registry', () => {
 
   it('busca por texto filtra por nome ignorando acento e caixa', () => {
     const { container } = render(<Maquinas />);
+
     const [campo] = screen.getAllByRole('textbox', {
       name: 'Buscar máquina'
     });
+
     fireEvent.change(campo, { target: { value: 'POUCH' } });
 
     const esperado = maquinasCatalogo.filter((m) =>
       `${m.nome} ${m.nomeCompleto}`.toLowerCase().includes('pouch')
     );
+
     expect(esperado.length).toBeGreaterThan(0);
     const links = container.querySelectorAll('a[href^="/maquinas/"]');
     expect(links.length).toBe(esperado.length);
@@ -74,6 +83,7 @@ describe('listagem de máquinas no registry', () => {
 
   it('cada card linka para /maquinas/<slug>', () => {
     const { container } = render(<Maquinas />);
+
     for (const m of maquinasCatalogo) {
       expect(
         container.querySelector(`a[href="/maquinas/${m.slug}"]`)

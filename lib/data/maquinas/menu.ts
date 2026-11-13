@@ -24,7 +24,9 @@ function vitrineDe(categoria: CategoriaCatalogo | null): VitrineMenu | null {
   const maquina = maquinasCatalogo.find(
     (m) => m.imagens && (categoria === null || m.categoria === categoria)
   );
+
   if (!maquina?.imagens) return null;
+
   return {
     slug: maquina.slug,
     nome: maquina.nome,
@@ -37,8 +39,10 @@ function vitrineDe(categoria: CategoriaCatalogo | null): VitrineMenu | null {
 // registro, sem o catálogo completo no bundle de toda rota.
 export function montarVitrinesDoMenu(): VitrinesDoMenu {
   const vitrines = { todas: vitrineDe(null) } as VitrinesDoMenu;
+
   for (const categoria of categoriasCatalogo) {
     vitrines[categoria] = vitrineDe(categoria);
   }
+
   return vitrines;
 }

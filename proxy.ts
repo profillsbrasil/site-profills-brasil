@@ -37,13 +37,16 @@ async function entrarPorLink(request: NextRequest): Promise<NextResponse> {
   const res = NextResponse.redirect(limpa, 302);
 
   if (!codigo) return res;
+
   /* Sem segredo o cookie não pode ser assinado; a URL ainda fica limpa. */
   if (!temSegredoIndicacao()) {
     avisarSemSegredo();
+
     return res;
   }
 
   const busca = await buscarVendedorPorCodigo(codigo);
+
   if (busca.tipo === 'encontrado') {
     res.cookies.set(
       INDICACAO_COOKIE,
@@ -51,28 +54,36 @@ async function entrarPorLink(request: NextRequest): Promise<NextResponse> {
       opcoesCookieIndicacao()
     );
   }
+
   return res;
 }
 
 async function renovarSePreciso(request: NextRequest): Promise<NextResponse> {
   const bruto = request.cookies.get(INDICACAO_COOKIE)?.value;
+
   if (!bruto) return NextResponse.next();
+
   /* Sem segredo nada é verificável: manter o cookie, não apagá-lo. */
   if (!temSegredoIndicacao()) {
     avisarSemSegredo();
+
     return NextResponse.next();
   }
 
   const atual = await lerIndicacao(bruto);
+
   if (!atual) {
     const res = NextResponse.next();
     res.cookies.delete(INDICACAO_COOKIE);
+
     return res;
   }
+
   if (!precisaRenovar(atual)) return NextResponse.next();
 
   const busca = await buscarVendedorPorCodigo(atual.codigo);
   const res = NextResponse.next();
+
   if (busca.tipo === 'encontrado') {
     res.cookies.set(
       INDICACAO_COOKIE,
@@ -82,6 +93,7 @@ async function renovarSePreciso(request: NextRequest): Promise<NextResponse> {
   } else if (busca.tipo === 'nao-encontrado') {
     res.cookies.delete(INDICACAO_COOKIE);
   }
+
   /* indisponivel: mantém o cookie como está e tenta de novo na próxima. */
   return res;
 }
@@ -91,9 +103,11 @@ export default async function proxy(request: NextRequest) {
     if (request.nextUrl.searchParams.has('ref')) {
       return await entrarPorLink(request);
     }
+
     return await renovarSePreciso(request);
   } catch (erro) {
     logger.error('[indicacao] proxy falhou; página segue sem Indicação', erro);
+
     return NextResponse.next();
   }
 }

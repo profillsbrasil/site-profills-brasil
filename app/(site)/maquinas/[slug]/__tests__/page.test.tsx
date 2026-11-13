@@ -27,6 +27,7 @@ class ResizeObserverStub {
   unobserve() {}
   disconnect() {}
 }
+
 vi.stubGlobal('ResizeObserver', ResizeObserverStub);
 
 // Injeta uma máquina de engenharia fake (fixture só deste teste, spread do
@@ -36,6 +37,7 @@ vi.stubGlobal('ResizeObserver', ResizeObserverStub);
 // mesma nem faça o piloto aparecer no grid de Relacionadas.
 vi.mock('@/lib/data/maquinas', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/data/maquinas')>();
+
   const maquinaEngenhariaFake = {
     ...actual.maquinasCatalogo[0],
     slug: 'engenharia-fake',
@@ -50,6 +52,7 @@ vi.mock('@/lib/data/maquinas', async (importOriginal) => {
       blocos: [{ rotulo: 'Etapa', valor: 'Integração completa da linha' }]
     }
   };
+
   return {
     ...actual,
     getMaquinaBySlug: (slug: string) =>
@@ -108,9 +111,11 @@ describe('página de máquina', () => {
 
   it('compõe os blocos na ordem do spec com âncoras derivadas', async () => {
     const { container } = render(await MaquinaPage({ params: paramsDoPiloto }));
+
     const ids = [...container.querySelectorAll('section[id], nav')].map(
       (el) => el.id || el.tagName.toLowerCase()
     );
+
     // nav (sub-nav) → hero (section sem id) → visao-geral → aplicacoes → embalagem → ficha-tecnica → contato
     expect(ids).toContain('visao-geral');
     expect(ids).toContain('aplicacoes');
@@ -126,6 +131,7 @@ describe('página de máquina', () => {
         params: Promise.resolve({ slug: 'engenharia-fake' })
       })
     );
+
     expect(container.querySelector('#escopo')).not.toBeNull();
     expect(container.querySelector('#ficha-tecnica')).toBeNull();
     expect(container.querySelectorAll('img').length).toBe(0);

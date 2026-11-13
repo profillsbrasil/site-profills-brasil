@@ -26,6 +26,7 @@ export function useContatoComercial(): ContatoComercial {
 
   if (estado.status === 'indicado') {
     email = estado.vendedor.email;
+
     if (estado.vendedor.contato) telefone = `55${estado.vendedor.contato}`;
   }
 

@@ -41,6 +41,7 @@ export default function FormularioMontarFabrica() {
 
   const onSubmit = async (data: MonteFabricaFormData) => {
     setIsSubmitting(true);
+
     try {
       logger.info('Enviando dados do formulário:', data);
 

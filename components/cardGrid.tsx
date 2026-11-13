@@ -183,6 +183,7 @@ export function GridPattern({
 
 export function genRandomPattern(length?: number): number[][] {
   length = length ?? 5;
+
   return Array.from({ length }, () => [
     Math.floor(Math.random() * 4) + 7, // random x between 7 and 10
     Math.floor(Math.random() * 6) + 1 // random y between 1 and 6

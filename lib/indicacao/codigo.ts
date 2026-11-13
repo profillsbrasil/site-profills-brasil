@@ -9,5 +9,6 @@ export function normalizarCodigo(
   valor: string | null | undefined
 ): string | null {
   const codigo = (valor ?? '').trim().toUpperCase();
+
   return FORMATO_CODIGO.test(codigo) ? codigo : null;
 }

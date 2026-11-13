@@ -1,12 +1,13 @@
+import { logger } from '@/lib/utils/logger';
+
 import fs from 'node:fs';
 import path from 'node:path';
-
-import { logger } from '@/lib/utils/logger';
 
 const PDF_PATH = path.join(
   process.cwd(),
   'private/downloads/Catalogo_ProfillsCompany.pdf'
 );
+
 const PDF_FILENAME = 'Catalogo_ProfillsCompany.pdf';
 
 export const runtime = 'nodejs';
@@ -14,6 +15,7 @@ export const runtime = 'nodejs';
 export async function GET() {
   if (!fs.existsSync(PDF_PATH)) {
     logger.error(`Catálogo PDF não encontrado em ${PDF_PATH}`);
+
     return new Response('Arquivo indisponível', { status: 500 });
   }
 

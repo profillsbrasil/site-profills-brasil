@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 // zod, react-hook-form e a máscara só baixam quando o visitante mostra
 // intenção de abrir o modal (hover ou foco no botão) ou quando ele abre.
 const carregarFormulario = () => import('./specificationForm');
+
 const SpecificationForm = dynamic(() => import('./specificationForm'), {
   // Reserva a altura do formulário enquanto o chunk não chega.
   loading: () => <div aria-busy='true' className='h-[450px] md:h-[308px]' />

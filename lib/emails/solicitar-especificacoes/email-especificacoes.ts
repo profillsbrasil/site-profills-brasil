@@ -29,6 +29,7 @@ const renderTemplate = (
   const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
   rendered = rendered.replace(ifRegex, (match, condition, content) => {
     const value = data[condition];
+
     // Mostra o conteúdo se a variável existe, não está vazia e não é undefined
     // Trata string "0" como válida (importante para IDs que podem ser 0)
     return value !== undefined && value !== null && value.trim() !== ''
@@ -139,6 +140,7 @@ Este e-mail foi gerado automaticamente pelo sistema Profills.
 
   try {
     const result = await transporter.sendMail(mailOptions);
+
     return { success: true, messageId: result.messageId };
   } catch (error) {
     logger.error('❌ Erro ao enviar e-mail:', error);

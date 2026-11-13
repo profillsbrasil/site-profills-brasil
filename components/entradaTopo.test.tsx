@@ -43,6 +43,7 @@ function estilosQueEscondem(ui: ReactElement, escopo?: string) {
   const raiz = document.createElement('div');
   raiz.innerHTML = renderToString(ui);
   const alvo = escopo ? [...raiz.querySelectorAll(escopo)] : [raiz];
+
   return alvo.flatMap((el) =>
     [el, ...el.querySelectorAll('[style]')]
       .map((n) => n.getAttribute('style') ?? '')

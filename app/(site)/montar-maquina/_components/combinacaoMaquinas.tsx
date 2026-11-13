@@ -69,6 +69,7 @@ export function getBestMachineRecommendation(
 
     const capacidadeAtual = atual.capacidadeMaxima ?? 0;
     const capacidadeCandidata = candidata.capacidadeMaxima ?? 0;
+
     return capacidadeCandidata > capacidadeAtual ? candidata : atual;
   });
 

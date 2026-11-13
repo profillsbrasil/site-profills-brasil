@@ -21,14 +21,17 @@ export const semEagerFixoRule = defineRule({
   },
   create(context) {
     let image: string | null = null;
+
     return {
       Program(node) {
         image = importPadrao(node, 'next/image');
       },
       JSXOpeningElement(node) {
         const nome = nomeDoElemento(node);
+
         if (nome !== 'img' && (image === null || nome !== image)) return;
         const loading = atributo(node, 'loading');
+
         if (loading !== null && valorLiteral(loading) === 'eager') {
           context.report({ node: loading, messageId: 'eagerFixo' });
         }

@@ -101,6 +101,7 @@ export const sendContactEmail = async (
   const transporter = createTransporter();
 
   const projectDetails = formatProjectDetails(data);
+
   const indicadoPor = destinatario.vendedor
     ? `${destinatario.vendedor.nome} (${destinatario.vendedor.referral_code})`
     : '';
@@ -146,6 +147,7 @@ Este e-mail foi gerado automaticamente pelo sistema Profills.
 
   try {
     const result = await transporter.sendMail(mailOptions);
+
     return { success: true, messageId: result.messageId };
   } catch (error) {
     logger.error('❌ Erro ao enviar e-mail de contato:', error);

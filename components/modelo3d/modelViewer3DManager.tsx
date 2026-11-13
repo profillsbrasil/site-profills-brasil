@@ -50,8 +50,10 @@ export function ModelViewer3DProvider({
           const oldestKey = modelCacheRef.current.keys().next().value as
             | string
             | undefined;
+
           if (oldestKey) modelCacheRef.current.delete(oldestKey);
         }
+
         modelCacheRef.current.set(src, true);
 
         // Remove o link após um tempo para não poluir o DOM
@@ -104,11 +106,13 @@ export function ModelViewer3DProvider({
 
 export function useModelViewer3D() {
   const context = useContext(ModelViewer3DContext);
+
   if (!context) {
     throw new Error(
       'useModelViewer3D deve ser usado dentro de ModelViewer3DProvider'
     );
   }
+
   return context;
 }
 

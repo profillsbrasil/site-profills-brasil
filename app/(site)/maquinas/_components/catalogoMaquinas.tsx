@@ -91,11 +91,14 @@ export default function CatalogoMaquinas() {
   useEffect(() => {
     if (!montou.current) {
       montou.current = true;
+
       return;
     }
+
     const timer = setTimeout(() => {
       updateUrl(categoriaFiltro, embalagemFiltro, busca);
     }, 300);
+
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [busca]);
@@ -118,9 +121,11 @@ export default function CatalogoMaquinas() {
     return maquinasCatalogo.filter((maquina) => {
       const categoriaPassa =
         categoriaFiltro === 'Todas' || maquina.categoria === categoriaFiltro;
+
       const embalagemPassa =
         embalagemFiltro === 'Todas' ||
         maquina.embalagensCompativeis.includes(embalagemFiltro);
+
       const buscaPassa =
         termoBusca === '' ||
         normalizar(`${maquina.nome} ${maquina.nomeCompleto}`).includes(
@@ -141,6 +146,7 @@ export default function CatalogoMaquinas() {
       }
     });
     const lista = Array.from(set);
+
     // Mantém ordem base de tiposEmbalagem para UX consistente
     return tiposEmbalagem.filter((t) => lista.includes(t));
   }, [categoriaFiltro]);
@@ -153,23 +159,29 @@ export default function CatalogoMaquinas() {
     const passaEmbalagem = (m: (typeof maquinasCatalogo)[number]) =>
       embalagemFiltro === 'Todas' ||
       m.embalagensCompativeis.includes(embalagemFiltro);
+
     const passaBusca = (m: (typeof maquinasCatalogo)[number]) =>
       termoBusca === '' ||
       normalizar(`${m.nome} ${m.nomeCompleto}`).includes(termoBusca);
+
     const contagem: Record<string, number> = {
       Todas: maquinasCatalogo.filter((m) => passaEmbalagem(m) && passaBusca(m))
         .length
     };
+
     for (const categoria of categoriasCatalogo) {
       const daCategoria = maquinasCatalogo.filter(
         (m) => m.categoria === categoria
       );
+
       const embalagemMantida =
         embalagemFiltro === 'Todas' || daCategoria.some(passaEmbalagem);
+
       contagem[categoria] = daCategoria.filter(
         (m) => (!embalagemMantida || passaEmbalagem(m)) && passaBusca(m)
       ).length;
     }
+
     return contagem;
   }, [embalagemFiltro, termoBusca]);
 
@@ -185,11 +197,13 @@ export default function CatalogoMaquinas() {
                 m.categoria === categoria && m.embalagensCompativeis.includes(t)
             )
           );
+
     const embalagem = tiposDaCategoria.includes(
       embalagemFiltro as (typeof tiposEmbalagem)[number]
     )
       ? embalagemFiltro
       : 'Todas';
+
     setCategoriaFiltro(categoria);
     setEmbalagemFiltro(embalagem);
     updateUrl(categoria, embalagem, busca);

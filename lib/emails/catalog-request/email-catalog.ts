@@ -59,6 +59,7 @@ export async function sendClientCatalogEmail(
       html,
       text
     });
+
     return { success: true, messageId: result.messageId };
   } catch (error) {
     logger.error('❌ Erro ao enviar email do catálogo (cliente):', error);
@@ -73,6 +74,7 @@ export async function sendLeadNotification(
   const transporter = createTransporter();
   const subject = `Nova solicitação de catálogo — ${data.name}`;
   const timestamp = nowSaoPaulo();
+
   const indicadoPor = destinatario.vendedor
     ? `${destinatario.vendedor.nome} (${destinatario.vendedor.referral_code})`
     : '';
@@ -107,6 +109,7 @@ export async function sendLeadNotification(
       html,
       text
     });
+
     return { success: true, messageId: result.messageId };
   } catch (error) {
     logger.error('❌ Erro ao enviar notificação interna do catálogo:', error);

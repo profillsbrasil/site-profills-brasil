@@ -21,7 +21,9 @@ export default function ClientesGrid() {
 
   const filtered = useMemo(() => {
     const q = normalizeQuery(query);
+
     if (!q) return listaClientes;
+
     return listaClientes.filter(
       (cliente) =>
         cliente.slug.includes(q) || normalizeQuery(cliente.name).includes(q)
@@ -31,6 +33,7 @@ export default function ClientesGrid() {
   // Query nova reinicia a paginação. Ajuste de estado durante o render em
   // vez de effect: evita um render extra com a contagem antiga.
   const [queryAnterior, setQueryAnterior] = useState(query);
+
   if (query !== queryAnterior) {
     setQueryAnterior(query);
     setVisibleCount(CHUNK_SIZE);
@@ -38,7 +41,9 @@ export default function ClientesGrid() {
 
   useEffect(() => {
     const el = sentinelRef.current;
+
     if (!el || visibleCount >= filtered.length) return;
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -49,7 +54,9 @@ export default function ClientesGrid() {
       },
       { rootMargin: '200px' }
     );
+
     io.observe(el);
+
     return () => io.disconnect();
   }, [visibleCount, filtered.length]);
 
@@ -83,8 +90,10 @@ export default function ClientesGrid() {
                   </EntradaTopo>
                 );
               }
+
               const positionInChunk = index % CHUNK_SIZE;
               const delay = Math.min(positionInChunk * 0.04, 0.4);
+
               return (
                 <BlurFade
                   key={`${query}-${cliente.id}`}

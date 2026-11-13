@@ -5,6 +5,7 @@ const tester = new RuleTester({
   cwd: '/repo',
   languageOptions: { parserOptions: { lang: 'tsx' } }
 });
+
 const imp = "import dynamic from 'next/dynamic';\n";
 const filename = '/repo/app/(site)/sobre/_components/historia.tsx';
 const erro = { messageId: 'semSsrFalse' };

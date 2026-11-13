@@ -31,6 +31,7 @@ export function useCatalogForm() {
 
   const onSubmit = async (values: CatalogRequestData) => {
     setStatus('submitting');
+
     try {
       const res = await fetch('/api/download-catalog', {
         method: 'POST',

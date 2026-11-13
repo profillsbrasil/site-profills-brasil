@@ -27,6 +27,7 @@ class ResizeObserverStub {
   unobserve() {}
   disconnect() {}
 }
+
 vi.stubGlobal('ResizeObserver', ResizeObserverStub);
 
 const featuredSlugs = [

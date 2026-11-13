@@ -23,18 +23,23 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/lib/emails/monte-fabrica/email-monte-fabrica', () => ({
   sendMonteFabricaEmail: vi.fn()
 }));
+
 vi.mock('@/lib/emails/montar-maquina/email-montar-maquina', () => ({
   sendMontarMaquinaEmail: vi.fn()
 }));
+
 vi.mock('@/lib/emails/solicitar-especificacoes/email-especificacoes', () => ({
   sendSpecificationEmail: vi.fn()
 }));
+
 vi.mock('@/lib/emails/contact-form/email-contact', () => ({
   sendContactEmail: vi.fn()
 }));
+
 vi.mock('@/lib/utils/logger', () => ({
   logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
 }));
+
 vi.mock('@/lib/indicacao/destinatario', () => ({
   resolverDestinatario: vi.fn()
 }));
@@ -169,6 +174,7 @@ vi.mock('@/lib/emails/catalog-request/email-catalog', () => ({
   sendClientCatalogEmail: vi.fn().mockResolvedValue(undefined),
   sendLeadNotification: vi.fn().mockResolvedValue(undefined)
 }));
+
 vi.mock('@/lib/utils/jwt-catalog', () => ({
   signCatalogToken: vi.fn().mockResolvedValue('token')
 }));
@@ -192,6 +198,7 @@ describe('POST /api/download-catalog', () => {
       para: 'caixa@profills.test',
       vendedor: null
     });
+
     const res = await postCatalogo(
       req({
         name: 'Teste',
@@ -200,6 +207,7 @@ describe('POST /api/download-catalog', () => {
         email: 'teste@example.com'
       })
     );
+
     expect(res.status).toBe(200);
     expect((await res.json()).indicacao).toBeNull();
     expect(sendLeadNotification).toHaveBeenCalledWith(
@@ -217,6 +225,7 @@ describe('POST /api/download-catalog', () => {
         email: 'teste@example.com'
       })
     );
+
     expect(res.status).toBe(200);
     expect((await res.json()).indicacao).toEqual({ codigo: 'MARIA-10' });
     expect(sendLeadNotification).toHaveBeenCalledWith(

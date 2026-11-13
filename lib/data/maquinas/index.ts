@@ -36,6 +36,7 @@ import { maquinaLavagemGaloes } from './maquina-lavagem-galoes';
 import type { MaquinaCatalogo } from './types';
 
 export * from './types';
+
 export { maquinaRedirects } from './redirects';
 
 export const maquinasCatalogo: MaquinaCatalogo[] = [

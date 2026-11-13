@@ -1,6 +1,7 @@
 type LogLevel = 'silent' | 'error' | 'warn' | 'info' | 'debug';
 
 const env = process.env.NODE_ENV || 'development';
+
 const configuredLevel: LogLevel =
   (process.env.LOG_LEVEL as LogLevel) ||
   (env === 'production' ? 'error' : 'info');
@@ -19,6 +20,7 @@ function shouldLog(level: LogLevel) {
 
 function formatMessage(level: string, message: unknown) {
   const timestamp = new Date().toISOString();
+
   return `[${timestamp}] [${level}] ${String(message)}`;
 }
 

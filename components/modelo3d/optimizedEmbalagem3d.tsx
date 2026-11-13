@@ -35,20 +35,25 @@ export function OptimizedEmbalagem3d({
     threshold: 0.1,
     rootMargin: '100px'
   });
+
   const montado = shouldRender && isLoaded && webglSupported !== false;
   const [modeloPronto, setModeloPronto] = useState(false);
 
   // O React não liga onLoad/onError em custom element (load e error não borbulham)
   useEffect(() => {
     const el = modelViewerRef.current;
+
     if (!montado || !el) return;
+
     const aoCarregar = () => {
       setModeloPronto(true);
       handleModelLoad();
     };
+
     const aoFalhar = (evento: Event) => handleModelError(evento);
     el.addEventListener('load', aoCarregar);
     el.addEventListener('error', aoFalhar);
+
     return () => {
       el.removeEventListener('load', aoCarregar);
       el.removeEventListener('error', aoFalhar);

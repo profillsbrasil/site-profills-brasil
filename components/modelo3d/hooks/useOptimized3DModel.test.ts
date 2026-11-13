@@ -38,6 +38,7 @@ describe('useOptimized3DModel', () => {
   it('não deixa o timer de render pendente depois de desmontar', () => {
     mockedIsWebGLAvailable.mockReturnValue(false);
     let avisar: IntersectionObserverCallback = () => {};
+
     vi.stubGlobal(
       'IntersectionObserver',
       class {
@@ -50,10 +51,12 @@ describe('useOptimized3DModel', () => {
       }
     );
     vi.useFakeTimers();
+
     try {
       const { unmount } = renderHook(() =>
         useOptimized3DModel({ src: '/timer.glb' })
       );
+
       avisar(
         [{ isIntersecting: true } as IntersectionObserverEntry],
         {} as IntersectionObserver

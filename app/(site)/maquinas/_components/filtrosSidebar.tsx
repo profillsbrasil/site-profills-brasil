@@ -121,7 +121,9 @@ function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
         {(['Todas', ...categoriasCatalogo] as const).map((categoria) => {
           const Icone =
             categoria === 'Todas' ? Layers : ICONE_CATEGORIA[categoria];
+
           const ativo = categoriaFiltro === categoria;
+
           return (
             <button
               key={categoria}
@@ -180,6 +182,7 @@ function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
 /** Painel-placa único de filtros da listagem — desktop. */
 export function FiltrosSidebar(props: FiltrosProps) {
   const { totalFiltrado, onLimpar } = props;
+
   return (
     <aside className='sticky top-[4.5rem] z-10 mt-8 ml-3 hidden w-80 shrink-0 self-start md:block'>
       {/* Placa da busca: instrumento separado, acima do console de filtros */}
@@ -221,6 +224,7 @@ export function FiltrosSidebar(props: FiltrosProps) {
 export function FiltrosMobile(props: FiltrosProps) {
   const { totalFiltrado, onLimpar } = props;
   const [aberto, setAberto] = useState(false);
+
   const ativos =
     Number(props.categoriaFiltro !== 'Todas') +
     Number(props.embalagemFiltro !== 'Todas') +

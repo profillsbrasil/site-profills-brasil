@@ -30,14 +30,17 @@ class ResizeObserverStub {
   unobserve() {}
   disconnect() {}
 }
+
 vi.stubGlobal('ResizeObserver', ResizeObserverStub);
 
 describe('Relacionadas', () => {
   it('renderiza o pool ranqueado inteiro, mesma categoria primeiro', () => {
     const { container } = render(<Relacionadas maquina={piloto} />);
+
     const esperado = getMaquinasRelacionadas(piloto, maquinasCatalogo, {
       minimo: 8
     });
+
     const links = container.querySelectorAll('a');
     expect(links.length).toBe(esperado.length);
     expect(esperado.length).toBeGreaterThan(3); // o carrossel tem o que deslizar
@@ -46,12 +49,15 @@ describe('Relacionadas', () => {
     expect(screen.getByText('Linha Pouch')).toBeInTheDocument();
     expect(screen.getByText('Linha Pouch Mini')).toBeInTheDocument();
     expect(screen.getByText('Linha Pouch Compacta')).toBeInTheDocument();
+
     const primeiros = Array.from(links)
       .slice(0, 3)
       .map((a) => a.getAttribute('href'));
+
     for (const m of esperado.slice(0, 3)) {
       expect(primeiros).toContain(`/maquinas/${m.slug}`);
     }
+
     // nunca lista a própria máquina
     expect(
       container.querySelector(`a[href='/maquinas/${piloto.slug}']`)
@@ -68,6 +74,7 @@ describe('Relacionadas', () => {
       categoria: 'Embalagens rígidas e higienização',
       embalagensCompativeis: []
     };
+
     const { container } = render(<Relacionadas maquina={sozinha} />);
     expect(container.querySelectorAll('a').length).toBe(8);
     // nunca ela mesma
@@ -97,6 +104,7 @@ describe('Relacionadas', () => {
 
     afterEach(() => {
       const i = maquinasCatalogo.indexOf(semFoto);
+
       if (i !== -1) maquinasCatalogo.splice(i, 1);
     });
 
@@ -108,6 +116,7 @@ describe('Relacionadas', () => {
           minimo: 8
         }
       ).length;
+
       maquinasCatalogo.push(semFoto);
       const { container } = render(<Relacionadas maquina={piloto} />);
       expect(screen.queryByText('Máquina Sem Foto')).toBeNull();

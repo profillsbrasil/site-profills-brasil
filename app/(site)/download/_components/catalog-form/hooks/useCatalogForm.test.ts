@@ -15,9 +15,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/lib/analytics/indicacao', async (importOriginal) => {
   const real =
     await importOriginal<typeof import('@/lib/analytics/indicacao')>();
+
   return { registrarLeadIndicacao: vi.fn(real.registrarLeadIndicacao) };
 });
+
 vi.mock('@next/third-parties/google', () => ({ sendGAEvent: vi.fn() }));
+
 vi.mock('sonner', () => ({
   toast: { error: vi.fn(), success: vi.fn() }
 }));

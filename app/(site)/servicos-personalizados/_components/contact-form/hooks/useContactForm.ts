@@ -44,8 +44,10 @@ export function useContactForm() {
   const handleCepComplete = async (cep: string) => {
     if (cep.replace(/\D/g, '').length === 8) {
       setIsLoadingCep(true);
+
       try {
         const data = await fetchAddressByCep(cep);
+
         if (data) {
           form.setValue('street', data.logradouro);
           form.setValue('neighborhood', data.bairro);
@@ -110,6 +112,7 @@ export function useContactForm() {
           });
         });
       }
+
       return false;
     }
   };
@@ -117,6 +120,7 @@ export function useContactForm() {
   // Navegação entre etapas
   const nextStep = async () => {
     const isValid = await validateStep(currentStep);
+
     if (isValid && currentStep < 3) {
       setCurrentStep(currentStep + 1);
     } else {

@@ -33,6 +33,7 @@ export default function HeroCarrossel() {
   useEffect(() => {
     if (reduzirMovimento) return;
     const timer = setTimeout(() => trocar(1), AUTOPLAY_MS);
+
     return () => clearTimeout(timer);
   }, [atual, reduzirMovimento, trocar]);
 

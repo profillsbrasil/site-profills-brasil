@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 function jwtFalso(payload: unknown) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
+
   return `${b64('{"alg":"HS256"}')}.${b64(JSON.stringify(payload))}.x`;
 }
 

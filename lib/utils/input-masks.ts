@@ -16,12 +16,15 @@ export function applyPhoneMask(value: string): string {
         if (second) {
           return `(${ddd}) ${first}-${second}`;
         }
+
         if (first) {
           return `(${ddd}) ${first}`;
         }
+
         if (ddd) {
           return `(${ddd}`;
         }
+
         return '';
       }
     );
@@ -33,12 +36,15 @@ export function applyPhoneMask(value: string): string {
         if (second) {
           return `(${ddd}) ${first}-${second}`;
         }
+
         if (first) {
           return `(${ddd}) ${first}`;
         }
+
         if (ddd) {
           return `(${ddd}`;
         }
+
         return '';
       }
     );
@@ -50,10 +56,12 @@ export function applyPhoneMask(value: string): string {
  */
 export function applyCepMask(value: string): string {
   const digits = value.replace(/\D/g, '');
+
   return digits.replace(/(\d{5})(\d{0,3})/, (_, first, second) => {
     if (second) {
       return `${first}-${second}`;
     }
+
     return first;
   });
 }

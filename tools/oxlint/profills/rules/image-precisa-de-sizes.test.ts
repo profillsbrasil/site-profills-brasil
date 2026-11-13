@@ -4,6 +4,7 @@ import { RuleTester } from 'oxlint/plugins-dev';
 const tester = new RuleTester({
   languageOptions: { parserOptions: { lang: 'tsx' } }
 });
+
 const imp = "import Image from 'next/image';\n";
 const erro = { messageId: 'semSizes' };
 

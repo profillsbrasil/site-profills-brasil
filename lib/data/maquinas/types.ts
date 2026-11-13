@@ -12,6 +12,7 @@ export const categoriasCatalogo = [
   'Fim de linha',
   'Linhas completas e automação'
 ] as const;
+
 export type CategoriaCatalogo = (typeof categoriasCatalogo)[number];
 
 export const categoriasProduto = [
@@ -21,6 +22,7 @@ export const categoriasProduto = [
   'graos',
   'solidos'
 ] as const;
+
 export type CategoriaProduto = (typeof categoriasProduto)[number];
 
 export interface EspecificacaoItem {

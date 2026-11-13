@@ -13,10 +13,12 @@ const sendMail = vi.fn().mockResolvedValue({ messageId: 'id' });
 vi.mock('@/lib/emails/_shared/transporter', () => ({
   createTransporter: () => ({ sendMail })
 }));
+
 vi.mock('nodemailer', () => ({
   default: { createTransport: () => ({ sendMail }) },
   createTransport: () => ({ sendMail })
 }));
+
 vi.mock('@/lib/utils/logger', () => ({
   logger: { error: vi.fn(), info: vi.fn(), warn: vi.fn() }
 }));
@@ -27,6 +29,7 @@ const vendedor: NonNullable<Destinatario['vendedor']> = {
   referral_code: 'MARIA-10',
   contato: null
 };
+
 const paraVendedor: Destinatario = { para: 'maria@profills.com.br', vendedor };
 const paraCaixa: Destinatario = { para: 'caixa@profills.test', vendedor: null };
 

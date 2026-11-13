@@ -38,18 +38,22 @@ let pendingCountries: Promise<CountryFeature[]> | null = null;
 
 function loadCountries(): Promise<CountryFeature[]> {
   if (cachedCountries) return Promise.resolve(cachedCountries);
+
   if (pendingCountries) return pendingCountries;
   pendingCountries = fetch(COUNTRIES_URL)
     .then((r) => r.json())
     .then((data: { features: CountryFeature[] }) => {
       cachedCountries = data.features;
+
       return cachedCountries;
     })
     .catch((error: unknown) => {
       logger.error('Erro ao carregar os países do globo:', error);
       pendingCountries = null;
+
       return [];
     });
+
   return pendingCountries;
 }
 
@@ -81,14 +85,18 @@ export function Globe({
 
   useEffect(() => {
     const el = containerRef.current;
+
     if (!el) return;
 
     const ro = new ResizeObserver(([entry]) => {
       const w = Math.round(entry.contentRect.width);
       const h = Math.round(entry.contentRect.height);
+
       if (w > 0 && h > 0) setSize({ w, h });
     });
+
     ro.observe(el);
+
     return () => ro.disconnect();
   }, []);
 
@@ -97,6 +105,7 @@ export function Globe({
     void loadCountries().then((features) => {
       if (!cancelled) setCountries(features);
     });
+
     return () => {
       cancelled = true;
     };
@@ -115,6 +124,7 @@ export function Globe({
         renderer: () => { setPixelRatio: (r: number) => void };
       }
     ).renderer();
+
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   }, [ready]);
 
@@ -127,9 +137,11 @@ export function Globe({
   useEffect(() => {
     const globo = globeRef.current;
     const el = containerRef.current;
+
     if (!ready || !globo || !el) return;
 
     let naTela = true;
+
     const aplicar = () => {
       if (naTela && document.visibilityState === 'visible') {
         globo.resumeAnimation();
@@ -137,12 +149,15 @@ export function Globe({
         globo.pauseAnimation();
       }
     };
+
     const io = new IntersectionObserver(([entry]) => {
       naTela = entry.isIntersecting;
       aplicar();
     });
+
     io.observe(el);
     document.addEventListener('visibilitychange', aplicar);
+
     return () => {
       io.disconnect();
       document.removeEventListener('visibilitychange', aplicar);

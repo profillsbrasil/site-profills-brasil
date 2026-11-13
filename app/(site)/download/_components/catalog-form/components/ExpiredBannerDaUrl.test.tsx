@@ -11,6 +11,7 @@ function comUrl(query: string) {
   vi.mocked(useSearchParams).mockReturnValue(
     new URLSearchParams(query) as unknown as ReturnType<typeof useSearchParams>
   );
+
   return render(<ExpiredBannerDaUrl />);
 }
 

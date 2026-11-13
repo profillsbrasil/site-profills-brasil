@@ -12,6 +12,7 @@ export type ResultadoBusca =
 
 const CACHE_MS = 5 * 60 * 1000;
 const TIMEOUT_MS = 4000;
+
 /** Teto de entradas do cache; o processo é longo e o código vem de fora. */
 const CACHE_MAX = 500;
 
@@ -40,10 +41,13 @@ function guardar(
   entrada: { ate: number; resultado: Cacheado }
 ) {
   cache.delete(codigo);
+
   if (cache.size >= CACHE_MAX) {
     const maisAntiga = cache.keys().next().value;
+
     if (maisAntiga !== undefined) cache.delete(maisAntiga);
   }
+
   cache.set(codigo, entrada);
 }
 
@@ -68,16 +72,20 @@ export async function buscarVendedorPorCodigo(
   valor: string | null | undefined
 ): Promise<ResultadoBusca> {
   const codigo = normalizarCodigo(valor);
+
   if (!codigo) return { tipo: 'nao-encontrado' };
 
   const agora = Date.now();
   const guardado = cache.get(codigo);
+
   if (guardado && guardado.ate > agora) return guardado.resultado;
 
   const base = process.env.CRM_BASE_URL;
   const chave = process.env.CRM_EXTERNAL_API_KEY;
+
   if (!base || !chave) {
     logger.warn('[crm-referral] CRM_BASE_URL ou CRM_EXTERNAL_API_KEY ausente');
+
     return { tipo: 'indisponivel' };
   }
 
@@ -95,39 +103,49 @@ export async function buscarVendedorPorCodigo(
     if (resp.status === 404) {
       const resultado: Cacheado = { tipo: 'nao-encontrado' };
       guardar(codigo, { ate: agora + CACHE_MS, resultado });
+
       return resultado;
     }
+
     if (!resp.ok) {
       logger.error(
         `[crm-referral] CRM respondeu ${resp.status} para ${codigo}`
       );
+
       return { tipo: 'indisponivel' };
     }
 
     const validado = RespostaCrm.safeParse(await resp.json());
+
     if (!validado.success) {
       logger.error(`[crm-referral] resposta inválida do CRM para ${codigo}`);
+
       return { tipo: 'indisponivel' };
     }
 
     const vendedor: VendedorIndicacao = validado.data;
     const resultado: Cacheado = { tipo: 'encontrado', vendedor };
     guardar(codigo, { ate: agora + CACHE_MS, resultado });
+
     return resultado;
   } catch (erro) {
     logger.error('[crm-referral] falha ao consultar o CRM', erro);
+
     return { tipo: 'indisponivel' };
   }
 }
 
 export function formatarTelefoneBR(digitos: string | null): string {
   if (!digitos) return '';
+
   if (digitos.length === 11) {
     return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7)}`;
   }
+
   if (digitos.length === 10) {
     return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 6)}-${digitos.slice(6)}`;
   }
+
   return digitos;
 }
 

@@ -8,6 +8,7 @@ const cepSchema = z
   .refine(
     (cep) => {
       const cleanCep = cep.replace(/\D/g, '');
+
       // Verifica se não é um CEP inválido (todos os dígitos iguais)
       const invalidCeps = [
         '00000000',
@@ -21,6 +22,7 @@ const cepSchema = z
         '88888888',
         '99999999'
       ];
+
       return !invalidCeps.includes(cleanCep);
     },
     { message: 'CEP inválido' }
@@ -79,5 +81,7 @@ export const step3Schema = contactFormSchema.pick({
 });
 
 export type Step1Data = z.infer<typeof step1Schema>;
+
 export type Step2Data = z.infer<typeof step2Schema>;
+
 export type Step3Data = z.infer<typeof step3Schema>;

@@ -58,9 +58,11 @@ describe('HeroSlideCopy', () => {
 
   it('link do WhatsApp abre wa.me em nova aba', () => {
     render(<HeroSlideCopy slide={SLIDES[0]} primeiro />);
+
     const whats = screen.getByRole('link', {
       name: /falar com um especialista/i
     });
+
     expect(whats).toHaveAttribute('href', expect.stringContaining('wa.me'));
     expect(whats).toHaveAttribute('target', '_blank');
   });

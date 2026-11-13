@@ -42,6 +42,7 @@ export async function fetchAddressByCep(
     if (error instanceof Error) {
       throw error;
     }
+
     throw new Error('Erro ao buscar CEP');
   }
 }
@@ -51,10 +52,12 @@ export async function fetchAddressByCep(
  */
 export function formatCep(value: string): string {
   const digits = value.replace(/\D/g, '');
+
   return digits.replace(/(\d{5})(\d{0,3})/, (_, first, second) => {
     if (second) {
       return `${first}-${second}`;
     }
+
     return first;
   });
 }

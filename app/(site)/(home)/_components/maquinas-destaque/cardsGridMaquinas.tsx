@@ -37,13 +37,16 @@ type MaquinaDestaque = MaquinaCatalogo & {
 // perder as imagens — destaque da home sempre precisa de foto (spec §7).
 const featuredMachines: MaquinaDestaque[] = featuredSlugs.map((slug) => {
   const m = getMaquinaBySlug(slug);
+
   if (!m || !m.imagens) throw new Error(`destaque inválido: ${slug}`);
+
   return m as MaquinaDestaque;
 });
 
 // Subtítulo do card: parte após ' - ' de nomeCompleto; sem separador, cai na categoria
 function subtituloDe(maquina: MaquinaCatalogo): string {
   const [, subtitulo] = maquina.nomeCompleto.split(' - ');
+
   return subtitulo ?? maquina.categoria;
 }
 

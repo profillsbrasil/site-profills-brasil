@@ -8,6 +8,7 @@ import { AnimatePresence, MotionProps, Variants } from 'motion/react';
 import * as m from 'motion/react-m';
 
 type AnimationType = 'text' | 'word' | 'character' | 'line';
+
 type AnimationVariant =
   | 'fadeIn'
   | 'blurIn'
@@ -322,6 +323,7 @@ const TextAnimateBase = ({
   const MotionComponent = useMemo(() => m.create(Component), [Component]);
 
   let segments: string[] = [];
+
   switch (by) {
     case 'word':
       segments = children.split(/(\s+)/);

@@ -21,29 +21,37 @@ const TENTATIVAS = 40; // cerca de 10 s (40 tentativas a cada 250 ms)
    lança. */
 function quandoPronto(pronto: () => boolean, acao: () => void) {
   let tentativas = 0;
+
   const tentar = () => {
     let ok = false;
+
     try {
       ok = pronto();
     } catch {
       ok = false;
     }
+
     if (ok) {
       try {
         acao();
       } catch {
         /* dataLayer corrompido por extensão, fbq quebrado: não derruba a página */
       }
+
       return;
     }
+
     tentativas += 1;
+
     if (tentativas >= TENTATIVAS) return;
+
     try {
       window.setTimeout(tentar, INTERVALO_MS);
     } catch {
       /* sem `window` (SSR, ambiente sem timers): desiste */
     }
   };
+
   tentar();
 }
 
@@ -66,6 +74,7 @@ function enviar(nomeGa: string, nomeMeta: string, params: Params) {
    finita e a dimensão `codigo_vendedor` só deve receber código válido. */
 export function registrarChegadaIndicacao(codigo: string) {
   const valido = normalizarCodigo(codigo);
+
   if (!valido) return;
   enviar('indicacao_chegada', 'IndicacaoChegada', { codigo_vendedor: valido });
 }
@@ -83,9 +92,11 @@ export function registrarLeadIndicacao(
 /** Devolve true na primeira chamada por sessão do navegador para este código. */
 export function marcarChegadaNaSessao(codigo: string): boolean {
   const chave = `indicacao_registrada:${codigo}`;
+
   try {
     if (window.sessionStorage.getItem(chave)) return false;
     window.sessionStorage.setItem(chave, '1');
+
     return true;
   } catch {
     return false; // storage bloqueado: não registra, não quebra

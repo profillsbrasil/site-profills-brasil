@@ -23,6 +23,7 @@ describe('montarVitrinesDoMenu', () => {
       const esperada = maquinasCatalogo.find(
         (m) => m.categoria === categoria && m.imagens
       );
+
       expect(vitrines[categoria]?.slug ?? null).toBe(esperada?.slug ?? null);
       expect(vitrines[categoria]?.imagem ?? null).toBe(
         esperada?.imagens?.maquina ?? null

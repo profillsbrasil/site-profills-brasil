@@ -19,6 +19,7 @@ describe('VideoMaquina', () => {
         }}
       />
     );
+
     const video = container.querySelector('video');
     expect(video).not.toBeNull();
     expect(video).toHaveAttribute('poster', '/videos/maquinas/teste.webp');

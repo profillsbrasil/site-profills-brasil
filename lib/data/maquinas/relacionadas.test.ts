@@ -14,21 +14,25 @@ describe('getMaquinasRelacionadas', () => {
       embalagensCompativeis: ['Pouch', 'Sachê'],
       capacidadeMaxima: 5400
     });
+
     const duasEmbalagens = fixture({
       slug: 'duas-embalagens',
       embalagensCompativeis: ['Pouch', 'Sachê'],
       capacidadeMaxima: 500 // longe da referência, mas 2 embalagens em comum
     });
+
     const umaEmbalagem = fixture({
       slug: 'uma-embalagem',
       embalagensCompativeis: ['Pouch'],
       capacidadeMaxima: 5400 // capacidade idêntica, mas só 1 embalagem em comum
     });
+
     const outraCategComEmbalagem = fixture({
       slug: 'c',
       categoria: 'Embalagens flexíveis',
       embalagensCompativeis: ['Pouch', 'Sachê']
     });
+
     const semRelacao = fixture({
       slug: 'd',
       categoria: 'Fim de linha',
@@ -42,6 +46,7 @@ describe('getMaquinasRelacionadas', () => {
       outraCategComEmbalagem,
       semRelacao
     ]);
+
     expect(resultado.map((m) => m.slug)).toEqual([
       'duas-embalagens',
       'uma-embalagem',
@@ -60,6 +65,7 @@ describe('getMaquinasRelacionadas', () => {
         capacidadeMaxima: undefined,
         embalagensCompativeis: ['Pouch']
       });
+
       const comCapacidadeProxima = fixture({
         slug: 'com-capacidade-proxima',
         capacidadeMaxima: 5000,
@@ -71,6 +77,7 @@ describe('getMaquinasRelacionadas', () => {
         semCapacidade,
         comCapacidadeProxima
       ]);
+
       expect(resultado.map((m) => m.slug)).toEqual([
         'sem-capacidade',
         'com-capacidade-proxima'
@@ -83,6 +90,7 @@ describe('getMaquinasRelacionadas', () => {
         capacidadeMaxima: undefined,
         embalagensCompativeis: ['Pouch']
       });
+
       const comCapacidadeProxima = fixture({
         slug: 'com-capacidade-proxima',
         capacidadeMaxima: 5000,
@@ -94,6 +102,7 @@ describe('getMaquinasRelacionadas', () => {
         comCapacidadeProxima,
         semCapacidade
       ]);
+
       expect(resultado.map((m) => m.slug)).toEqual([
         'com-capacidade-proxima',
         'sem-capacidade'
@@ -106,6 +115,7 @@ describe('getMaquinasRelacionadas', () => {
         capacidadeMaxima: 0,
         embalagensCompativeis: ['Pouch']
       });
+
       const comCapacidadeProxima = fixture({
         slug: 'com-capacidade-proxima',
         capacidadeMaxima: 5000,
@@ -117,6 +127,7 @@ describe('getMaquinasRelacionadas', () => {
         capacidadeZero,
         comCapacidadeProxima
       ]);
+
       expect(resultado.map((m) => m.slug)).toEqual([
         'com-capacidade-proxima',
         'capacidade-zero'

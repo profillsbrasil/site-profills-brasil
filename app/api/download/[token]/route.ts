@@ -10,6 +10,7 @@ const PDF_PATH = path.join(
   process.cwd(),
   'private/downloads/Catalogo_ProfillsCompany.pdf'
 );
+
 const PDF_FILENAME = 'Catalogo_ProfillsCompany.pdf';
 
 export const runtime = 'nodejs';
@@ -23,11 +24,13 @@ export async function GET(
 
   if (!result.ok) {
     const url = new URL(`/download?error=${result.reason}`, request.url);
+
     return Response.redirect(url, 302);
   }
 
   if (!fs.existsSync(PDF_PATH)) {
     logger.error(`Catálogo PDF não encontrado em ${PDF_PATH}`);
+
     return new Response('Arquivo indisponível', { status: 500 });
   }
 

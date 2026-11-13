@@ -75,6 +75,7 @@ export default function SolucaoMarketplace() {
         <div className='mb-12 grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3'>
           {solucoes.map((solucao, index) => {
             const IconComponent = solucao.icon;
+
             return (
               <div
                 key={index}

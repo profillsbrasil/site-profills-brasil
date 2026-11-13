@@ -32,10 +32,12 @@ export function ehModulo3d(
 ): boolean {
   if (ehPacote3d(fonte)) return true;
   let relativo: string;
+
   if (fonte.startsWith('@/')) relativo = fonte.slice(2);
   else if (fonte.startsWith('.'))
     relativo = relativoARaiz(cwd, path.resolve(path.dirname(arquivo), fonte));
   else return false;
+
   return (
     relativo.startsWith('components/modelo3d/') ||
     relativo.replace(/\.tsx?$/, '') === 'components/magicui/globe'
