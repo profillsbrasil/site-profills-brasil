@@ -25,7 +25,10 @@ async function enviarFormulario() {
     })
   );
 
-  await user.type(screen.getByLabelText(/Nome Completo/i), 'Fulano Teste');
+  await user.type(
+    await screen.findByLabelText(/Nome Completo/i),
+    'Fulano Teste'
+  );
   await user.type(screen.getByLabelText(/E-mail/i), 'fulano@example.com');
   await user.type(screen.getByLabelText(/Telefone/i), '11999998888');
 
@@ -62,7 +65,10 @@ describe('SpecificationModal', () => {
       })
     );
 
-    await user.type(screen.getByLabelText(/Nome Completo/i), 'Fulano Teste');
+    await user.type(
+      await screen.findByLabelText(/Nome Completo/i),
+      'Fulano Teste'
+    );
     await user.type(screen.getByLabelText(/E-mail/i), 'fulano@example.com');
     await user.type(screen.getByLabelText(/Telefone/i), '11999998888');
 
@@ -102,6 +108,61 @@ describe('SpecificationModal', () => {
         'MARIA-10'
       );
     });
+  });
+
+  it('mantém o que foi digitado ao fechar e reabrir o modal', async () => {
+    const user = userEvent.setup();
+    render(
+      <SpecificationModal
+        maquinaSlug='linha-producao-completa-envase'
+        maquinaNome='Linha de Produção Ponta a Ponta'
+      />
+    );
+    const abrir = screen.getByRole('button', {
+      name: /Solicitar proposta técnica e comercial/i
+    });
+
+    await user.click(abrir);
+    await user.type(
+      await screen.findByLabelText(/Nome Completo/i),
+      'Fulano Teste'
+    );
+    await user.click(screen.getByRole('button', { name: /Cancelar/i }));
+    await waitFor(() => {
+      expect(screen.queryByLabelText(/Nome Completo/i)).toBeNull();
+    });
+
+    await user.click(abrir);
+    expect(await screen.findByLabelText(/Nome Completo/i)).toHaveValue(
+      'Fulano Teste'
+    );
+  });
+
+  it('mostra erro de validação sem chamar a rota', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const user = userEvent.setup();
+    render(
+      <SpecificationModal
+        maquinaSlug='linha-producao-completa-envase'
+        maquinaNome='Linha de Produção Ponta a Ponta'
+      />
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /Solicitar proposta técnica e comercial/i
+      })
+    );
+    await screen.findByLabelText(/Nome Completo/i);
+    await user.click(
+      screen.getByRole('button', { name: /Enviar solicitação/i })
+    );
+
+    expect(
+      await screen.findAllByText(/./, { selector: 'p.text-red-600' })
+    ).not.toHaveLength(0);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('não registra lead quando a rota responde 500', async () => {
