@@ -48,19 +48,18 @@ Provider para gerenciamento avançado:
 ### Uso Básico (já implementado):
 
 ```tsx
-import { OptimizedEmbalagem3d } from "@/components/modelo3d/optimizedEmbalagem3d";
+import { OptimizedEmbalagem3d } from '@/components/modelo3d/optimizedEmbalagem3d';
+import { embalagens3d } from '@/lib/data/embalagens3d';
 
-// Usa o modelo padrão
-<OptimizedEmbalagem3d />
-
-// Com configurações personalizadas
+// `embalagem` e `alt` são obrigatórias
 <OptimizedEmbalagem3d
-  modelSrc="/models/meu-modelo.glb"
-  alt="Meu Modelo 3D"
-  cameraOrbit="45deg 80deg 110%"
+  embalagem={embalagens3d.pouch}
+  alt='Modelo 3D - Pouch'
   autoRotate={false}
-/>
+/>;
 ```
+
+Cada embalagem é uma entrada de `lib/data/embalagens3d.ts` com `glb`, `cameraOrbit` e `poster`. O poster fica em `lib/images/embalagens3d/` e aparece no card até o modelo carregar. Ele é o primeiro quadro do `.glb` naquela `cameraOrbit`: mudar a órbita ou o modelo pede recapturar o poster.
 
 ### Uso Avançado com Provider:
 
