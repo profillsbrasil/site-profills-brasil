@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { ZodError } from 'zod';
 
 import { catalogRequestSchema } from './catalog-request';
 
@@ -17,13 +18,13 @@ describe('catalogRequestSchema', () => {
   it('rejeita name com menos de 2 caracteres', () => {
     expect(() =>
       catalogRequestSchema.parse({ ...valid, name: 'X' })
-    ).toThrow();
+    ).toThrow(ZodError);
   });
 
   it('rejeita document inválido (CPF/CNPJ malformado)', () => {
     expect(() =>
       catalogRequestSchema.parse({ ...valid, document: '111.111.111-11' })
-    ).toThrow();
+    ).toThrow(ZodError);
   });
 
   it('aceita CNPJ válido como document', () => {
@@ -35,12 +36,12 @@ describe('catalogRequestSchema', () => {
   it('rejeita phone fora do formato (00) 00000-0000', () => {
     expect(() =>
       catalogRequestSchema.parse({ ...valid, phone: '11912345678' })
-    ).toThrow();
+    ).toThrow(ZodError);
   });
 
   it('rejeita email inválido', () => {
     expect(() =>
       catalogRequestSchema.parse({ ...valid, email: 'nao-eh-email' })
-    ).toThrow();
+    ).toThrow(ZodError);
   });
 });

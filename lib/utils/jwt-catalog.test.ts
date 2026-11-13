@@ -15,11 +15,10 @@ describe('jwt-catalog', () => {
       '7d'
     );
     const result = await verifyCatalogToken(token);
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.payload.email).toBe('cliente@exemplo.com');
-      expect(result.payload.name).toBe('Cliente Teste');
-    }
+    expect(result).toMatchObject({
+      ok: true,
+      payload: { email: 'cliente@exemplo.com', name: 'Cliente Teste' }
+    });
   });
 
   it('retorna reason="expired" para token vencido', async () => {
@@ -27,7 +26,9 @@ describe('jwt-catalog', () => {
       { email: 'a@b.com', name: 'X' },
       '0s'
     );
-    await new Promise((r) => setTimeout(r, 50));
+    await new Promise((r) => {
+      setTimeout(r, 50);
+    });
     const result = await verifyCatalogToken(token);
     expect(result).toEqual({ ok: false, reason: 'expired' });
   });

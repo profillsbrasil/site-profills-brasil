@@ -18,14 +18,17 @@ describe('integridade do registry de máquinas', () => {
   });
 
   it('máquinas padrão têm specs e imagens; engenharia tem conteudoEngenharia', () => {
-    for (const m of maquinasCatalogo) {
-      if (m.tipoPagina === 'padrao') {
-        expect(m.specsMaquina.length, m.slug).toBeGreaterThan(0);
-        expect(m.specsEmbalagem.length, m.slug).toBeGreaterThan(0);
-        expect(m.imagens, m.slug).toBeDefined();
-      } else {
-        expect(m.conteudoEngenharia, m.slug).toBeDefined();
-      }
+    const padrao = maquinasCatalogo.filter((m) => m.tipoPagina === 'padrao');
+    const engenharia = maquinasCatalogo.filter(
+      (m) => m.tipoPagina === 'engenharia'
+    );
+    for (const m of padrao) {
+      expect(m.specsMaquina.length, m.slug).toBeGreaterThan(0);
+      expect(m.specsEmbalagem.length, m.slug).toBeGreaterThan(0);
+      expect(m.imagens, m.slug).toBeDefined();
+    }
+    for (const m of engenharia) {
+      expect(m.conteudoEngenharia, m.slug).toBeDefined();
     }
   });
 
