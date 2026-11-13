@@ -39,7 +39,8 @@ export default function SpecificationForm({
     formState: { errors },
     reset,
     control,
-    getValues
+    getValues,
+    setFocus
   } = useForm<SpecificationFormData>({
     resolver: zodResolver(
       specificationFormSchema
@@ -50,6 +51,11 @@ export default function SpecificationForm({
       maquinaNome
     }
   });
+
+  // O formulário pode montar depois do Dialog abrir; o foco vai para o primeiro campo.
+  useEffect(() => {
+    setFocus('nome');
+  }, [setFocus]);
 
   useEffect(() => {
     return () => {

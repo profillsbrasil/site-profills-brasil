@@ -44,6 +44,31 @@ describe('SpecificationModal', () => {
     vi.unstubAllGlobals();
   });
 
+  it('reserva o espaço do formulário e foca o primeiro campo quando ele monta', async () => {
+    const user = userEvent.setup();
+    render(
+      <SpecificationModal
+        maquinaSlug='linha-producao-completa-envase'
+        maquinaNome='Linha de Produção Ponta a Ponta'
+      />
+    );
+
+    await user.click(
+      screen.getByRole('button', {
+        name: /Solicitar proposta técnica e comercial/i
+      })
+    );
+
+    expect(
+      screen.getByRole('dialog').querySelector('[aria-busy="true"]')
+    ).not.toBeNull();
+    const nome = await screen.findByLabelText(/Nome Completo/i);
+    await waitFor(() => {
+      expect(nome).toHaveFocus();
+    });
+    expect(screen.getByRole('dialog').querySelector('[aria-busy]')).toBeNull();
+  });
+
   it('envia o payload com maquinaSlug para máquina sem legacyId', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
