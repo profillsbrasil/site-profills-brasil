@@ -19,6 +19,11 @@ function normalizar(texto: string) {
   return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
+/* Filtro vindo da URL ou do estado é texto livre; a lista é de literais. */
+function contem(lista: readonly string[], valor: string) {
+  return lista.includes(valor);
+}
+
 export default function CatalogoMaquinas() {
   const router = useRouter();
   const pathname = usePathname();
@@ -59,21 +64,11 @@ export default function CatalogoMaquinas() {
     const embalagemFromUrl = searchParams.get('embalagem');
     const buscaFromUrl = searchParams.get('q');
 
-    if (
-      categoriaFromUrl &&
-      categoriasCatalogo.includes(
-        categoriaFromUrl as (typeof categoriasCatalogo)[number]
-      )
-    ) {
+    if (categoriaFromUrl && contem(categoriasCatalogo, categoriaFromUrl)) {
       setCategoriaFiltro(categoriaFromUrl);
     }
 
-    if (
-      embalagemFromUrl &&
-      tiposEmbalagem.includes(
-        embalagemFromUrl as (typeof tiposEmbalagem)[number]
-      )
-    ) {
+    if (embalagemFromUrl && contem(tiposEmbalagem, embalagemFromUrl)) {
       setEmbalagemFiltro(embalagemFromUrl);
     }
 
@@ -164,10 +159,13 @@ export default function CatalogoMaquinas() {
       termoBusca === '' ||
       normalizar(`${m.nome} ${m.nomeCompleto}`).includes(termoBusca);
 
-    const contagem: Record<string, number> = {
-      Todas: maquinasCatalogo.filter((m) => passaEmbalagem(m) && passaBusca(m))
-        .length
-    };
+    const contagem = new Map([
+      [
+        'Todas',
+        maquinasCatalogo.filter((m) => passaEmbalagem(m) && passaBusca(m))
+          .length
+      ]
+    ]);
 
     for (const categoria of categoriasCatalogo) {
       const daCategoria = maquinasCatalogo.filter(
@@ -177,9 +175,12 @@ export default function CatalogoMaquinas() {
       const embalagemMantida =
         embalagemFiltro === 'Todas' || daCategoria.some(passaEmbalagem);
 
-      contagem[categoria] = daCategoria.filter(
-        (m) => (!embalagemMantida || passaEmbalagem(m)) && passaBusca(m)
-      ).length;
+      contagem.set(
+        categoria,
+        daCategoria.filter(
+          (m) => (!embalagemMantida || passaEmbalagem(m)) && passaBusca(m)
+        ).length
+      );
     }
 
     return contagem;
@@ -198,9 +199,7 @@ export default function CatalogoMaquinas() {
             )
           );
 
-    const embalagem = tiposDaCategoria.includes(
-      embalagemFiltro as (typeof tiposEmbalagem)[number]
-    )
+    const embalagem = contem(tiposDaCategoria, embalagemFiltro)
       ? embalagemFiltro
       : 'Todas';
 

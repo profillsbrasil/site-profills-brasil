@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
@@ -9,29 +9,6 @@ const reducedMotionMock = vi.fn(() => false);
 
 vi.mock('motion/react', () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-  motion: {
-    div: ({
-      children,
-      custom: _c,
-      variants: _v,
-      initial: _i,
-      animate: _a,
-      exit: _e,
-      transition: _t,
-      ...props
-    }: HTMLAttributes<HTMLDivElement> &
-      Record<string, unknown> & { children?: ReactNode }) => (
-      <div {...props}>{children}</div>
-    ),
-    span: ({
-      children,
-      variants: _v,
-      ...props
-    }: HTMLAttributes<HTMLSpanElement> &
-      Record<string, unknown> & { children?: ReactNode }) => (
-      <span {...props}>{children}</span>
-    )
-  },
   useReducedMotion: () => reducedMotionMock()
 }));
 

@@ -8,13 +8,13 @@ import { cn } from '@/lib/utils';
 
 type Grid = { rows: number; cols: number };
 
-const DEFAULT_GRIDS: Record<string, Grid> = {
+const DEFAULT_GRIDS = {
   '6x4': { rows: 4, cols: 6 },
   '8x8': { rows: 8, cols: 8 },
   '8x3': { rows: 3, cols: 8 },
   '4x6': { rows: 6, cols: 4 },
   '3x8': { rows: 8, cols: 3 }
-};
+} satisfies Record<string, Grid>;
 
 type PredefinedGridKey = keyof typeof DEFAULT_GRIDS;
 
@@ -46,7 +46,7 @@ export const PixelImage = ({
   const MAX_GRID = 16;
 
   const { rows, cols } = useMemo(() => {
-    const isValidGrid = (g?: Grid) =>
+    const isValidGrid = (g?: Grid): g is Grid =>
       !!g &&
       Number.isInteger(g.rows) &&
       Number.isInteger(g.cols) &&
@@ -55,7 +55,7 @@ export const PixelImage = ({
       g.rows <= MAX_GRID &&
       g.cols <= MAX_GRID;
 
-    return isValidGrid(customGrid) ? (customGrid as Grid) : DEFAULT_GRIDS[grid];
+    return isValidGrid(customGrid) ? customGrid : DEFAULT_GRIDS[grid];
   }, [customGrid, grid]);
 
   useEffect(() => {

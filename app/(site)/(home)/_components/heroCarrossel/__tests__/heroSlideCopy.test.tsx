@@ -1,34 +1,8 @@
-import type { HTMLAttributes, ReactNode } from 'react';
-
 import { render, screen } from '@testing-library/react';
 
 import { HeroSlideCopy } from '../heroSlideCopy';
 import { SLIDES } from '../slideData';
-import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('motion/react', () => ({
-  motion: {
-    div: ({
-      children,
-      variants: _v,
-      initial: _i,
-      animate: _a,
-      exit: _e,
-      ...props
-    }: HTMLAttributes<HTMLDivElement> &
-      Record<string, unknown> & { children?: ReactNode }) => (
-      <div {...props}>{children}</div>
-    ),
-    span: ({
-      children,
-      variants: _v,
-      ...props
-    }: HTMLAttributes<HTMLSpanElement> &
-      Record<string, unknown> & { children?: ReactNode }) => (
-      <span {...props}>{children}</span>
-    )
-  }
-}));
+import { describe, expect, it } from 'vitest';
 
 describe('HeroSlideCopy', () => {
   it('renderiza lockup, headline em 2 linhas nowrap, descrição, specs com "até" e CTA', () => {

@@ -12,27 +12,27 @@ import { template as contactTemplate } from './email-template';
 
 // Função para formatar o material, serviço e acabamento como arrays
 const formatProjectDetails = (data: ContactFormData) => {
-  const materialLabels: Record<string, string> = {
-    'aco-inox': 'Aço Inox',
-    'aco-carbono': 'Aço Carbono'
-  };
+  const materialLabels = new Map([
+    ['aco-inox', 'Aço Inox'],
+    ['aco-carbono', 'Aço Carbono']
+  ]);
 
-  const serviceLabels: Record<string, string> = {
-    corte: 'Corte',
-    'corte-dobra': 'Corte + Dobra',
-    'corte-dobra-solda': 'Corte + Dobra + Solda'
-  };
+  const serviceLabels = new Map([
+    ['corte', 'Corte'],
+    ['corte-dobra', 'Corte + Dobra'],
+    ['corte-dobra-solda', 'Corte + Dobra + Solda']
+  ]);
 
-  const finishLabels: Record<string, string> = {
-    escovado: 'Escovado',
-    polido: 'Polido',
-    'sem-acabamento': 'Sem Acabamento'
-  };
+  const finishLabels = new Map([
+    ['escovado', 'Escovado'],
+    ['polido', 'Polido'],
+    ['sem-acabamento', 'Sem Acabamento']
+  ]);
 
   return {
-    material: [materialLabels[data.material] || data.material],
-    service: [serviceLabels[data.service] || data.service],
-    finish: [finishLabels[data.finish] || data.finish]
+    material: [materialLabels.get(data.material) || data.material],
+    service: [serviceLabels.get(data.service) || data.service],
+    finish: [finishLabels.get(data.finish) || data.finish]
   };
 };
 

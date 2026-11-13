@@ -1,10 +1,10 @@
-const ESCAPES: Record<string, string> = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  "'": '&#39;'
-};
+const ESCAPES = new Map([
+  ['&', '&amp;'],
+  ['<', '&lt;'],
+  ['>', '&gt;'],
+  ['"', '&quot;'],
+  ["'", '&#39;']
+]);
 
 /**
  * Escapa texto que vai para o HTML do e-mail. O template engine substitui
@@ -12,7 +12,7 @@ const ESCAPES: Record<string, string> = {
  * Vendedor, vindo do CRM) passa por aqui antes.
  */
 export const escaparHtml = (valor: string): string =>
-  valor.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+  valor.replace(/[&<>"']/g, (c) => ESCAPES.get(c) ?? c);
 
 export const renderTemplate = (
   template: string,

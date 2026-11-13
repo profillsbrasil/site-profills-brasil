@@ -33,7 +33,7 @@ interface FiltrosProps {
   embalagemFiltro: string;
   busca: string;
   tiposVisiveis: readonly string[];
-  contagemPorCategoria: Record<string, number>;
+  contagemPorCategoria: ReadonlyMap<string, number>;
   totalFiltrado: number;
   onCategoria: (categoria: string) => void;
   onEmbalagem: (tipo: string) => void;
@@ -123,6 +123,7 @@ function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
             categoria === 'Todas' ? Layers : ICONE_CATEGORIA[categoria];
 
           const ativo = categoriaFiltro === categoria;
+          const contagem = contagemPorCategoria.get(categoria) ?? 0;
 
           return (
             <button
@@ -144,14 +145,10 @@ function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
                   'font-mono text-[10px]',
                   ativo ? 'text-white/70' : 'text-muted-foreground/60'
                 )}>
-                {contagemPorCategoria[categoria] ?? 0}
+                {contagem}
               </span>
               <span className='sr-only'>
-                ({contagemPorCategoria[categoria] ?? 0}{' '}
-                {(contagemPorCategoria[categoria] ?? 0) === 1
-                  ? 'máquina'
-                  : 'máquinas'}
-                )
+                ({contagem} {contagem === 1 ? 'máquina' : 'máquinas'})
               </span>
             </button>
           );

@@ -5,26 +5,26 @@ import {
 } from '@/lib/data/maquinas';
 
 // Mapeamento dos tipos de embalagem da UI para o vocabulário de `embalagensCompativeis`
-const packagingTypeMapping: Record<string, string> = {
-  cartonada: 'Cartonada',
-  pouch: 'Pouch',
-  especiais: 'Especiais',
-  sache: 'Sachê',
-  garrafa: 'Garrafa',
-  frasco: 'Frasco',
-  fardo: 'Fardo',
-  pote: 'Pote'
-};
+const packagingTypeMapping = new Map([
+  ['cartonada', 'Cartonada'],
+  ['pouch', 'Pouch'],
+  ['especiais', 'Especiais'],
+  ['sache', 'Sachê'],
+  ['garrafa', 'Garrafa'],
+  ['frasco', 'Frasco'],
+  ['fardo', 'Fardo'],
+  ['pote', 'Pote']
+]);
 
 // Mapeamento dos tipos de produto da UI para `aplicacoes.categorias`
-const productTypeMapping: Record<string, CategoriaProduto> = {
-  liquidos: 'liquidos',
-  viscoso: 'pastosos',
-  pastoso: 'pastosos',
-  po: 'pos',
-  granular: 'graos',
-  solido: 'solidos'
-};
+const productTypeMapping = new Map<string, CategoriaProduto>([
+  ['liquidos', 'liquidos'],
+  ['viscoso', 'pastosos'],
+  ['pastoso', 'pastosos'],
+  ['po', 'pos'],
+  ['granular', 'graos'],
+  ['solido', 'solidos']
+]);
 
 export interface MachineRecommendation {
   machine: MaquinaCatalogo;
@@ -42,8 +42,8 @@ export function getBestMachineRecommendation(
   selectedPackaging: string,
   selectedProductType: string
 ): MachineRecommendation | null {
-  const embalagemAlvo = packagingTypeMapping[selectedPackaging];
-  const categoriaAlvo = productTypeMapping[selectedProductType];
+  const embalagemAlvo = packagingTypeMapping.get(selectedPackaging);
+  const categoriaAlvo = productTypeMapping.get(selectedProductType);
 
   if (!embalagemAlvo || !categoriaAlvo) {
     return null;
