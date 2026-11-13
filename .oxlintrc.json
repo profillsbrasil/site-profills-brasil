@@ -12,6 +12,9 @@
     "vitest",
     "promise"
   ],
+  "jsPlugins": [
+    { "name": "profills", "specifier": "./tools/oxlint/profills/index.ts" }
+  ],
   "categories": {
     "correctness": "error"
   },
@@ -98,6 +101,10 @@
           {
             "name": "framer-motion",
             "message": "Use 'motion/react' (pacote motion)."
+          },
+          {
+            "name": "next-themes",
+            "message": "O site é light-mode único, sem provider de tema. Fixe o tema no componente."
           }
         ],
         "patterns": [
@@ -150,9 +157,55 @@
     // Legenda exige arquivo de texto que o site não tem; ver videoMaquina.tsx.
     "jsx-a11y/media-has-caption": "off",
     // O autoFocus da busca de clientes só ocorre depois do clique que abre o campo.
-    "jsx-a11y/no-autofocus": "off"
+    "jsx-a11y/no-autofocus": "off",
+
+    // Plugin local (tools/oxlint/profills): padrões de carregamento medidos na auditoria.
+    "profills/image-precisa-de-sizes": "error",
+    "profills/sem-eager-fixo": "error",
+    "profills/video-completo": "error",
+    "profills/opacity-scroll-em-funcao": "error",
+    "profills/dynamic-3d-sem-ssr": "error",
+    "profills/sem-3d-direto": "error"
   },
   "overrides": [
+    {
+      // A navbar entra em toda rota: o barrel traz o catálogo inteiro das máquinas.
+      // O override troca as opções da regra, então repete as restrições globais.
+      "files": ["components/layout/**"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "framer-motion",
+                "message": "Use 'motion/react' (pacote motion)."
+              },
+              {
+                "name": "next-themes",
+                "message": "O site é light-mode único, sem provider de tema. Fixe o tema no componente."
+              },
+              {
+                "name": "@/lib/data/maquinas",
+                "allowTypeImports": true,
+                "message": "O barrel traz o catálogo completo para toda rota. Use @/lib/data/maquinas/menu."
+              }
+            ],
+            "patterns": [
+              {
+                "group": [
+                  "**/interactiveGridPatternBg",
+                  "**/magicui/grid-pattern",
+                  "**/magicui/animated-grid-pattern",
+                  "**/magicui/interactive-grid-pattern"
+                ],
+                "message": "Grid pattern morto. Use components/layout/gridPatternBg ou gridPatternBgMobile."
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "files": ["lib/utils/logger.ts"],
       "rules": {
