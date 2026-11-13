@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { logger } from '@/lib/utils/logger';
-
 import { ModelViewerElement } from '@google/model-viewer';
 
 import { isWebGLAvailable } from './webglSupport';

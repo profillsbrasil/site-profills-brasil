@@ -1,7 +1,6 @@
 // @vitest-environment node
-import { beforeAll, describe, expect, it } from 'vitest';
-
 import { signCatalogToken, verifyCatalogToken } from './jwt-catalog';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 beforeAll(() => {
   process.env.CATALOG_TOKEN_SECRET =
@@ -22,10 +21,7 @@ describe('jwt-catalog', () => {
   });
 
   it('retorna reason="expired" para token vencido', async () => {
-    const token = await signCatalogToken(
-      { email: 'a@b.com', name: 'X' },
-      '0s'
-    );
+    const token = await signCatalogToken({ email: 'a@b.com', name: 'X' }, '0s');
     await new Promise((r) => {
       setTimeout(r, 50);
     });
@@ -34,10 +30,7 @@ describe('jwt-catalog', () => {
   });
 
   it('retorna reason="invalid" para token adulterado', async () => {
-    const token = await signCatalogToken(
-      { email: 'a@b.com', name: 'X' },
-      '7d'
-    );
+    const token = await signCatalogToken({ email: 'a@b.com', name: 'X' }, '7d');
     const tampered = token.slice(0, -2) + 'aa';
     const result = await verifyCatalogToken(tampered);
     expect(result).toEqual({ ok: false, reason: 'invalid' });

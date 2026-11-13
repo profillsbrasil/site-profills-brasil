@@ -391,8 +391,8 @@ export default function SorteioFispal2026() {
               className='h-7 w-auto md:h-8'
             />
             <p className='hidden md:block'>
-              <span className='text-accent'>&copy;</span>{' '}
-              {ANO_ATUAL} Profills Brasil. Sorteio FISPAL 2026.
+              <span className='text-accent'>&copy;</span> {ANO_ATUAL} Profills
+              Brasil. Sorteio FISPAL 2026.
             </p>
           </div>
         </footer>

@@ -225,11 +225,10 @@ declare global {
       ref?: React.RefObject<ModelViewerElement | undefined>;
     };
   }
-  export interface ModelViewer
-    extends Omit<
-      React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
-      'ref'
-    > {
+  export interface ModelViewer extends Omit<
+    React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
+    'ref'
+  > {
     /**
      * The URL to the 3D model. Only glTF/GLB models are supported.
      */

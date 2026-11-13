@@ -1,7 +1,6 @@
+import { catalogRequestSchema } from './catalog-request';
 import { describe, expect, it } from 'vitest';
 import { ZodError } from 'zod';
-
-import { catalogRequestSchema } from './catalog-request';
 
 const valid = {
   name: 'Cliente Teste',
@@ -16,9 +15,9 @@ describe('catalogRequestSchema', () => {
   });
 
   it('rejeita name com menos de 2 caracteres', () => {
-    expect(() =>
-      catalogRequestSchema.parse({ ...valid, name: 'X' })
-    ).toThrow(ZodError);
+    expect(() => catalogRequestSchema.parse({ ...valid, name: 'X' })).toThrow(
+      ZodError
+    );
   });
 
   it('rejeita document inválido (CPF/CNPJ malformado)', () => {
