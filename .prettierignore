@@ -1,3 +1,6 @@
 # Ignore artifacts:
 build
 coverage
+
+# Plugin vendorizado do upstream, no estilo dele (tools/oxlint/anti-slop/UPSTREAM.md).
+tools/oxlint/anti-slop
