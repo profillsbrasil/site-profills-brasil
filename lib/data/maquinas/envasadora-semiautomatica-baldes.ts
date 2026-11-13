@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-semiautomatica-baldes.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-semiautomatica-baldes.webp';
 
@@ -52,10 +53,7 @@ export const envasadoraSemiautomaticaBaldes: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/lata-tinta.glb',
-    cameraOrbit: '190deg 66deg 100%'
-  },
+  embalagem3d: embalagens3d['lata-tinta'],
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

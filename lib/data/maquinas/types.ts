@@ -1,5 +1,7 @@
 import type { StaticImageData } from 'next/image';
 
+import type { Embalagem3d } from '@/lib/data/embalagens3d';
+
 export const categoriasCatalogo = [
   'Stand-up pouch',
   'Embalagens cartonadas e especiais',
@@ -51,7 +53,7 @@ export interface MaquinaCatalogo {
     maquinaClassName?: string;
     embalagemClassName?: string;
   };
-  embalagem3d?: { glb: string; cameraOrbit?: string };
+  embalagem3d?: Embalagem3d;
   video?: { src: string; poster?: string };
   specsMaquina: EspecificacaoItem[];
   specsEmbalagem: EspecificacaoItem[];

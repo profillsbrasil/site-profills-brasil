@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/embaladora-horizontal-flowpack.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/embaladora-horizontal-flowpack.webp';
 
@@ -53,10 +54,7 @@ export const embaladoraHorizontalFlowpack: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/flowpack.glb',
-    cameraOrbit: '18deg 82deg 100%'
-  },
+  embalagem3d: embalagens3d.flowpack,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

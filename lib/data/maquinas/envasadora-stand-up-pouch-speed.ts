@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-stand-up-pouch-speed.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-stand-up-pouch-speed.webp';
 
@@ -56,10 +57,7 @@ export const envasadoraStandUpPouchSpeed: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/pouch.glb',
-    cameraOrbit: '27deg 80deg 100%'
-  },
+  embalagem3d: embalagens3d.pouch,
   specsEmbalagem: [
     { rotulo: 'Largura do filme', valor: '320 a 650 mm' },
     { rotulo: 'Espessura do filme', valor: '130 a 160 µm' },

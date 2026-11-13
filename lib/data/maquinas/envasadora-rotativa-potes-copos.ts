@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-rotativa-potes-copos.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-rotativa-potes-copos.webp';
 
@@ -53,10 +54,7 @@ export const envasadoraRotativaPotesCopos: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/pote02.glb',
-    cameraOrbit: '270deg 40deg 100%'
-  },
+  embalagem3d: embalagens3d.pote,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

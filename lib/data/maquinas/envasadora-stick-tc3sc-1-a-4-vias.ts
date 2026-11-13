@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-stick-tc3sc-1-a-4-vias.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-stick-tc3sc-1-a-4-vias.webp';
 
@@ -57,10 +58,7 @@ export const envasadoraStickTc3sc1A4Vias: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/stick.glb',
-    cameraOrbit: '20deg 120deg 100%'
-  },
+  embalagem3d: embalagens3d.stick,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

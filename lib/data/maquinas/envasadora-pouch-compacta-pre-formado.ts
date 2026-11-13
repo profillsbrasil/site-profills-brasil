@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-pouch-compacta-pre-formado.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-pouch-compacta-pre-formado.webp';
 
@@ -55,10 +56,7 @@ export const envasadoraPouchCompactaPreFormado: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/pouch.glb',
-    cameraOrbit: '27deg 80deg 100%'
-  },
+  embalagem3d: embalagens3d.pouch,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

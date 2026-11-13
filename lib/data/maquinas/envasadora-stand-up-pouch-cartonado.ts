@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-stand-up-pouch-cartonado.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-stand-up-pouch-cartonado.webp';
 
@@ -50,10 +51,7 @@ export const envasadoraStandUpPouchCartonado: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/pouch.glb',
-    cameraOrbit: '27deg 80deg 100%'
-  },
+  embalagem3d: embalagens3d.pouch,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',

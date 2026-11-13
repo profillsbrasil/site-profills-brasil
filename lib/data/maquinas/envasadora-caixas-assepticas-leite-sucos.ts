@@ -1,3 +1,4 @@
+import { embalagens3d } from '@/lib/data/embalagens3d';
 import imgEmbalagem from '@/lib/images/catalogo2026/embalagens/envasadora-caixas-assepticas-leite-sucos.webp';
 import imgMaquina from '@/lib/images/catalogo2026/maquinas/envasadora-caixas-assepticas-leite-sucos.webp';
 
@@ -45,10 +46,7 @@ export const envasadoraCaixasAssepticasLeiteSucos: MaquinaCatalogo = {
     ]
   },
   imagens: { maquina: imgMaquina, embalagem: imgEmbalagem },
-  embalagem3d: {
-    glb: '/embalagens-3d/uht.glb',
-    cameraOrbit: '36deg 79deg 100%'
-  },
+  embalagem3d: embalagens3d.uht,
   specsMaquina: [
     {
       rotulo: 'Capacidade de produção',
