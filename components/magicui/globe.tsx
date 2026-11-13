@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/utils/logger';
 
 import type { GlobeMethods } from 'react-globe.gl';
 import * as THREE from 'three';
@@ -43,7 +44,8 @@ function loadCountries(): Promise<CountryFeature[]> {
       cachedCountries = data.features;
       return cachedCountries;
     })
-    .catch(() => {
+    .catch((error: unknown) => {
+      logger.error('Erro ao carregar os países do globo:', error);
       pendingCountries = null;
       return [];
     });
