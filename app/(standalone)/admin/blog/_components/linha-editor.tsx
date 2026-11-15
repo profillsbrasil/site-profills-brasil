@@ -117,7 +117,7 @@ export function LinhaEditor({
           }>
           <GripVertical />
         </Button>
-        <span className='font-mono text-[0.7rem] text-[#8a90a0]'>
+        <span className='font-mono text-[0.7rem] text-[#5a6172]'>
           {String(numero).padStart(2, '0')}
         </span>
         {linha.colunas.length === 2 ? (

@@ -61,12 +61,12 @@ export function DadosPost({
           <SelectTrigger id='post-assunto' className={`w-full ${classeCampo}`}>
             <SelectValue>{assuntos[post.assunto].nome}</SelectValue>
           </SelectTrigger>
-          <SelectContent className='rounded-xs'>
+          <SelectContent className='tema-admin rounded-xs'>
             {Object.entries(assuntos).map(([valor, { nome, descricao }]) => (
               <SelectItem key={valor} value={valor} className='rounded-xs'>
                 <span className='flex flex-col'>
                   <span>{nome}</span>
-                  <span className='text-xs text-[#8a90a0]'>{descricao}</span>
+                  <span className='text-xs text-[#5a6172]'>{descricao}</span>
                 </span>
               </SelectItem>
             ))}

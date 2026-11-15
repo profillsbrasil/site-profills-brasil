@@ -472,7 +472,9 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
         onOpenChange={(aberto) => {
           if (!aberto) setSaida(null);
         }}>
-        <DialogContent showCloseButton={false} className='rounded-xs'>
+        <DialogContent
+          showCloseButton={false}
+          className='tema-admin rounded-xs'>
           <DialogHeader>
             <DialogTitle>Sair sem salvar?</DialogTitle>
             <DialogDescription>

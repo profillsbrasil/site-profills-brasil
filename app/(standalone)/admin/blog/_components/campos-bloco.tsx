@@ -338,7 +338,7 @@ export function CamposBloco({
             className={`w-full ${classeCampo}`}>
             <SelectValue placeholder='Escolha a máquina' />
           </SelectTrigger>
-          <SelectContent className='rounded-xs'>
+          <SelectContent className='tema-admin rounded-xs'>
             {maquinasCatalogo.map((m) => (
               <SelectItem key={m.slug} value={m.slug} className='rounded-xs'>
                 {m.seo.titulo}
