@@ -20,7 +20,7 @@ app/
 ├── (site)/               ← páginas com navbar + footer (layout do grupo injeta a casca)
 │   └── <rota>/_components/   ← componentes privados da rota (o _ tira do roteamento)
 ├── (standalone)/         ← páginas sem casca (landings, ex.: sorteio-fispal-2026)
-│   └── admin/blog/       ← admin do blog: lista, novo e [slug] (editor); só existe no `bun dev`, sem login; grava por Server Actions (acoes.ts) e imagem por [slug]/imagem/route.ts
+│   └── admin/blog/       ← admin do blog: lista, novo e [slug] (editor); só existe no `bun dev`, sem login; rotas com sufixo `.dev.tsx` (o `pageExtensions` do next.config só as inclui no `next dev`); grava por Server Actions (acoes.ts) e imagem por [slug]/imagem/route.dev.ts
 └── api/                  ← form handlers (zod + e-mail); exceção: download/[token] serve arquivo via JWT
 
 components/

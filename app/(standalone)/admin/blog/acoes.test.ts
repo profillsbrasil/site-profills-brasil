@@ -1,7 +1,7 @@
 // @vitest-environment node
 import type { Post, PostGuardado } from '@/lib/blog/tipos';
 
-import { POST as enviarImagem } from './[slug]/imagem/route';
+import { POST as enviarImagem } from './[slug]/imagem/route.dev';
 import { publicar, salvarRascunho } from './acoes';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
