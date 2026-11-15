@@ -367,7 +367,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
             </p>
           ) : null}
 
-          <div className='grid min-h-0 flex-1 grid-cols-[16.5rem_minmax(0,1fr)_minmax(0,1fr)] gap-5 px-5'>
+          <div className='grid min-h-0 flex-1 grid-cols-[17.5rem_minmax(0,1fr)_minmax(0,1fr)] gap-5 px-5'>
             <aside
               aria-labelledby='titulo-paleta'
               className='min-h-0 overflow-y-auto py-5'>
