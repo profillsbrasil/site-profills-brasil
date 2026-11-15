@@ -32,7 +32,7 @@ type ItemLateral = { nome: string; Icone: LucideIcon } & (
 );
 
 const classeItem =
-  'flex items-center gap-2 rounded-xs px-3 py-2 text-sm whitespace-nowrap text-[#b6c5e2]';
+  'flex items-center gap-2 rounded-xs py-2 text-sm whitespace-nowrap text-[#b6c5e2]';
 
 const classeLink = `${classeItem} transition-colors outline-none hover:bg-[rgba(148,178,235,0.12)] hover:text-white focus-visible:bg-[rgba(148,178,235,0.12)] focus-visible:text-white motion-reduce:transition-none aria-[current=page]:bg-[rgba(148,178,235,0.18)] aria-[current=page]:text-white`;
 
@@ -91,7 +91,7 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
 
       {itens.map((item) => {
         const { nome, Icone } = item;
-        const alinhamento = recolhida ? 'justify-center px-0' : '';
+        const alinhamento = recolhida ? 'justify-center px-0' : 'px-3';
 
         const icone = (
           <Icone aria-hidden='true' className='size-[18px] shrink-0' />

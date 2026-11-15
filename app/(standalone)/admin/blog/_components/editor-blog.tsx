@@ -71,31 +71,31 @@ const textoGravando: Record<AcaoGravacao | 'imagem', string> = {
 };
 
 function textoStatus(fase: Fase, gravacao: PostGuardado | null, sujo: boolean) {
-  const pendente = sujo ? ' Há mudanças não salvas.' : '';
+  const pendente = sujo ? '. Há mudanças não salvas' : '';
 
   switch (fase.fase) {
     case 'gravando':
       return `${textoGravando[fase.acao]}…`;
     case 'erro':
-      return sujo ? 'Mudanças não salvas.' : '';
+      return sujo ? 'Mudanças não salvas' : '';
     case 'gravado': {
       const hora = horaMinuto(fase.em);
 
       const feito = {
         salvar:
           gravacao?.estado === 'publicado'
-            ? `Alterações salvas às ${hora}.`
-            : `Rascunho salvo às ${hora}.`,
-        publicar: `Publicado às ${hora}.`,
-        despublicar: `Voltou para rascunho às ${hora}.`,
-        imagem: `Imagem enviada às ${hora}.`
+            ? `Alterações salvas às ${hora}`
+            : `Rascunho salvo às ${hora}`,
+        publicar: `Publicado às ${hora}`,
+        despublicar: `Voltou para rascunho às ${hora}`,
+        imagem: `Imagem enviada às ${hora}`
       }[fase.acao];
 
       return `${feito}${pendente}`;
     }
 
     case 'parado':
-      if (sujo) return 'Mudanças não salvas.';
+      if (sujo) return 'Mudanças não salvas';
 
       return gravacao
         ? `Salvo em ${dataPorExtenso(gravacao.atualizadoEm)} às ${horaMinuto(gravacao.atualizadoEm)}`
