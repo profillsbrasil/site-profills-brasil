@@ -41,10 +41,10 @@ function CartaoBloco({
   return (
     <div
       data-bloco={bloco.tipo}
-      className='min-w-0 rounded-xs border border-[#dfe2e8] bg-white px-3.5 pt-2 pb-3.5'>
+      className='min-w-0 rounded-xs border border-[#dfe2e8] bg-white px-4 pt-2 pb-4'>
       <div className='mb-2 flex items-center gap-2'>
-        <Icone aria-hidden='true' className='size-4 text-[#3b80f6]' />
-        <b className='flex-1 truncate text-[0.82rem] font-semibold'>{nome}</b>
+        <Icone aria-hidden='true' className='size-4 text-[#5a6172]' />
+        <b className='flex-1 truncate text-sm font-medium'>{nome}</b>
         <Button
           type='button'
           variant='ghost'
@@ -117,13 +117,13 @@ export function LinhaEditor({
           }>
           <GripVertical />
         </Button>
-        <span className='font-mono text-[0.7rem] text-[#5a6172]'>
+        <span className='font-mono text-xs text-[#5a6172]'>
           {String(numero).padStart(2, '0')}
         </span>
         {linha.colunas.length === 2 ? (
           <span
             data-proporcao={linha.proporcao}
-            className='ml-2 font-mono text-[0.7rem] text-[#5a6172]'>
+            className='ml-2 font-mono text-xs text-[#5a6172]'>
             {linha.proporcao}% | {100 - linha.proporcao}%
           </span>
         ) : null}
@@ -222,7 +222,7 @@ export function LinhaEditor({
           data-alvo-lado={ladoAlvo}
           className={`pointer-events-none absolute top-8 bottom-0 flex w-2 items-center bg-[#3b80f6] ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}>
           <span
-            className={`absolute rounded-xs bg-[#3b80f6] px-1.5 py-0.5 text-[0.68rem] font-semibold whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? 'left-3' : 'right-3'}`}>
+            className={`absolute rounded-xs bg-[#3b80f6] px-2 py-0.5 text-xs font-medium whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? 'left-3' : 'right-3'}`}>
             Lado a lado
           </span>
         </div>

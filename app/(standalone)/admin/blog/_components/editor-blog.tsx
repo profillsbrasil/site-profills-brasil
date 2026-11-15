@@ -98,13 +98,13 @@ function textoStatus(fase: Fase, gravacao: PostGuardado | null, sujo: boolean) {
       if (sujo) return 'Mudanças não salvas.';
 
       return gravacao
-        ? `Salvo em ${dataPorExtenso(gravacao.atualizadoEm)} às ${horaMinuto(gravacao.atualizadoEm)}.`
-        : 'Ainda não salvo.';
+        ? `Salvo em ${dataPorExtenso(gravacao.atualizadoEm)} às ${horaMinuto(gravacao.atualizadoEm)}`
+        : 'Ainda não salvo';
   }
 }
 
 const classeAba =
-  'h-full flex-none gap-1.5 rounded-xs border-0 px-3 text-xs text-[#5a6172] shadow-none hover:bg-[#eceef2] hover:text-[#1b1c1f] focus-visible:bg-[#eceef2] focus-visible:text-[#1b1c1f] focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-[#0f172b] data-[state=active]:text-white data-[state=active]:shadow-none';
+  'h-full flex-none gap-2 rounded-xs border-0 px-3 text-xs text-[#5a6172] shadow-none hover:bg-[#eceef2] hover:text-[#1b1c1f] focus-visible:bg-[#eceef2] focus-visible:text-[#1b1c1f] focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-[#0f172b] data-[state=active]:text-white data-[state=active]:shadow-none';
 
 function Vao({ ativo }: { ativo: boolean }) {
   return (
@@ -112,7 +112,7 @@ function Vao({ ativo }: { ativo: boolean }) {
       {ativo ? (
         <div
           data-alvo-vao
-          className='absolute inset-x-0 top-1/2 flex -translate-y-1/2 items-center gap-2 text-[0.68rem] font-semibold text-[#3b80f6]'>
+          className='absolute inset-x-0 top-1/2 flex -translate-y-1/2 items-center gap-2 text-xs font-medium text-[#3b80f6]'>
           <span className='h-0.5 flex-1 bg-[#3b80f6]' />
           Nova linha aqui
           <span className='h-0.5 flex-1 bg-[#3b80f6]' />
@@ -304,11 +304,11 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
 
         <div className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-[#f3f4f6] text-[#1b1c1f]'>
           <header className='flex flex-wrap items-center gap-3 border-b border-[#dfe2e8] bg-white px-5 py-3'>
-            <h1 className='text-lg font-bold'>
+            <h1 className='text-lg font-semibold'>
               {gravacao ? 'Editar post' : 'Novo post'}
             </h1>
             <span
-              className={`rounded-xs px-2 py-0.5 text-xs font-semibold ${publicado ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
+              className={`rounded-xs px-2 py-0.5 text-xs font-medium ${publicado ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
               {publicado ? 'Publicado' : 'Rascunho'}
             </span>
             <p aria-live='polite' className='text-xs text-[#5a6172]'>
@@ -367,15 +367,15 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
             </p>
           ) : null}
 
-          <div className='grid min-h-0 flex-1 grid-cols-[14.5rem_minmax(0,1fr)_minmax(0,1fr)] gap-5 px-5'>
+          <div className='grid min-h-0 flex-1 grid-cols-[16.5rem_minmax(0,1fr)_minmax(0,1fr)] gap-5 px-5'>
             <aside
               aria-labelledby='titulo-paleta'
               className='min-h-0 overflow-y-auto py-5'>
-              <h2 id='titulo-paleta' className='text-[0.95rem] font-bold'>
+              <h2 id='titulo-paleta' className='text-base font-semibold'>
                 Blocos
               </h2>
               <p className='mt-1 mb-3 text-xs text-[#5a6172]'>
-                Arraste para o texto ou clique para pôr no fim.
+                Arraste para o texto ou clique para pôr no fim
               </p>
               <Paleta
                 onInserir={(tipo) =>
@@ -389,12 +389,12 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
               aria-labelledby='titulo-conteudo'
               data-coluna='editor'
               className='min-h-0 overflow-y-auto py-5'>
-              <h2 className='mb-2.5 text-[0.95rem] font-bold'>Dados do post</h2>
+              <h2 className='mb-3 text-base font-semibold'>Dados do post</h2>
               <DadosPost post={post} dispatch={dispatch} />
 
               <h2
                 id='titulo-conteudo'
-                className='mt-6 mb-1 text-[0.95rem] font-bold'>
+                className='mt-6 mb-1 text-base font-semibold'>
                 Conteúdo
               </h2>
               <div ref={listaRef} data-lista-linhas>
@@ -423,7 +423,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
                 <Vao ativo={vaoAtivo === post.linhas.length} />
                 {post.linhas.length === 0 ? (
                   <p className='rounded-xs border border-dashed border-[#8a90a0] p-6 text-center text-xs text-[#5a6172]'>
-                    Arraste um bloco para cá.
+                    Arraste um bloco para cá
                   </p>
                 ) : null}
               </div>
@@ -439,7 +439,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
                 }
                 className='gap-3'>
                 <div className='flex items-center justify-between gap-2'>
-                  <h2 id='titulo-previa' className='text-[0.95rem] font-bold'>
+                  <h2 id='titulo-previa' className='text-base font-semibold'>
                     Como fica no site
                   </h2>
                   <TabsList className='h-8 rounded-xs border border-[#dfe2e8] bg-white p-0.5'>

@@ -61,7 +61,7 @@ export function EscolherImagem({
           className={`relative block w-full overflow-hidden rounded-xs border border-dashed border-[#8a90a0] bg-[#0f172b] bg-contain bg-center bg-no-repeat transition-colors outline-none group-data-dragging/zona:border-solid group-data-dragging/zona:border-[#3b80f6] hover:border-solid hover:border-[#3b80f6] focus-visible:border-solid focus-visible:border-[#3b80f6] motion-reduce:transition-none ${proporcao === 'larga' ? 'aspect-[16/7]' : 'aspect-[4/3]'}`}
           style={src ? { backgroundImage: `url(${src})` } : undefined}>
           {enviando ? (
-            <span className='flex h-full items-center justify-center gap-1.5 bg-[rgba(15,23,43,0.7)] text-xs font-semibold text-white'>
+            <span className='flex h-full items-center justify-center gap-2 bg-[rgba(15,23,43,0.7)] text-xs font-medium text-white'>
               <LoaderCircle
                 aria-hidden='true'
                 className='size-4 animate-spin motion-reduce:animate-none'
@@ -69,16 +69,14 @@ export function EscolherImagem({
               Enviando imagem
             </span>
           ) : src ? (
-            <span className='absolute right-2 bottom-2 rounded-xs bg-white px-2 py-1 text-xs font-semibold text-[#1b1c1f]'>
+            <span className='absolute right-2 bottom-2 rounded-xs bg-white px-2 py-1 text-xs font-medium text-[#1b1c1f]'>
               Trocar imagem
             </span>
           ) : (
-            <span className='flex h-full flex-col items-center justify-center gap-1.5 p-3 text-center text-xs text-[#b6c5e2]'>
+            <span className='flex h-full flex-col items-center justify-center gap-2 p-3 text-center text-xs text-[#b6c5e2]'>
               <ImagePlus aria-hidden='true' className='size-5 text-white' />
               Clique para enviar ou solte a imagem aqui
-              <span className='text-[0.68rem]'>
-                PNG, JPEG, WebP ou AVIF, até 5 MB
-              </span>
+              <span className='text-xs'>PNG, JPEG, WebP ou AVIF, até 5 MB</span>
             </span>
           )}
         </FileInputTrigger>

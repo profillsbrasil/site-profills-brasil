@@ -3,7 +3,7 @@ export const classeCampo =
   'rounded-xs border-[#dfe2e8] bg-white shadow-none transition-colors hover:border-[#8a90a0] focus-visible:border-[#3b80f6] focus-visible:ring-0 motion-reduce:transition-none';
 
 export const classeBotaoCheio =
-  'rounded-xs bg-[#3b80f6] text-white shadow-none hover:bg-[#2f6fe0] focus-visible:bg-[#2f6fe0] focus-visible:ring-0 motion-reduce:transition-none';
+  'rounded-xs bg-[#0f172b] text-white shadow-none hover:bg-[#243049] focus-visible:bg-[#243049] focus-visible:ring-0 motion-reduce:transition-none';
 
 export const classeBotaoContorno =
   'rounded-xs border-[#dfe2e8] bg-white text-[#1b1c1f] shadow-none hover:border-[#8a90a0] hover:bg-[#f7f8fa] focus-visible:border-[#8a90a0] focus-visible:bg-[#f7f8fa] focus-visible:ring-0 motion-reduce:transition-none';

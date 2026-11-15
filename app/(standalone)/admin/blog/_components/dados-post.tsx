@@ -46,8 +46,8 @@ export function DadosPost({
   dispatch: Dispatch<AcaoEditor>;
 }) {
   return (
-    <div className='grid gap-3.5 rounded-xs border border-[#dfe2e8] bg-white p-4'>
-      <div className='grid gap-1.5'>
+    <div className='grid gap-4 rounded-xs border border-[#dfe2e8] bg-white p-4'>
+      <div className='grid gap-2'>
         <Label htmlFor='post-assunto' className={classeRotulo}>
           Assunto
         </Label>
@@ -74,7 +74,7 @@ export function DadosPost({
         </Select>
       </div>
 
-      <div className='grid gap-1.5'>
+      <div className='grid gap-2'>
         <Label htmlFor='post-titulo' className={`block ${classeRotulo}`}>
           Título
           <Contador texto={post.titulo} minimo={30} maximo={65} />
@@ -89,7 +89,7 @@ export function DadosPost({
         />
       </div>
 
-      <div className='grid gap-1.5'>
+      <div className='grid gap-2'>
         <Label htmlFor='post-resumo' className={`block ${classeRotulo}`}>
           Resumo, aparece na listagem e no Google
           <Contador texto={post.resumo} minimo={90} maximo={160} />
@@ -105,7 +105,7 @@ export function DadosPost({
         />
       </div>
 
-      <div className='grid gap-1.5'>
+      <div className='grid gap-2'>
         <span className={classeRotulo}>Capa</span>
         <EscolherImagem
           rotulo='capa do post'
