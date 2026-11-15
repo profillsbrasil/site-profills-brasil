@@ -26,22 +26,31 @@ type Props = {
   aoNavegar?: (evento: MouseEvent<HTMLAnchorElement>, href: string) => void;
 };
 
-const itensSemTela: { nome: string; Icone: LucideIcon; total: number }[] = [
-  { nome: 'Imagens', Icone: Images, total: 7 },
-  { nome: 'Assuntos', Icone: Tags, total: 6 }
-];
+type ItemLateral = { nome: string; Icone: LucideIcon } & (
+  | { tipo: 'link'; href: string; total: number }
+  | { tipo: 'emBreve' }
+);
 
 const classeItem =
-  'flex items-center gap-2.5 rounded-xs px-2.5 py-2 text-left text-sm whitespace-nowrap text-[#b6c5e2] transition-colors outline-none hover:bg-[rgba(148,178,235,0.12)] hover:text-white focus-visible:bg-[rgba(148,178,235,0.12)] focus-visible:text-white motion-reduce:transition-none aria-[current=page]:bg-[rgba(148,178,235,0.18)] aria-[current=page]:text-white';
+  'flex items-center gap-2 rounded-xs py-2 text-sm whitespace-nowrap text-[#b6c5e2]';
+
+const classeLink = `${classeItem} transition-colors outline-none hover:bg-[rgba(148,178,235,0.12)] hover:text-white focus-visible:bg-[rgba(148,178,235,0.12)] focus-visible:text-white motion-reduce:transition-none aria-[current=page]:bg-[rgba(148,178,235,0.18)] aria-[current=page]:text-white`;
 
 export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
   const [recolhida, setRecolhida] = useState(false);
   const IconeRecolher = recolhida ? PanelLeftOpen : PanelLeftClose;
   const rotuloRecolher = recolhida ? 'Abrir o menu' : 'Recolher o menu';
 
-  const itens = [
-    { nome: 'Posts', Icone: FileText, total: totalPosts, href: '/admin/blog' },
-    ...itensSemTela.map((item) => ({ ...item, href: null }))
+  const itens: ItemLateral[] = [
+    {
+      tipo: 'link',
+      nome: 'Posts',
+      Icone: FileText,
+      href: '/admin/blog',
+      total: totalPosts
+    },
+    { tipo: 'emBreve', nome: 'Imagens', Icone: Images },
+    { tipo: 'emBreve', nome: 'Assuntos', Icone: Tags }
   ];
 
   return (
@@ -75,15 +84,50 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
         aria-current={atual === 'novo' ? 'page' : undefined}
         title='Novo post'
         onClick={(e) => aoNavegar?.(e, '/admin/blog/novo')}
-        className={`mb-2 flex items-center justify-center gap-2 rounded-xs bg-[#3b80f6] py-2 text-sm font-semibold text-white transition-colors outline-none hover:bg-[#2f6fe0] focus-visible:bg-[#2f6fe0] motion-reduce:transition-none ${recolhida ? 'px-0' : 'px-2.5'}`}>
+        className={`mb-2 flex items-center justify-center gap-2 rounded-xs bg-white py-2 text-sm font-medium text-[#0f172b] transition-colors outline-none hover:bg-[#e2e8f4] focus-visible:bg-[#e2e8f4] motion-reduce:transition-none ${recolhida ? 'px-0' : 'px-3'}`}>
         <Plus aria-hidden='true' className='size-[18px]' />
         {recolhida ? null : 'Novo post'}
       </Link>
 
-      {itens.map(({ nome, Icone, total, href }) => {
-        const conteudo = (
-          <>
-            <Icone aria-hidden='true' className='size-[18px] shrink-0' />
+      {itens.map((item) => {
+        const { nome, Icone } = item;
+        const alinhamento = recolhida ? 'justify-center px-0' : 'px-3';
+
+        const icone = (
+          <Icone aria-hidden='true' className='size-[18px] shrink-0' />
+        );
+
+        if (item.tipo === 'emBreve') {
+          return (
+            <div
+              key={nome}
+              title={recolhida ? `${nome}, em breve` : undefined}
+              className={`${classeItem} ${alinhamento} opacity-50`}>
+              {icone}
+              {recolhida ? (
+                <span className='sr-only'>{nome}, em breve</span>
+              ) : (
+                <>
+                  <span>{nome}</span>
+                  <span className='ml-auto text-xs'>em breve</span>
+                </>
+              )}
+            </div>
+          );
+        }
+
+        const { href, total } = item;
+
+        return (
+          <Link
+            key={nome}
+            href={href}
+            aria-label={recolhida ? nome : undefined}
+            aria-current={atual === 'posts' ? 'page' : undefined}
+            title={nome}
+            onClick={(e) => aoNavegar?.(e, href)}
+            className={`${classeLink} ${alinhamento}`}>
+            {icone}
             {recolhida ? null : (
               <>
                 <span>{nome}</span>
@@ -92,31 +136,7 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
                 </span>
               </>
             )}
-          </>
-        );
-
-        const classe = `${classeItem} ${recolhida ? 'justify-center px-0' : ''}`;
-
-        return href ? (
-          <Link
-            key={nome}
-            href={href}
-            aria-label={recolhida ? nome : undefined}
-            aria-current={atual === 'posts' ? 'page' : undefined}
-            title={nome}
-            onClick={(e) => aoNavegar?.(e, href)}
-            className={classe}>
-            {conteudo}
           </Link>
-        ) : (
-          <button
-            key={nome}
-            type='button'
-            aria-label={recolhida ? nome : undefined}
-            title={nome}
-            className={classe}>
-            {conteudo}
-          </button>
         );
       })}
     </nav>

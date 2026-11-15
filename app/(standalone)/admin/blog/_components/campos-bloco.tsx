@@ -52,12 +52,12 @@ function CamposLista({ bloco, mudar }: PropsCampos<'lista'>) {
   };
 
   return (
-    <ul className='grid gap-1.5'>
+    <ul className='grid gap-2'>
       {bloco.itens.map((texto, indice) => (
         <li
           // A lista é texto livre sem id por item; a posição é a identidade do campo.
           key={indice}
-          className='grid grid-cols-[1rem_minmax(0,1fr)_auto] items-center gap-1.5'>
+          className='grid grid-cols-[1rem_minmax(0,1fr)_auto] items-center gap-2'>
           <span
             aria-hidden='true'
             className='size-1.5 justify-self-center bg-[#3b80f6]'
@@ -162,12 +162,12 @@ function CamposTabela({ bloco, mudar }: PropsCampos<'tabela'>) {
               aria-label={`Linha ${y + 1}, coluna ${x + 1}`}
               value={linha[x] ?? ''}
               onChange={(e) => trocar(y, x, e.target.value)}
-              className={`min-w-0 border-r border-b border-[#eceef2] px-2.5 py-2 text-sm outline-none transition-colors hover:bg-[#f7f8fa] focus-visible:bg-[#e8f0fe] motion-reduce:transition-none ${y === 0 ? 'bg-[#f3f4f6] font-semibold' : 'bg-white'}`}
+              className={`min-w-0 border-r border-b border-[#eceef2] h-9 px-3 text-sm outline-none transition-colors hover:bg-[#f7f8fa] focus-visible:bg-[#e8f0fe] motion-reduce:transition-none ${y === 0 ? 'bg-[#f3f4f6] font-medium' : 'bg-white'}`}
             />
           ))
         )}
       </div>
-      <div className='flex flex-wrap gap-1.5'>
+      <div className='flex flex-wrap gap-2'>
         {operacoes.map((op) => (
           <Button
             key={op.nome}
