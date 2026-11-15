@@ -4,3 +4,6 @@ coverage
 
 # Plugin vendorizado do upstream, no estilo dele (tools/oxlint/anti-slop/UPSTREAM.md).
 tools/oxlint/anti-slop
+
+# Skills instaladas pela CLI skills: o computedHash do skills-lock.json é do conteúdo original.
+.agents/skills

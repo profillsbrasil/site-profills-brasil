@@ -20,6 +20,7 @@ app/
 ├── (site)/               ← páginas com navbar + footer (layout do grupo injeta a casca)
 │   └── <rota>/_components/   ← componentes privados da rota (o _ tira do roteamento)
 ├── (standalone)/         ← páginas sem casca (landings, ex.: sorteio-fispal-2026)
+│   └── prototipos/blog-admin/ ← protótipo do editor do blog (UI SDK + shadcn); só existe no `bun dev`, sem login
 └── api/                  ← form handlers (zod + e-mail); exceção: download/[token] serve arquivo via JWT
 
 components/
@@ -88,7 +89,8 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 
 - `PRODUCT.md` — design, voz da marca, paleta, anti-referências. Ler antes de qualquer decisão visual.
 - `components/modelo3d/DocModelos3d.md` — como adicionar/otimizar modelos 3D e configurar câmera.
-- `skills-lock.json` — skills de repo instaladas (magic-ui, shadcn, vercel-react-best-practices).
+- `skills-lock.json` — skills de repo instaladas (magic-ui, shadcn, ui-sdk, vercel-react-best-practices).
+- UI SDK (`@ui-sdk/react` e `@ui-sdk/core`, da `vercel-labs/ui`) está em beta (0.1.0-beta.3): a API sai da skill `ui-sdk`, de `node_modules/@ui-sdk/react/docs/llms.txt` e dos `.d.ts` do pacote instalado, nunca de memória. O `@layer ui-sdk;` no topo do `globals.css` deixa as classes do site vencerem o CSS que ela injeta.
 - `.env.example` — as 8 env vars dos forms, downloads e Indicação (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`, `CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET`); copiar para `.env` local.
 - `CONTEXT.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs.
 
