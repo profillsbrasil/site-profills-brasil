@@ -1,8 +1,9 @@
 'use client';
 
+import type { TipoBloco } from '@/lib/blog/tipos';
+
 import type { Carga } from './arraste';
 import { definicoesBlocos } from './registro-blocos';
-import type { TipoBloco } from './tipos';
 
 type Props = {
   onInserir: (tipo: TipoBloco) => void;

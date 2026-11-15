@@ -1,5 +1,6 @@
+import type { Bloco, Linha, Post } from '@/lib/blog/tipos';
+
 import { editorReducer } from './editor-reducer';
-import type { Bloco, Linha, Post } from './tipos';
 import { describe, expect, it } from 'vitest';
 
 const paragrafo = (id: string): Bloco => ({

@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
+import { type Bloco, type Post, assuntos } from '@/lib/blog/tipos';
 import { getMaquinaBySlug } from '@/lib/data/maquinas';
 
-import { type Bloco, type Post, assuntos } from './tipos';
 import { Download, ExternalLink, Play } from 'lucide-react';
 
 export type Dispositivo = 'computador' | 'celular';
