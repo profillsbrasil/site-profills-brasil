@@ -10,5 +10,5 @@ export default function AdminBlogLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <div className='tema-admin contents'>{children}</div>;
 }

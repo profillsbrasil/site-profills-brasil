@@ -279,6 +279,15 @@ input[type='number']::-webkit-outer-spin-button {
 /* ===== Tema navy local: conteúdo da home na paleta do hero =====
    Re-declara os tokens semânticos para a subárvore — os componentes que usam
    bg-background/text-muted-foreground/border-border seguem automaticamente. */
+/* Admin do blog: o --accent do site é o azul sólido de ação, e o shadcn o usa como fundo de hover
+   (item de Select, botão outline e ghost). Aqui ele vira um azul bem claro com texto escuro.
+   Conteúdo em portal (SelectContent, DialogContent) fica fora da subárvore e leva a classe também. */
+.tema-admin {
+  --accent: #e8f0fe;
+  --accent-foreground: #1b1c1f;
+  --ring: #3b80f6;
+}
+
 .tema-navy {
   --background: oklch(0.2084 0.0417 266.3592);
   --foreground: oklch(1 0 0);
