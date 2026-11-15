@@ -1,3 +1,6 @@
+/* O UI SDK injeta o CSS dele nesta camada; declarada antes do Tailwind, as classes do site vencem. */
+@layer ui-sdk;
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
