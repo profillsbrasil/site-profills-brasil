@@ -20,7 +20,7 @@ app/
 ├── (site)/               ← páginas com navbar + footer (layout do grupo injeta a casca)
 │   └── <rota>/_components/   ← componentes privados da rota (o _ tira do roteamento)
 ├── (standalone)/         ← páginas sem casca (landings, ex.: sorteio-fispal-2026)
-│   └── prototipos/blog-admin/ ← protótipo do editor do blog (UI SDK + shadcn); só existe no `bun dev`, sem login
+│   └── admin/blog/       ← admin do blog: lista, novo e [slug] (editor); só existe no `bun dev`, sem login; rotas com sufixo `.dev.tsx` (o `pageExtensions` do next.config só as inclui no `next dev`); grava por Server Actions (acoes.ts) e imagem por [slug]/imagem/route.dev.ts
 └── api/                  ← form handlers (zod + e-mail); exceção: download/[token] serve arquivo via JWT
 
 components/
@@ -53,6 +53,9 @@ lib/crm/                  ← cliente server-only da API do CRM (referral code)
 lib/indicacao/            ← cookie assinado, tipos e destinatário do lead
 components/indicacao/     ← IndicacaoProvider, useContatoComercial, BotaoEspecialista
 lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte, compras)
+lib/blog/                 ← tipos do blog e repositorio.ts (server-only), a interface que o banco substitui depois (issue #44)
+conteudo/blog/posts/      ← um JSON por post (<slug>.json), gravado pelo admin; formato do JSON.stringify, fora do Prettier
+public/blog/<slug>/       ← imagens enviadas pelo admin do blog
 lib/analytics/            ← eventos de GA4 e Meta (só código do vendedor, nunca dado pessoal)
 ```
 
@@ -69,6 +72,7 @@ lib/analytics/            ← eventos de GA4 e Meta (só código do vendedor, nu
 | Vídeo                      | `public/videos/`. Padrão de referência (hero): trio webm + mp4 + poster webp, `preload='metadata'`. Há exceção legada com mp4 único (`servico-personalizado.mp4`)      |
 | Modelo 3D                  | `public/embalagens-3d/*.glb`, < 2MB (exceção legada: `caixa-teste-3d.glb` na raiz de `public/`) — renderizar via `components/modelo3d/`, nunca `<model-viewer>` direto |
 | Texto/copy de página       | Hardcoded no componente da rota (arrays `const` no topo); listas grandes → `lib/data/`                                                                                 |
+| Post do blog               | Pelo admin em `/admin/blog` no `bun dev`; nunca editar o JSON à mão sem rodar `bun run test` (o teste do repositório lê todos)                                         |
 | Formulário novo            | Schema zod em `lib/schemas/` + `app/api/<nome>/route.ts` + template em `lib/emails/<nome>/` (usar `_shared/`)                                                          |
 | Util/helper                | `lib/utils/` com teste `.test.ts` ao lado                                                                                                                              |
 | Tipos globais/declarações  | `types/*.d.ts`                                                                                                                                                         |

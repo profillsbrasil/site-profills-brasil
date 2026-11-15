@@ -12,11 +12,11 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import type { Bloco, BlocoDoTipo, TipoBloco } from '@/lib/blog/tipos';
 import { maquinasCatalogo } from '@/lib/data/maquinas';
 
 import { EscolherImagem } from './escolher-imagem';
 import { classeBotaoContorno, classeCampo, classeIcone } from './estilos';
-import type { Bloco, BlocoDoTipo, TipoBloco } from './tipos';
 import { Plus, X } from 'lucide-react';
 
 type PropsCampos<T extends TipoBloco> = {

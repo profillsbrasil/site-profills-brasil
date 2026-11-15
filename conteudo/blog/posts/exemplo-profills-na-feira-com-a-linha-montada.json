@@ -1,0 +1,56 @@
+{
+  "slug": "exemplo-profills-na-feira-com-a-linha-montada",
+  "estado": "publicado",
+  "criadoEm": "2026-11-06T13:00:00.000Z",
+  "atualizadoEm": "2026-11-06T16:00:00.000Z",
+  "publicadoEm": "2026-11-06T16:00:00.000Z",
+  "post": {
+    "assunto": "evento",
+    "titulo": "Exemplo: Profills na feira com a linha montada",
+    "resumo": "O estande leva uma linha de envase funcionando, para o visitante ver a troca de formato e conversar com quem monta a máquina.",
+    "capa": null,
+    "linhas": [
+      {
+        "id": "l-estande",
+        "colunas": [
+          {
+            "id": "b-estande",
+            "tipo": "paragrafo",
+            "texto": "Neste exemplo, o post mostra um parágrafo ao lado de um aviso, com a primeira coluna mais larga. Troque o texto pelo da feira de verdade."
+          },
+          {
+            "id": "b-onde",
+            "tipo": "aviso",
+            "titulo": "Onde encontrar",
+            "texto": "Rua B, estande 42. Das 10h às 19h."
+          }
+        ],
+        "proporcao": 62
+      },
+      {
+        "id": "l-citacao",
+        "colunas": [
+          {
+            "id": "b-citacao",
+            "tipo": "citacao",
+            "texto": "A gente prefere mostrar a máquina rodando a mostrar um catálogo.",
+            "autor": "Time comercial da Profills"
+          }
+        ],
+        "proporcao": 50
+      },
+      {
+        "id": "l-link",
+        "colunas": [
+          {
+            "id": "b-link",
+            "tipo": "link",
+            "titulo": "Página oficial da feira",
+            "url": "https://example.com"
+          }
+        ],
+        "proporcao": 50
+      }
+    ]
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import type { TipoBloco } from '@/lib/blog/tipos';
 import {
   type DragPreview,
   bindDrag,
@@ -11,7 +12,6 @@ import {
 } from '@ui-sdk/core';
 
 import type { Destino } from './editor-reducer';
-import type { TipoBloco } from './tipos';
 
 export type Carga =
   | { tipo: 'novo'; bloco: TipoBloco }

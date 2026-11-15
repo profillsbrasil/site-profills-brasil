@@ -12,13 +12,11 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { type Post, assuntos, ehAssunto } from '@/lib/blog/tipos';
 
 import type { AcaoEditor } from './editor-reducer';
 import { EscolherImagem } from './escolher-imagem';
 import { classeCampo, classeRotulo } from './estilos';
-import { type Assunto, type Post, assuntos } from './tipos';
-
-const ehAssunto = (valor: string): valor is Assunto => valor in assuntos;
 
 function Contador({
   texto,

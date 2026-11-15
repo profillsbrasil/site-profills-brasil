@@ -1,4 +1,5 @@
-import type { BlocoDoTipo, TipoBloco } from './tipos';
+import type { BlocoDoTipo, TipoBloco } from '@/lib/blog/tipos';
+
 import {
   Download,
   Factory,

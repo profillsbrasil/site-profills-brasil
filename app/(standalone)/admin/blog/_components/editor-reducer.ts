@@ -1,7 +1,11 @@
-import type { Bloco, Lado, Linha, Post } from './tipos';
-
-export const PROPORCAO_MINIMA = 25;
-export const PROPORCAO_MAXIMA = 75;
+import {
+  type Bloco,
+  type Lado,
+  type Linha,
+  PROPORCAO_MAXIMA,
+  PROPORCAO_MINIMA,
+  type Post
+} from '@/lib/blog/tipos';
 
 /** `posicao` conta os vãos entre linhas: 0 é antes da primeira, `linhas.length` é o fim. */
 export type Destino =

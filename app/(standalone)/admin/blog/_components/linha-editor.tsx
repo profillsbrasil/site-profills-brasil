@@ -4,6 +4,13 @@ import { type Dispatch, useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
+  type Bloco,
+  type Lado,
+  type Linha,
+  PROPORCAO_MAXIMA,
+  PROPORCAO_MINIMA
+} from '@/lib/blog/tipos';
+import {
   Resizable,
   ResizableHandle,
   ResizablePanel
@@ -11,14 +18,9 @@ import {
 
 import type { Carga } from './arraste';
 import { CamposBloco } from './campos-bloco';
-import {
-  type AcaoEditor,
-  PROPORCAO_MAXIMA,
-  PROPORCAO_MINIMA
-} from './editor-reducer';
+import type { AcaoEditor } from './editor-reducer';
 import { classeBotaoContorno, classeIcone } from './estilos';
 import { registroBlocos } from './registro-blocos';
-import type { Bloco, Lado, Linha } from './tipos';
 import {
   ChevronDown,
   ChevronUp,

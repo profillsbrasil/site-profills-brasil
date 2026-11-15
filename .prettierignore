@@ -5,5 +5,9 @@ coverage
 # Plugin vendorizado do upstream, no estilo dele (tools/oxlint/anti-slop/UPSTREAM.md).
 tools/oxlint/anti-slop
 
+# Posts gravados pelo admin do blog (lib/blog/repositorio.ts): o formato é o do JSON.stringify,
+# e o Prettier reformataria cada gravação.
+conteudo/blog
+
 # Skills instaladas pela CLI skills: o computedHash do skills-lock.json é do conteúdo original.
 .agents/skills
