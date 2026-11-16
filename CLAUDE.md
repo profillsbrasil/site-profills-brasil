@@ -57,7 +57,7 @@ lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte
 lib/blog/                 ← tipos, regras.ts (transição e conflito de versão, puro), repositorio.ts (SQL); as portas são admin.ts (escrita) e leitura.ts (publicados)
 lib/banco/                ← conexão (pg ou PGlite), migrar.mjs e migracoes/*.sql; só lib/blog e scripts/ importam (regra profills/sem-banco-direto)
 lib/armazem/              ← Armazem (gravar, ler) em disco; o bucket entra depois
-scripts/banco-migrar.mjs  ← pre-deploy da Railway: aplica as migrações pendentes por node
+scripts/banco-migrar.mjs  ← pre-deploy da Railway (`node scripts/banco-migrar.mjs` em deploy.preDeployCommand do serviço site): aplica as migrações pendentes
 .dados/                   ← fora do Git: o PGlite do bun dev (.dados/pglite)
 public/blog/<slug>/       ← imagens enviadas pelo admin do blog
 lib/analytics/            ← eventos de GA4 e Meta (só código do vendedor, nunca dado pessoal)
@@ -127,7 +127,7 @@ Contexto único: `GLOSSARY.md` e `docs/adr/` na raiz. Ver `docs/agents/domain.md
 - Hero mobile e desktop são duas árvores montadas alternadas por CSS (`md:hidden` / `hidden md:block`) — código eager (3D, observers) checa `getClientRects()` para ignorar a árvore invisível.
 - Produção roda na Railway (projeto `site-profills-brasil`, serviço `site`, `next start` atrás de proxy, deploy a cada push na `main`). Em route handler o `request.url` traz o host interno (`localhost:8080`): redirect usa `Location` relativo, e URL absoluta sai de `SITE_URL`. O `profills.com` sem `www` ainda aponta para a Vercel, que só redireciona para o `www`; a KingHost não tem ALIAS para a raiz.
 - Sem `.env` local, as rotas de e-mail/download falham — não é bug do seu código; ver `.env.example`.
-- Blog no banco: sem `DATABASE_URL`, o `bun dev` abre um PGlite em `.dados/pglite` e migra sozinho; apagar a pasta volta aos 3 posts de exemplo. Fora do `bun dev`, a falta de `DATABASE_URL` é erro na primeira consulta, e o build nunca consulta o banco (`leitura.ts` chama `connection()`). O PGlite precisa estar em `serverExternalPackages`. Testes de banco usam `// @vitest-environment node` e `abrirPglite()` em memória (ADR 0003).
+- Blog no banco: sem `DATABASE_URL`, o `bun dev` abre um PGlite em `.dados/pglite` e migra sozinho; apagar a pasta volta aos 3 posts de exemplo. Fora do `bun dev`, a falta de `DATABASE_URL` é erro na primeira consulta, e o build nunca consulta o banco (`leitura.ts` chama `connection()`). O PGlite precisa estar em `serverExternalPackages`. Testes de banco usam `// @vitest-environment node` e `abrirPglite()` em memória (ADR 0003). Em produção, as migrações rodam no pre-deploy do serviço `site` na Railway com `node scripts/banco-migrar.mjs` (campo `deploy.preDeployCommand`, configurado no serviço e não no repo). Com `DATABASE_URL` no `.env` local, o admin sem login do `bun dev` grava nesse banco: nunca pôr ali a URL de produção.
 - Grid pattern de fundo: a implementação viva é `components/layout/gridPatternBg(Mobile).tsx` (usada em ~20 rotas). As variantes em `components/` raiz e `magicui/` (`grid-pattern`, `animated-grid-pattern`, `interactive-grid-pattern`) são código morto — candidatas a remoção, não usar.
 - `text-animate` existe em `ui/` e `magicui/` — verificar qual variante a rota vizinha já usa antes de importar.
 - Tema é light-mode único com seções dark (`bg-secondary`) — não há toggle dark/light.
