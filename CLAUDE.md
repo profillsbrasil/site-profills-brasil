@@ -20,7 +20,8 @@ app/
 ├── layout.tsx            ← fonts Geist (next/font), metadata/SEO global, Toaster
 ├── globals.css           ← tokens do tema (@theme, oklch), keyframes CSS — Tailwind v4 não tem tailwind.config
 ├── (site)/               ← páginas com navbar + footer (layout do grupo injeta a casca)
-│   └── <rota>/_components/   ← componentes privados da rota (o _ tira do roteamento)
+│   ├── <rota>/_components/   ← componentes privados da rota (o _ tira do roteamento)
+│   └── blog/             ← listagem e leitura públicas, dinâmicas, por lib/blog/leitura.ts; not-found.tsx próprio dá 404 de verdade (ADR 0006)
 ├── (standalone)/         ← páginas sem casca (landings, ex.: sorteio-fispal-2026)
 │   └── admin/            ← admin do blog atrás de login: entrar/ (login e sair), blog/ (lista, novo e [slug] com o editor); toda página, action e route handler abre por `abrirAdminBlog()` (teste em admin/guarda.test.ts); grava pela Server Action `gravarPost` (blog/acoes.ts) e imagem por blog/[slug]/imagem/route.ts
 └── api/                  ← form handlers (zod + e-mail); exceção: download/[token] serve arquivo via JWT
@@ -30,6 +31,7 @@ components/
 ├── ui/                   ← primitivos shadcn (new-york, base stone, ícones lucide)
 ├── magicui/              ← efeitos visuais Magic UI (registry @magicui no components.json)
 ├── blocks/               ← blocos compostos reutilizáveis (scrollHint, progress-indicator…)
+├── blog/                 ← ConteudoPost: o renderizador único dos blocos do post, na leitura pública e na prévia do admin
 ├── layout/               ← navbarDesktop/Mobile, footer, gridPatternBg(Mobile), socialLinks
 └── modelo3d/             ← domínio 3D: caixaHome3d, embalagem3d, WebGLFallback, hooks/
 
@@ -39,7 +41,7 @@ lib/
 ├── schemas/              ← schemas zod dos forms — compartilhados entre client e route.ts
 ├── emails/<form>/        ← template + envio nodemailer; _shared/ tem transporter e template-engine
 ├── data/                 ← dados estruturados de conteúdo (listaClientes); data/maquinas/ é a fonte única das máquinas — registry por slug, 1 arquivo por máquina
-└── images/<categoria>/   ← imagens importadas no código (catalogo2026, projetos, logoClientes…)
+└── images/<categoria>/   ← imagens importadas no código (catalogo2026, projetos, logoClientes…); blog/ guarda os sketches do fundo do blog, nunca capa de post
 
 public/                   ← só o que precisa de URL direta: videos/, embalagens-3d/*.glb, logos, geojson
 private/downloads/        ← arquivos NÃO públicos (catálogo 77MB), servidos via api/download/[token] com JWT
@@ -48,7 +50,7 @@ tools/oxlint/profills/    ← plugin local do Oxlint: regras de carregamento (si
 tools/oxlint/anti-slop/   ← plugin anti-slop vendorizado de dmmulroy/anti-slop; não editar à mão, origem e desvios no UPSTREAM.md
 tools/imagens/            ← recomprimir.ts (SSIM ≥ 0,99 nos derivados do Next) e orfas.ts; os testes ao lado travam o teto e a imagem órfã
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
-docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação, 0003 blog no Postgres, 0004 login do admin, 0005 imagens no bucket)
+docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação, 0003 blog no Postgres, 0004 login do admin, 0005 imagens no bucket, 0006 leitura pública do blog)
 docs/agents/              ← config das skills de engenharia: issue tracker, labels de triagem e docs do domínio
 docs/indicacao-verificacao.md ← guia: como testar a Indicação em produção e onde ler os números no GA4 e no Meta
 
@@ -57,7 +59,7 @@ lib/crm/                  ← cliente server-only da API do CRM (referral code)
 lib/indicacao/            ← cookie assinado, tipos e destinatário do lead
 components/indicacao/     ← IndicacaoProvider, useContatoComercial, BotaoEspecialista
 lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte, compras)
-lib/blog/                 ← tipos, regras.ts (transição e conflito de versão, puro), repositorio.ts (SQL); as portas são admin.ts (escrita) e leitura.ts (publicados)
+lib/blog/                 ← tipos (o registry `assuntos` dá plural, chamada e fim do post), regras.ts (transição e conflito de versão, puro), apresentacao.ts (listagem, data, minutos de leitura, puro), repositorio.ts (SQL); as portas são admin.ts (escrita) e leitura.ts (publicados)
 lib/banco/                ← conexão (pg ou PGlite), migrar.mjs e migracoes/*.sql; só lib/blog, lib/admin e scripts/ importam (regra profills/sem-banco-direto)
 lib/admin/                ← login do admin: senha.mjs (scrypt, JS puro para o script) e sessao.ts (JWT no cookie, limite de tentativas, atalho de dev)
 lib/armazem/              ← Armazem (gravar, ler por stream): S3 pelas AWS_*, disco em .dados/armazem só no bun dev sem elas (ADR 0005)

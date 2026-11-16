@@ -1,5 +1,7 @@
 import robots from '@/app/robots';
 import sitemap from '@/app/sitemap';
+import { listarPublicados } from '@/lib/blog/leitura';
+import type { ResumoPublicado } from '@/lib/blog/tipos';
 import { maquinasCatalogo } from '@/lib/data/maquinas';
 import { metadataDaPagina } from '@/lib/seo/metadata';
 import {
@@ -12,10 +14,33 @@ import {
 } from '@/lib/seo/schemas';
 import { SITE_URL } from '@/lib/seo/site';
 
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/lib/blog/leitura', () => ({ listarPublicados: vi.fn() }));
+
+const postPublicado: ResumoPublicado = {
+  slug: 'gt-ganha-troca-de-formato',
+  publicadoEm: '2026-11-10T13:00:00.000Z',
+  atualizadoEm: '2026-11-12T09:30:00.000Z',
+  titulo: 'GT ganha troca de formato',
+  resumo: 'Resumo',
+  assunto: 'maquina',
+  capa: null
+};
+
+beforeEach(() => {
+  vi.mocked(listarPublicados).mockReset();
+  vi.mocked(listarPublicados).mockResolvedValue([postPublicado]);
+});
+
+const urlsDoSitemap = async () => (await sitemap()).map((e) => e.url);
 
 describe('sitemap', () => {
-  const urls = sitemap().map((entrada) => entrada.url);
+  let urls: string[];
+
+  beforeEach(async () => {
+    urls = await urlsDoSitemap();
+  });
 
   it('lista as 35 máquinas do registry', () => {
     for (const maquina of maquinasCatalogo) {
@@ -33,6 +58,32 @@ describe('sitemap', () => {
 
   it('usa o host canônico em toda entrada', () => {
     for (const url of urls) expect(url.startsWith(SITE_URL)).toBe(true);
+  });
+
+  it('lista o blog e os posts publicados', () => {
+    expect(urls).toContain(`${SITE_URL}/blog`);
+    expect(urls).toContain(`${SITE_URL}/blog/gt-ganha-troca-de-formato`);
+  });
+
+  it('dá ao post a data da última edição', async () => {
+    const entrada = (await sitemap()).find(
+      (e) => e.url === `${SITE_URL}/blog/gt-ganha-troca-de-formato`
+    );
+
+    expect(entrada?.lastModified).toEqual(new Date('2026-11-12T09:30:00.000Z'));
+  });
+
+  it('com o banco fora, as páginas fixas e as máquinas continuam saindo', async () => {
+    vi.mocked(listarPublicados).mockRejectedValue(new Error('ECONNREFUSED'));
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const semBanco = await urlsDoSitemap();
+
+    expect(semBanco).toContain(`${SITE_URL}/blog`);
+    expect(semBanco).toContain(
+      `${SITE_URL}/maquinas/${maquinasCatalogo[0].slug}`
+    );
+    expect(semBanco.some((u) => u.includes('/blog/'))).toBe(false);
   });
 });
 

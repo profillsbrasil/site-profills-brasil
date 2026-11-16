@@ -19,9 +19,9 @@ export function JsonLd({
   return (
     <script
       type='application/ld+json'
-      // O objeto é montado no servidor a partir de dados do repo, nunca de input do usuário.
+      // O objeto sai do servidor, mas o título e o resumo de post vêm do admin do blog:
+      // o escape de < impede que um </script> no texto feche a tag.
       dangerouslySetInnerHTML={{
-        // escapa < para um texto de conteúdo com </script> não fechar a tag
         __html: JSON.stringify(data).replace(/</g, String.raw`\u003c`)
       }}
     />

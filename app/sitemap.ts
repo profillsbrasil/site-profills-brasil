@@ -1,7 +1,10 @@
 import type { MetadataRoute } from 'next';
+import { unstable_rethrow } from 'next/navigation';
 
+import { listarPublicados } from '@/lib/blog/leitura';
 import { maquinasCatalogo } from '@/lib/data/maquinas';
 import { SITE_URL } from '@/lib/seo/site';
+import { logger } from '@/lib/utils/logger';
 
 type Rota = {
   path: string;
@@ -22,6 +25,7 @@ const rotasEstaticas: Rota[] = [
   { path: '/sobre', priority: 0.6, changeFrequency: 'yearly' },
   { path: '/clientes', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/download', priority: 0.7, changeFrequency: 'monthly' },
+  { path: '/blog', priority: 0.6, changeFrequency: 'weekly' },
   { path: '/projetos/profills-hub', priority: 0.5, changeFrequency: 'yearly' },
   { path: '/projetos/profills-erp', priority: 0.5, changeFrequency: 'yearly' },
   { path: '/projetos/profills-bank', priority: 0.5, changeFrequency: 'yearly' },
@@ -48,7 +52,27 @@ const rotasEstaticas: Rota[] = [
   }
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+/** Banco fora não derruba o sitemap: as páginas fixas e as máquinas saem do mesmo jeito. */
+async function postsDoBlog(): Promise<MetadataRoute.Sitemap> {
+  try {
+    const posts = await listarPublicados();
+
+    return posts.map((post) => ({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: new Date(post.atualizadoEm),
+      changeFrequency: 'monthly',
+      priority: 0.6
+    }));
+  } catch (erro) {
+    // O connection() da leitura sinaliza ao build que a rota é dinâmica; esse sinal não pode ser engolido.
+    unstable_rethrow(erro);
+    logger.error('Banco do blog fora ao montar o sitemap', erro);
+
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
 
   return [
@@ -63,6 +87,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: 'monthly' as const,
       priority: 0.8
-    }))
+    })),
+    ...(await postsDoBlog())
   ];
 }

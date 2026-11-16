@@ -1,3 +1,4 @@
+import { type PostPublicado, assuntos } from '@/lib/blog/tipos';
 import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 
 import {
@@ -141,5 +142,28 @@ export function faqSchema(
         text: [questao.resposta, ...(questao.topicos ?? [])].join(' ')
       }
     }))
+  };
+}
+
+/** Post do blog. A capa vira a imagem; sem capa, o card social padrão. */
+export function postBlogSchema(guardado: PostPublicado) {
+  const url = urlAbsoluta(`/blog/${guardado.slug}`);
+  const { post } = guardado;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${url}#post`,
+    headline: post.titulo,
+    description: post.resumo,
+    url,
+    mainEntityOfPage: url,
+    datePublished: guardado.publicadoEm,
+    dateModified: guardado.atualizadoEm,
+    image: urlAbsoluta(post.capa ?? OG_IMAGE),
+    inLanguage: 'pt-BR',
+    articleSection: assuntos[post.assunto].nome,
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@id': ORGANIZACAO_ID }
   };
 }

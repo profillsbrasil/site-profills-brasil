@@ -243,6 +243,11 @@ export default function Footer() {
               ))}
             </div>
             <div className='mt-6 flex flex-col items-center justify-center gap-1 text-xs text-[#b6c5e2]/70 md:text-sm'>
+              <Link
+                href='/blog'
+                className='transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none'>
+                Blog
+              </Link>
               <p className='text-center'>
                 <span className='text-accent'>&copy;</span> {ANO_ATUAL} Profills
                 Brasil. Todos os direitos reservados.
