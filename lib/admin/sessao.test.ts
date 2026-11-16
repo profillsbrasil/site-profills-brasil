@@ -53,17 +53,25 @@ vi.mock('@/lib/banco/conexao', () => ({
   }
 }));
 
-vi.mock('next/headers', () => ({
-  cookies: async () => ({
-    get: (nome: string) => {
-      const guardado = estado.jar.get(nome);
+const leuCookies = vi.hoisted(() => ({ vezes: 0 }));
 
-      return guardado && { name: nome, value: guardado.value };
-    },
-    set: (nome: string, value: string, opcoes: OpcoesCookie) =>
-      estado.jar.set(nome, { value, opcoes }),
-    delete: ({ name }: { name: string }) => estado.jar.delete(name)
-  })
+const jarFalso = {
+  get: (nome: string) => {
+    const guardado = estado.jar.get(nome);
+
+    return guardado && { name: nome, value: guardado.value };
+  },
+  set: (nome: string, value: string, opcoes: OpcoesCookie) =>
+    estado.jar.set(nome, { value, opcoes }),
+  delete: ({ name }: { name: string }) => estado.jar.delete(name)
+};
+
+vi.mock('next/headers', () => ({
+  cookies: async () => {
+    leuCookies.vezes += 1;
+
+    return jarFalso;
+  }
 }));
 
 const SENHA = 'senha longa só do teste';
@@ -158,8 +166,11 @@ describe('login do admin', () => {
     await entrar('dono', SENHA);
     vi.spyOn(logger, 'error').mockImplementation(() => undefined);
     vi.stubEnv(nome, valor);
+    leuCookies.vezes = 0;
 
     expect(await autorAtual()).toBeNull();
+    // Ler o cookie é o que torna a página do admin dinâmica no next build, que roda sem essas envs.
+    expect(leuCookies.vezes).toBe(1);
     expect(await entrar('dono', SENHA)).toEqual({ tipo: 'indisponivel' });
   });
 

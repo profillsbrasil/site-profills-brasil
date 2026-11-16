@@ -65,15 +65,14 @@ export function atalhoDev() {
 }
 
 export async function autorAtual(): Promise<Autor | null> {
+  // O cookie vem antes de tudo: sem ele, uma página do admin sem env no build vira HTML estático com o redirect congelado.
+  const token = (await cookies()).get(COOKIE_SESSAO)?.value;
+
   if (atalhoDev()) return { usuario: 'dev' };
 
   const config = configAdmin();
 
-  if (!config) return null;
-
-  const token = (await cookies()).get(COOKIE_SESSAO)?.value;
-
-  if (!token) return null;
+  if (!config || !token) return null;
 
   try {
     const { payload } = await jwtVerify(token, config.chave, {
