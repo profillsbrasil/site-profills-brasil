@@ -4,11 +4,37 @@ import { abrirAdminBlog } from '@/lib/blog/admin';
 import { MOTIVO_SEM_SESSAO, comMotivo } from '@/lib/blog/erro';
 import { slugSchema } from '@/lib/schemas/post-blog';
 
+/**
+ * O cookie sameSite strict ainda sai de crm.profills.com, que é o mesmo site: o Origin precisa ter o
+ * host de SITE_URL. Sem SITE_URL, só o next dev aceita, para o upload local funcionar sem env.
+ */
+function origemDoSite(request: Request) {
+  const site = process.env.SITE_URL;
+
+  if (!site) return process.env.NODE_ENV === 'development';
+
+  const hostDoSite = URL.parse(site)?.host;
+  const origem = request.headers.get('origin');
+
+  return (
+    hostDoSite !== undefined &&
+    origem !== null &&
+    URL.parse(origem)?.host === hostDoSite
+  );
+}
+
 // Route handler e não Server Action: a Server Action limita o corpo a 1 MB, e a imagem vai até 5 MB.
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  if (!origemDoSite(request)) {
+    return NextResponse.json(
+      { erro: 'Envio recusado: a página não é do site.' },
+      { status: 403 }
+    );
+  }
+
   const admin = await abrirAdminBlog();
 
   if (!admin) {
