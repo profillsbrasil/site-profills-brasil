@@ -304,3 +304,44 @@ input[type='number']::-webkit-outer-spin-button {
   --input: oklch(0.62 0.06 262 / 25%);
   --ring: oklch(0.6207 0.1894 259.9358);
 }
+
+/* Placa da navbar desktop. O data-tema sai de temaDoTopo(pathname): navy sobre topo
+   escuro, claro sobre topo branco. O logo colorido tem margem transparente no PNG:
+   a imagem cresce, sobe e é recortada até o conteúdo ter os mesmos 38,4 px do branco. */
+.placa-navbar {
+  --placa-card: oklch(0.2503 0.0417 266.3592);
+  --placa-hover: oklch(0.2734 0.0428 266.3592);
+  --placa-recuo: oklch(0.208 0.042 265.755 / 0.6);
+  --placa-texto: oklch(1 0 0);
+  --placa-texto-2: #b6c5e2;
+  --placa-tracejado: rgba(148, 178, 235, 0.3);
+  --placa-tracejado-sutil: rgba(148, 178, 235, 0.22);
+  --placa-botao: oklch(1 0 0);
+  --placa-botao-texto: oklch(0.2084 0.0417 266.3592);
+  --placa-sombra: none;
+  --logo-altura: 38.4px;
+  --logo-desloc: 0 0;
+  --logo-origem: 0 50%;
+  --logo-recorte: inset(0 0 0 0);
+  --logo-recorte-simbolo: inset(0 87.5% 0 0);
+}
+
+.placa-navbar[data-tema='claro'] {
+  --placa-card: oklch(1 0 0);
+  --placa-hover: oklch(0.95 0.008 266);
+  --placa-recuo: oklch(0.968 0.006 266);
+  --placa-texto: oklch(0.2084 0.0417 266.3592);
+  --placa-texto-2: oklch(0.45 0.035 266);
+  --placa-tracejado: rgba(15, 23, 43, 0.3);
+  --placa-tracejado-sutil: rgba(15, 23, 43, 0.16);
+  --placa-botao: oklch(0.2084 0.0417 266.3592);
+  --placa-botao-texto: oklch(1 0 0);
+  --placa-sombra:
+    0 1px 2px rgba(15, 23, 43, 0.06), 0 8px 24px -12px rgba(15, 23, 43, 0.18);
+  /* logo.png: 1024 x 225, conteúdo em x 25 a 1003 e y 30 a 180, símbolo até x 138. */
+  --logo-altura: 57.22px;
+  --logo-desloc: -6.36px -7.63px;
+  --logo-origem: 2.44% 50%;
+  --logo-recorte: inset(13.33% 1.95% 19.56% 2.44%);
+  --logo-recorte-simbolo: inset(13.33% 85.35% 19.56% 2.44%);
+}

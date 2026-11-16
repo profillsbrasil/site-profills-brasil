@@ -22,9 +22,11 @@ import {
   usePlaca,
   useRolouAlem
 } from '@/components/layout/placa';
+import { temaDoTopo } from '@/components/layout/temaDoTopo';
 import type { VitrinesDoMenu } from '@/lib/data/maquinas/menu';
 import { cn } from '@/lib/utils';
-import logoProfills from '@/public/logo-branco.png';
+import logoBranco from '@/public/logo-branco.png';
+import logoCor from '@/public/logo.png';
 
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 
@@ -32,16 +34,16 @@ const ORDEM_MENUS = NAVEGACAO.menus.map((m) => m.id);
 const LIMIAR_COMPACTA = 24;
 const SAIDA = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
-// A navbar vive fora de .tema-navy: as cores são literais (Regra da Cor Explícita do DESIGN.md).
-const TRACEJADO = 'border-[rgba(148,178,235,0.3)]';
-const TRACEJADO_SUTIL = 'border-[rgba(148,178,235,0.22)]';
-const NAVY_CARD = 'bg-[oklch(0.2503_0.0417_266.3592)]';
+// As cores da placa são variáveis de .placa-navbar (globals.css), trocadas pelo data-tema.
+const TRACEJADO = 'border-(--placa-tracejado)';
+const TRACEJADO_SUTIL = 'border-(--placa-tracejado-sutil)';
+const CARD = 'bg-(--placa-card)';
 
 const ITEM =
-  'group/item inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs border border-transparent px-3 text-sm leading-none font-medium whitespace-nowrap text-white outline-none max-[1100px]:px-2.5 hover:border-dashed hover:border-[rgba(148,178,235,0.3)] hover:bg-[oklch(0.2734_0.0428_266.3592)] focus-visible:border-dashed focus-visible:border-[rgba(148,178,235,0.3)] focus-visible:bg-[oklch(0.2734_0.0428_266.3592)] aria-expanded:border-dashed aria-expanded:border-[rgba(148,178,235,0.3)] aria-expanded:bg-slate-900/60 aria-[current=page]:border-dashed aria-[current=page]:border-[rgba(148,178,235,0.3)] aria-[current=page]:bg-slate-900/60 transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
+  'group/item inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs border border-transparent px-3 text-sm leading-none font-medium whitespace-nowrap text-(--placa-texto) outline-none max-[1100px]:px-2.5 hover:border-dashed hover:border-(--placa-tracejado) hover:bg-(--placa-hover) focus-visible:border-dashed focus-visible:border-(--placa-tracejado) focus-visible:bg-(--placa-hover) aria-expanded:border-dashed aria-expanded:border-(--placa-tracejado) aria-expanded:bg-(--placa-recuo) aria-[current=page]:border-dashed aria-[current=page]:border-(--placa-tracejado) aria-[current=page]:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
 const LINHA_DO_PAINEL =
-  'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-white outline-none hover:border-solid hover:border-accent hover:bg-slate-900/60 focus-visible:border-solid focus-visible:border-accent focus-visible:bg-slate-900/60 transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
+  'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-(--placa-texto) outline-none hover:border-solid hover:border-accent hover:bg-(--placa-recuo) focus-visible:border-solid focus-visible:border-accent focus-visible:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
 const CANTO = 'pointer-events-none absolute z-[2] size-2 border-accent';
 
@@ -73,7 +75,7 @@ function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
         {menu.rotuloCurto ?? menu.rotulo}
         <ChevronDown
           aria-hidden
-          className='size-3.5 text-[#b6c5e2] transition-transform duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-aria-expanded/item:rotate-180 group-aria-expanded/item:text-accent motion-reduce:transition-none'
+          className='size-3.5 text-(--placa-texto-2) transition-transform duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-aria-expanded/item:rotate-180 group-aria-expanded/item:text-accent motion-reduce:transition-none'
         />
       </button>
     </li>
@@ -102,7 +104,7 @@ function PainelVitrine({
       onFocus={() => setFoco(folha.vitrine)}>
       <folha.icone aria-hidden className='size-5 shrink-0 text-accent' />
       <span className='min-w-0 flex-1 truncate'>{folha.rotulo}</span>
-      <span className='font-mono text-xs leading-none font-medium text-[#b6c5e2]'>
+      <span className='font-mono text-xs leading-none font-medium text-(--placa-texto-2)'>
         {vitrines[folha.vitrine].total}
       </span>
     </LinkDaArvore>
@@ -138,26 +140,26 @@ function PainelVitrine({
             />
             <figcaption
               className={cn(
-                'border-t border-dashed bg-slate-900/60 px-3 py-2',
+                'border-t border-dashed bg-(--placa-recuo) px-3 py-2',
                 TRACEJADO_SUTIL
               )}>
-              <strong className='block text-sm font-bold text-white'>
+              <strong className='block text-sm font-bold text-(--placa-texto)'>
                 {vitrine.nome}
               </strong>
-              <small className='block font-mono text-[10px] leading-[1.4] tracking-[0.08em] text-[#b6c5e2] uppercase'>
+              <small className='block font-mono text-[10px] leading-[1.4] tracking-[0.08em] text-(--placa-texto-2) uppercase'>
                 {vitrine.subtitulo}
               </small>
             </figcaption>
           </div>
         )}
         {preparado && !vitrine && (
-          <div className='animate-in fade-in flex min-h-0 flex-1 flex-col items-center justify-center gap-2 bg-slate-900/60 duration-200 motion-reduce:animate-none'>
+          <div className='animate-in fade-in flex min-h-0 flex-1 flex-col items-center justify-center gap-2 bg-(--placa-recuo) duration-200 motion-reduce:animate-none'>
             <span
               aria-hidden
               className='font-mono text-2xl leading-none text-accent'>
               +
             </span>
-            <span className='text-center font-mono text-[11px] leading-[1.6] tracking-[0.2em] text-[#b6c5e2] uppercase'>
+            <span className='text-center font-mono text-[11px] leading-[1.6] tracking-[0.2em] text-(--placa-texto-2) uppercase'>
               Solução de engenharia
               <br />
               sob projeto
@@ -191,7 +193,7 @@ function PainelFotos({
             <span className='min-w-0 flex-1 truncate'>{folha.rotulo}</span>
             <ArrowUpRight
               aria-hidden
-              className='size-4 shrink-0 text-[#b6c5e2] group-hover/servico:text-accent group-focus-visible/servico:text-accent'
+              className='size-4 shrink-0 text-(--placa-texto-2) group-hover/servico:text-accent group-focus-visible/servico:text-accent'
             />
           </LinkDaArvore>
         ))}
@@ -248,7 +250,7 @@ function ConteudoPainel({
               key={folha.id}
               alvo={folha}
               className={cn(
-                'grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-xs border border-dashed bg-slate-900/60 p-3.5 text-white outline-none hover:border-solid hover:border-accent focus-visible:border-solid focus-visible:border-accent transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+                'grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-xs border border-dashed bg-(--placa-recuo) p-3.5 text-(--placa-texto) outline-none hover:border-solid hover:border-accent focus-visible:border-solid focus-visible:border-accent transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
                 TRACEJADO_SUTIL
               )}>
               <folha.icone
@@ -258,7 +260,7 @@ function ConteudoPainel({
               <strong className='truncate text-sm font-semibold'>
                 {folha.rotulo}
               </strong>
-              <span className='line-clamp-2 min-h-[2.8em] text-[13px] leading-[1.4] text-[#b6c5e2]'>
+              <span className='line-clamp-2 min-h-[2.8em] text-[13px] leading-[1.4] text-(--placa-texto-2)'>
                 {folha.descricao}
               </span>
             </LinkDaArvore>
@@ -285,6 +287,7 @@ export default function NavbarDesktop({
 }: {
   vitrines: VitrinesDoMenu;
 }) {
+  const tema = temaDoTopo(usePathname());
   const placa = usePlaca(ORDEM_MENUS);
   const compacta = useRolouAlem(LIMIAR_COMPACTA);
   const { aberto, sentido, prestes, raiz, gaveta } = placa;
@@ -372,26 +375,27 @@ export default function NavbarDesktop({
   return (
     <div
       ref={raiz}
+      data-tema={tema}
       data-compacta={compacta || undefined}
       data-aberta={aberto !== null || undefined}
-      className='group/placa fixed inset-x-0 top-0 z-50 hidden h-0 lg:block'>
+      className='placa-navbar group/placa fixed inset-x-0 top-0 z-50 hidden h-0 lg:block'>
       <div className='relative mx-auto w-[min(1216px,calc(100%_-_2*clamp(16px,2.5vw,32px)))]'>
         <nav
           ref={nav}
           aria-label='Principal'
           className={cn(
-            'absolute inset-x-0 top-0 grid translate-y-3 grid-rows-[62px] rounded-xs border border-dashed transition-[translate,grid-template-rows] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:translate-y-2 group-data-[compacta]/placa:grid-rows-[46px] motion-reduce:transition-none',
+            'absolute inset-x-0 top-0 grid translate-y-3 grid-rows-[62px] rounded-xs border border-dashed shadow-(--placa-sombra) transition-[translate,grid-template-rows] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:translate-y-2 group-data-[compacta]/placa:grid-rows-[46px] motion-reduce:transition-none',
             TRACEJADO
           )}>
           <span
             aria-hidden
-            className='pointer-events-none absolute inset-0 -z-10 rounded-xs bg-[color-mix(in_oklch,oklch(0.2503_0.0417_266.3592)_76%,transparent)] backdrop-blur-[14px] backdrop-saturate-[1.15]'
+            className='pointer-events-none absolute inset-0 -z-10 rounded-xs bg-[color-mix(in_oklch,var(--placa-card)_76%,transparent)] backdrop-blur-[14px] backdrop-saturate-[1.15]'
           />
           <span
             aria-hidden
             className={cn(
               'pointer-events-none absolute inset-0 -z-10 rounded-xs transition-opacity duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:opacity-0 motion-reduce:duration-[120ms] motion-reduce:ease-linear',
-              NAVY_CARD
+              CARD
             )}
           />
           <Cantos />
@@ -400,11 +404,11 @@ export default function NavbarDesktop({
               alvo={NAVEGACAO.marca}
               className='group/logo block h-[38.4px] rounded-xs outline-none'>
               <Image
-                src={logoProfills}
+                src={tema === 'claro' ? logoCor : logoBranco}
                 alt='Profills, página inicial'
                 priority
-                sizes='252px'
-                className='h-[38.4px] w-auto max-w-none origin-left [clip-path:inset(0_0_0_0)] transition-[clip-path,scale,opacity] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/logo:opacity-80 group-focus-visible/logo:opacity-80 group-data-[compacta]/placa:scale-80 group-data-[compacta]/placa:[clip-path:inset(0_87.5%_0_0)] max-[1100px]:scale-80 max-[1100px]:[clip-path:inset(0_87.5%_0_0)] motion-reduce:transition-none'
+                sizes='261px'
+                className='h-(--logo-altura) w-auto max-w-none [transform-origin:var(--logo-origem)] [translate:var(--logo-desloc)] [clip-path:var(--logo-recorte)] transition-[clip-path,scale,opacity] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/logo:opacity-80 group-focus-visible/logo:opacity-80 group-data-[compacta]/placa:scale-80 group-data-[compacta]/placa:[clip-path:var(--logo-recorte-simbolo)] max-[1100px]:scale-80 max-[1100px]:[clip-path:var(--logo-recorte-simbolo)] motion-reduce:transition-none'
               />
             </LinkDaArvore>
             <ul className='m-0 flex min-w-0 list-none items-center gap-1 p-0'>
@@ -429,7 +433,7 @@ export default function NavbarDesktop({
               className='flex items-center gap-2.5'>
               <span
                 aria-hidden
-                className='text-[13px] leading-none whitespace-nowrap text-[#b6c5e2] max-[1100px]:hidden'>
+                className='text-[13px] leading-none whitespace-nowrap text-(--placa-texto-2) max-[1100px]:hidden'>
                 Monte a sua
               </span>
               <div className='flex gap-0.5'>
@@ -438,7 +442,7 @@ export default function NavbarDesktop({
                     key={no.id}
                     alvo={no}
                     aria-label={no.rotulo}
-                    className='inline-flex h-9 items-center gap-[7px] border border-white bg-white px-3.5 text-sm leading-none font-semibold whitespace-nowrap text-secondary outline-none first:rounded-l-xs last:rounded-r-xs hover:border-accent hover:bg-accent hover:text-white focus-visible:border-accent focus-visible:bg-accent focus-visible:text-white aria-[current=page]:border-accent aria-[current=page]:bg-slate-900/60 aria-[current=page]:text-white transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'>
+                    className='inline-flex h-9 items-center gap-[7px] border border-(--placa-botao) bg-(--placa-botao) px-3.5 text-sm leading-none font-semibold whitespace-nowrap text-(--placa-botao-texto) outline-none first:rounded-l-xs last:rounded-r-xs hover:border-accent hover:bg-accent hover:text-white focus-visible:border-accent focus-visible:bg-accent focus-visible:text-white aria-[current=page]:border-accent aria-[current=page]:bg-(--placa-recuo) aria-[current=page]:text-(--placa-texto) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'>
                     <no.icone aria-hidden className='size-4' />
                     {no.rotuloCurto}
                   </LinkDaArvore>
@@ -460,7 +464,7 @@ export default function NavbarDesktop({
             className={cn(
               'grid rounded-t-xs border border-b-0 border-dashed [clip-path:inset(0_0_100%_0)] transition-[clip-path] duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
               TRACEJADO,
-              NAVY_CARD
+              CARD
             )}>
             {NAVEGACAO.menus.map((menu) => {
               const ativo = aberto === menu.id;
