@@ -168,7 +168,13 @@ describe('escolha do armazém pelo ambiente', () => {
     await expect(leitura).rejects.not.toThrow('segredo-que-nao-aparece');
   });
 
-  it.each(['virtual-hosted', 'VIRTUAL_HOSTED', 'path', 'path-style'])(
+  it.each([
+    'virtual-host',
+    'virtual-hosted',
+    'VIRTUAL_HOSTED',
+    'path',
+    'path-style'
+  ])(
     'aceita AWS_S3_URL_STYLE=%s',
     async (estilo) => {
       await expect(

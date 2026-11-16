@@ -131,11 +131,11 @@ export type AmbienteArmazem = Partial<
   Record<(typeof NOMES_S3)[number] | 'NODE_ENV', string>
 >;
 
-// A Railway entrega o estilo de URL do bucket; a grafia exata não está documentada, então caixa e separador não importam.
+// A Railway entrega "virtual-host" (medido em 16/11/2026 em `railway bucket credentials --json`); caixa e separador não importam.
 const estiloUrl = z
   .string()
   .transform((estilo) => estilo.toLowerCase().replace(/[^a-z]/g, ''))
-  .pipe(z.enum(['virtualhosted', 'path', 'pathstyle']));
+  .pipe(z.enum(['virtualhost', 'virtualhosted', 'path', 'pathstyle']));
 
 const ambienteS3 = z
   .object({
@@ -144,7 +144,7 @@ const ambienteS3 = z
     AWS_SECRET_ACCESS_KEY: z.string(),
     AWS_S3_BUCKET_NAME: z.string(),
     AWS_DEFAULT_REGION: z.string(),
-    AWS_S3_URL_STYLE: estiloUrl.default('virtualhosted')
+    AWS_S3_URL_STYLE: estiloUrl.default('virtualhost')
   })
   .transform(
     (env): ConfigS3 => ({
@@ -153,7 +153,7 @@ const ambienteS3 = z
       bucket: env.AWS_S3_BUCKET_NAME,
       chave: env.AWS_ACCESS_KEY_ID,
       segredo: env.AWS_SECRET_ACCESS_KEY,
-      estiloCaminho: env.AWS_S3_URL_STYLE !== 'virtualhosted'
+      estiloCaminho: env.AWS_S3_URL_STYLE.startsWith('path')
     })
   );
 
