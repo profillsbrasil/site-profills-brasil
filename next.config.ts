@@ -4,6 +4,12 @@ import { buildMaquinaRedirects } from './lib/data/maquinas/redirects';
 
 const nextConfig: NextConfig = {
   compress: true,
+  experimental: {
+    serverActions: {
+      // Atrás do proxy da Railway o Host chega interno; a action aceita o Origin dos dois domínios do site.
+      allowedOrigins: ['www.profills.com', 'profills.com']
+    }
+  },
   // O PGlite do bun dev carrega WASM e módulos opcionais em runtime; empacotado pelo Turbopack, quebra.
   serverExternalPackages: ['@electric-sql/pglite'],
   images: {
