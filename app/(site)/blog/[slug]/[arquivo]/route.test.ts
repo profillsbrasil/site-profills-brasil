@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { lerImagem } from '@/lib/blog/leitura';
 
-import { GET } from './route';
+import { GET, HEAD } from './route';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/blog/leitura', () => ({ lerImagem: vi.fn() }));
@@ -51,6 +51,33 @@ describe('GET /blog/[slug]/[arquivo]', () => {
 
     expect(resposta.status).toBe(404);
     expect(ler).not.toHaveBeenCalled();
+  });
+
+  it('HEAD responde os cabeçalhos e cancela o corpo do armazém', async () => {
+    const cancelar = vi.fn();
+
+    ler.mockResolvedValue({
+      corpo: new ReadableStream({ cancel: cancelar }),
+      tamanho: png.length,
+      tipo: 'image/png'
+    });
+
+    const resposta = await HEAD(
+      new Request('http://localhost/blog/fispal/foto-0123456789.png', {
+        method: 'HEAD'
+      }),
+      {
+        params: Promise.resolve({
+          slug: 'fispal',
+          arquivo: 'foto-0123456789.png'
+        })
+      }
+    );
+
+    expect(resposta.status).toBe(200);
+    expect(resposta.headers.get('content-length')).toBe(String(png.length));
+    expect(resposta.body).toBeNull();
+    expect(cancelar).toHaveBeenCalledOnce();
   });
 
   it('responde 404 com cache curto quando a imagem não existe', async () => {

@@ -7,12 +7,20 @@ import {
   S3Client
 } from '@aws-sdk/client-s3';
 
-import { type Armazem, criarArmazemDisco, escolherArmazem } from './armazem';
+import {
+  type Armazem,
+  criarArmazemDisco,
+  criarArmazemS3,
+  escolherArmazem
+} from './armazem';
 import { randomUUID } from 'node:crypto';
+import { once } from 'node:events';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { type RequestListener, createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { z } from 'zod';
 
 const bytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 1, 2, 3, 4]);
 
@@ -120,6 +128,47 @@ describe('armazém em disco', () => {
       'fora do armazém'
     );
   });
+});
+
+/** Servidor HTTP local no lugar do bucket; devolve a porta e o fechamento. */
+async function bucketLocal(responder: RequestListener) {
+  const servidor = createServer(responder);
+
+  servidor.listen(0);
+  await once(servidor, 'listening');
+
+  const { port } = z.object({ port: z.number() }).parse(servidor.address());
+
+  return {
+    porta: port,
+    fechar: () => {
+      servidor.closeAllConnections();
+      servidor.close();
+    }
+  };
+}
+
+describe('armazém S3 com bucket mudo', () => {
+  it('desiste da leitura quando o bucket aceita a conexão e não responde', async () => {
+    const mudo = await bucketLocal(() => {});
+
+    const armazem = criarArmazemS3({
+      endpoint: `http://127.0.0.1:${mudo.porta}`,
+      regiao: 'auto',
+      bucket: 'bucket',
+      chave: 'chave',
+      segredo: 'segredo',
+      estiloCaminho: true
+    });
+
+    try {
+      await expect(armazem.ler(chaveNova())).rejects.toMatchObject({
+        name: 'TimeoutError'
+      });
+    } finally {
+      mudo.fechar();
+    }
+  }, 20_000);
 });
 
 describe('escolha do armazém pelo ambiente', () => {

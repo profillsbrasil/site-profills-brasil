@@ -9,7 +9,7 @@ const ausente = () =>
   });
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string; arquivo: string }> }
 ) {
   const { slug, arquivo } = await params;
@@ -32,13 +32,22 @@ export async function GET(
 
   if (!imagem) return ausente();
 
-  return new Response(imagem.corpo, {
-    headers: {
-      'Content-Type': imagem.tipo,
-      'Content-Length': String(imagem.tamanho),
-      'X-Content-Type-Options': 'nosniff',
-      // O nome carrega o hash do conteúdo: a mesma URL nunca muda de bytes.
-      'Cache-Control': 'public, max-age=31536000, immutable'
-    }
-  });
+  const headers = {
+    'Content-Type': imagem.tipo,
+    'Content-Length': String(imagem.tamanho),
+    'X-Content-Type-Options': 'nosniff',
+    // O nome carrega o hash do conteúdo: a mesma URL nunca muda de bytes.
+    'Cache-Control': 'public, max-age=31536000, immutable'
+  };
+
+  // O HEAD do Next responde sem ler o corpo; o stream aberto prenderia o socket do bucket.
+  if (request.method === 'HEAD') {
+    await imagem.corpo.cancel();
+
+    return new Response(null, { headers });
+  }
+
+  return new Response(imagem.corpo, { headers });
 }
+
+export const HEAD = GET;

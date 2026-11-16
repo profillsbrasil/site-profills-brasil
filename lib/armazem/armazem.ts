@@ -79,7 +79,13 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
     endpoint: config.endpoint,
     region: config.regiao,
     credentials: { accessKeyId: config.chave, secretAccessKey: config.segredo },
-    forcePathStyle: config.estiloCaminho
+    forcePathStyle: config.estiloCaminho,
+    // Sem prazo, um bucket mudo prende o socket e a rota pública para de responder.
+    requestHandler: {
+      connectionTimeout: 2_000,
+      requestTimeout: 3_000,
+      throwOnRequestTimeout: true
+    }
   });
 
   return {
