@@ -1,17 +1,8 @@
-// Gera o ADMIN_SENHA_HASH. A senha só entra pelo teclado, sem eco, e o stdout leva só o hash:
-//   node scripts/admin-gerar-hash.mjs > ~/.local/state/profills-admin-senha-hash
+// Gera o ADMIN_SENHA_HASH. A senha só entra pelo teclado, sem eco, e o stdout leva só o hash.
+// O umask 077 faz o arquivo nascer legível só pelo dono (0600), não 0644:
+//   (umask 077 && node scripts/admin-gerar-hash.mjs > ~/.local/state/profills-admin-senha-hash)
 import { TAMANHO_MINIMO_SENHA, hashSenha } from '../lib/admin/senha.mjs';
-
-const CTRL_C = '\x03';
-const APAGAR = new Set(['\x7f', '\b']);
-
-/**
- * Letras como a pessoa vê: um emoji composto conta como uma.
- *
- * @param {string} texto
- */
-const letras = (texto) =>
-  Array.from(new Intl.Segmenter('pt-BR').segment(texto), (s) => s.segment);
+import { digitar, letras } from './teclas-senha.mjs';
 
 /**
  * @param {string} rotulo
@@ -32,25 +23,15 @@ function lerSemEco(rotulo) {
 
     /** @param {string} texto */
     function aoDigitar(texto) {
-      for (const tecla of texto) {
-        if (tecla === '\r' || tecla === '\n') {
-          terminar();
-          resolve(senha);
+      const lido = digitar(senha, texto);
 
-          return;
-        }
+      senha = lido.senha;
 
-        if (tecla === CTRL_C) {
-          terminar();
-          reject(new Error('Cancelado.'));
+      if (lido.fim) terminar();
 
-          return;
-        }
+      if (lido.fim === 'enter') resolve(senha);
 
-        senha = APAGAR.has(tecla)
-          ? letras(senha).slice(0, -1).join('')
-          : senha + tecla;
-      }
+      if (lido.fim === 'cancelar') reject(new Error('Cancelado.'));
     }
 
     process.stdin.setEncoding('utf8');
