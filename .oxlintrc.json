@@ -173,6 +173,8 @@
     "profills/opacity-scroll-em-funcao": "error",
     "profills/dynamic-3d-sem-ssr": "error",
     "profills/sem-3d-direto": "error",
+    // A escrita no blog passa por lib/blog/admin.ts; o lint barra o atalho por alias e por caminho relativo.
+    "profills/sem-banco-direto": "error",
 
     // Plugin vendorizado (tools/oxlint/anti-slop): padrões de código de baixa evidência.
     // oxc/no-accumulating-spread, a regra nativa que o acompanha, já está acima.
@@ -239,6 +241,13 @@
             ]
           }
         ]
+      }
+    },
+    {
+      // O script de pre-deploy escreve no log do deploy da Railway, sem o logger do app.
+      "files": ["scripts/**"],
+      "rules": {
+        "eslint/no-console": "off"
       }
     },
     {
