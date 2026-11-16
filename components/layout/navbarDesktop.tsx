@@ -40,7 +40,7 @@ const TRACEJADO_SUTIL = 'border-(--placa-tracejado-sutil)';
 const CARD = 'bg-(--placa-card)';
 
 const ITEM =
-  'group/item inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs border border-transparent px-3 text-sm leading-none font-medium whitespace-nowrap text-(--placa-texto) outline-none max-[1100px]:px-2.5 hover:border-dashed hover:border-(--placa-tracejado) hover:bg-(--placa-hover) focus-visible:border-dashed focus-visible:border-(--placa-tracejado) focus-visible:bg-(--placa-hover) aria-expanded:border-dashed aria-expanded:border-(--placa-tracejado) aria-expanded:bg-(--placa-recuo) aria-[current=page]:border-dashed aria-[current=page]:border-(--placa-tracejado) aria-[current=page]:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
+  'group/item inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs border border-transparent px-3 text-sm leading-none font-medium whitespace-nowrap text-(--placa-texto) outline-none max-xl:px-2.5 hover:border-dashed hover:border-(--placa-tracejado) hover:bg-(--placa-hover) focus-visible:border-dashed focus-visible:border-(--placa-tracejado) focus-visible:bg-(--placa-hover) aria-expanded:border-dashed aria-expanded:border-(--placa-tracejado) aria-expanded:bg-(--placa-recuo) aria-[current=page]:border-dashed aria-[current=page]:border-(--placa-tracejado) aria-[current=page]:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
 const LINHA_DO_PAINEL =
   'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-(--placa-texto) outline-none hover:border-solid hover:border-accent hover:bg-(--placa-recuo) focus-visible:border-solid focus-visible:border-accent focus-visible:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
@@ -400,7 +400,7 @@ export default function NavbarDesktop({
             )}
           />
           <Cantos />
-          <div className='grid min-w-0 grid-cols-[252px_minmax(0,1fr)_auto] items-center gap-x-7 pr-3 pl-4 transition-[grid-template-columns,column-gap] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:grid-cols-[26px_minmax(0,1fr)_auto] group-data-[compacta]/placa:gap-x-5 max-[1100px]:grid-cols-[26px_minmax(0,1fr)_auto] max-[1100px]:gap-x-4 motion-reduce:transition-none'>
+          <div className='grid min-w-0 grid-cols-[252px_minmax(0,1fr)_auto] items-center gap-x-7 pr-3 pl-4 transition-[grid-template-columns,column-gap] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:grid-cols-[26px_minmax(0,1fr)_auto] group-data-[compacta]/placa:gap-x-5 max-xl:grid-cols-[26px_minmax(0,1fr)_auto] max-xl:gap-x-4 motion-reduce:transition-none'>
             <LinkDaArvore
               alvo={NAVEGACAO.marca}
               className='group/logo block h-[38.4px] rounded-xs outline-none'>
@@ -409,7 +409,7 @@ export default function NavbarDesktop({
                 alt='Profills, página inicial'
                 priority
                 sizes='261px'
-                className='h-(--logo-altura) w-auto max-w-none [transform-origin:var(--logo-origem)] [translate:var(--logo-desloc)] [clip-path:var(--logo-recorte)] transition-[clip-path,scale,opacity] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/logo:opacity-80 group-focus-visible/logo:opacity-80 group-data-[compacta]/placa:scale-80 group-data-[compacta]/placa:[clip-path:var(--logo-recorte-simbolo)] max-[1100px]:scale-80 max-[1100px]:[clip-path:var(--logo-recorte-simbolo)] motion-reduce:transition-none'
+                className='h-(--logo-altura) w-auto max-w-none [transform-origin:var(--logo-origem)] [translate:var(--logo-desloc)] [clip-path:var(--logo-recorte)] transition-[clip-path,scale,opacity] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/logo:opacity-80 group-focus-visible/logo:opacity-80 group-data-[compacta]/placa:scale-80 group-data-[compacta]/placa:[clip-path:var(--logo-recorte-simbolo)] max-xl:scale-80 max-xl:[clip-path:var(--logo-recorte-simbolo)] motion-reduce:transition-none'
               />
             </LinkDaArvore>
             <ul className='m-0 flex min-w-0 list-none items-center gap-1 p-0'>
@@ -434,7 +434,7 @@ export default function NavbarDesktop({
               className='flex items-center gap-2.5'>
               <span
                 aria-hidden
-                className='text-[13px] leading-none whitespace-nowrap text-(--placa-texto-2) max-[1100px]:hidden'>
+                className='text-[13px] leading-none whitespace-nowrap text-(--placa-texto-2) max-xl:hidden'>
                 Monte a sua
               </span>
               <div className='flex gap-0.5'>
