@@ -47,7 +47,7 @@ types/                    ← declarações globais (model-viewer.d.ts, css-vari
 tools/oxlint/profills/    ← plugin local do Oxlint: regras de carregamento (sizes, eager, vídeo, opacity de scroll, 3D)
 tools/oxlint/anti-slop/   ← plugin anti-slop vendorizado de dmmulroy/anti-slop; não editar à mão, origem e desvios no UPSTREAM.md
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
-docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação, 0003 blog no Postgres, 0004 login do admin)
+docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação, 0003 blog no Postgres, 0004 login do admin, 0005 imagens no bucket)
 docs/agents/              ← config das skills de engenharia: issue tracker, labels de triagem e docs do domínio
 docs/indicacao-verificacao.md ← guia: como testar a Indicação em produção e onde ler os números no GA4 e no Meta
 
@@ -59,11 +59,11 @@ lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte
 lib/blog/                 ← tipos, regras.ts (transição e conflito de versão, puro), repositorio.ts (SQL); as portas são admin.ts (escrita) e leitura.ts (publicados)
 lib/banco/                ← conexão (pg ou PGlite), migrar.mjs e migracoes/*.sql; só lib/blog, lib/admin e scripts/ importam (regra profills/sem-banco-direto)
 lib/admin/                ← login do admin: senha.mjs (scrypt, JS puro para o script) e sessao.ts (JWT no cookie, limite de tentativas, atalho de dev)
-lib/armazem/              ← Armazem (gravar, ler) em disco; o bucket entra depois
+lib/armazem/              ← Armazem (gravar, ler por stream): S3 pelas AWS_*, disco em .dados/armazem só no bun dev sem elas (ADR 0005)
 scripts/admin-gerar-hash.mjs ← gera o ADMIN_SENHA_HASH: lê a senha do terminal sem eco e escreve só o hash no stdout
 scripts/banco-migrar.mjs  ← pre-deploy da Railway (`node scripts/banco-migrar.mjs` em deploy.preDeployCommand do serviço site): aplica as migrações pendentes
-.dados/                   ← fora do Git: o PGlite do bun dev (.dados/pglite)
-public/blog/<slug>/       ← imagens enviadas pelo admin do blog
+.dados/                   ← fora do Git: o PGlite (.dados/pglite) e as imagens (.dados/armazem) do bun dev
+app/(site)/blog/[slug]/[arquivo]/route.ts ← serve as imagens do blog do armazém, sem banco, com cache imutável
 lib/analytics/            ← eventos de GA4 e Meta (só código do vendedor, nunca dado pessoal)
 ```
 
@@ -134,6 +134,7 @@ Contexto único: `GLOSSARY.md` e `docs/adr/` na raiz. Ver `docs/agents/domain.md
 - Blog no banco: sem `DATABASE_URL`, o `bun dev` abre um PGlite em `.dados/pglite` e migra sozinho; apagar a pasta volta aos 3 posts de exemplo. Fora do `bun dev`, a falta de `DATABASE_URL` é erro na primeira consulta, e o build nunca consulta o banco (`leitura.ts` chama `connection()`). O PGlite precisa estar em `serverExternalPackages`. Testes de banco usam `// @vitest-environment node` e `abrirPglite()` em memória (ADR 0003). Em produção, as migrações rodam no pre-deploy do serviço `site` na Railway com `node scripts/banco-migrar.mjs` (campo `deploy.preDeployCommand`, configurado no serviço e não no repo). Com `DATABASE_URL` no `.env` local, o admin do `bun dev` grava nesse banco: nunca pôr ali a URL de produção.
 - Grid pattern de fundo: a implementação viva é `components/layout/gridPatternBg(Mobile).tsx` (usada em ~20 rotas). As variantes em `components/` raiz e `magicui/` (`grid-pattern`, `animated-grid-pattern`, `interactive-grid-pattern`) são código morto — candidatas a remoção, não usar.
 - Admin do blog: login por `ADMIN_USUARIO`, `ADMIN_SENHA_HASH` (de `node scripts/admin-gerar-hash.mjs > arquivo`) e `ADMIN_SESSAO_SEGREDO` (32+ caracteres); faltando qualquer um, o login fica fechado (ADR 0004). Para testar a UI local sem senha: `ADMIN_DEV_SEM_LOGIN=1 bun dev` sem `DATABASE_URL`; com `DATABASE_URL`, ou fora do `next dev`, o atalho é ignorado. Mais de 10 tentativas em 15 minutos fecham o login para todos; para destravar antes, apague a linha `global` de `admin_tentativas_login`. O cookie `admin_sessao` é `sameSite: strict` em `path: /admin`: um link de fora para o admin chega sem cookie e cai no login. As Server Actions aceitam o Origin de `www.profills.com` e `profills.com` (`experimental.serverActions.allowedOrigins` no next.config), porque o Host atrás do proxy da Railway é interno.
+- Imagens do blog: vivem no bucket da Railway (S3 privado, sem URL pública) e saem por `GET /blog/<slug>/<arquivo>`, nunca de `public/blog/`. O nome leva o hash do conteúdo, então reenviar o mesmo arquivo devolve o mesmo caminho e o cache é `immutable`. Sem `AWS_*` o `bun dev` grava em `.dados/armazem`; fora do dev, sem elas, o upload devolve o erro de configuração e a rota responde 503. `AWS_S3_URL_STYLE` aceita `virtual-hosted` (padrão) ou `path`. O `next/image` otimiza a imagem pela rota sem `localPatterns`. Objetos órfãos ficam no bucket (ADR 0005).
 - `text-animate` existe em `ui/` e `magicui/` — verificar qual variante a rota vizinha já usa antes de importar.
 - Tema é light-mode único com seções dark (`bg-secondary`) — não há toggle dark/light.
 - Conteúdo do site é em pt-BR.
