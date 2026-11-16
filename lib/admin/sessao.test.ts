@@ -174,6 +174,15 @@ describe('login do admin', () => {
     expect(await entrar('dono', SENHA)).toEqual({ tipo: 'indisponivel' });
   });
 
+  it('fica fechado, sem lançar, com hash de custo que o scrypt recusa', async () => {
+    vi.spyOn(logger, 'error').mockImplementation(() => undefined);
+    vi.stubEnv('ADMIN_SENHA_HASH', hash.replace(':32768:', ':65536:'));
+
+    await expect(entrar('dono', SENHA)).resolves.toEqual({
+      tipo: 'indisponivel'
+    });
+  });
+
   it('fica fechado com o banco fora, mesmo com a senha certa', async () => {
     vi.spyOn(logger, 'error').mockImplementation(() => undefined);
     estado.banco = () => Promise.reject(new Error('ECONNREFUSED'));

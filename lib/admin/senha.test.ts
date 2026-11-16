@@ -39,5 +39,30 @@ describe('senha do admin', () => {
     }
 
     expect(hashValido(hash)).toBe(true);
+    expect(hashValido(`${hash}\n`)).toBe(true);
+  });
+
+  it('recusa custo fraco, escrito fora de dígitos ou acima da memória do scrypt', async () => {
+    const hash = await hashSenha('uma senha longa de teste');
+    const [, , , , sal, derivado] = hash.split(':');
+
+    const custo = (n: string, r: string, p: string, s = sal) =>
+      ['scrypt', n, r, p, s, derivado].join(':');
+
+    for (const ruim of [
+      custo('2', '1', '1'),
+      custo('16384', '8', '1'),
+      custo('0x8000', '8', '1'),
+      custo('32768', '4', '1'),
+      custo('32768', '8', '1e0'),
+      custo('32768', '8', '0'),
+      custo('65536', '8', '1'),
+      custo('32768', '8', '1', `${sal.slice(0, -1)}+`)
+    ]) {
+      expect(hashValido(ruim), ruim).toBe(false);
+      await expect(
+        conferirSenha('uma senha longa de teste', ruim)
+      ).resolves.toBe(false);
+    }
   });
 });
