@@ -421,18 +421,34 @@ describe('posts que as migrações gravam', { timeout: 30_000 }, () => {
       armazem: criarArmazemDisco(raiz)
     });
 
-  it('entram os 3 de exemplo e os 8 do LinkedIn como rascunho, no formato atual', async () => {
+  it('entram os 3 de exemplo como rascunho, no formato atual', async () => {
     const semente = await abrirSemente();
     const lista = await semente.listar();
+    const exemplos = lista.filter((p) => p.slug.startsWith('exemplo-'));
 
-    expect(lista.filter((p) => p.slug.startsWith('exemplo-'))).toHaveLength(3);
     expect(lista).toHaveLength(11);
-    expect(lista.every((p) => p.estado === 'rascunho')).toBe(true);
+    expect(exemplos).toHaveLength(3);
+    expect(exemplos.every((p) => p.estado === 'rascunho')).toBe(true);
 
-    for (const { slug } of lista) {
+    for (const { slug } of exemplos) {
       expect(await semente.ler(slug)).toMatchObject({
         versao: 1,
         publicadoEm: null
+      });
+    }
+  });
+
+  it('os 8 do LinkedIn saem publicados, e só eles aparecem na leitura pública', async () => {
+    const semente = await abrirSemente();
+    const publicados = await semente.listarPublicados();
+
+    expect(publicados).toHaveLength(8);
+    expect(publicados.some((p) => p.slug.startsWith('exemplo-'))).toBe(false);
+
+    for (const { slug } of publicados) {
+      expect(await semente.lerPublicado(slug)).toMatchObject({
+        estado: 'publicado',
+        versao: 2
       });
     }
   });
