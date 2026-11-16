@@ -8,8 +8,8 @@ import path from 'node:path';
 // Módulos que tocam o banco ou o disco direto; o app entra por lib/blog/admin.ts (escrita) ou lib/blog/leitura.ts (público).
 const INTERNOS = ['lib/banco/', 'lib/armazem/', 'lib/blog/repositorio'];
 
-// Pacotes que abrem conexão própria com o banco, contornando lib/banco/conexao.ts.
-const PACOTES = ['pg', '@electric-sql/pglite'];
+// Pacotes que abrem conexão própria com o banco ou o bucket, contornando lib/banco e lib/armazem.
+const PACOTES = ['pg', '@electric-sql/pglite', '@aws-sdk/client-s3'];
 
 // Quem pode importá-los: o próprio domínio, o login do admin (limite de tentativas), os scripts de deploy e os testes.
 const DONOS = [
@@ -53,7 +53,7 @@ export const semBancoDiretoRule = defineRule({
     type: 'problem',
     docs: {
       description:
-        'Proíbe importar lib/banco, lib/armazem, lib/blog/repositorio, pg ou @electric-sql/pglite fora do domínio do blog, do login do admin, dos scripts e dos testes.'
+        'Proíbe importar lib/banco, lib/armazem, lib/blog/repositorio, pg, @electric-sql/pglite ou @aws-sdk/client-s3 fora do domínio do blog, do login do admin, dos scripts e dos testes.'
     },
     messages: {
       interno:

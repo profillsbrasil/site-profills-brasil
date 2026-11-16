@@ -1,5 +1,5 @@
-import type { Armazem } from '@/lib/armazem/armazem';
-import { criarArmazemDisco } from '@/lib/armazem/armazem';
+import type { Armazem, ObjetoGuardado } from '@/lib/armazem/armazem';
+import { escolherArmazem } from '@/lib/armazem/armazem';
 import { consultar } from '@/lib/banco/conexao';
 import type { Consulta, Linha, ValorSql } from '@/lib/banco/tipos';
 import { postGuardadoSchema } from '@/lib/schemas/post-blog';
@@ -18,6 +18,7 @@ import {
   type ResumoAdmin,
   type ResumoPublicado
 } from './tipos';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import 'server-only';
 import { z } from 'zod';
@@ -28,12 +29,16 @@ export type RepositorioBlog = {
   ler: (slug: string) => Promise<PostGuardado | null>;
   /** Uma instrução SQL por gravação: salvar, publicar e despublicar nunca ficam pela metade. */
   gravar: (entrada: EntradaEditor, intencao: Intencao) => Promise<PostGuardado>;
-  /** Devolve o caminho público da imagem, como `/blog/<slug>/foto.webp`. */
+  /** Devolve o caminho público da imagem, como `/blog/<slug>/foto-1a2b3c4d5e.webp`. O mesmo arquivo dá o mesmo caminho. */
   enviarImagem: (slug: string, arquivo: File) => Promise<string>;
+  /** Recebe um caminho que já casou com PADRAO_CAMINHO_IMAGEM; null quando a imagem não existe. */
+  lerImagem: (caminho: string) => Promise<ImagemGuardada | null>;
   /** Do publicado mais recente para o mais antigo. */
   listarPublicados: () => Promise<ResumoPublicado[]>;
   lerPublicado: (slug: string) => Promise<PostPublicado | null>;
 };
+
+export type ImagemGuardada = ObjetoGuardado & { tipo: string };
 
 const COLUNAS =
   'slug, versao, estado, criado_em, atualizado_em, publicado_em, conteudo';
@@ -91,28 +96,53 @@ function lerLista(linhas: Linha[]) {
 const ascii = (bytes: Uint8Array, inicio: number, fim: number) =>
   String.fromCharCode(...bytes.subarray(inicio, fim));
 
-const tiposImagem: { extensao: string; confere: (b: Uint8Array) => boolean }[] =
-  [
-    {
-      extensao: 'png',
-      confere: (b) => b[0] === 0x89 && ascii(b, 1, 4) === 'PNG'
-    },
-    {
-      extensao: 'jpg',
-      confere: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff
-    },
-    {
-      extensao: 'webp',
-      confere: (b) => ascii(b, 0, 4) === 'RIFF' && ascii(b, 8, 12) === 'WEBP'
-    },
-    {
-      extensao: 'avif',
-      confere: (b) =>
-        ascii(b, 4, 8) === 'ftyp' && ['avif', 'avis'].includes(ascii(b, 8, 12))
-    }
-  ];
+const tiposImagem: {
+  extensao: string;
+  mime: string;
+  confere: (b: Uint8Array) => boolean;
+}[] = [
+  {
+    extensao: 'png',
+    mime: 'image/png',
+    confere: (b) => b[0] === 0x89 && ascii(b, 1, 4) === 'PNG'
+  },
+  {
+    extensao: 'jpg',
+    mime: 'image/jpeg',
+    confere: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff
+  },
+  {
+    extensao: 'webp',
+    mime: 'image/webp',
+    confere: (b) => ascii(b, 0, 4) === 'RIFF' && ascii(b, 8, 12) === 'WEBP'
+  },
+  {
+    extensao: 'avif',
+    mime: 'image/avif',
+    confere: (b) =>
+      ascii(b, 4, 8) === 'ftyp' && ['avif', 'avis'].includes(ascii(b, 8, 12))
+  }
+];
 
 const semExtensao = (nome: string) => nome.replace(/\.[^.]*$/, '');
+
+/** O hash do conteúdo entra no nome: a URL nunca muda de bytes e o cache pode ser immutable. */
+function nomearImagem(
+  nomeEnviado: string,
+  bytes: Uint8Array,
+  extensao: string
+) {
+  const hash = createHash('sha256').update(bytes).digest('hex').slice(0, 10);
+
+  const base = textoParaSlug(semExtensao(nomeEnviado))
+    .slice(0, LIMITE_SLUG)
+    .replace(/-+$/, '');
+
+  return `${base || 'imagem'}-${hash}.${extensao}`;
+}
+
+/** A chave no armazém é o caminho público sem a barra inicial. */
+const chaveImagem = (caminho: string) => caminho.slice(1);
 
 export function criarRepositorioBlog({
   consulta,
@@ -176,20 +206,6 @@ export function criarRepositorioBlog({
     return rows[0]
       ? exigirLinha(rows[0])
       : inserirNovo(post, intencao, quando, tentativa + 1);
-  }
-
-  /** foto.png, depois foto-2.png: nunca sobrescreve outra imagem do post. */
-  async function nomeLivre(
-    slug: string,
-    base: string,
-    extensao: string,
-    ocupados = new Set<string>()
-  ): Promise<string> {
-    const nome = `${gerarSlug(base, ocupados)}.${extensao}`;
-
-    if (!(await armazem.ler(`blog/${slug}/${nome}`))) return nome;
-
-    return nomeLivre(slug, base, extensao, ocupados.add(semExtensao(nome)));
   }
 
   return {
@@ -260,15 +276,23 @@ export function criarRepositorioBlog({
 
       if (!tipo) throw new ErroBlog(motivosImagem.tipo);
 
-      const nomeEnviado = semExtensao(arquivo.name.split(/[/\\]/).at(-1) ?? '');
+      const nomeEnviado = arquivo.name.split(/[/\\]/).at(-1) ?? '';
 
-      const base = textoParaSlug(nomeEnviado).slice(0, LIMITE_SLUG) || 'imagem';
+      const caminho = `/blog/${slug}/${nomearImagem(nomeEnviado, bytes, tipo.extensao)}`;
 
-      const nome = await nomeLivre(slug, base, tipo.extensao);
+      await armazem.gravar(chaveImagem(caminho), bytes, tipo.mime);
 
-      await armazem.gravar(`blog/${slug}/${nome}`, bytes);
+      return caminho;
+    },
 
-      return `/blog/${slug}/${nome}`;
+    async lerImagem(caminho) {
+      const tipo = tiposImagem.find((t) => caminho.endsWith(`.${t.extensao}`));
+
+      if (!tipo) return null;
+
+      const objeto = await armazem.ler(chaveImagem(caminho));
+
+      return objeto && { ...objeto, tipo: tipo.mime };
     },
 
     async listarPublicados() {
@@ -305,8 +329,11 @@ export function criarRepositorioBlog({
   };
 }
 
-/** Imagens ainda em public/, servidas pelo próprio Next, até o bucket entrar. */
+/** Imagens no bucket pelas AWS_*; no bun dev sem elas, em .dados/armazem. */
 export const repositorioBlog = criarRepositorioBlog({
   consulta: consultar,
-  armazem: criarArmazemDisco(path.join(process.cwd(), 'public'))
+  armazem: escolherArmazem(
+    process.env,
+    path.join(process.cwd(), '.dados', 'armazem')
+  )
 });

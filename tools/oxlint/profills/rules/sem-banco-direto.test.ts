@@ -49,6 +49,10 @@ tester.run('profills/sem-banco-direto', semBancoDiretoRule, {
     },
     { code: "import pg from 'pg';", filename: '/repo/lib/banco/conexao.ts' },
     {
+      code: "import { S3Client } from '@aws-sdk/client-s3';",
+      filename: '/repo/lib/armazem/armazem.ts'
+    },
+    {
       code: "import { PGlite } from '@electric-sql/pglite';",
       filename: '/repo/lib/banco/pglite.ts'
     },
@@ -106,6 +110,11 @@ tester.run('profills/sem-banco-direto', semBancoDiretoRule, {
     {
       code: "import { PGlite } from '@electric-sql/pglite';",
       filename: '/repo/components/qualquer.tsx',
+      errors: [{ messageId: 'interno' }]
+    },
+    {
+      code: "import { S3Client } from '@aws-sdk/client-s3';",
+      filename: '/repo/app/(site)/blog/[slug]/[arquivo]/route.ts',
       errors: [{ messageId: 'interno' }]
     },
     {
