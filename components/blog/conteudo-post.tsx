@@ -113,7 +113,8 @@ function BlocoPost({ bloco, ctx }: { bloco: Bloco; ctx: Contexto }) {
             {bloco.src ? (
               <Image
                 src={bloco.src}
-                alt={bloco.legenda}
+                // A legenda já está no figcaption da figure; repetir no alt faria o leitor de tela ouvir o texto duas vezes.
+                alt=''
                 fill
                 sizes={
                   ctx.emColuna

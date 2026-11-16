@@ -72,8 +72,10 @@ describe('ConteudoPost na página pública', () => {
       screen.getByText('A GT troca de formato pelo painel.')
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('img', { name: 'Operador na saída da linha' })
-    ).toHaveAttribute('src', '/blog/gt/foto-0123456789.webp');
+      screen.getByText('Operador na saída da linha').closest('figure')
+    ).toContainElement(
+      document.querySelector('img[src="/blog/gt/foto-0123456789.webp"]')
+    );
     expect(screen.getAllByRole('listitem').map((li) => li.textContent)).toEqual(
       ['Laticínios', 'Sucos']
     );
@@ -122,6 +124,35 @@ describe('ConteudoPost na página pública', () => {
     fireEvent.click(botao);
 
     expect(screen.getByTitle('A troca em 40 segundos')).toHaveFocus();
+  });
+
+  it('imagem com legenda diz o texto uma vez, pelo figcaption', () => {
+    renderizar([linha(todos[2])]);
+
+    const legenda = screen.getByText('Operador na saída da linha');
+
+    expect(legenda.tagName).toBe('FIGCAPTION');
+    expect(
+      screen.queryByRole('img', { name: 'Operador na saída da linha' })
+    ).toBeNull();
+    expect(legenda.closest('figure')?.querySelector('img')).toHaveAttribute(
+      'alt',
+      ''
+    );
+  });
+
+  it('imagem sem legenda fica decorativa e sem figcaption', () => {
+    const { container } = renderizar([
+      linha({
+        id: 'i',
+        tipo: 'imagem',
+        src: '/blog/gt/foto-0123456789.webp',
+        legenda: ''
+      })
+    ]);
+
+    expect(container.querySelector('img')).toHaveAttribute('alt', '');
+    expect(container.querySelector('figcaption')).toBeNull();
   });
 
   it('bloco sem conteúdo some da página', () => {
