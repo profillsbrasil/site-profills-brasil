@@ -38,10 +38,10 @@ const TRACEJADO_SUTIL = 'border-[rgba(148,178,235,0.22)]';
 const NAVY_CARD = 'bg-[oklch(0.2503_0.0417_266.3592)]';
 
 const ITEM =
-  'group/item inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs border border-transparent px-3 text-sm leading-none font-medium whitespace-nowrap text-white outline-none max-[1100px]:px-2.5 hover:border-dashed hover:border-[rgba(148,178,235,0.3)] hover:bg-[oklch(0.2734_0.0428_266.3592)] focus-visible:border-dashed focus-visible:border-[rgba(148,178,235,0.3)] focus-visible:bg-[oklch(0.2734_0.0428_266.3592)] aria-expanded:border-dashed aria-expanded:border-[rgba(148,178,235,0.3)] aria-expanded:bg-slate-900/60 aria-[current=page]:border-dashed aria-[current=page]:border-[rgba(148,178,235,0.3)] aria-[current=page]:bg-slate-900/60';
+  'group/item inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs border border-transparent px-3 text-sm leading-none font-medium whitespace-nowrap text-white outline-none max-[1100px]:px-2.5 hover:border-dashed hover:border-[rgba(148,178,235,0.3)] hover:bg-[oklch(0.2734_0.0428_266.3592)] focus-visible:border-dashed focus-visible:border-[rgba(148,178,235,0.3)] focus-visible:bg-[oklch(0.2734_0.0428_266.3592)] aria-expanded:border-dashed aria-expanded:border-[rgba(148,178,235,0.3)] aria-expanded:bg-slate-900/60 aria-[current=page]:border-dashed aria-[current=page]:border-[rgba(148,178,235,0.3)] aria-[current=page]:bg-slate-900/60 transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
 const LINHA_DO_PAINEL =
-  'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-white outline-none hover:border-solid hover:border-accent hover:bg-slate-900/60 focus-visible:border-solid focus-visible:border-accent focus-visible:bg-slate-900/60';
+  'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-white outline-none hover:border-solid hover:border-accent hover:bg-slate-900/60 focus-visible:border-solid focus-visible:border-accent focus-visible:bg-slate-900/60 transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
 const CANTO = 'pointer-events-none absolute z-[2] size-2 border-accent';
 
@@ -90,7 +90,7 @@ function PainelVitrine({
   preparado: boolean;
 }) {
   const [foco, setFoco] = useState<ChaveVitrine>('todas');
-  const vitrine = vitrines[foco];
+  const { vitrine } = vitrines[foco];
   const [todas, ...categorias] = folhas;
 
   const linha = (folha: FolhaVitrine, extra?: string) => (
@@ -102,6 +102,9 @@ function PainelVitrine({
       onFocus={() => setFoco(folha.vitrine)}>
       <folha.icone aria-hidden className='size-5 shrink-0 text-accent' />
       <span className='min-w-0 flex-1 truncate'>{folha.rotulo}</span>
+      <span className='font-mono text-xs leading-none font-medium text-[#b6c5e2]'>
+        {vitrines[folha.vitrine].total}
+      </span>
     </LinkDaArvore>
   );
 
@@ -245,7 +248,7 @@ function ConteudoPainel({
               key={folha.id}
               alvo={folha}
               className={cn(
-                'grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-xs border border-dashed bg-slate-900/60 p-3.5 text-white outline-none hover:border-solid hover:border-accent focus-visible:border-solid focus-visible:border-accent',
+                'grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-xs border border-dashed bg-slate-900/60 p-3.5 text-white outline-none hover:border-solid hover:border-accent focus-visible:border-solid focus-visible:border-accent transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
                 TRACEJADO_SUTIL
               )}>
               <folha.icone
@@ -435,7 +438,7 @@ export default function NavbarDesktop({
                     key={no.id}
                     alvo={no}
                     aria-label={no.rotulo}
-                    className='inline-flex h-9 items-center gap-[7px] border border-white bg-white px-3.5 text-sm leading-none font-semibold whitespace-nowrap text-secondary outline-none first:rounded-l-xs last:rounded-r-xs hover:border-accent hover:bg-accent hover:text-white focus-visible:border-accent focus-visible:bg-accent focus-visible:text-white aria-[current=page]:border-accent aria-[current=page]:bg-slate-900/60 aria-[current=page]:text-white'>
+                    className='inline-flex h-9 items-center gap-[7px] border border-white bg-white px-3.5 text-sm leading-none font-semibold whitespace-nowrap text-secondary outline-none first:rounded-l-xs last:rounded-r-xs hover:border-accent hover:bg-accent hover:text-white focus-visible:border-accent focus-visible:bg-accent focus-visible:text-white aria-[current=page]:border-accent aria-[current=page]:bg-slate-900/60 aria-[current=page]:text-white transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'>
                     <no.icone aria-hidden className='size-4' />
                     {no.rotuloCurto}
                   </LinkDaArvore>

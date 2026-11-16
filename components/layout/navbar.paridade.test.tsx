@@ -43,15 +43,15 @@ vi.mock('@/components/ui/accordion', () => {
 });
 
 const vitrinesVazias: VitrinesDoMenu = {
-  todas: null,
-  'Stand-up pouch': null,
-  'Embalagens cartonadas e especiais': null,
-  'Embalagens flexíveis': null,
-  'Fim de linha e embalagens flexíveis': null,
-  'Embalagens rígidas': null,
-  'Embalagens rígidas e higienização': null,
-  'Fim de linha': null,
-  'Linhas completas e automação': null
+  todas: { vitrine: null, total: 0 },
+  'Stand-up pouch': { vitrine: null, total: 0 },
+  'Embalagens cartonadas e especiais': { vitrine: null, total: 0 },
+  'Embalagens flexíveis': { vitrine: null, total: 0 },
+  'Fim de linha e embalagens flexíveis': { vitrine: null, total: 0 },
+  'Embalagens rígidas': { vitrine: null, total: 0 },
+  'Embalagens rígidas e higienização': { vitrine: null, total: 0 },
+  'Fim de linha': { vitrine: null, total: 0 },
+  'Linhas completas e automação': { vitrine: null, total: 0 }
 };
 
 function destinosRenderizados(raiz: HTMLElement): Map<string, string> {

@@ -12,18 +12,16 @@ export interface VitrineMenu {
 }
 
 // `todas` é o item "Todas as máquinas". Categoria só de engenharia (sem
-// fotos) fica null: a vitrine mostra o placeholder, nunca máquina de outra
-// categoria.
+// fotos) tem vitrine null: o popout mostra o placeholder, nunca máquina de
+// outra categoria. `total` é quantas máquinas a linha do popout leva.
 export type VitrinesDoMenu = Record<
   CategoriaCatalogo | 'todas',
-  VitrineMenu | null
+  { vitrine: VitrineMenu | null; total: number }
 >;
 
 // Primeira máquina com foto da categoria, na ordem do registry.
-function vitrineDe(categoria: CategoriaCatalogo | null): VitrineMenu | null {
-  const maquina = maquinasCatalogo.find(
-    (m) => m.imagens && (categoria === null || m.categoria === categoria)
-  );
+function vitrineDe(maquinas: typeof maquinasCatalogo): VitrineMenu | null {
+  const maquina = maquinas.find((m) => m.imagens);
 
   if (!maquina?.imagens) return null;
 
@@ -40,10 +38,22 @@ function vitrineDe(categoria: CategoriaCatalogo | null): VitrineMenu | null {
 export function montarVitrinesDoMenu(): VitrinesDoMenu {
   // SAFETY: o laço abaixo grava toda chave de categoriasCatalogo antes do
   // return, então o objeto devolvido tem todas as chaves de VitrinesDoMenu.
-  const vitrines = { todas: vitrineDe(null) } as VitrinesDoMenu;
+  const vitrines = {
+    todas: {
+      vitrine: vitrineDe(maquinasCatalogo),
+      total: maquinasCatalogo.length
+    }
+  } as VitrinesDoMenu;
 
   for (const categoria of categoriasCatalogo) {
-    vitrines[categoria] = vitrineDe(categoria);
+    const daCategoria = maquinasCatalogo.filter(
+      (m) => m.categoria === categoria
+    );
+
+    vitrines[categoria] = {
+      vitrine: vitrineDe(daCategoria),
+      total: daCategoria.length
+    };
   }
 
   return vitrines;
