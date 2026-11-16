@@ -71,7 +71,7 @@ function exigirLinha(linha: Linha) {
   return lida.data;
 }
 
-/** Linha fora do formato some da lista com um aviso, sem derrubar as outras. */
+/** Linha fora do formato some com um aviso, sem derrubar a lista nem a página pública. */
 function lerLista(linhas: Linha[]) {
   return linhas.flatMap((linha) => {
     const lida = lerLinha(linha);
@@ -79,7 +79,7 @@ function lerLista(linhas: Linha[]) {
     if (lida.success) return [lida.data];
 
     logger.warn(
-      `Post ignorado na lista: ${JSON.stringify(linha.slug)}`,
+      `Post fora do formato ignorado: ${JSON.stringify(linha.slug)}`,
       lida.error
     );
 
@@ -293,7 +293,12 @@ export function criarRepositorioBlog({
     },
 
     async lerPublicado(slug) {
-      const guardado = await ler(slug);
+      const { rows } = await consulta(
+        `select ${COLUNAS} from blog_posts where slug = $1 and estado = 'publicado'`,
+        [slug]
+      );
+
+      const [guardado] = lerLista(rows);
 
       return guardado?.estado === 'publicado' ? guardado : null;
     }

@@ -336,6 +336,22 @@ describe('repositório de posts no Postgres', () => {
     aviso.mockRestore();
   });
 
+  it('a leitura pública trata post publicado fora do formato como inexistente', async () => {
+    const repo = repositorio();
+    const aviso = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    await consulta(
+      "insert into blog_posts (slug, versao, estado, criado_em, atualizado_em, publicado_em, conteudo) values ('quebrado', 1, 'publicado', now(), now(), now(), '{\"titulo\": 1}')"
+    );
+
+    expect(await repo.lerPublicado('quebrado')).toBeNull();
+    expect(aviso).toHaveBeenCalledWith(
+      expect.stringContaining('"quebrado"'),
+      expect.anything()
+    );
+    aviso.mockRestore();
+  });
+
   it('recusa gravar por cima de um slug que não existe', async () => {
     await expect(
       repositorio().gravar(
