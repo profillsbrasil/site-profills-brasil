@@ -17,7 +17,12 @@ import {
 import { randomUUID } from 'node:crypto';
 import { once } from 'node:events';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { type RequestListener, createServer } from 'node:http';
+import {
+  type IncomingMessage,
+  type RequestListener,
+  type ServerResponse,
+  createServer
+} from 'node:http';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -148,6 +153,143 @@ async function bucketLocal(responder: RequestListener) {
     }
   };
 }
+
+type PedidoS3 = { metodo?: string; host?: string; caminho: string };
+
+const fechamentos: (() => void)[] = [];
+
+afterAll(() => {
+  for (const fechar of fechamentos) fechar();
+});
+
+/** Bucket em memória que responde como o S3: 404 NoSuchKey e 403 AccessDenied em XML. */
+async function bucketFalso() {
+  const objetos = new Map<string, Buffer>();
+  const pedidos: PedidoS3[] = [];
+
+  const erroS3 = (status: number, codigo: string) =>
+    [
+      status,
+      `<?xml version="1.0" encoding="UTF-8"?><Error><Code>${codigo}</Code><Message>${codigo}</Message></Error>`
+    ] as const;
+
+  const servidor = await bucketLocal((pedido, resposta) => {
+    const partes: Buffer[] = [];
+
+    pedido.on('data', (parte: Buffer) => partes.push(parte));
+    pedido.on('end', () => responder(pedido, Buffer.concat(partes), resposta));
+  });
+
+  const responder = (
+    pedido: IncomingMessage,
+    corpo: Buffer,
+    resposta: ServerResponse
+  ) => {
+    const caminho = new URL(pedido.url ?? '/', 'http://x').pathname;
+    const onde = `${pedido.headers.host}${caminho}`;
+
+    pedidos.push({ metodo: pedido.method, host: pedido.headers.host, caminho });
+
+    if (pedido.method === 'PUT') {
+      objetos.set(onde, corpo);
+      resposta.writeHead(200, { etag: '"0"' }).end();
+
+      return;
+    }
+
+    const guardado = objetos.get(onde);
+
+    const [status, xml] = caminho.includes('negado')
+      ? erroS3(403, 'AccessDenied')
+      : erroS3(404, 'NoSuchKey');
+
+    if (!guardado) {
+      resposta
+        .writeHead(status, { 'content-type': 'application/xml' })
+        .end(xml);
+
+      return;
+    }
+
+    resposta
+      .writeHead(200, {
+        'content-type': 'application/octet-stream',
+        'content-length': String(guardado.length)
+      })
+      .end(guardado);
+  };
+
+  fechamentos.push(servidor.fechar);
+
+  return { porta: servidor.porta, pedidos };
+}
+
+const modosS3 = [
+  ['virtual-host', false],
+  ['path', true]
+] as const;
+
+const armazemFalso = async (estiloCaminho: boolean) => {
+  const bucket = await bucketFalso();
+
+  return {
+    pedidos: bucket.pedidos,
+    porta: bucket.porta,
+    armazem: criarArmazemS3({
+      endpoint: `http://localhost:${bucket.porta}`,
+      regiao: 'auto',
+      bucket: 'meu-bucket',
+      chave: 'chave',
+      segredo: 'segredo',
+      estiloCaminho
+    })
+  };
+};
+
+for (const [modo, estiloCaminho] of modosS3) {
+  contrato(
+    `S3 local em ${modo}`,
+    async () => (await armazemFalso(estiloCaminho)).armazem
+  );
+}
+
+describe('armazém S3 contra o bucket local', () => {
+  it.each(modosS3)(
+    'em %s endereça o bucket pelo Host ou pelo caminho',
+    async (_modo, estiloCaminho) => {
+      const { armazem, pedidos, porta } = await armazemFalso(estiloCaminho);
+
+      await armazem.gravar(
+        'blog/fispal/foto-0123456789.png',
+        bytes,
+        'image/png'
+      );
+
+      expect(pedidos).toEqual([
+        estiloCaminho
+          ? {
+              metodo: 'PUT',
+              host: `localhost:${porta}`,
+              caminho: '/meu-bucket/blog/fispal/foto-0123456789.png'
+            }
+          : {
+              metodo: 'PUT',
+              host: `meu-bucket.localhost:${porta}`,
+              caminho: '/blog/fispal/foto-0123456789.png'
+            }
+      ]);
+    }
+  );
+
+  it('chave que falta vira null e acesso negado vira exceção', async () => {
+    const { armazem } = await armazemFalso(false);
+
+    expect(await armazem.ler('blog/fispal/falta-0123456789.png')).toBeNull();
+    await expect(
+      armazem.ler('blog/fispal/negado-0123456789.png')
+    ).rejects.toMatchObject({ name: 'AccessDenied' });
+  });
+});
 
 describe('armazém S3 com bucket mudo', () => {
   it('desiste da leitura quando o bucket aceita a conexão e não responde', async () => {
