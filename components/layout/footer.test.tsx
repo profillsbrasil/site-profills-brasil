@@ -82,6 +82,14 @@ describe('Footer', () => {
     expect(html).toContain('mailto:compras@profillsdobrasil.com.br');
   });
 
+  it('leva ao blog', () => {
+    renderFooter();
+    expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute(
+      'href',
+      '/blog'
+    );
+  });
+
   it('com Indicação troca só o card Vendas/Peças', () => {
     document.cookie = `profills_indicacao=${jwtFalso({
       codigo: 'MARIA-10',
