@@ -59,7 +59,7 @@ async function postsDoBlog(): Promise<MetadataRoute.Sitemap> {
 
     return posts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.publicadoEm),
+      lastModified: new Date(post.atualizadoEm),
       changeFrequency: 'monthly',
       priority: 0.6
     }));

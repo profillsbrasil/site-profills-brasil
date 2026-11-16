@@ -84,6 +84,7 @@ function lerResumo(linha: Linha) {
   return resumoPublicadoSchema.safeParse({
     slug: linha.slug,
     publicadoEm: iso(linha.publicado_em),
+    atualizadoEm: iso(linha.atualizado_em),
     titulo: linha.titulo,
     resumo: linha.resumo,
     assunto: linha.assunto,
@@ -317,7 +318,7 @@ export function criarRepositorioBlog({
 
     async listarPublicados() {
       const { rows } = await consulta(
-        `select slug, publicado_em, conteudo->'titulo' as titulo, conteudo->'resumo' as resumo,
+        `select slug, publicado_em, atualizado_em, conteudo->'titulo' as titulo, conteudo->'resumo' as resumo,
                 conteudo->'assunto' as assunto, conteudo->'capa' as capa
          from blog_posts where estado = 'publicado' order by publicado_em desc`
       );

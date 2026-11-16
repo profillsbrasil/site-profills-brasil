@@ -18,6 +18,7 @@ const resumo = (
   slug,
   assunto,
   publicadoEm,
+  atualizadoEm: publicadoEm,
   capa,
   titulo: slug,
   resumo: ''

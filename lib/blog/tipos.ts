@@ -122,7 +122,10 @@ export type ResumoAdmin = Pick<
 > &
   Pick<Post, 'titulo' | 'assunto'>;
 
-export type ResumoPublicado = Pick<PostPublicado, 'slug' | 'publicadoEm'> &
+export type ResumoPublicado = Pick<
+  PostPublicado,
+  'slug' | 'publicadoEm' | 'atualizadoEm'
+> &
   Pick<Post, 'titulo' | 'resumo' | 'assunto' | 'capa'>;
 
 export const IMAGEM_LIMITE_BYTES = 5 * 1024 * 1024;

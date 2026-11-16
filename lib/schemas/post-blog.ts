@@ -125,7 +125,8 @@ export const postGuardadoSchema = z.discriminatedUnion('estado', [
 
 export const resumoPublicadoSchema = postSchema.omit({ linhas: true }).extend({
   slug: slugSchema,
-  publicadoEm: data
+  publicadoEm: data,
+  atualizadoEm: data
 }) satisfies z.ZodType<ResumoPublicado>;
 
 /** Sem slug, o post ainda não existe; slug e versão chegam juntos ou não chegam. */

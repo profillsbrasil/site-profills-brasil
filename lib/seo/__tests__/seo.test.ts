@@ -21,6 +21,7 @@ vi.mock('@/lib/blog/leitura', () => ({ listarPublicados: vi.fn() }));
 const postPublicado: ResumoPublicado = {
   slug: 'gt-ganha-troca-de-formato',
   publicadoEm: '2026-11-10T13:00:00.000Z',
+  atualizadoEm: '2026-11-12T09:30:00.000Z',
   titulo: 'GT ganha troca de formato',
   resumo: 'Resumo',
   assunto: 'maquina',
@@ -62,6 +63,14 @@ describe('sitemap', () => {
   it('lista o blog e os posts publicados', () => {
     expect(urls).toContain(`${SITE_URL}/blog`);
     expect(urls).toContain(`${SITE_URL}/blog/gt-ganha-troca-de-formato`);
+  });
+
+  it('dá ao post a data da última edição', async () => {
+    const entrada = (await sitemap()).find(
+      (e) => e.url === `${SITE_URL}/blog/gt-ganha-troca-de-formato`
+    );
+
+    expect(entrada?.lastModified).toEqual(new Date('2026-11-12T09:30:00.000Z'));
   });
 
   it('com o banco fora, as páginas fixas e as máquinas continuam saindo', async () => {

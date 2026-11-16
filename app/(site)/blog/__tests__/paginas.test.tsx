@@ -54,6 +54,7 @@ const gt: PostPublicado = {
 const resumoDe = (p: PostPublicado): ResumoPublicado => ({
   slug: p.slug,
   publicadoEm: p.publicadoEm,
+  atualizadoEm: p.atualizadoEm,
   titulo: p.post.titulo,
   resumo: p.post.resumo,
   assunto: p.post.assunto,
@@ -63,6 +64,7 @@ const resumoDe = (p: PostPublicado): ResumoPublicado => ({
 const feira: ResumoPublicado = {
   slug: 'profills-na-feira',
   publicadoEm: '2026-10-22T13:00:00.000Z',
+  atualizadoEm: '2026-10-22T13:00:00.000Z',
   titulo: 'Profills na feira com a linha montada',
   resumo: 'O estande leva uma linha funcionando.',
   assunto: 'evento',

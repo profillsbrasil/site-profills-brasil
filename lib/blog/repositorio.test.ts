@@ -312,6 +312,7 @@ describe('repositório de posts no Postgres', () => {
       {
         slug: 'novo-post',
         publicadoEm: '2026-11-15T12:02:00.000Z',
+        atualizadoEm: '2026-11-15T12:02:00.000Z',
         titulo: 'Novo post',
         resumo: 'Resumo',
         assunto: 'nota',
@@ -355,6 +356,28 @@ describe('repositório de posts no Postgres', () => {
       expect.anything()
     );
     aviso.mockRestore();
+  });
+
+  it('a lista pública traz a última edição do post publicado', async () => {
+    const repo = repositorio();
+
+    const publicado = await repo.gravar(
+      { slug: null, versao: null, post: post('Publicado') },
+      'publicar'
+    );
+
+    avancar(30);
+    await repo.gravar(
+      { slug: publicado.slug, versao: 1, post: post('Publicado e corrigido') },
+      'salvar'
+    );
+
+    expect(await repo.listarPublicados()).toEqual([
+      expect.objectContaining({
+        publicadoEm: '2026-11-15T12:00:00.000Z',
+        atualizadoEm: '2026-11-15T12:30:00.000Z'
+      })
+    ]);
   });
 
   it('a lista pública não traz o texto dos posts do banco', async () => {
