@@ -8,6 +8,7 @@ import {
   PROPORCAO_MINIMA,
   type Post,
   type PostGuardado,
+  type ResumoPublicado,
   ehAssunto
 } from '@/lib/blog/tipos';
 import { LIMITE_SLUG, PADRAO_SLUG } from '@/lib/utils/slug';
@@ -121,6 +122,11 @@ export const postGuardadoSchema = z.discriminatedUnion('estado', [
     post: postSchema
   })
 ]) satisfies z.ZodType<PostGuardado>;
+
+export const resumoPublicadoSchema = postSchema.omit({ linhas: true }).extend({
+  slug: slugSchema,
+  publicadoEm: data
+}) satisfies z.ZodType<ResumoPublicado>;
 
 /** Sem slug, o post ainda não existe; slug e versão chegam juntos ou não chegam. */
 export const entradaEditorSchema = z

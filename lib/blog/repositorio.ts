@@ -2,7 +2,10 @@ import type { Armazem, ObjetoGuardado } from '@/lib/armazem/armazem';
 import { escolherArmazem } from '@/lib/armazem/armazem';
 import { consultar } from '@/lib/banco/conexao';
 import type { Consulta, Linha, ValorSql } from '@/lib/banco/tipos';
-import { postGuardadoSchema } from '@/lib/schemas/post-blog';
+import {
+  postGuardadoSchema,
+  resumoPublicadoSchema
+} from '@/lib/schemas/post-blog';
 import { logger } from '@/lib/utils/logger';
 import { LIMITE_SLUG, gerarSlug, textoParaSlug } from '@/lib/utils/slug';
 
@@ -76,10 +79,25 @@ function exigirLinha(linha: Linha) {
   return lida.data;
 }
 
+/** Só os campos do cartão: a listagem pública não traz o texto (`linhas`) dos posts. */
+function lerResumo(linha: Linha) {
+  return resumoPublicadoSchema.safeParse({
+    slug: linha.slug,
+    publicadoEm: iso(linha.publicado_em),
+    titulo: linha.titulo,
+    resumo: linha.resumo,
+    assunto: linha.assunto,
+    capa: linha.capa
+  });
+}
+
 /** Linha fora do formato some com um aviso, sem derrubar a lista nem a página pública. */
-function lerLista(linhas: Linha[]) {
+function lerLista<T>(
+  linhas: Linha[],
+  ler: (linha: Linha) => z.ZodSafeParseResult<T>
+) {
   return linhas.flatMap((linha) => {
-    const lida = lerLinha(linha);
+    const lida = ler(linha);
 
     if (lida.success) return [lida.data];
 
@@ -216,13 +234,15 @@ export function criarRepositorioBlog({
         `select ${COLUNAS} from blog_posts order by atualizado_em desc`
       );
 
-      return lerLista(rows).map(({ slug, estado, atualizadoEm, post }) => ({
-        slug,
-        estado,
-        atualizadoEm,
-        titulo: post.titulo,
-        assunto: post.assunto
-      }));
+      return lerLista(rows, lerLinha).map(
+        ({ slug, estado, atualizadoEm, post }) => ({
+          slug,
+          estado,
+          atualizadoEm,
+          titulo: post.titulo,
+          assunto: post.assunto
+        })
+      );
     },
 
     async gravar(entrada, intencao) {
@@ -297,23 +317,12 @@ export function criarRepositorioBlog({
 
     async listarPublicados() {
       const { rows } = await consulta(
-        `select ${COLUNAS} from blog_posts where estado = 'publicado' order by publicado_em desc`
+        `select slug, publicado_em, conteudo->'titulo' as titulo, conteudo->'resumo' as resumo,
+                conteudo->'assunto' as assunto, conteudo->'capa' as capa
+         from blog_posts where estado = 'publicado' order by publicado_em desc`
       );
 
-      return lerLista(rows).flatMap((guardado) =>
-        guardado.estado === 'publicado'
-          ? [
-              {
-                slug: guardado.slug,
-                publicadoEm: guardado.publicadoEm,
-                titulo: guardado.post.titulo,
-                resumo: guardado.post.resumo,
-                assunto: guardado.post.assunto,
-                capa: guardado.post.capa
-              }
-            ]
-          : []
-      );
+      return lerLista(rows, lerResumo);
     },
 
     async lerPublicado(slug) {
@@ -322,7 +331,7 @@ export function criarRepositorioBlog({
         [slug]
       );
 
-      const [guardado] = lerLista(rows);
+      const [guardado] = lerLista(rows, lerLinha);
 
       return guardado?.estado === 'publicado' ? guardado : null;
     }

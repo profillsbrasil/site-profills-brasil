@@ -67,12 +67,11 @@ export async function generateMetadata({
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
 
-  const [guardado, publicados] = await Promise.all([
-    lerPost(slug),
-    listarPublicados()
-  ]);
+  const guardado = await lerPost(slug);
 
+  // Slug que não existe dá 404 sem listar os outros posts.
   if (!guardado) notFound();
+  const publicados = await listarPublicados();
   const { post } = guardado;
   const assunto = assuntos[post.assunto];
 

@@ -357,6 +357,30 @@ describe('repositório de posts no Postgres', () => {
     aviso.mockRestore();
   });
 
+  it('a lista pública não traz o texto dos posts do banco', async () => {
+    const lidas: unknown[] = [];
+
+    const repo = criarRepositorioBlog({
+      consulta: async (sql, valores) => {
+        const resposta = await consulta(sql, valores);
+        lidas.push(...resposta.rows);
+
+        return resposta;
+      },
+      armazem: criarArmazemDisco(raiz),
+      agora: () => agora
+    });
+
+    await repo.gravar(
+      { slug: null, versao: null, post: post('Publicado') },
+      'publicar'
+    );
+    lidas.length = 0;
+
+    expect(await repo.listarPublicados()).toHaveLength(1);
+    expect(JSON.stringify(lidas)).not.toContain('linhas');
+  });
+
   it('recusa gravar por cima de um slug que não existe', async () => {
     await expect(
       repositorio().gravar(

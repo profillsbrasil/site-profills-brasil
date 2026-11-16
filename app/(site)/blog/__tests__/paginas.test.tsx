@@ -76,6 +76,7 @@ const searchParams = (assunto?: string) => ({
 });
 
 beforeEach(() => {
+  vi.clearAllMocks();
   vi.mocked(listarPublicados).mockResolvedValue([resumoDe(gt), feira]);
   vi.mocked(lerPublicado).mockImplementation(async (slug) =>
     slug === gt.slug ? gt : null
@@ -151,10 +152,11 @@ describe('leitura do post', () => {
     );
   });
 
-  it('rascunho ou slug inexistente dá notFound', async () => {
+  it('rascunho ou slug inexistente dá notFound sem listar os outros posts', async () => {
     await expect(PostPage(params('rascunho-qualquer'))).rejects.toThrow(
       'NEXT_NOT_FOUND'
     );
+    expect(listarPublicados).not.toHaveBeenCalled();
   });
 
   it('metadata traz canonical, resumo e a capa como og:image', async () => {
