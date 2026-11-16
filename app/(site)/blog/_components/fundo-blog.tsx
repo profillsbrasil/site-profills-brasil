@@ -1,0 +1,95 @@
+'use client';
+
+import Image, { type StaticImageData } from 'next/image';
+
+import sketchCaixas from '@/lib/images/blog/sketch-caixas.webp';
+import sketchFlowpack from '@/lib/images/blog/sketch-flowpack.webp';
+import sketchGable from '@/lib/images/blog/sketch-gable.webp';
+import sketchPouch from '@/lib/images/blog/sketch-pouch.webp';
+import sketchRotativa from '@/lib/images/blog/sketch-rotativa.webp';
+import sketchSaches from '@/lib/images/blog/sketch-saches.webp';
+import sketchVertical from '@/lib/images/blog/sketch-vertical.webp';
+import { cn } from '@/lib/utils';
+
+import { m, useReducedMotion, useScroll, useTransform } from 'motion/react';
+
+export type TelaBlog = 'listagem' | 'leitura';
+
+// A listagem e a leitura usam desenhos diferentes (decisão do user, 15/11/2026).
+const desenhos: Record<TelaBlog, StaticImageData[]> = {
+  listagem: [
+    sketchGable,
+    sketchCaixas,
+    sketchFlowpack,
+    sketchRotativa,
+    sketchGable,
+    sketchCaixas
+  ],
+  leitura: [
+    sketchPouch,
+    sketchSaches,
+    sketchVertical,
+    sketchPouch,
+    sketchSaches
+  ]
+};
+
+// Posição e tamanho do protótipo aprovado; a opacidade sobe um degrau (0,4 para 0,5), pedido do user.
+const layout: Record<
+  TelaBlog,
+  { topo: (i: number) => number; margem: number; classe: string }
+> = {
+  listagem: {
+    topo: (i) => 2 + i * 16,
+    margem: -9,
+    classe: 'w-[min(66vw,740px)] opacity-30 md:opacity-50'
+  },
+  leitura: {
+    topo: (i) => 3 + i * 19,
+    margem: -5,
+    classe:
+      'w-[85vw] opacity-25 min-[901px]:w-[min(42vw,620px)] min-[901px]:opacity-50'
+  }
+};
+
+function Desenho({
+  src,
+  indice,
+  tela
+}: {
+  src: StaticImageData;
+  indice: number;
+  tela: TelaBlog;
+}) {
+  const { scrollY } = useScroll();
+  const reduzido = useReducedMotion();
+  const fator = 0.18 + (indice % 3) * 0.08;
+  const y = useTransform(() => scrollY.get() * fator);
+  const { topo, margem, classe } = layout[tela];
+
+  return (
+    <m.div
+      className={cn('absolute', classe)}
+      style={{
+        top: `${topo(indice)}%`,
+        [indice % 2 ? 'left' : 'right']: `${margem}%`,
+        y: reduzido ? 0 : y
+      }}>
+      <Image src={src} alt='' sizes='(max-width: 900px) 85vw, 740px' />
+    </m.div>
+  );
+}
+
+/** Sketches blueprint nas margens, só ambientação: nunca capa de post. */
+export function FundoBlog({ tela }: { tela: TelaBlog }) {
+  return (
+    <div
+      aria-hidden='true'
+      className='pointer-events-none absolute inset-0 overflow-hidden'>
+      {desenhos[tela].map((src, i) => (
+        // A mesma imagem se repete na lista; a posição desempata.
+        <Desenho key={`${i}-${src.src}`} src={src} indice={i} tela={tela} />
+      ))}
+    </div>
+  );
+}
