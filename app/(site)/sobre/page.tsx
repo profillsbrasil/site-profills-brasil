@@ -20,7 +20,7 @@ export const metadata: Metadata = metadataDaPagina({
 
 export default function Sobre() {
   return (
-    <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-8 md:py-10'>
+    <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-8 md:py-10 lg:pt-[52px]'>
       <JsonLd data={faqSchema(faqQuestoes)} />
       <JsonLd
         data={breadcrumbSchema([

@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ICONE_CATEGORIA } from '@/components/layout/iconesCategorias';
+import { LinkDaArvore } from '@/components/layout/linkDaArvore';
+import { NAVEGACAO, type NoMenu } from '@/components/layout/navegacao';
 import {
   Accordion,
   AccordionContent,
@@ -21,153 +22,76 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer';
-import { categoriasCatalogo } from '@/lib/data/maquinas/types';
 import logoProfills from '@/public/logo-branco.png';
 
 import { socialLinks } from './socialLinks';
-import {
-  Archive,
-  Brain,
-  Building,
-  Calendar,
-  Cloud,
-  Globe,
-  GraduationCap,
-  Home,
-  Landmark,
-  Layers,
-  Leaf,
-  Menu,
-  Package,
-  Store,
-  User,
-  Users,
-  Wrench
-} from 'lucide-react';
+import { Menu } from 'lucide-react';
 
-const projetos = [
-  {
-    title: 'Profills P&D',
-    href: '/projetos/profills-pd',
-    description: 'IA e Indústria 4.0, com menos paradas e falhas.',
-    icon: <Brain className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Profills ERP',
-    href: '/projetos/profills-erp',
-    description: 'Gestão integrada em nuvem, automação e menos erros.',
-    icon: <Cloud className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Profills Bank',
-    href: '/projetos/profills-bank',
-    description: 'Finanças digitais acessíveis e seguras.',
-    icon: <Landmark className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Profills HUB',
-    href: '/projetos/profills-hub',
-    description:
-      'Presença internacional, embalagens seguras e soluções completas',
-    icon: <Globe className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Profills Locação',
-    href: '/projetos/profills-locacao',
-    description: 'Máquinas por assinatura, acesso fácil e baixo risco.',
-    icon: <Calendar className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Profills Marketplace',
-    href: '/projetos/profills-marketplace',
-    description:
-      'Conexão digital segura entre produtores, clientes e parceiros.',
-    icon: <Store className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Profills School',
-    href: '/projetos/profills-school',
-    description: 'Educação técnica acessível para capacitar e gerar impacto.',
-    icon: <GraduationCap className='text-accent mr-2 size-5' />
-  },
-  {
-    title: 'Profills Sustentabilidade',
-    href: '/projetos/profills-sustentabilidade',
-    description: 'Soluções em alimento, educação e futuro com impacto.',
-    icon: <Leaf className='text-accent mr-2 size-5' />
+const principais = [NAVEGACAO.marca, ...NAVEGACAO.links, ...NAVEGACAO.monte];
+
+function FolhasDoMenu({ painel }: { painel: NoMenu['painel'] }) {
+  switch (painel.forma) {
+    case 'vitrine':
+      return (
+        <div className='space-y-2 pl-6'>
+          {painel.folhas.map((folha) => (
+            <div
+              key={folha.id}
+              className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
+              <DrawerClose asChild>
+                <LinkDaArvore alvo={folha} className='flex w-full items-center'>
+                  <folha.icone className='text-accent mr-2 size-5' />
+                  {folha.rotulo}
+                </LinkDaArvore>
+              </DrawerClose>
+            </div>
+          ))}
+        </div>
+      );
+    case 'cartoes':
+      return (
+        <div className='space-y-3 pl-6'>
+          {painel.folhas.map((folha) => (
+            <div
+              key={folha.id}
+              className='hover:text-accent flex items-start py-3 text-secondary-foreground/70 transition-colors'>
+              <DrawerClose asChild>
+                <LinkDaArvore alvo={folha} className='flex w-full items-start'>
+                  <div className='flex items-start'>
+                    <folha.icone className='text-accent mr-2 size-5' />
+                    <div className='font-medium'>{folha.rotulo}</div>
+                  </div>
+                </LinkDaArvore>
+              </DrawerClose>
+            </div>
+          ))}
+        </div>
+      );
+    case 'fotos':
+      return (
+        <div className='space-y-2 pl-6'>
+          {painel.folhas.map((folha) => (
+            <div
+              key={folha.id}
+              className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
+              <DrawerClose asChild>
+                <LinkDaArvore alvo={folha} className='flex w-full items-center'>
+                  {folha.rotulo}
+                </LinkDaArvore>
+              </DrawerClose>
+            </div>
+          ))}
+        </div>
+      );
   }
-];
-
-const maquinas = [
-  {
-    title: 'Todas as máquinas',
-    href: '/maquinas',
-    icon: <Layers className='text-accent mr-2 size-5' />
-  },
-  ...categoriasCatalogo.map((categoria) => {
-    const Icone = ICONE_CATEGORIA[categoria];
-
-    return {
-      title: categoria,
-      href: `/maquinas?categoria=${encodeURIComponent(categoria)}`,
-      icon: <Icone className='text-accent mr-2 size-5' />
-    };
-  })
-];
-
-const pecas = [
-  {
-    title: 'Sensores',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/sensores'
-  },
-  {
-    title: 'Resistência',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/resistencias'
-  },
-  {
-    title: 'Atuadores',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/atuadores'
-  },
-  {
-    title: 'Silenciadores',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/silenciadores'
-  },
-  {
-    title: 'Lâminas',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/corte'
-  },
-  {
-    title: 'Válvulas',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/valvulas'
-  },
-  { title: 'Molas', href: 'https://profillsbrasil.lojaintegrada.com.br/molas' },
-  {
-    title: 'Selagem',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
-  },
-  {
-    title: 'Fitas',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
-  },
-  {
-    title: 'Conexões',
-    href: 'https://profillsbrasil.lojaintegrada.com.br/conexoes-pneumaticas'
-  }
-];
-
-const servicos = [
-  { title: 'Corte a Laser', href: '/servicos-personalizados' },
-  { title: 'Dobra e Corte CNC', href: '/servicos-personalizados' },
-  { title: 'Usinagem CNC', href: '/servicos-personalizados' },
-  { title: 'Soldagem', href: '/servicos-personalizados' }
-];
+}
 
 export default function NavbarMobile() {
   return (
-    <div className='fixed top-0 z-50 flex h-16 w-full border-b border-secondary-foreground/5 bg-secondary md:hidden'>
+    <div className='fixed top-0 z-50 flex h-16 w-full border-b border-secondary-foreground/5 bg-secondary lg:hidden'>
       <div className='flex h-full w-full items-center justify-center pr-5'>
-        <Link
-          href='/'
+        <LinkDaArvore
+          alvo={NAVEGACAO.marca}
           className='flex h-full w-full items-center justify-center'>
           <Image
             src={logoProfills}
@@ -176,7 +100,7 @@ export default function NavbarMobile() {
             sizes='314px'
             className='h-8 w-auto object-contain'
           />
-        </Link>
+        </LinkDaArvore>
       </div>
 
       <div className='absolute top-1/2 right-4 -translate-y-1/2'>
@@ -204,190 +128,49 @@ export default function NavbarMobile() {
             </DrawerHeader>
 
             <div className='flex-1 overflow-y-auto p-4'>
-              {/* Links principais */}
               <div className='mb-6'>
-                <BlurFade delay={0.05} direction='right'>
-                  <DrawerClose asChild>
-                    <Link
-                      href='/'
-                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
-                      <Home className='text-accent mr-2 size-5' />
-                      Início
-                    </Link>
-                  </DrawerClose>
-                </BlurFade>
-                <BlurFade delay={0.1} direction='right'>
-                  <DrawerClose asChild>
-                    <Link
-                      href='/sobre'
-                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
-                      <User className='text-accent mr-2 size-5' />
-                      Sobre
-                    </Link>
-                  </DrawerClose>
-                </BlurFade>
-                <BlurFade delay={0.125} direction='right'>
-                  <DrawerClose asChild>
-                    <Link
-                      href='/clientes'
-                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
-                      <Users className='text-accent mr-2 size-5' />
-                      Clientes
-                    </Link>
-                  </DrawerClose>
-                </BlurFade>
-                <BlurFade delay={0.15} direction='right'>
-                  <DrawerClose asChild>
-                    <Link
-                      href='/montar-fabrica'
-                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
-                      <Building className='text-accent mr-2 size-5' />
-                      Monte a sua fábrica
-                    </Link>
-                  </DrawerClose>
-                </BlurFade>
-                <BlurFade delay={0.2} direction='right'>
-                  <DrawerClose asChild>
-                    <Link
-                      href='/montar-maquina'
-                      className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
-                      <Wrench className='text-accent mr-2 size-5' />
-                      Monte a sua máquina
-                    </Link>
-                  </DrawerClose>
-                </BlurFade>
+                {principais.map((no, i) => (
+                  <BlurFade
+                    key={no.id}
+                    delay={0.05 + i * 0.03}
+                    direction='right'>
+                    <DrawerClose asChild>
+                      <LinkDaArvore
+                        alvo={no}
+                        className='hover:text-accent flex min-h-[44px] items-center border-l-2 border-transparent py-3 text-secondary-foreground transition-all duration-200 hover:border-accent hover:pl-1'>
+                        <no.icone className='text-accent mr-2 size-5' />
+                        {no.rotulo}
+                      </LinkDaArvore>
+                    </DrawerClose>
+                  </BlurFade>
+                ))}
               </div>
 
-              {/* Accordion para seções com múltiplas opções */}
               <BlurFade delay={0.25} direction='right'>
                 <Accordion type='multiple' className='w-full'>
-                  {/* Máquinas */}
-                  <AccordionItem
-                    value='maquinas'
-                    className='border-secondary-foreground/10'>
-                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                      <div className='flex items-center'>
-                        <Package className='text-accent mr-2 size-5' />
-                        Máquinas
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className='pb-4'>
-                      <div className='space-y-2 pl-6'>
-                        {maquinas.map((maquina) => (
-                          <div
-                            key={maquina.title}
-                            className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
-                            <DrawerClose asChild>
-                              <Link
-                                href={maquina.href}
-                                className='flex w-full items-center'>
-                                {maquina.icon}
-                                {maquina.title}
-                              </Link>
-                            </DrawerClose>
-                          </div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  {/* Peças - oculto até integração com sistema externo */}
-                  <AccordionItem
-                    value='pecas'
-                    className='hidden border-secondary-foreground/10'>
-                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                      <div className='flex items-center'>
-                        <Archive className='text-accent mr-2 size-5' />
-                        Peças
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className='pb-4'>
-                      <div className='space-y-2 pl-6'>
-                        {pecas.map((peca) => (
-                          <div
-                            key={peca.title}
-                            className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
-                            <DrawerClose asChild>
-                              <Link
-                                href={peca.href}
-                                target='_blank'
-                                className='flex w-full items-center'>
-                                {peca.title}
-                              </Link>
-                            </DrawerClose>
-                          </div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  {/* Projetos */}
-                  <AccordionItem
-                    value='projetos'
-                    className='border-secondary-foreground/10'>
-                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                      <div className='flex items-center'>
-                        <Brain className='text-accent mr-2 size-5' />
-                        Projetos
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className='pb-4'>
-                      <div className='space-y-3 pl-6'>
-                        {projetos.map((projeto) => (
-                          <div
-                            key={projeto.title}
-                            className='hover:text-accent flex items-start py-3 text-secondary-foreground/70 transition-colors'>
-                            <DrawerClose asChild>
-                              <Link
-                                href={projeto.href}
-                                className='flex w-full items-start'>
-                                <div className='flex items-start'>
-                                  {projeto.icon}
-                                  <div className='font-medium'>
-                                    {projeto.title}
-                                  </div>
-                                </div>
-                              </Link>
-                            </DrawerClose>
-                          </div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  {/* Outros Serviços */}
-                  <AccordionItem
-                    value='servicos'
-                    className='border-secondary-foreground/10'>
-                    <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
-                      <div className='flex items-center'>
-                        <Layers className='text-accent mr-2 size-5' />
-                        Outros Serviços
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className='pb-4'>
-                      <div className='space-y-2 pl-6'>
-                        {servicos.map((servico) => (
-                          <div
-                            key={servico.title}
-                            className='hover:text-accent flex items-center py-3 text-secondary-foreground/70 transition-colors'>
-                            <DrawerClose asChild>
-                              <Link
-                                href={servico.href}
-                                className='flex w-full items-center'>
-                                {servico.title}
-                              </Link>
-                            </DrawerClose>
-                          </div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
+                  {NAVEGACAO.menus.map((menu) => (
+                    <AccordionItem
+                      key={menu.id}
+                      value={menu.id}
+                      className='border-secondary-foreground/10'>
+                      <AccordionTrigger className='hover:text-accent text-secondary-foreground'>
+                        <div className='flex items-center'>
+                          <menu.icone className='text-accent mr-2 size-5' />
+                          {menu.rotulo}
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className='pb-4'>
+                        <FolhasDoMenu painel={menu.painel} />
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
                 </Accordion>
               </BlurFade>
             </div>
             <BlurFade delay={0.3} direction='up'>
-              <DrawerFooter className='flex flex-row items-center justify-center gap-3'>
+              <DrawerFooter
+                data-redes
+                className='flex flex-row items-center justify-center gap-3'>
                 {socialLinks.map(({ href, Icon, label }) => (
                   <Link
                     key={label}
