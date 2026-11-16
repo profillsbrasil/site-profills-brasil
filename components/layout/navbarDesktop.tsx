@@ -289,7 +289,7 @@ export default function NavbarDesktop({
 }) {
   const tema = temaDoTopo(usePathname());
   const placa = usePlaca(ORDEM_MENUS);
-  const compacta = useRolouAlem(LIMIAR_COMPACTA);
+  const { rolou: compacta, animar } = useRolouAlem(LIMIAR_COMPACTA);
   const { aberto, sentido, prestes, raiz, gaveta } = placa;
   const nav = useRef<HTMLElement>(null);
   const corpo = useRef<HTMLDivElement>(null);
@@ -378,6 +378,7 @@ export default function NavbarDesktop({
       data-tema={tema}
       data-compacta={compacta || undefined}
       data-aberta={aberto !== null || undefined}
+      data-sem-transicao={!animar || undefined}
       className='placa-navbar group/placa fixed inset-x-0 top-0 z-50 hidden h-0 lg:block'>
       <div className='relative mx-auto w-[min(1216px,calc(100%_-_2*clamp(16px,2.5vw,32px)))]'>
         <nav

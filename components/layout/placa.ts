@@ -8,7 +8,8 @@ import {
   useEffect,
   useReducer,
   useRef,
-  useState
+  useState,
+  useSyncExternalStore
 } from 'react';
 
 import { usePathname } from 'next/navigation';
@@ -381,26 +382,33 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
   };
 }
 
-/** true depois de `limiar` px de rolagem. */
-export function useRolouAlem(limiar: number): boolean {
-  const [rolou, setRolou] = useState(false);
+function assinarRolagem(avisar: () => void) {
+  window.addEventListener('scroll', avisar, { passive: true });
+
+  return () => window.removeEventListener('scroll', avisar);
+}
+
+/**
+ * `rolou`: passou de `limiar` px de rolagem. `animar`: falso do HTML do
+ * servidor até dois quadros depois da hidratação, para quem recarrega já
+ * rolado ver a placa compacta sem a animação de encolher.
+ */
+export function useRolouAlem(limiar: number) {
+  const rolou = useSyncExternalStore(
+    assinarRolagem,
+    () => window.scrollY > limiar,
+    () => false
+  );
+
+  const [animar, setAnimar] = useState(false);
 
   useEffect(() => {
-    let quadro = 0;
+    let quadro = requestAnimationFrame(() => {
+      quadro = requestAnimationFrame(() => setAnimar(true));
+    });
 
-    const medir = () => {
-      cancelAnimationFrame(quadro);
-      quadro = requestAnimationFrame(() => setRolou(window.scrollY > limiar));
-    };
+    return () => cancelAnimationFrame(quadro);
+  }, []);
 
-    medir();
-    window.addEventListener('scroll', medir, { passive: true });
-
-    return () => {
-      cancelAnimationFrame(quadro);
-      window.removeEventListener('scroll', medir);
-    };
-  }, [limiar]);
-
-  return rolou;
+  return { rolou, animar };
 }
