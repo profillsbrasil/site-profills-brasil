@@ -6,20 +6,23 @@ import { slugSchema } from '@/lib/schemas/post-blog';
 
 /**
  * O cookie sameSite strict ainda sai de crm.profills.com, que é o mesmo site: o Origin precisa ter o
- * host de SITE_URL. Sem SITE_URL, só o next dev aceita, para o upload local funcionar sem env.
+ * host de SITE_URL. No next dev vale também a própria página local, porque o .env costuma trazer o
+ * SITE_URL de produção; sem SITE_URL, só o next dev aceita.
  */
 function origemDoSite(request: Request) {
+  const emDev = process.env.NODE_ENV === 'development';
   const site = process.env.SITE_URL;
 
-  if (!site) return process.env.NODE_ENV === 'development';
+  if (!site) return emDev;
 
-  const hostDoSite = URL.parse(site)?.host;
   const origem = request.headers.get('origin');
+  const hostDaOrigem = origem === null ? undefined : URL.parse(origem)?.host;
+
+  if (hostDaOrigem === undefined) return false;
 
   return (
-    hostDoSite !== undefined &&
-    origem !== null &&
-    URL.parse(origem)?.host === hostDoSite
+    hostDaOrigem === URL.parse(site)?.host ||
+    (emDev && hostDaOrigem === URL.parse(request.url)?.host)
   );
 }
 

@@ -126,6 +126,20 @@ describe('gravação do admin do blog', () => {
     ).toBe(200);
   });
 
+  it('no next dev, aceita a própria página local mesmo com SITE_URL de produção no .env', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+
+    expect(
+      (await pedidoImagem('catalogo-novo', 'http://localhost:8080')).status
+    ).toBe(200);
+
+    vi.stubEnv('NODE_ENV', 'production');
+
+    expect(
+      (await pedidoImagem('catalogo-novo', 'http://localhost:8080')).status
+    ).toBe(403);
+  });
+
   it('recusa slug malicioso antes de chegar ao repositório', async () => {
     for (const slug of ['../conteudo', 'a/b', '..', 'A', 'x.json']) {
       expect(
