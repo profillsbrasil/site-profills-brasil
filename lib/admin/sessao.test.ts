@@ -203,6 +203,16 @@ describe('limite de tentativas', { timeout: 30_000 }, () => {
     expect(aviso).toHaveBeenCalledWith(expect.stringContaining('bloqueado'));
   });
 
+  it('avisa no log só na tentativa que fecha o login, não nas seguintes', async () => {
+    const aviso = vi.spyOn(logger, 'error').mockImplementation(() => undefined);
+
+    for (let i = 0; i < LIMITE_TENTATIVAS + 5; i++)
+      await entrar('dono', 'errada');
+
+    expect(aviso).toHaveBeenCalledOnce();
+    expect(aviso).toHaveBeenCalledWith(expect.stringContaining('bloqueado'));
+  });
+
   it('libera quando a janela de 15 minutos passa', async () => {
     vi.spyOn(logger, 'error').mockImplementation(() => undefined);
 

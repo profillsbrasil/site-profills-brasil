@@ -20,13 +20,14 @@ Com os posts no Postgres (ADR 0003), o admin do blog precisa abrir em produção
 
 - **Sessão no banco**: revogar uma sessão isolada não paga a tabela e a limpeza com um autor só. Revogar tudo é trocar a senha.
 - **Biblioteca de auth (Auth.js, better-auth)**: tabelas, provedores e config maiores que três funções para um usuário.
-- **Limite por IP**: depende do cabeçalho que o proxy da Railway repassa, que ainda não foi medido.
+- **Limite por IP agora**: depende do cabeçalho que o proxy da Railway repassa, que ainda não foi medido. Fica como follow-up, não como recusa.
 - **Checagem de login no `proxy.ts`**: a doc do Next pede só checagem otimista ali, e a action continuaria precisando da própria.
 - **Entrar sem senha em qualquer `next dev`**: com `DATABASE_URL` no `.env` local o admin gravaria num Postgres de verdade sem senha.
 
 ## Consequências
 
-- Qualquer um pode trancar o dono do lado de fora por 15 minutos com 11 POSTs. O bloqueio sai no log como `error` (o logger de produção só escreve `error` sem `LOG_LEVEL`). Para destravar antes, apague a linha `global` de `admin_tentativas_login`.
+- Qualquer um mantém o login fechado, até para o dono com a senha certa, mandando 11 requisições a cada janela de 15 minutos, sem fim. A sessão já aberta continua valendo pelos 7 dias. O limite por IP é o follow-up que resolve isso, depois de medir o cabeçalho de IP do proxy da Railway.
+- O bloqueio sai no log como `error` uma vez por janela, na tentativa que fecha o login; as seguintes não escrevem (o logger de produção só escreve `error` sem `LOG_LEVEL`). Para destravar antes, apague a linha `global` de `admin_tentativas_login`.
 - Um link de outro site para o admin chega sem o cookie `sameSite: strict` e cai no login.
 - O que só a produção mede: se o proxy da Railway manda `X-Forwarded-Host` igual ao Origin (com o `allowedOrigins`, a action passa de qualquer jeito), se o cookie sai com `Secure` atrás do TLS do proxy, e qual cabeçalho traz o IP do visitante para o limite por IP.
 - Sair do editor com mudança não salva pelo botão Sair descarta a mudança sem o aviso que os links da lateral dão.

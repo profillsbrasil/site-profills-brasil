@@ -87,6 +87,9 @@ export async function autorAtual(): Promise<Autor | null> {
 
 const contagemLida = z.object({ tentativas: z.number(), ate: z.date() });
 
+/** acabouDeFechar só na tentativa que passa do limite: o log sai uma vez por janela, não a cada pedido bloqueado. */
+export type Bloqueio = { ate: Date; acabouDeFechar: boolean };
+
 /**
  * Soma a tentativa numa instrução só, antes do scrypt: pedidos em paralelo não passam do limite.
  * A janela é fixa e começa na primeira tentativa depois da anterior expirar.
@@ -94,7 +97,7 @@ const contagemLida = z.object({ tentativas: z.number(), ate: z.date() });
  */
 export async function contarTentativa(
   consulta: Consulta
-): Promise<Date | null> {
+): Promise<Bloqueio | null> {
   const { rows } = await consulta(
     `insert into admin_tentativas_login as t (chave, inicio, tentativas)
      values ('global', now(), 1)
@@ -107,7 +110,9 @@ export async function contarTentativa(
 
   const { tentativas, ate } = contagemLida.parse(rows[0]);
 
-  return tentativas > LIMITE_TENTATIVAS ? ate : null;
+  return tentativas > LIMITE_TENTATIVAS
+    ? { ate, acabouDeFechar: tentativas === LIMITE_TENTATIVAS + 1 }
+    : null;
 }
 
 /** Depois de um login certo, as tentativas anteriores deixam de contar. */
@@ -137,7 +142,7 @@ export async function entrar(
     return { tipo: 'indisponivel' };
   }
 
-  let bloqueio: Date | null;
+  let bloqueio: Bloqueio | null;
 
   try {
     bloqueio = await contarTentativa(consultar);
@@ -149,11 +154,12 @@ export async function entrar(
 
   if (bloqueio) {
     // error e não warn: o logger de produção só escreve error sem LOG_LEVEL.
-    logger.error(
-      `Login do admin bloqueado até ${bloqueio.toISOString()}: mais de ${LIMITE_TENTATIVAS} tentativas em ${JANELA_MINUTOS} minutos.`
-    );
+    if (bloqueio.acabouDeFechar)
+      logger.error(
+        `Login do admin bloqueado até ${bloqueio.ate.toISOString()}: mais de ${LIMITE_TENTATIVAS} tentativas em ${JANELA_MINUTOS} minutos.`
+      );
 
-    return { tipo: 'bloqueado', ate: bloqueio };
+    return { tipo: 'bloqueado', ate: bloqueio.ate };
   }
 
   // O scrypt roda mesmo com o usuário errado: o tempo da resposta não conta qual dos dois errou.
