@@ -46,6 +46,7 @@ tools/oxlint/profills/    ← plugin local do Oxlint: regras de carregamento (si
 tools/oxlint/anti-slop/   ← plugin anti-slop vendorizado de dmmulroy/anti-slop; não editar à mão, origem e desvios no UPSTREAM.md
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
 docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação)
+docs/agents/              ← config das skills de engenharia: issue tracker, labels de triagem e docs do domínio
 docs/indicacao-verificacao.md ← guia: como testar a Indicação em produção e onde ler os números no GA4 e no Meta
 
 proxy.ts                  ← captura ?ref, grava o cookie de Indicação e redireciona para a URL limpa (spec 2026-09-02)
@@ -93,10 +94,24 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 
 - `PRODUCT.md` — design, voz da marca, paleta, anti-referências. Ler antes de qualquer decisão visual.
 - `components/modelo3d/DocModelos3d.md` — como adicionar/otimizar modelos 3D e configurar câmera.
-- `skills-lock.json` — skills de repo instaladas (magic-ui, shadcn, ui-sdk, vercel-react-best-practices).
+- `skills-lock.json` — skills de repo instaladas (magic-ui, shadcn, ui-sdk, unslop, vercel-react-best-practices).
 - UI SDK (`@ui-sdk/react` e `@ui-sdk/core`, da `vercel-labs/ui`) está em beta (0.1.0-beta.3): a API sai da skill `ui-sdk`, de `node_modules/@ui-sdk/react/docs/llms.txt` e dos `.d.ts` do pacote instalado, nunca de memória. O `@layer ui-sdk;` no topo do `globals.css` deixa as classes do site vencerem o CSS que ela injeta.
 - `.env.example` — as 8 env vars dos forms, downloads e Indicação (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`, `CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET`); copiar para `.env` local.
-- `CONTEXT.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs.
+- `GLOSSARY.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs.
+
+## Agent skills
+
+### Issue tracker
+
+As issues ficam no GitHub deste repo, pelo `gh`. Ver `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Cinco labels de triagem com o nome padrão (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). Ver `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Contexto único: `GLOSSARY.md` e `docs/adr/` na raiz. Ver `docs/agents/domain.md`.
 
 ## Armadilhas não-óbvias
 
