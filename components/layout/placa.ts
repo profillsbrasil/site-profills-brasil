@@ -45,7 +45,15 @@ interface GavetaAberta {
 }
 
 export type EstadoPlaca =
-  | { readonly fase: 'fechada'; readonly devolverFocoA: IdMenu | null }
+  | {
+      readonly fase: 'fechada';
+      readonly devolverFocoA: IdMenu | null;
+      /**
+       * Fechado por clique ou Esc com o ponteiro talvez em cima: o hover só
+       * volta a armar esse menu depois de o ponteiro sair do gatilho.
+       */
+      readonly dispensado: IdMenu | null;
+    }
   | { readonly fase: 'armando'; readonly repouso: Repouso }
   | (GavetaAberta & {
       readonly fase: 'aberta';
@@ -56,7 +64,7 @@ export type EstadoPlaca =
 
 export type EventoPlaca =
   | {
-      readonly tipo: 'ponteiro-moveu';
+      readonly tipo: 'ponteiro-entrou' | 'ponteiro-moveu';
       readonly menu: IdMenu;
       readonly x: number;
       readonly y: number;
@@ -78,7 +86,8 @@ export type EventoPlaca =
 
 export const PLACA_INICIAL: EstadoPlaca = {
   fase: 'fechada',
-  devolverFocoA: null
+  devolverFocoA: null,
+  dispensado: null
 };
 
 export function menuVisivel(estado: EstadoPlaca): IdMenu | null {
@@ -143,7 +152,16 @@ export function reduzirPlaca(
   evento: EventoPlaca
 ): EstadoPlaca {
   switch (evento.tipo) {
+    case 'ponteiro-entrou':
     case 'ponteiro-moveu': {
+      if (
+        estado.fase === 'fechada' &&
+        evento.tipo === 'ponteiro-moveu' &&
+        estado.dispensado === evento.menu
+      ) {
+        return estado;
+      }
+
       if (estado.fase === 'fechada' || estado.fase === 'armando') {
         const atual = estado.fase === 'armando' ? estado.repouso : null;
         const repouso = seguirRepouso(atual, evento);
@@ -177,7 +195,12 @@ export function reduzirPlaca(
         : estado;
 
     case 'ponteiro-saiu':
-      if (estado.fase === 'armando') return PLACA_INICIAL;
+      if (
+        estado.fase === 'armando' ||
+        (estado.fase === 'fechada' && estado.dispensado !== null)
+      ) {
+        return PLACA_INICIAL;
+      }
 
       return estado.fase === 'aberta'
         ? {
@@ -196,7 +219,11 @@ export function reduzirPlaca(
         (estado.fase === 'aberta' || estado.fase === 'fechando') &&
         evento.agora - estado.abertaEm > CLIQUE_IGNORA_MS
       ) {
-        return PLACA_INICIAL;
+        return {
+          fase: 'fechada',
+          devolverFocoA: null,
+          dispensado: evento.menu
+        };
       }
 
       return abrir(estado, evento.menu, evento.agora);
@@ -210,12 +237,14 @@ export function reduzirPlaca(
 
       return visivel === null
         ? estado
-        : { fase: 'fechada', devolverFocoA: visivel };
+        : { fase: 'fechada', devolverFocoA: visivel, dispensado: visivel };
     }
 
     case 'fora':
     case 'navegou':
-      return estado.fase === 'fechada' && estado.devolverFocoA === null
+      return estado.fase === 'fechada' &&
+        estado.devolverFocoA === null &&
+        estado.dispensado === null
         ? estado
         : PLACA_INICIAL;
 
@@ -365,10 +394,13 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
   const gatilho = useCallback(
     (menu: IdMenu) => {
-      const moveu = (e: PointerEvent) => {
+      const apontou = (
+        tipo: 'ponteiro-entrou' | 'ponteiro-moveu',
+        e: PointerEvent
+      ) => {
         if (e.pointerType !== 'touch') {
           despachar({
-            tipo: 'ponteiro-moveu',
+            tipo,
             menu,
             x: e.clientX,
             y: e.clientY,
@@ -381,8 +413,8 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
         id: idGatilho(menu),
         'aria-expanded': aberto === menu,
         'aria-controls': idPainel(menu),
-        onPointerEnter: moveu,
-        onPointerMove: moveu,
+        onPointerEnter: (e: PointerEvent) => apontou('ponteiro-entrou', e),
+        onPointerMove: (e: PointerEvent) => apontou('ponteiro-moveu', e),
         onPointerLeave: (e: PointerEvent) => {
           if (e.pointerType !== 'touch') despachar({ tipo: 'ponteiro-saiu' });
         },

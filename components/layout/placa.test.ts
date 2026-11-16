@@ -228,7 +228,11 @@ describe('placa: clique, teclado e fora', () => {
         { tipo: 'teclado-abriu', menu: 'projetos', agora: 0 },
         { tipo: 'esc' }
       )
-    ).toEqual({ fase: 'fechada', devolverFocoA: 'projetos' });
+    ).toEqual({
+      fase: 'fechada',
+      devolverFocoA: 'projetos',
+      dispensado: 'projetos'
+    });
   });
 
   it('clique fora e navegação fecham sem roubar o foco', () => {
@@ -300,6 +304,46 @@ describe('placa: dispensar com o ponteiro em cima', () => {
       );
 
       expect(menuVisivel(e)).toBe('maquinas');
+    }
+  });
+
+  it('fechar pelo teclado com o ponteiro longe não trava o hover', () => {
+    const e = rodar(
+      { tipo: 'clique', menu: 'maquinas', agora: 0 },
+      { tipo: 'clique', menu: 'maquinas', agora: 1000 },
+      { tipo: 'ponteiro-entrou', menu: 'maquinas', x: 100, y: 44, agora: 2000 },
+      { tipo: 'venceu-abre', agora: 2000 + REPOUSO_MS }
+    );
+
+    expect(menuVisivel(e)).toBe('maquinas');
+  });
+
+  it('clique fora e navegação depois da dispensa não deixam dispensa', () => {
+    for (const fim of [{ tipo: 'fora' }, { tipo: 'navegou' }] as const) {
+      const e = rodar(...abertoNoGatilho(), fecharPorClique, fim);
+
+      expect(e).toEqual(PLACA_INICIAL);
+      expect(
+        menuVisivel(
+          rodar(
+            ...abertoNoGatilho(),
+            fecharPorClique,
+            fim,
+            ...hoverAbre('maquinas', 3000)
+          )
+        )
+      ).toBe('maquinas');
+    }
+  });
+
+  it('clique e teclado reabrem o menu dispensado', () => {
+    for (const reabrir of [
+      { tipo: 'clique', menu: 'maquinas', agora: 2000 },
+      { tipo: 'teclado-abriu', menu: 'maquinas', agora: 2000 }
+    ] as const) {
+      expect(
+        menuVisivel(rodar(...abertoNoGatilho(), fecharPorClique, reabrir))
+      ).toBe('maquinas');
     }
   });
 
