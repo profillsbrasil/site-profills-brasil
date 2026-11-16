@@ -6,3 +6,9 @@ pre-commit:
       run: bunx oxlint --type-aware --no-error-on-unmatched-pattern {staged_files}
     - name: prettier
       run: bunx prettier --check --ignore-unknown {staged_files}
+pre-push:
+  jobs:
+    - name: tipos
+      run: bun run tipos
+    - name: testes
+      run: bun run test
