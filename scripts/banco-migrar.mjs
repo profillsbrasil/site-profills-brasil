@@ -16,8 +16,24 @@ const cliente = new pg.Client({
   connectionTimeoutMillis: 10_000
 });
 
+// Em 16/11/2026 um pre-deploy ficou 5 min sem saída até a Railway abortar: cada etapa avisa que
+// começou, e um prazo total encerra o processo dizendo onde parou.
+const PRAZO_MS = 120_000;
+let etapa = 'conectar ao banco';
+
+const prazo = setTimeout(() => {
+  console.error(
+    `A migração passou de ${PRAZO_MS / 1000} s na etapa "${etapa}" e foi encerrada.`
+  );
+  process.exit(1);
+}, PRAZO_MS);
+
 try {
+  console.log('Migração: conectando ao banco.');
   await cliente.connect();
+
+  etapa = 'aplicar as migrações';
+  console.log('Migração: conectado, conferindo as migrações.');
 
   const aplicadas = await migrar(
     (sql, valores) => cliente.query(sql, valores),
@@ -33,5 +49,7 @@ try {
   console.error('A migração do banco falhou.', erro);
   process.exitCode = 1;
 } finally {
+  etapa = 'fechar a conexão';
   await cliente.end();
+  clearTimeout(prazo);
 }
