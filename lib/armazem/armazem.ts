@@ -170,6 +170,31 @@ function armazemIndisponivel(motivo: string): Armazem {
   return { gravar: falhar, ler: falhar };
 }
 
+export type LeituraS3 =
+  | { estado: 'ausente' }
+  | { estado: 'invalido'; motivo: string }
+  | { estado: 'pronto'; config: ConfigS3 };
+
+/** Variável vazia conta como ausente; o motivo cita só nomes, nunca valores. */
+export function lerConfigS3(env: AmbienteArmazem): LeituraS3 {
+  const definidas = Object.fromEntries(
+    NOMES_S3.flatMap((nome) => (env[nome] ? [[nome, env[nome]]] : []))
+  );
+
+  if (Object.keys(definidas).length === 0) return { estado: 'ausente' };
+
+  const lido = ambienteS3.safeParse(definidas);
+
+  if (lido.success) return { estado: 'pronto', config: lido.data };
+
+  const nomes = [...new Set(lido.error.issues.map((i) => i.path.join('.')))];
+
+  return {
+    estado: 'invalido',
+    motivo: `Armazém de imagens mal configurado: confira ${nomes.join(', ')}.`
+  };
+}
+
 /**
  * Com as AWS_*, o bucket S3. Sem nenhuma, só o bun dev cai no disco em
  * raizDisco; fora dele, o armazém falha em vez de gravar onde o deploy apaga.
@@ -178,21 +203,11 @@ export function escolherArmazem(
   env: AmbienteArmazem,
   raizDisco: string
 ): Armazem {
-  const definidas = Object.fromEntries(
-    NOMES_S3.flatMap((nome) => (env[nome] ? [[nome, env[nome]]] : []))
-  );
+  const lido = lerConfigS3(env);
 
-  if (Object.keys(definidas).length > 0) {
-    const lido = ambienteS3.safeParse(definidas);
+  if (lido.estado === 'pronto') return criarArmazemS3(lido.config);
 
-    if (lido.success) return criarArmazemS3(lido.data);
-
-    const nomes = [...new Set(lido.error.issues.map((i) => i.path.join('.')))];
-
-    return armazemIndisponivel(
-      `Armazém de imagens mal configurado: confira ${nomes.join(', ')}.`
-    );
-  }
+  if (lido.estado === 'invalido') return armazemIndisponivel(lido.motivo);
 
   if (env.NODE_ENV === 'development') return criarArmazemDisco(raizDisco);
 

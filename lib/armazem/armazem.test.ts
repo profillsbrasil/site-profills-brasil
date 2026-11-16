@@ -11,7 +11,8 @@ import {
   type Armazem,
   criarArmazemDisco,
   criarArmazemS3,
-  escolherArmazem
+  escolherArmazem,
+  lerConfigS3
 } from './armazem';
 import { randomUUID } from 'node:crypto';
 import { once } from 'node:events';
@@ -218,22 +219,31 @@ describe('escolha do armazém pelo ambiente', () => {
   });
 
   it.each([
-    'virtual-host',
-    'virtual-hosted',
-    'VIRTUAL_HOSTED',
-    'path',
-    'path-style'
-  ])(
-    'aceita AWS_S3_URL_STYLE=%s',
-    async (estilo) => {
-      await expect(
-        escolherArmazem({ ...completo, AWS_S3_URL_STYLE: estilo }, raiz).ler(
-          chaveNova()
-        )
-      ).rejects.not.toBeInstanceOf(ErroConfiguracao);
-    },
-    15_000
-  );
+    ['virtual-host', false],
+    ['virtual-hosted', false],
+    ['VIRTUAL_HOSTED', false],
+    ['path', true],
+    ['path-style', true]
+  ])('AWS_S3_URL_STYLE=%s dá estiloCaminho %s', (estilo, estiloCaminho) => {
+    expect(lerConfigS3({ ...completo, AWS_S3_URL_STYLE: estilo })).toEqual({
+      estado: 'pronto',
+      config: expect.objectContaining({ estiloCaminho })
+    });
+  });
+
+  it('sem AWS_S3_URL_STYLE usa virtual-host, como a Railway', () => {
+    expect(lerConfigS3(completo)).toEqual({
+      estado: 'pronto',
+      config: {
+        endpoint: 'http://127.0.0.1:1',
+        regiao: 'auto',
+        bucket: 'bucket',
+        chave: 'chave',
+        segredo: 'segredo-que-nao-aparece',
+        estiloCaminho: false
+      }
+    });
+  });
 
   it('recusa AWS_S3_URL_STYLE desconhecido', async () => {
     await expect(
