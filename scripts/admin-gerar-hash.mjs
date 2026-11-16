@@ -1,15 +1,15 @@
-// Gera o ADMIN_SENHA_HASH. A senha só entra pelo teclado, sem eco, e o stdout leva só o hash.
+// Gera o ADMIN_SENHA_HASH. A senha só entra pelo teclado, aparece como asteriscos, e o stdout leva só o hash.
 // O umask 077 faz o arquivo nascer legível só pelo dono (0600), não 0644:
 //   (umask 077 && node scripts/admin-gerar-hash.mjs > ~/.local/state/profills-admin-senha-hash)
 import { TAMANHO_MINIMO_SENHA, hashSenha } from '../lib/admin/senha.mjs';
-import { digitar, letras } from './teclas-senha.mjs';
+import { digitar, letras, linhaDaSenha } from './teclas-senha.mjs';
 
 /**
  * @param {string} rotulo
  * @returns {Promise<string>}
  */
 function lerSemEco(rotulo) {
-  process.stderr.write(rotulo);
+  process.stderr.write(linhaDaSenha(rotulo, ''));
 
   return new Promise((resolve, reject) => {
     let senha = '';
@@ -26,6 +26,7 @@ function lerSemEco(rotulo) {
       const lido = digitar(senha, texto);
 
       senha = lido.senha;
+      process.stderr.write(linhaDaSenha(rotulo, senha));
 
       if (lido.fim) terminar();
 
@@ -53,7 +54,7 @@ if (process.argv.length > 2)
   );
 
 if (!process.stdin.isTTY)
-  falhar('Rode num terminal: a senha é lida do teclado, sem eco.');
+  falhar('Rode num terminal: a senha é lida do teclado.');
 
 // O hash não abre o admin sozinho, mas não tem por que ficar no histórico do terminal.
 if (process.stdout.isTTY)
