@@ -1,5 +1,5 @@
 import path from 'path';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   css: {
@@ -20,6 +20,8 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    // Os worktrees de agentes são cópias do repo em outra branch: os testes deles não são deste checkout.
+    exclude: [...configDefaults.exclude, '.claude/worktrees/**'],
     globals: true,
     setupFiles: ['./vitest.setup.ts']
   }
