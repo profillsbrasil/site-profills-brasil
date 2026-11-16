@@ -1,0 +1,63 @@
+import { logger } from '@/lib/utils/logger';
+
+import { abrirPglite } from './pglite';
+import type { Consulta } from './tipos';
+import path from 'node:path';
+import pg from 'pg';
+import 'server-only';
+
+export class ErroConfiguracao extends Error {
+  override name = 'ErroConfiguracao';
+}
+
+function abrir(): Promise<Consulta> {
+  const url = process.env.DATABASE_URL;
+
+  if (url) {
+    const pool = new pg.Pool({
+      connectionString: url,
+      max: 5,
+      connectionTimeoutMillis: 5000,
+      idleTimeoutMillis: 30_000,
+      statement_timeout: 10_000
+    });
+
+    // Sem este handler, uma conexão ociosa que cai derruba o processo do next start.
+    pool.on('error', (erro) =>
+      logger.error('Conexão ociosa do banco caiu', erro)
+    );
+
+    return Promise.resolve((sql, valores) => pool.query(sql, valores));
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    return abrirPglite(path.join(process.cwd(), '.dados', 'pglite'));
+  }
+
+  return Promise.reject(
+    new ErroConfiguracao(
+      'DATABASE_URL não está definida. Fora do bun dev, o blog exige um Postgres.'
+    )
+  );
+}
+
+// No globalThis porque o HMR do next dev reavalia o módulo e abriria outro pool.
+const global: typeof globalThis & { bancoProfills?: Promise<Consulta> } =
+  globalThis;
+
+/** Uma abertura que falhou não fica guardada: a próxima consulta tenta de novo. */
+async function conexao() {
+  global.bancoProfills ??= abrir();
+
+  try {
+    return await global.bancoProfills;
+  } catch (erro) {
+    global.bancoProfills = undefined;
+
+    throw erro;
+  }
+}
+
+/** Abre a conexão na primeira consulta, nunca no import: o build não conecta. */
+export const consultar: Consulta = async (sql, valores) =>
+  (await conexao())(sql, valores);

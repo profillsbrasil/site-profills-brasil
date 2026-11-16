@@ -1,6 +1,8 @@
 import {
   type Assunto,
   type Bloco,
+  type EntradaEditor,
+  type Intencao,
   type Linha,
   PROPORCAO_MAXIMA,
   PROPORCAO_MINIMA,
@@ -94,10 +96,12 @@ export const postSchema = z.object({
 
 const data = z.iso.datetime();
 
-/** A ordem das chaves aqui é a ordem no arquivo: o parse devolve o objeto nela. */
+const versaoSchema = z.number().int().positive();
+
 export const postGuardadoSchema = z.discriminatedUnion('estado', [
   z.object({
     slug: slugSchema,
+    versao: versaoSchema,
     estado: z.literal('rascunho'),
     criadoEm: data,
     atualizadoEm: data,
@@ -106,6 +110,7 @@ export const postGuardadoSchema = z.discriminatedUnion('estado', [
   }),
   z.object({
     slug: slugSchema,
+    versao: versaoSchema,
     estado: z.literal('publicado'),
     criadoEm: data,
     atualizadoEm: data,
@@ -114,10 +119,31 @@ export const postGuardadoSchema = z.discriminatedUnion('estado', [
   })
 ]) satisfies z.ZodType<PostGuardado>;
 
-/** O que o editor manda ao gravar: sem slug, o post ainda não existe. */
-export const entradaEditorSchema = z.object({
-  slug: slugSchema.nullable(),
-  post: postSchema
-});
+/** Sem slug, o post ainda não existe; slug e versão chegam juntos ou não chegam. */
+export const entradaEditorSchema = z
+  .object({
+    slug: slugSchema.nullable(),
+    versao: versaoSchema.nullable(),
+    post: postSchema
+  })
+  .transform((entrada, ctx): EntradaEditor => {
+    const { slug, versao, post } = entrada;
 
-export type EntradaEditor = z.infer<typeof entradaEditorSchema>;
+    if (slug === null && versao === null) return { slug, versao, post };
+
+    if (slug !== null && versao !== null) return { slug, versao, post };
+
+    ctx.addIssue({
+      code: 'custom',
+      path: ['versao'],
+      message: 'Endereço e versão do post chegam juntos'
+    });
+
+    return z.NEVER;
+  });
+
+export const intencaoSchema = z.enum([
+  'salvar',
+  'publicar',
+  'despublicar'
+]) satisfies z.ZodType<Intencao>;

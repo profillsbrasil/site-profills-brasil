@@ -56,9 +56,13 @@ export type Lado = 'esquerda' | 'direita';
 
 export type EstadoPost = 'rascunho' | 'publicado';
 
+export type Intencao = 'salvar' | 'publicar' | 'despublicar';
+
 /** O slug nasce do título na primeira gravação e nunca muda depois. */
 export type PostGuardado = {
   slug: string;
+  /** Sobe 1 a cada gravação; o editor devolve a que leu, e outra aba que gravou antes ganha. */
+  versao: number;
   criadoEm: string;
   atualizadoEm: string;
   post: Post;
@@ -66,6 +70,23 @@ export type PostGuardado = {
   | { estado: 'rascunho'; publicadoEm: null }
   | { estado: 'publicado'; publicadoEm: string }
 );
+
+export type PostPublicado = Extract<PostGuardado, { estado: 'publicado' }>;
+
+/** O que o editor manda ao gravar: post novo sem slug e sem versão, post gravado com os dois. */
+export type EntradaEditor = { post: Post } & (
+  | { slug: null; versao: null }
+  | { slug: string; versao: number }
+);
+
+export type ResumoAdmin = Pick<
+  PostGuardado,
+  'slug' | 'estado' | 'atualizadoEm'
+> &
+  Pick<Post, 'titulo' | 'assunto'>;
+
+export type ResumoPublicado = Pick<PostPublicado, 'slug' | 'publicadoEm'> &
+  Pick<Post, 'titulo' | 'resumo' | 'assunto' | 'capa'>;
 
 export const IMAGEM_LIMITE_BYTES = 5 * 1024 * 1024;
 

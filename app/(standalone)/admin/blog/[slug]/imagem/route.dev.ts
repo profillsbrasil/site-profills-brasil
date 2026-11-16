@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { abrirAdminBlog } from '@/lib/blog/admin';
 import { comMotivo } from '@/lib/blog/erro';
-import { salvarImagem } from '@/lib/blog/repositorio';
 import { slugSchema } from '@/lib/schemas/post-blog';
 
 // Route handler e não Server Action: a Server Action limita o corpo a 1 MB, e a imagem vai até 5 MB.
@@ -9,7 +9,9 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  if (process.env.NODE_ENV !== 'development') {
+  const admin = await abrirAdminBlog();
+
+  if (!admin) {
     return NextResponse.json({ erro: 'Não encontrado.' }, { status: 404 });
   }
 
@@ -31,7 +33,9 @@ export async function POST(
     );
   }
 
-  const tentativa = await comMotivo(() => salvarImagem(slug.data, arquivo));
+  const tentativa = await comMotivo(() =>
+    admin.enviarImagem(slug.data, arquivo)
+  );
 
   return tentativa.ok
     ? NextResponse.json({ caminho: tentativa.valor })

@@ -1,18 +1,21 @@
 // @vitest-environment node
-import type { Post, PostGuardado } from '@/lib/blog/tipos';
+import { ErroBlog } from '@/lib/blog/erro';
+import type { EntradaEditor, Post, PostGuardado } from '@/lib/blog/tipos';
 
 import { POST as enviarImagem } from './[slug]/imagem/route.dev';
-import { publicar, salvarRascunho } from './acoes';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { gravarPost } from './acoes';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const repositorio = vi.hoisted(() => ({
-  salvarPost: vi.fn(),
-  publicarPost: vi.fn(),
-  despublicarPost: vi.fn(),
-  salvarImagem: vi.fn()
+const admin = vi.hoisted(() => ({
+  listar: vi.fn(),
+  ler: vi.fn(),
+  gravar: vi.fn(),
+  enviarImagem: vi.fn()
 }));
 
-vi.mock('@/lib/blog/repositorio', () => repositorio);
+const porta = vi.hoisted(() => ({ abrirAdminBlog: vi.fn() }));
+
+vi.mock('@/lib/blog/admin', () => porta);
 
 const post: Post = {
   assunto: 'nota',
@@ -24,12 +27,15 @@ const post: Post = {
 
 const guardado: PostGuardado = {
   slug: 'catalogo-novo',
+  versao: 1,
   estado: 'rascunho',
   criadoEm: '2026-11-15T12:00:00.000Z',
   atualizadoEm: '2026-11-15T12:00:00.000Z',
   publicadoEm: null,
   post
 };
+
+const novo: EntradaEditor = { slug: null, versao: null, post };
 
 const pedidoImagem = (slug: string) => {
   const corpo = new FormData();
@@ -44,77 +50,90 @@ const pedidoImagem = (slug: string) => {
   );
 };
 
+beforeEach(() => {
+  porta.abrirAdminBlog.mockResolvedValue(admin);
+});
+
 afterEach(() => {
-  vi.unstubAllEnvs();
   vi.clearAllMocks();
 });
 
 describe('gravação do admin do blog', () => {
-  it('grava em desenvolvimento e devolve o post guardado', async () => {
-    vi.stubEnv('NODE_ENV', 'development');
-    repositorio.salvarPost.mockResolvedValue(guardado);
-    repositorio.publicarPost.mockResolvedValue({
-      ...guardado,
-      estado: 'publicado',
-      publicadoEm: guardado.atualizadoEm
-    });
+  it('grava com a intenção pedida e devolve o post guardado', async () => {
+    admin.gravar.mockResolvedValue(guardado);
 
-    expect(await salvarRascunho({ slug: null, post })).toEqual({
-      ok: true,
-      guardado
-    });
-    expect(await publicar({ slug: 'catalogo-novo', post })).toMatchObject({
-      ok: true,
-      guardado: { estado: 'publicado' }
-    });
-    expect(repositorio.publicarPost).toHaveBeenCalledWith('catalogo-novo');
+    expect(await gravarPost(novo, 'publicar')).toEqual({ ok: true, guardado });
+    expect(admin.gravar).toHaveBeenCalledWith(novo, 'publicar');
   });
 
-  it('recusa fora de desenvolvimento sem tocar no disco', async () => {
-    vi.stubEnv('NODE_ENV', 'production');
+  it('recusa sem a porta do admin, sem tocar no banco nem no disco', async () => {
+    porta.abrirAdminBlog.mockResolvedValue(null);
 
-    expect(await salvarRascunho({ slug: null, post })).toMatchObject({
-      ok: false
-    });
+    expect(await gravarPost(novo, 'salvar')).toMatchObject({ ok: false });
     expect((await pedidoImagem('catalogo-novo')).status).toBe(404);
-    expect(repositorio.salvarPost).not.toHaveBeenCalled();
-    expect(repositorio.salvarImagem).not.toHaveBeenCalled();
+    expect(admin.gravar).not.toHaveBeenCalled();
+    expect(admin.enviarImagem).not.toHaveBeenCalled();
   });
 
   it('recusa slug malicioso antes de chegar ao repositório', async () => {
-    vi.stubEnv('NODE_ENV', 'development');
-
     for (const slug of ['../conteudo', 'a/b', '..', 'A', 'x.json']) {
-      expect(await salvarRascunho({ slug, post })).toMatchObject({ ok: false });
+      expect(
+        await gravarPost({ slug, versao: 1, post }, 'salvar')
+      ).toMatchObject({
+        ok: false
+      });
       expect((await pedidoImagem(slug)).status).toBe(400);
     }
 
-    expect(repositorio.salvarPost).not.toHaveBeenCalled();
-    expect(repositorio.salvarImagem).not.toHaveBeenCalled();
+    expect(admin.gravar).not.toHaveBeenCalled();
+    expect(admin.enviarImagem).not.toHaveBeenCalled();
   });
 
   it('recusa post fora do formato com o motivo', async () => {
-    vi.stubEnv('NODE_ENV', 'development');
-
-    const resultado = await salvarRascunho({
-      slug: null,
-      post: { ...post, capa: 'blob:http://localhost/abc' }
-    });
-
-    expect(resultado).toMatchObject({ ok: false });
-    expect(!resultado.ok && resultado.erro).toContain('capa');
-    expect(repositorio.salvarPost).not.toHaveBeenCalled();
-  });
-
-  it('devolve o motivo quando o disco recusa a gravação', async () => {
-    vi.stubEnv('NODE_ENV', 'development');
-    repositorio.salvarPost.mockRejectedValue(
-      Object.assign(new Error('sem permissão'), { code: 'EACCES' })
+    const resultado = await gravarPost(
+      { ...novo, post: { ...post, capa: 'blob:http://localhost/abc' } },
+      'salvar'
     );
 
-    expect(await salvarRascunho({ slug: null, post })).toEqual({
+    expect(!resultado.ok && resultado.erro).toContain('capa');
+    expect(admin.gravar).not.toHaveBeenCalled();
+  });
+
+  it('recusa slug sem versão e intenção desconhecida', async () => {
+    // A action recebe o que chegou pela rede; o JSON.parse faz o papel do cliente que foge do tipo.
+    const semVersao = JSON.parse(
+      JSON.stringify({ slug: 'catalogo-novo', versao: null, post })
+    );
+
+    expect(await gravarPost(semVersao, 'salvar')).toMatchObject({ ok: false });
+    expect(await gravarPost(novo, JSON.parse('"apagar"'))).toEqual({
       ok: false,
-      erro: 'Não foi possível gravar no disco (EACCES).'
+      erro: 'Ação de gravação desconhecida.'
+    });
+    expect(admin.gravar).not.toHaveBeenCalled();
+  });
+
+  it('devolve o aviso de conflito de outra aba como motivo', async () => {
+    admin.gravar.mockRejectedValue(
+      new ErroBlog('Este post foi salvo em outra aba às 14h32.')
+    );
+
+    expect(
+      await gravarPost({ slug: 'catalogo-novo', versao: 1, post }, 'salvar')
+    ).toEqual({
+      ok: false,
+      erro: 'Este post foi salvo em outra aba às 14h32.'
+    });
+  });
+
+  it('devolve o código quando o banco recusa a gravação', async () => {
+    admin.gravar.mockRejectedValue(
+      Object.assign(new Error('conexão recusada'), { code: 'ECONNREFUSED' })
+    );
+
+    expect(await gravarPost(novo, 'salvar')).toEqual({
+      ok: false,
+      erro: 'Não foi possível gravar (ECONNREFUSED).'
     });
   });
 });

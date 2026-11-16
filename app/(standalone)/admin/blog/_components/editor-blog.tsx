@@ -14,15 +14,9 @@ import {
   DialogTitle
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { Post, PostGuardado, TipoBloco } from '@/lib/blog/tipos';
-import type { EntradaEditor } from '@/lib/schemas/post-blog';
+import type { Intencao, Post, PostGuardado, TipoBloco } from '@/lib/blog/tipos';
 
-import {
-  type ResultadoGravacao,
-  despublicar,
-  publicar,
-  salvarRascunho
-} from '../acoes';
+import { type ResultadoGravacao, gravarPost } from '../acoes';
 import { type Carga, useArraste } from './arraste';
 import { DadosPost } from './dados-post';
 import { dataPorExtenso, horaMinuto } from './datas';
@@ -46,24 +40,13 @@ const postVazio: Post = {
   linhas: []
 };
 
-type AcaoGravacao = 'salvar' | 'publicar' | 'despublicar';
-
 type Fase =
   | { fase: 'parado' }
-  | { fase: 'gravando'; acao: AcaoGravacao | 'imagem' }
-  | { fase: 'gravado'; acao: AcaoGravacao | 'imagem'; em: string }
+  | { fase: 'gravando'; acao: Intencao | 'imagem' }
+  | { fase: 'gravado'; acao: Intencao | 'imagem'; em: string }
   | { fase: 'erro'; motivo: string };
 
-const acoesServidor: Record<
-  AcaoGravacao,
-  (entrada: EntradaEditor) => Promise<ResultadoGravacao>
-> = {
-  salvar: salvarRascunho,
-  publicar,
-  despublicar
-};
-
-const textoGravando: Record<AcaoGravacao | 'imagem', string> = {
+const textoGravando: Record<Intencao | 'imagem', string> = {
   salvar: 'Salvando',
   publicar: 'Publicando',
   despublicar: 'Despublicando',
@@ -156,7 +139,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
     return () => window.removeEventListener('beforeunload', segurar);
   }, [sujo]);
 
-  const gravar = async (acao: AcaoGravacao) => {
+  const gravar = async (acao: Intencao) => {
     const enviado = post;
 
     setFase({ fase: 'gravando', acao });
@@ -164,10 +147,12 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
     let resultado: ResultadoGravacao;
 
     try {
-      resultado = await acoesServidor[acao]({
-        slug: gravacao?.slug ?? null,
-        post: enviado
-      });
+      resultado = await gravarPost(
+        gravacao
+          ? { slug: gravacao.slug, versao: gravacao.versao, post: enviado }
+          : { slug: null, versao: null, post: enviado },
+        acao
+      );
     } catch {
       resultado = {
         ok: false,

@@ -1,45 +1,96 @@
-import {
-  type EntradaEditor,
-  postGuardadoSchema,
-  slugSchema
-} from '@/lib/schemas/post-blog';
+import type { Armazem } from '@/lib/armazem/armazem';
+import { criarArmazemDisco } from '@/lib/armazem/armazem';
+import { consultar } from '@/lib/banco/conexao';
+import type { Consulta, Linha, ValorSql } from '@/lib/banco/tipos';
+import { postGuardadoSchema } from '@/lib/schemas/post-blog';
 import { logger } from '@/lib/utils/logger';
 import { LIMITE_SLUG, gerarSlug, textoParaSlug } from '@/lib/utils/slug';
 
 import { ErroBlog, motivosImagem } from './erro';
-import { IMAGEM_LIMITE_BYTES, type PostGuardado } from './tipos';
+import { SLUGS_RESERVADOS, conferirVersao, transicao } from './regras';
 import {
-  mkdir,
-  readFile,
-  readdir,
-  rename,
-  rm,
-  writeFile
-} from 'node:fs/promises';
+  type EntradaEditor,
+  IMAGEM_LIMITE_BYTES,
+  type Intencao,
+  type Post,
+  type PostGuardado,
+  type PostPublicado,
+  type ResumoAdmin,
+  type ResumoPublicado
+} from './tipos';
 import path from 'node:path';
 import 'server-only';
+import { z } from 'zod';
 
-/** A costura que o banco vai substituir: quem chama não sabe que é arquivo. */
-export type RepositorioPosts = {
-  listarPosts: () => Promise<PostGuardado[]>;
-  lerPost: (slug: string) => Promise<PostGuardado | null>;
-  salvarPost: (entrada: EntradaEditor) => Promise<PostGuardado>;
-  publicarPost: (slug: string) => Promise<PostGuardado>;
-  despublicarPost: (slug: string) => Promise<PostGuardado>;
-  apagarPost: (slug: string) => Promise<void>;
+export type RepositorioBlog = {
+  /** Do atualizado mais recente para o mais antigo. */
+  listar: () => Promise<ResumoAdmin[]>;
+  ler: (slug: string) => Promise<PostGuardado | null>;
+  /** Uma instrução SQL por gravação: salvar, publicar e despublicar nunca ficam pela metade. */
+  gravar: (entrada: EntradaEditor, intencao: Intencao) => Promise<PostGuardado>;
   /** Devolve o caminho público da imagem, como `/blog/<slug>/foto.webp`. */
-  salvarImagem: (slug: string, arquivo: File) => Promise<string>;
+  enviarImagem: (slug: string, arquivo: File) => Promise<string>;
+  /** Do publicado mais recente para o mais antigo. */
+  listarPublicados: () => Promise<ResumoPublicado[]>;
+  lerPublicado: (slug: string) => Promise<PostPublicado | null>;
 };
 
-type Pastas = { posts: string; imagens: string };
+const COLUNAS =
+  'slug, versao, estado, criado_em, atualizado_em, publicado_em, conteudo';
 
-/** `novo` é o endereço do editor de post novo em /admin/blog/novo. */
-const SLUGS_RESERVADOS = ['novo'];
+/** Até 5 tentativas quando outra gravação pega o mesmo slug entre a leitura e o insert. */
+const TENTATIVAS_SLUG = 5;
 
+const slugsLidos = z.array(z.object({ slug: z.string() }));
+
+const iso = (valor: ValorSql) =>
+  valor instanceof Date ? valor.toISOString() : valor;
+
+/** A linha do banco passa pelo mesmo schema do editor antes de virar PostGuardado. */
+function lerLinha(linha: Linha) {
+  return postGuardadoSchema.safeParse({
+    slug: linha.slug,
+    versao: linha.versao,
+    estado: linha.estado,
+    criadoEm: iso(linha.criado_em),
+    atualizadoEm: iso(linha.atualizado_em),
+    publicadoEm: iso(linha.publicado_em),
+    post: linha.conteudo
+  });
+}
+
+function exigirLinha(linha: Linha) {
+  const lida = lerLinha(linha);
+
+  if (!lida.success) {
+    throw new ErroBlog(
+      `O post ${JSON.stringify(linha.slug)} está fora do formato.`
+    );
+  }
+
+  return lida.data;
+}
+
+/** Linha fora do formato some com um aviso, sem derrubar a lista nem a página pública. */
+function lerLista(linhas: Linha[]) {
+  return linhas.flatMap((linha) => {
+    const lida = lerLinha(linha);
+
+    if (lida.success) return [lida.data];
+
+    logger.warn(
+      `Post fora do formato ignorado: ${JSON.stringify(linha.slug)}`,
+      lida.error
+    );
+
+    return [];
+  });
+}
+
+/** O tipo vem dos bytes do arquivo, nunca do nome nem do MIME que o navegador mandou. */
 const ascii = (bytes: Uint8Array, inicio: number, fim: number) =>
   String.fromCharCode(...bytes.subarray(inicio, fim));
 
-/** O tipo vem dos bytes do arquivo, nunca do nome nem do MIME que o navegador mandou. */
 const tiposImagem: { extensao: string; confere: (b: Uint8Array) => boolean }[] =
   [
     {
@@ -61,172 +112,144 @@ const tiposImagem: { extensao: string; confere: (b: Uint8Array) => boolean }[] =
     }
   ];
 
-function validarSlug(slug: string) {
-  const lido = slugSchema.safeParse(slug);
-
-  if (!lido.success) throw new ErroBlog('Endereço do post inválido.');
-
-  return lido.data;
-}
-
 const semExtensao = (nome: string) => nome.replace(/\.[^.]*$/, '');
 
-/** Arquivo ou pasta que ainda não existe vira null; outro erro de disco sobe. */
-async function ouNuloSeAusente<T>(leitura: () => Promise<T>) {
-  try {
-    return await leitura();
-  } catch (erro) {
-    if (erro instanceof Error && 'code' in erro && erro.code === 'ENOENT') {
-      return null;
-    }
-
-    throw erro;
-  }
-}
-
-const lerPasta = async (pasta: string) =>
-  (await ouNuloSeAusente(() => readdir(pasta))) ?? [];
-
-async function gravarInteiro(arquivo: string, conteudo: string | Uint8Array) {
-  const temporario = path.join(
-    path.dirname(arquivo),
-    `.${path.basename(arquivo)}.${crypto.randomUUID()}.tmp`
-  );
-
-  await mkdir(path.dirname(arquivo), { recursive: true });
-  await writeFile(temporario, conteudo);
-  await rename(temporario, arquivo);
-}
-
-export function criarRepositorioArquivo(
-  pastas: Pastas,
-  agora: () => Date = () => new Date()
-): RepositorioPosts {
-  const arquivoPost = (slug: string) =>
-    path.join(pastas.posts, `${validarSlug(slug)}.json`);
-
-  async function slugsOcupados() {
-    const nomes = await lerPasta(pastas.posts);
-
-    return new Set([
-      ...SLUGS_RESERVADOS,
-      ...nomes.filter((n) => n.endsWith('.json')).map(semExtensao)
-    ]);
-  }
-
-  async function gravar(guardado: PostGuardado) {
-    const canonico = postGuardadoSchema.parse(guardado);
-
-    await gravarInteiro(
-      arquivoPost(canonico.slug),
-      `${JSON.stringify(canonico, null, 2)}\n`
+export function criarRepositorioBlog({
+  consulta,
+  armazem,
+  agora = () => new Date()
+}: {
+  consulta: Consulta;
+  armazem: Armazem;
+  agora?: () => Date;
+}): RepositorioBlog {
+  async function ler(slug: string) {
+    const { rows } = await consulta(
+      `select ${COLUNAS} from blog_posts where slug = $1`,
+      [slug]
     );
 
-    return canonico;
+    return rows[0] ? exigirLinha(rows[0]) : null;
   }
 
-  async function lerPost(slug: string) {
-    const caminho = arquivoPost(slug);
-    const texto = await ouNuloSeAusente(() => readFile(caminho, 'utf8'));
-
-    if (texto === null) return null;
-
-    let json: unknown;
-
-    try {
-      json = JSON.parse(texto);
-    } catch {
-      throw new ErroBlog(`O arquivo do post ${slug} não é JSON válido.`);
+  async function inserirNovo(
+    post: Post,
+    intencao: Intencao,
+    quando: string,
+    tentativa = 1
+  ): Promise<PostGuardado> {
+    if (tentativa > TENTATIVAS_SLUG) {
+      throw new ErroBlog(
+        'Não foi possível reservar um endereço para o post. Tente de novo.'
+      );
     }
 
-    const lido = postGuardadoSchema.safeParse(json);
+    const { rows: slugs } = await consulta('select slug from blog_posts');
 
-    if (!lido.success || lido.data.slug !== slug) {
-      throw new ErroBlog(`O arquivo do post ${slug} está fora do formato.`);
-    }
+    const ocupados = new Set([
+      ...SLUGS_RESERVADOS,
+      ...slugsLidos.parse(slugs).map((linha) => linha.slug)
+    ]);
 
-    return lido.data;
+    const novo = transicao(
+      null,
+      post,
+      intencao,
+      quando,
+      gerarSlug(post.titulo, ocupados)
+    );
+
+    const { rows } = await consulta(
+      `insert into blog_posts (${COLUNAS}) values ($1, $2, $3, $4, $5, $6, $7::jsonb)
+       on conflict (slug) do nothing returning ${COLUNAS}`,
+      [
+        novo.slug,
+        novo.versao,
+        novo.estado,
+        novo.criadoEm,
+        novo.atualizadoEm,
+        novo.publicadoEm,
+        JSON.stringify(novo.post)
+      ]
+    );
+
+    return rows[0]
+      ? exigirLinha(rows[0])
+      : inserirNovo(post, intencao, quando, tentativa + 1);
   }
 
-  async function exigirPost(slug: string) {
-    const atual = await lerPost(slug);
+  /** foto.png, depois foto-2.png: nunca sobrescreve outra imagem do post. */
+  async function nomeLivre(
+    slug: string,
+    base: string,
+    extensao: string,
+    ocupados = new Set<string>()
+  ): Promise<string> {
+    const nome = `${gerarSlug(base, ocupados)}.${extensao}`;
 
-    if (!atual) throw new ErroBlog('Esse post não existe mais no disco.');
+    if (!(await armazem.ler(`blog/${slug}/${nome}`))) return nome;
 
-    return atual;
+    return nomeLivre(slug, base, extensao, ocupados.add(semExtensao(nome)));
   }
 
   return {
-    lerPost,
+    ler,
 
-    async listarPosts() {
-      const nomes = await lerPasta(pastas.posts);
-
-      const lidos = await Promise.all(
-        nomes
-          .filter((n) => n.endsWith('.json') && !n.startsWith('.'))
-          .map(async (nome) => {
-            try {
-              return await lerPost(semExtensao(nome));
-            } catch (erro) {
-              logger.warn(`Post ignorado na lista: ${nome}`, erro);
-
-              return null;
-            }
-          })
+    async listar() {
+      const { rows } = await consulta(
+        `select ${COLUNAS} from blog_posts order by atualizado_em desc`
       );
 
-      return lidos
-        .filter((p) => p !== null)
-        .toSorted((a, b) => b.atualizadoEm.localeCompare(a.atualizadoEm));
+      return lerLista(rows).map(({ slug, estado, atualizadoEm, post }) => ({
+        slug,
+        estado,
+        atualizadoEm,
+        titulo: post.titulo,
+        assunto: post.assunto
+      }));
     },
 
-    async salvarPost({ slug, post }) {
-      const atualizadoEm = agora().toISOString();
+    async gravar(entrada, intencao) {
+      const quando = agora().toISOString();
 
-      if (slug === null) {
-        return gravar({
-          slug: gerarSlug(post.titulo, await slugsOcupados()),
-          estado: 'rascunho',
-          criadoEm: atualizadoEm,
-          atualizadoEm,
-          publicadoEm: null,
-          post
-        });
+      if (entrada.slug === null) {
+        return inserirNovo(entrada.post, intencao, quando);
       }
 
-      return gravar({ ...(await exigirPost(slug)), atualizadoEm, post });
+      const atual = await ler(entrada.slug);
+
+      conferirVersao(atual, entrada.versao);
+
+      const novo = transicao(atual, entrada.post, intencao, quando, atual.slug);
+
+      const { rows } = await consulta(
+        `update blog_posts
+         set versao = $2, estado = $3, atualizado_em = $4, publicado_em = $5, conteudo = $6::jsonb
+         where slug = $1 and versao = $7
+         returning ${COLUNAS}`,
+        [
+          novo.slug,
+          novo.versao,
+          novo.estado,
+          novo.atualizadoEm,
+          novo.publicadoEm,
+          JSON.stringify(novo.post),
+          atual.versao
+        ]
+      );
+
+      if (rows[0]) return exigirLinha(rows[0]);
+
+      // Outra gravação entrou entre a leitura e o update.
+      conferirVersao(await ler(atual.slug), atual.versao);
+
+      throw new ErroBlog('O post mudou durante a gravação. Tente de novo.');
     },
 
-    async publicarPost(slug) {
-      const atual = await exigirPost(slug);
-      const atualizadoEm = agora().toISOString();
-
-      return gravar({
-        ...atual,
-        estado: 'publicado',
-        atualizadoEm,
-        publicadoEm: atual.publicadoEm ?? atualizadoEm
-      });
-    },
-
-    async despublicarPost(slug) {
-      return gravar({
-        ...(await exigirPost(slug)),
-        estado: 'rascunho',
-        atualizadoEm: agora().toISOString(),
-        publicadoEm: null
-      });
-    },
-
-    async apagarPost(slug) {
-      await rm(arquivoPost(slug), { force: true });
-    },
-
-    async salvarImagem(slug, arquivo) {
-      const valido = validarSlug(slug);
-
-      await exigirPost(valido);
+    async enviarImagem(slug, arquivo) {
+      if (!(await ler(slug))) {
+        throw new ErroBlog('Salve o post antes de enviar imagem.');
+      }
 
       if (arquivo.size > IMAGEM_LIMITE_BYTES) {
         throw new ErroBlog(motivosImagem.tamanho);
@@ -237,34 +260,53 @@ export function criarRepositorioArquivo(
 
       if (!tipo) throw new ErroBlog(motivosImagem.tipo);
 
-      const pasta = path.join(pastas.imagens, valido);
-      const ocupados = new Set((await lerPasta(pasta)).map(semExtensao));
+      const nomeEnviado = semExtensao(arquivo.name.split(/[/\\]/).at(-1) ?? '');
 
-      const nomeOriginal = semExtensao(
-        arquivo.name.split(/[/\\]/).at(-1) ?? ''
+      const base = textoParaSlug(nomeEnviado).slice(0, LIMITE_SLUG) || 'imagem';
+
+      const nome = await nomeLivre(slug, base, tipo.extensao);
+
+      await armazem.gravar(`blog/${slug}/${nome}`, bytes);
+
+      return `/blog/${slug}/${nome}`;
+    },
+
+    async listarPublicados() {
+      const { rows } = await consulta(
+        `select ${COLUNAS} from blog_posts where estado = 'publicado' order by publicado_em desc`
       );
 
-      const base =
-        textoParaSlug(nomeOriginal).slice(0, LIMITE_SLUG) || 'imagem';
+      return lerLista(rows).flatMap((guardado) =>
+        guardado.estado === 'publicado'
+          ? [
+              {
+                slug: guardado.slug,
+                publicadoEm: guardado.publicadoEm,
+                titulo: guardado.post.titulo,
+                resumo: guardado.post.resumo,
+                assunto: guardado.post.assunto,
+                capa: guardado.post.capa
+              }
+            ]
+          : []
+      );
+    },
 
-      const nome = `${gerarSlug(base, ocupados)}.${tipo.extensao}`;
+    async lerPublicado(slug) {
+      const { rows } = await consulta(
+        `select ${COLUNAS} from blog_posts where slug = $1 and estado = 'publicado'`,
+        [slug]
+      );
 
-      await gravarInteiro(path.join(pasta, nome), bytes);
+      const [guardado] = lerLista(rows);
 
-      return `/blog/${valido}/${nome}`;
+      return guardado?.estado === 'publicado' ? guardado : null;
     }
   };
 }
 
-export const {
-  listarPosts,
-  lerPost,
-  salvarPost,
-  publicarPost,
-  despublicarPost,
-  apagarPost,
-  salvarImagem
-} = criarRepositorioArquivo({
-  posts: path.join(process.cwd(), 'conteudo', 'blog', 'posts'),
-  imagens: path.join(process.cwd(), 'public', 'blog')
+/** Imagens ainda em public/, servidas pelo próprio Next, até o bucket entrar. */
+export const repositorioBlog = criarRepositorioBlog({
+  consulta: consultar,
+  armazem: criarArmazemDisco(path.join(process.cwd(), 'public'))
 });
