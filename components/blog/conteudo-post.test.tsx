@@ -82,9 +82,10 @@ describe('ConteudoPost na página pública', () => {
       screen.getAllByRole('columnheader').map((th) => th.textContent)
     ).toEqual(['Na troca', 'Antes', 'Agora']);
     expect(screen.getByRole('cell', { name: '15 min' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /Página da feira/ })
-    ).toHaveAttribute('target', '_blank');
+    const externo = screen.getByRole('link', { name: /Página da feira/ });
+
+    expect(externo).toHaveAttribute('target', '_blank');
+    expect(externo).toHaveAttribute('rel', 'noopener noreferrer');
     expect(screen.getByText('Já tem uma GT?')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Ver a máquina/ })).toHaveAttribute(
       'href',

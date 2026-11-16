@@ -1,8 +1,10 @@
 import { lerPublicado, listarPublicados } from '@/lib/blog/leitura';
 import type { PostPublicado, ResumoPublicado } from '@/lib/blog/tipos';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import PostPage, { generateMetadata } from '../[slug]/page';
+import ErroBlog from '../error';
+import PostNaoEncontrado from '../not-found';
 import BlogPage from '../page';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -170,5 +172,38 @@ describe('leitura do post', () => {
     expect(meta.openGraph?.images).toEqual([
       { url: gt.post.capa, alt: gt.post.titulo }
     ]);
+  });
+});
+
+describe('telas de falha do blog', () => {
+  it('post fora do ar leva de volta à listagem', () => {
+    render(<PostNaoEncontrado />);
+
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Este post não está no ar'
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Ver os posts do blog' })
+    ).toHaveAttribute('href', '/blog');
+  });
+
+  it('banco fora avisa e tenta de novo no clique', () => {
+    const tentar = vi.fn();
+
+    render(
+      <ErroBlog error={new Error('ECONNREFUSED')} unstable_retry={tentar} />
+    );
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'O blog não abriu agora'
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Tentar de novo' }));
+    expect(tentar).toHaveBeenCalledOnce();
+    expect(
+      screen.getByRole('link', { name: 'Voltar ao início' })
+    ).toHaveAttribute('href', '/');
   });
 });
