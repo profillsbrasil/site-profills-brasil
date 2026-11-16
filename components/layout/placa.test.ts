@@ -146,6 +146,50 @@ describe('placa: intenção de hover', () => {
     expect(menuVisivel(e)).toBe('maquinas');
   });
 
+  it('candidato que segue para a gaveta não troca com o timer atrasado', () => {
+    const e = rodar(
+      ...hoverAbre('maquinas'),
+      { tipo: 'ponteiro-saiu' },
+      moveu('projetos', 480, 200),
+      { tipo: 'ponteiro-saiu' },
+      { tipo: 'ponteiro-entrou-gaveta' },
+      { tipo: 'venceu-abre', agora: 200 + REPOUSO_MS }
+    );
+
+    expect(menuVisivel(e)).toBe('maquinas');
+  });
+
+  it('fechando, chegar a outro gatilho segura a gaveta e troca no repouso', () => {
+    const e = rodar(
+      ...hoverAbre('maquinas'),
+      { tipo: 'ponteiro-saiu' },
+      moveu('projetos', 480, 200),
+      { tipo: 'venceu-fecha' }
+    );
+
+    expect(menuVisivel(e)).toBe('maquinas');
+    expect(
+      menuVisivel(
+        reduzirPlaca(e, { tipo: 'venceu-abre', agora: 200 + REPOUSO_MS })
+      )
+    ).toBe('projetos');
+  });
+
+  it('timer de um repouso antigo não abre o repouso novo antes do prazo', () => {
+    const e = rodar(
+      moveu('maquinas', 100, 0),
+      moveu('maquinas', 100 + REPOUSO_PX + 1, 50),
+      { tipo: 'venceu-abre', agora: REPOUSO_MS }
+    );
+
+    expect(menuVisivel(e)).toBeNull();
+    expect(
+      menuVisivel(
+        reduzirPlaca(e, { tipo: 'venceu-abre', agora: 50 + REPOUSO_MS })
+      )
+    ).toBe('maquinas');
+  });
+
   it('a primeira abertura não tem sentido', () => {
     expect(sentidoDaTroca(rodar(...hoverAbre('projetos')), ORDEM)).toBe(0);
   });
