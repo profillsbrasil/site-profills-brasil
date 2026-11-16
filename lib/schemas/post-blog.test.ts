@@ -32,6 +32,7 @@ const post: Post = {
 
 const guardado: PostGuardado = {
   slug: 'profills-na-fispal-2026',
+  versao: 2,
   estado: 'publicado',
   criadoEm: '2026-11-10T12:00:00.000Z',
   atualizadoEm: '2026-11-11T12:00:00.000Z',
@@ -116,54 +117,37 @@ describe('postGuardadoSchema', () => {
       postGuardadoSchema.safeParse({ ...guardado, estado: 'rascunho' }).success
     ).toBe(false);
   });
-
-  it('devolve as chaves numa ordem fixa, para o diff do Git', () => {
-    const embaralhado = {
-      post: {
-        linhas: post.linhas,
-        capa: post.capa,
-        resumo: post.resumo,
-        titulo: post.titulo,
-        assunto: post.assunto
-      },
-      publicadoEm: guardado.publicadoEm,
-      estado: guardado.estado,
-      atualizadoEm: guardado.atualizadoEm,
-      slug: guardado.slug,
-      criadoEm: guardado.criadoEm
-    };
-
-    const lido = postGuardadoSchema.parse(embaralhado);
-
-    expect(Object.keys(lido)).toEqual([
-      'slug',
-      'estado',
-      'criadoEm',
-      'atualizadoEm',
-      'publicadoEm',
-      'post'
-    ]);
-    expect(Object.keys(lido.post)).toEqual([
-      'assunto',
-      'titulo',
-      'resumo',
-      'capa',
-      'linhas'
-    ]);
-  });
 });
 
 describe('entrada do editor', () => {
-  it('aceita post novo sem slug', () => {
-    expect(entradaEditorSchema.safeParse({ slug: null, post }).success).toBe(
-      true
-    );
+  it('aceita post novo sem slug nem versão e post gravado com os dois', () => {
+    expect(
+      entradaEditorSchema.safeParse({ slug: null, versao: null, post }).success
+    ).toBe(true);
+    expect(
+      entradaEditorSchema.safeParse({ slug: 'feira', versao: 3, post }).success
+    ).toBe(true);
+  });
+
+  it('recusa slug sem versão, versão sem slug e versão que não é inteiro positivo', () => {
+    for (const [slug, versao] of [
+      ['feira', null],
+      [null, 1],
+      ['feira', 0],
+      ['feira', 1.5]
+    ]) {
+      expect(
+        entradaEditorSchema.safeParse({ slug, versao, post }).success
+      ).toBe(false);
+    }
   });
 
   it('recusa slug com caminho, barra ou caractere fora do padrão', () => {
     for (const slug of ['../conteudo', 'a/b', '..', 'Post', 'a.json', '']) {
       expect(slugSchema.safeParse(slug).success).toBe(false);
-      expect(entradaEditorSchema.safeParse({ slug, post }).success).toBe(false);
+      expect(
+        entradaEditorSchema.safeParse({ slug, versao: 1, post }).success
+      ).toBe(false);
     }
   });
 });

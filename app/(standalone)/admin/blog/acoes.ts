@@ -1,30 +1,26 @@
 'use server';
 
+import { abrirAdminBlog } from '@/lib/blog/admin';
 import { comMotivo } from '@/lib/blog/erro';
-import {
-  despublicarPost,
-  publicarPost,
-  salvarPost
-} from '@/lib/blog/repositorio';
-import type { PostGuardado } from '@/lib/blog/tipos';
-import {
-  type EntradaEditor,
-  entradaEditorSchema
-} from '@/lib/schemas/post-blog';
+import type { EntradaEditor, Intencao, PostGuardado } from '@/lib/blog/tipos';
+import { entradaEditorSchema, intencaoSchema } from '@/lib/schemas/post-blog';
 
 export type ResultadoGravacao =
   | { ok: true; guardado: PostGuardado }
   | { ok: false; erro: string };
 
-/** O tipo da entrada é o que o editor promete; o zod confere o que chegou de fato. */
-async function gravar(
+/**
+ * Salvar, publicar e despublicar numa gravação só. O tipo da entrada é o que o
+ * editor promete; o zod confere o que chegou de fato.
+ */
+export async function gravarPost(
   entrada: EntradaEditor,
-  depois?: (slug: string) => Promise<PostGuardado>
+  intencao: Intencao
 ): Promise<ResultadoGravacao> {
-  // Sem login: o admin só grava no `bun dev`.
-  if (process.env.NODE_ENV !== 'development') {
+  const admin = await abrirAdminBlog();
+
+  if (!admin)
     return { ok: false, erro: 'O admin do blog só grava no bun dev.' };
-  }
 
   const lida = entradaEditorSchema.safeParse(entrada);
 
@@ -37,25 +33,14 @@ async function gravar(
     };
   }
 
-  const tentativa = await comMotivo(async () => {
-    const salvo = await salvarPost(lida.data);
+  const qual = intencaoSchema.safeParse(intencao);
 
-    return depois ? depois(salvo.slug) : salvo;
-  });
+  if (!qual.success)
+    return { ok: false, erro: 'Ação de gravação desconhecida.' };
+
+  const tentativa = await comMotivo(() => admin.gravar(lida.data, qual.data));
 
   return tentativa.ok
     ? { ok: true, guardado: tentativa.valor }
     : { ok: false, erro: tentativa.motivo };
-}
-
-export async function salvarRascunho(entrada: EntradaEditor) {
-  return gravar(entrada);
-}
-
-export async function publicar(entrada: EntradaEditor) {
-  return gravar(entrada, publicarPost);
-}
-
-export async function despublicar(entrada: EntradaEditor) {
-  return gravar(entrada, despublicarPost);
 }

@@ -25,7 +25,7 @@ export async function comMotivo<T>(
 
     const motivo =
       erro instanceof Error && 'code' in erro
-        ? `Não foi possível gravar no disco (${String(erro.code)}).`
+        ? `Não foi possível gravar (${String(erro.code)}).`
         : 'Erro inesperado ao gravar. Veja o terminal do bun dev.';
 
     return { ok: false, motivo, doAutor: false };

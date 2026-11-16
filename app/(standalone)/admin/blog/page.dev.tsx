@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { listarPosts } from '@/lib/blog/repositorio';
+import { abrirAdminBlog } from '@/lib/blog/admin';
 import { assuntos } from '@/lib/blog/tipos';
 
 import { dataPorExtenso } from './_components/datas';
@@ -14,10 +14,11 @@ const colunas =
   'grid grid-cols-[minmax(0,1fr)_8rem_11rem_6.5rem] items-center gap-4 px-4';
 
 export default async function PostsPage() {
-  // Sem login: a rota só existe no `bun dev`.
-  if (process.env.NODE_ENV !== 'development') notFound();
+  const admin = await abrirAdminBlog();
 
-  const posts = await listarPosts();
+  if (!admin) notFound();
+
+  const posts = await admin.listar();
 
   return (
     <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
@@ -48,29 +49,31 @@ export default async function PostsPage() {
                 <span>Estado</span>
               </div>
               <ul>
-                {posts.map(({ slug, estado, atualizadoEm, post }) => (
-                  <li
-                    key={slug}
-                    className='border-b border-[#eceef2] last:border-b-0'>
-                    <Link
-                      href={`/admin/blog/${slug}`}
-                      className={`${colunas} py-3 transition-colors outline-none hover:bg-[#f7f8fa] focus-visible:bg-[#f7f8fa] motion-reduce:transition-none`}>
-                      <span className='truncate font-medium'>
-                        {post.titulo || 'Sem título'}
-                      </span>
-                      <span className='text-[#5a6172]'>
-                        {assuntos[post.assunto].nome}
-                      </span>
-                      <span className='text-[#5a6172]'>
-                        {dataPorExtenso(atualizadoEm)}
-                      </span>
-                      <span
-                        className={`justify-self-start rounded-xs px-2 py-0.5 text-xs font-medium ${estado === 'publicado' ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
-                        {estado === 'publicado' ? 'Publicado' : 'Rascunho'}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
+                {posts.map(
+                  ({ slug, estado, atualizadoEm, titulo, assunto }) => (
+                    <li
+                      key={slug}
+                      className='border-b border-[#eceef2] last:border-b-0'>
+                      <Link
+                        href={`/admin/blog/${slug}`}
+                        className={`${colunas} py-3 transition-colors outline-none hover:bg-[#f7f8fa] focus-visible:bg-[#f7f8fa] motion-reduce:transition-none`}>
+                        <span className='truncate font-medium'>
+                          {titulo || 'Sem título'}
+                        </span>
+                        <span className='text-[#5a6172]'>
+                          {assuntos[assunto].nome}
+                        </span>
+                        <span className='text-[#5a6172]'>
+                          {dataPorExtenso(atualizadoEm)}
+                        </span>
+                        <span
+                          className={`justify-self-start rounded-xs px-2 py-0.5 text-xs font-medium ${estado === 'publicado' ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
+                          {estado === 'publicado' ? 'Publicado' : 'Rascunho'}
+                        </span>
+                      </Link>
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           )}
