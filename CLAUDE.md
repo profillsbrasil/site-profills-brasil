@@ -121,6 +121,7 @@ Contexto único: `GLOSSARY.md` e `docs/adr/` na raiz. Ver `docs/agents/domain.md
 - Toda animação nova respeita `useReducedMotion` — padrão do repo é fallback estático.
 - Componentes 3D/WebGL (`CaixaHome3d`, `OptimizedEmbalagem3d`, globe) sempre entram via `dynamic(() => import(...), { ssr: false })` — padrão consistente nos 4 usos existentes.
 - Hero mobile e desktop são duas árvores montadas alternadas por CSS (`md:hidden` / `hidden md:block`) — código eager (3D, observers) checa `getClientRects()` para ignorar a árvore invisível.
+- Produção roda na Railway (projeto `site-profills-brasil`, serviço `site`, `next start` atrás de proxy, deploy a cada push na `main`). Em route handler o `request.url` traz o host interno (`localhost:8080`): redirect usa `Location` relativo, e URL absoluta sai de `SITE_URL`. O `profills.com` sem `www` ainda aponta para a Vercel, que só redireciona para o `www`; a KingHost não tem ALIAS para a raiz.
 - Sem `.env` local, as rotas de e-mail/download falham — não é bug do seu código; ver `.env.example`.
 - Grid pattern de fundo: a implementação viva é `components/layout/gridPatternBg(Mobile).tsx` (usada em ~20 rotas). As variantes em `components/` raiz e `magicui/` (`grid-pattern`, `animated-grid-pattern`, `interactive-grid-pattern`) são código morto — candidatas a remoção, não usar.
 - `text-animate` existe em `ui/` e `magicui/` — verificar qual variante a rota vizinha já usa antes de importar.

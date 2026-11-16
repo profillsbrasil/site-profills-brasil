@@ -50,10 +50,10 @@ Gerenciador de Eventos → pixel `1567963658356669`. A aba "Testar eventos" most
 
 ## Envs e chaves
 
-`CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET` na Vercel (Production e Preview). `GMAIL_USER_RECEIVER` só existe em Production; um smoke de formulário em Preview precisa dela. A chave do CRM circulou em chat durante o desenvolvimento e o dono decidiu não rotacionar.
+`CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET` e `GMAIL_USER_RECEIVER` ficam no serviço `site` do projeto `site-profills-brasil` na Railway (ambiente production, o único). O `INDICACAO_COOKIE_SECRET` foi gerado de novo na migração de 16/11/2026, porque a Vercel não devolve variável do tipo Secret. A chave do CRM circulou em chat durante o desenvolvimento e o dono decidiu não rotacionar.
 
 ## Pendências
 
 - Conferir `IndicacaoChegada` e `IndicacaoLead` no Gerenciador de Eventos do Meta.
 - Decidir se o HTML estático deve trazer o contato padrão antes da hidratação (hoje sai sem `href`, decisão 9 da spec, contestada em revisão).
-- Rate limit para `?ref` fica no CRM ou no firewall da Vercel, se um dia preocupar.
+- Rate limit para `?ref` fica no CRM ou num proxy na frente da Railway, se um dia preocupar.
