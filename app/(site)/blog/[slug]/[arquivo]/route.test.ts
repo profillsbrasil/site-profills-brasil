@@ -45,7 +45,10 @@ describe('GET /blog/[slug]/[arquivo]', () => {
     ['fispal', 'Foto.png'],
     ['fispal', '..%2Ffoto.png'],
     ['Fispal', 'foto.png'],
-    ['fispal', 'foto.svg']
+    ['fispal', 'foto.svg'],
+    ['fispal', 'foto.png'],
+    ['fispal', 'foto-012345678.png'],
+    ['fispal', 'foto-012345678z.png']
   ])('responde 404 a %s/%s sem tocar no armazém', async (slug, arquivo) => {
     const resposta = await pedir(slug, arquivo);
 

@@ -2,7 +2,10 @@
 import { criarArmazemDisco } from '@/lib/armazem/armazem';
 import { abrirPglite } from '@/lib/banco/pglite';
 import type { Consulta } from '@/lib/banco/tipos';
-import { PADRAO_CAMINHO_IMAGEM } from '@/lib/schemas/post-blog';
+import {
+  PADRAO_CAMINHO_IMAGEM,
+  SUFIXO_HASH_IMAGEM
+} from '@/lib/schemas/post-blog';
 
 import { ErroBlog } from './erro';
 import { SLUGS_RESERVADOS } from './regras';
@@ -405,6 +408,7 @@ describe('imagens do post', () => {
 
     expect(caminho).toBe(`/blog/fispal/estande-cao-01-${hash(png)}.png`);
     expect(caminho).toMatch(PADRAO_CAMINHO_IMAGEM);
+    expect(caminho).toMatch(SUFIXO_HASH_IMAGEM);
     expect(await readFile(path.join(raiz, caminho.slice(1)))).toEqual(
       Buffer.from(png)
     );

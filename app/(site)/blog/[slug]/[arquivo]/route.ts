@@ -1,5 +1,8 @@
 import { lerImagem } from '@/lib/blog/leitura';
-import { PADRAO_CAMINHO_IMAGEM } from '@/lib/schemas/post-blog';
+import {
+  PADRAO_CAMINHO_IMAGEM,
+  SUFIXO_HASH_IMAGEM
+} from '@/lib/schemas/post-blog';
 import { logger } from '@/lib/utils/logger';
 
 const ausente = () =>
@@ -15,7 +18,13 @@ export async function GET(
   const { slug, arquivo } = await params;
   const caminho = `/blog/${slug}/${arquivo}`;
 
-  if (!PADRAO_CAMINHO_IMAGEM.test(caminho)) return ausente();
+  // Sem o hash no nome, a imagem não veio do upload: responde 404 sem ir ao bucket.
+  if (
+    !PADRAO_CAMINHO_IMAGEM.test(caminho) ||
+    !SUFIXO_HASH_IMAGEM.test(caminho)
+  ) {
+    return ausente();
+  }
 
   let imagem;
 
