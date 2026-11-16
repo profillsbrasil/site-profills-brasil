@@ -36,6 +36,10 @@ tester.run('profills/sem-banco-direto', semBancoDiretoRule, {
       filename: '/repo/lib/blog/admin.ts'
     },
     {
+      code: "import { consultar } from '@/lib/banco/conexao';",
+      filename: '/repo/lib/admin/sessao.ts'
+    },
+    {
       code: "import { migrar } from '../lib/banco/migrar.mjs';",
       filename: '/repo/scripts/banco-migrar.mjs'
     },

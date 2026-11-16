@@ -11,8 +11,14 @@ const INTERNOS = ['lib/banco/', 'lib/armazem/', 'lib/blog/repositorio'];
 // Pacotes que abrem conexão própria com o banco, contornando lib/banco/conexao.ts.
 const PACOTES = ['pg', '@electric-sql/pglite'];
 
-// Quem pode importá-los: o próprio domínio, os scripts de deploy e os testes.
-const DONOS = ['lib/banco/', 'lib/armazem/', 'lib/blog/', 'scripts/'];
+// Quem pode importá-los: o próprio domínio, o login do admin (limite de tentativas), os scripts de deploy e os testes.
+const DONOS = [
+  'lib/banco/',
+  'lib/armazem/',
+  'lib/blog/',
+  'lib/admin/',
+  'scripts/'
+];
 
 /** Caminho do módulo importado, relativo à raiz e sem extensão; null para pacote. */
 function destino(fonte: string, arquivo: string): string | null {
@@ -47,7 +53,7 @@ export const semBancoDiretoRule = defineRule({
     type: 'problem',
     docs: {
       description:
-        'Proíbe importar lib/banco, lib/armazem, lib/blog/repositorio, pg ou @electric-sql/pglite fora do domínio do blog, dos scripts e dos testes.'
+        'Proíbe importar lib/banco, lib/armazem, lib/blog/repositorio, pg ou @electric-sql/pglite fora do domínio do blog, do login do admin, dos scripts e dos testes.'
     },
     messages: {
       interno:
