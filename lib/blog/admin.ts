@@ -1,3 +1,5 @@
+import { autorAtual } from '@/lib/admin/sessao';
+
 import { type RepositorioBlog, repositorioBlog } from './repositorio';
 import 'server-only';
 
@@ -7,10 +9,9 @@ export type AdminBlog = Pick<
 >;
 
 /**
- * A única porta de escrita do blog. null quando quem chama não pode escrever:
- * a página responde 404, a action devolve o motivo e o editor mantém o texto.
- * Sem login ainda, só abre no bun dev.
+ * A única porta de escrita do blog. null sem sessão do admin: a página manda
+ * para o login, a action devolve o motivo e o editor mantém o texto.
  */
 export async function abrirAdminBlog(): Promise<AdminBlog | null> {
-  return process.env.NODE_ENV === 'development' ? repositorioBlog : null;
+  return (await autorAtual()) ? repositorioBlog : null;
 }

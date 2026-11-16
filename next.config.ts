@@ -1,10 +1,15 @@
 import type { NextConfig } from 'next';
-import { PHASE_DEVELOPMENT_SERVER } from 'next/constants';
 
 import { buildMaquinaRedirects } from './lib/data/maquinas/redirects';
 
 const nextConfig: NextConfig = {
   compress: true,
+  experimental: {
+    serverActions: {
+      // Atrás do proxy da Railway o Host chega interno; a action aceita o Origin dos dois domínios do site.
+      allowedOrigins: ['www.profills.com', 'profills.com']
+    }
+  },
   // O PGlite do bun dev carrega WASM e módulos opcionais em runtime; empacotado pelo Turbopack, quebra.
   serverExternalPackages: ['@electric-sql/pglite'],
   images: {
@@ -40,16 +45,4 @@ const nextConfig: NextConfig = {
   }
 };
 
-// O admin do blog não tem login e grava em disco: as rotas dele usam o sufixo `.dev.tsx` e só entram no `next dev`.
-// Fora dele os arquivos nem fazem parte do build, então não viram rota, chunk público nem function.
-const EXTENSOES = ['tsx', 'ts', 'jsx', 'js'];
-
-export default function config(fase: string): NextConfig {
-  return {
-    ...nextConfig,
-    pageExtensions:
-      fase === PHASE_DEVELOPMENT_SERVER
-        ? [...EXTENSOES.map((extensao) => `dev.${extensao}`), ...EXTENSOES]
-        : EXTENSOES
-  };
-}
+export default nextConfig;

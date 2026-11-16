@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import { abrirAdminBlog } from '@/lib/blog/admin';
 
+import { enderecoDeEntrada } from '../../entrar/volta';
 import { EditorBlog } from '../_components/editor-blog';
 
 export const metadata: Metadata = { title: 'Novo post' };
@@ -10,7 +11,7 @@ export const metadata: Metadata = { title: 'Novo post' };
 export default async function NovoPostPage() {
   const admin = await abrirAdminBlog();
 
-  if (!admin) notFound();
+  if (!admin) redirect(enderecoDeEntrada('/admin/blog/novo'));
 
   const posts = await admin.listar();
 

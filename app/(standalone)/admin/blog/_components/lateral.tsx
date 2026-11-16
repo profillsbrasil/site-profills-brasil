@@ -7,9 +7,11 @@ import Link from 'next/link';
 
 import logoBranco from '@/public/logo-branco.png';
 
+import { sairDoAdmin } from '../../entrar/acoes';
 import {
   FileText,
   Images,
+  LogOut,
   type LucideIcon,
   PanelLeftClose,
   PanelLeftOpen,
@@ -40,6 +42,7 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
   const [recolhida, setRecolhida] = useState(false);
   const IconeRecolher = recolhida ? PanelLeftOpen : PanelLeftClose;
   const rotuloRecolher = recolhida ? 'Abrir o menu' : 'Recolher o menu';
+  const alinhamento = recolhida ? 'justify-center px-0' : 'px-3';
 
   const itens: ItemLateral[] = [
     {
@@ -91,7 +94,6 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
 
       {itens.map((item) => {
         const { nome, Icone } = item;
-        const alinhamento = recolhida ? 'justify-center px-0' : 'px-3';
 
         const icone = (
           <Icone aria-hidden='true' className='size-[18px] shrink-0' />
@@ -139,6 +141,17 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
           </Link>
         );
       })}
+
+      <form action={sairDoAdmin} className='mt-auto'>
+        <button
+          type='submit'
+          aria-label={recolhida ? 'Sair' : undefined}
+          title='Sair'
+          className={`${classeLink} w-full ${alinhamento}`}>
+          <LogOut aria-hidden='true' className='size-[18px] shrink-0' />
+          {recolhida ? null : 'Sair'}
+        </button>
+      </form>
     </nav>
   );
 }

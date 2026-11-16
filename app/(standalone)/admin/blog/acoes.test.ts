@@ -1,8 +1,8 @@
 // @vitest-environment node
-import { ErroBlog } from '@/lib/blog/erro';
+import { ErroBlog, MOTIVO_SEM_SESSAO } from '@/lib/blog/erro';
 import type { EntradaEditor, Post, PostGuardado } from '@/lib/blog/tipos';
 
-import { POST as enviarImagem } from './[slug]/imagem/route.dev';
+import { POST as enviarImagem } from './[slug]/imagem/route';
 import { gravarPost } from './acoes';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -13,9 +13,12 @@ const admin = vi.hoisted(() => ({
   enviarImagem: vi.fn()
 }));
 
-const porta = vi.hoisted(() => ({ abrirAdminBlog: vi.fn() }));
+// Sessão falsa: a action e a rota passam pela abrirAdminBlog de verdade, que pergunta à sessão.
+const sessao = vi.hoisted(() => ({ autorAtual: vi.fn() }));
 
-vi.mock('@/lib/blog/admin', () => porta);
+vi.mock('@/lib/admin/sessao', () => sessao);
+
+vi.mock('@/lib/blog/repositorio', () => ({ repositorioBlog: admin }));
 
 const post: Post = {
   assunto: 'nota',
@@ -37,13 +40,16 @@ const guardado: PostGuardado = {
 
 const novo: EntradaEditor = { slug: null, versao: null, post };
 
-const pedidoImagem = (slug: string) => {
+const SITE = 'https://www.profills.com';
+
+const pedidoImagem = (slug: string, origem: string | null = SITE) => {
   const corpo = new FormData();
   corpo.set('arquivo', new File([new Uint8Array([0x89])], 'a.png'));
 
   return enviarImagem(
-    new Request(`http://localhost/admin/blog/${slug}/imagem`, {
+    new Request(`http://localhost:8080/admin/blog/${slug}/imagem`, {
       method: 'POST',
+      headers: origem ? { origin: origem } : {},
       body: corpo
     }),
     { params: Promise.resolve({ slug }) }
@@ -51,10 +57,13 @@ const pedidoImagem = (slug: string) => {
 };
 
 beforeEach(() => {
-  porta.abrirAdminBlog.mockResolvedValue(admin);
+  vi.stubEnv('SITE_URL', SITE);
+  sessao.autorAtual.mockResolvedValue({ usuario: 'dono' });
+  admin.enviarImagem.mockResolvedValue('/blog/catalogo-novo/a.png');
 });
 
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.clearAllMocks();
 });
 
@@ -66,13 +75,69 @@ describe('gravação do admin do blog', () => {
     expect(admin.gravar).toHaveBeenCalledWith(novo, 'publicar');
   });
 
-  it('recusa sem a porta do admin, sem tocar no banco nem no disco', async () => {
-    porta.abrirAdminBlog.mockResolvedValue(null);
+  it('recusa sem sessão, sem tocar no banco nem no disco', async () => {
+    sessao.autorAtual.mockResolvedValue(null);
 
-    expect(await gravarPost(novo, 'salvar')).toMatchObject({ ok: false });
-    expect((await pedidoImagem('catalogo-novo')).status).toBe(404);
+    expect(await gravarPost(novo, 'salvar')).toEqual({
+      ok: false,
+      erro: MOTIVO_SEM_SESSAO
+    });
+
+    const imagem = await pedidoImagem('catalogo-novo');
+
+    expect(imagem.status).toBe(401);
+    expect(await imagem.json()).toEqual({ erro: MOTIVO_SEM_SESSAO });
     expect(admin.gravar).not.toHaveBeenCalled();
     expect(admin.enviarImagem).not.toHaveBeenCalled();
+  });
+
+  it('grava a imagem com o Origin do site, mesmo com o Host interno do proxy', async () => {
+    const resposta = await pedidoImagem('catalogo-novo');
+
+    expect(resposta.status).toBe(200);
+    expect(admin.enviarImagem).toHaveBeenCalledOnce();
+  });
+
+  it.each([
+    ['de um subdomínio irmão', 'https://crm.profills.com'],
+    ['de outro site', 'https://evil.com'],
+    ['que só começa com o host do site', 'https://www.profills.com.evil.com'],
+    ['ausente', null]
+  ])(
+    'recusa a imagem com Origin %s, mesmo com a sessão do dono',
+    async (_, origem) => {
+      const resposta = await pedidoImagem('catalogo-novo', origem);
+
+      expect(resposta.status).toBe(403);
+      expect(admin.enviarImagem).not.toHaveBeenCalled();
+    }
+  );
+
+  it('sem SITE_URL, aceita qualquer Origin só no next dev', async () => {
+    vi.stubEnv('SITE_URL', '');
+    vi.stubEnv('NODE_ENV', 'production');
+
+    expect((await pedidoImagem('catalogo-novo')).status).toBe(403);
+
+    vi.stubEnv('NODE_ENV', 'development');
+
+    expect(
+      (await pedidoImagem('catalogo-novo', 'http://localhost:3000')).status
+    ).toBe(200);
+  });
+
+  it('no next dev, aceita a própria página local mesmo com SITE_URL de produção no .env', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+
+    expect(
+      (await pedidoImagem('catalogo-novo', 'http://localhost:8080')).status
+    ).toBe(200);
+
+    vi.stubEnv('NODE_ENV', 'production');
+
+    expect(
+      (await pedidoImagem('catalogo-novo', 'http://localhost:8080')).status
+    ).toBe(403);
   });
 
   it('recusa slug malicioso antes de chegar ao repositório', async () => {

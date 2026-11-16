@@ -22,7 +22,7 @@ app/
 ├── (site)/               ← páginas com navbar + footer (layout do grupo injeta a casca)
 │   └── <rota>/_components/   ← componentes privados da rota (o _ tira do roteamento)
 ├── (standalone)/         ← páginas sem casca (landings, ex.: sorteio-fispal-2026)
-│   └── admin/blog/       ← admin do blog: lista, novo e [slug] (editor); só existe no `bun dev`, sem login; rotas com sufixo `.dev.tsx` (o `pageExtensions` do next.config só as inclui no `next dev`); grava pela Server Action `gravarPost` (acoes.ts) e imagem por [slug]/imagem/route.dev.ts
+│   └── admin/            ← admin do blog atrás de login: entrar/ (login e sair), blog/ (lista, novo e [slug] com o editor); toda página, action e route handler abre por `abrirAdminBlog()` (teste em admin/guarda.test.ts); grava pela Server Action `gravarPost` (blog/acoes.ts) e imagem por blog/[slug]/imagem/route.ts
 └── api/                  ← form handlers (zod + e-mail); exceção: download/[token] serve arquivo via JWT
 
 components/
@@ -47,7 +47,7 @@ types/                    ← declarações globais (model-viewer.d.ts, css-vari
 tools/oxlint/profills/    ← plugin local do Oxlint: regras de carregamento (sizes, eager, vídeo, opacity de scroll, 3D)
 tools/oxlint/anti-slop/   ← plugin anti-slop vendorizado de dmmulroy/anti-slop; não editar à mão, origem e desvios no UPSTREAM.md
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
-docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação, 0003 blog no Postgres)
+docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação, 0003 blog no Postgres, 0004 login do admin)
 docs/agents/              ← config das skills de engenharia: issue tracker, labels de triagem e docs do domínio
 docs/indicacao-verificacao.md ← guia: como testar a Indicação em produção e onde ler os números no GA4 e no Meta
 
@@ -57,8 +57,10 @@ lib/indicacao/            ← cookie assinado, tipos e destinatário do lead
 components/indicacao/     ← IndicacaoProvider, useContatoComercial, BotaoEspecialista
 lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte, compras)
 lib/blog/                 ← tipos, regras.ts (transição e conflito de versão, puro), repositorio.ts (SQL); as portas são admin.ts (escrita) e leitura.ts (publicados)
-lib/banco/                ← conexão (pg ou PGlite), migrar.mjs e migracoes/*.sql; só lib/blog e scripts/ importam (regra profills/sem-banco-direto)
+lib/banco/                ← conexão (pg ou PGlite), migrar.mjs e migracoes/*.sql; só lib/blog, lib/admin e scripts/ importam (regra profills/sem-banco-direto)
+lib/admin/                ← login do admin: senha.mjs (scrypt, JS puro para o script) e sessao.ts (JWT no cookie, limite de tentativas, atalho de dev)
 lib/armazem/              ← Armazem (gravar, ler) em disco; o bucket entra depois
+scripts/admin-gerar-hash.mjs ← gera o ADMIN_SENHA_HASH: lê a senha do terminal sem eco e escreve só o hash no stdout
 scripts/banco-migrar.mjs  ← pre-deploy da Railway (`node scripts/banco-migrar.mjs` em deploy.preDeployCommand do serviço site): aplica as migrações pendentes
 .dados/                   ← fora do Git: o PGlite do bun dev (.dados/pglite)
 public/blog/<slug>/       ← imagens enviadas pelo admin do blog
@@ -78,7 +80,7 @@ lib/analytics/            ← eventos de GA4 e Meta (só código do vendedor, nu
 | Vídeo                      | `public/videos/`. Padrão de referência (hero): trio webm + mp4 + poster webp, `preload='metadata'`. Há exceção legada com mp4 único (`servico-personalizado.mp4`)      |
 | Modelo 3D                  | `public/embalagens-3d/*.glb`, < 2MB (exceção legada: `caixa-teste-3d.glb` na raiz de `public/`) — renderizar via `components/modelo3d/`, nunca `<model-viewer>` direto |
 | Texto/copy de página       | Hardcoded no componente da rota (arrays `const` no topo); listas grandes → `lib/data/`                                                                                 |
-| Post do blog               | Pelo admin em `/admin/blog` no `bun dev`; o post vive no banco (tabela `blog_posts`)                                                                                   |
+| Post do blog               | Pelo admin em `/admin/blog`, com login em `/admin/entrar`; o post vive no banco (tabela `blog_posts`)                                                                  |
 | Mudança no banco           | Arquivo novo em `lib/banco/migracoes/` (`NNNN_nome.sql`), só aditivo; nunca editar uma migração já aplicada                                                            |
 | Formulário novo            | Schema zod em `lib/schemas/` + `app/api/<nome>/route.ts` + template em `lib/emails/<nome>/` (usar `_shared/`)                                                          |
 | Util/helper                | `lib/utils/` com teste `.test.ts` ao lado                                                                                                                              |
@@ -102,7 +104,7 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 - `components/modelo3d/DocModelos3d.md` — como adicionar/otimizar modelos 3D e configurar câmera.
 - `skills-lock.json` — skills de repo instaladas (magic-ui, shadcn, ui-sdk, unslop, vercel-react-best-practices).
 - UI SDK (`@ui-sdk/react` e `@ui-sdk/core`, da `vercel-labs/ui`) está em beta (0.1.0-beta.3): a API sai da skill `ui-sdk`, de `node_modules/@ui-sdk/react/docs/llms.txt` e dos `.d.ts` do pacote instalado, nunca de memória. O `@layer ui-sdk;` no topo do `globals.css` deixa as classes do site vencerem o CSS que ela injeta.
-- `.env.example` — as env vars dos forms, downloads, Indicação e banco (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`, `CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET`, `DATABASE_URL`); copiar para `.env` local. Sem `DATABASE_URL`, o `bun dev` usa o PGlite.
+- `.env.example` — as env vars dos forms, downloads, Indicação e banco (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`, `CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET`, `DATABASE_URL`, `ADMIN_*`); copiar para `.env` local. Sem `DATABASE_URL`, o `bun dev` usa o PGlite.
 - `GLOSSARY.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs.
 
 ## Agent skills
@@ -129,8 +131,9 @@ Contexto único: `GLOSSARY.md` e `docs/adr/` na raiz. Ver `docs/agents/domain.md
 - Hero mobile e desktop são duas árvores montadas alternadas por CSS (`md:hidden` / `hidden md:block`) — código eager (3D, observers) checa `getClientRects()` para ignorar a árvore invisível.
 - Produção roda na Railway (projeto `site-profills-brasil`, serviço `site`, `next start` atrás de proxy, deploy a cada push na `main`). Em route handler o `request.url` traz o host interno (`localhost:8080`): redirect usa `Location` relativo, e URL absoluta sai de `SITE_URL`. O `profills.com` sem `www` ainda aponta para a Vercel, que só redireciona para o `www`; a KingHost não tem ALIAS para a raiz.
 - Sem `.env` local, as rotas de e-mail/download falham — não é bug do seu código; ver `.env.example`.
-- Blog no banco: sem `DATABASE_URL`, o `bun dev` abre um PGlite em `.dados/pglite` e migra sozinho; apagar a pasta volta aos 3 posts de exemplo. Fora do `bun dev`, a falta de `DATABASE_URL` é erro na primeira consulta, e o build nunca consulta o banco (`leitura.ts` chama `connection()`). O PGlite precisa estar em `serverExternalPackages`. Testes de banco usam `// @vitest-environment node` e `abrirPglite()` em memória (ADR 0003). Em produção, as migrações rodam no pre-deploy do serviço `site` na Railway com `node scripts/banco-migrar.mjs` (campo `deploy.preDeployCommand`, configurado no serviço e não no repo). Com `DATABASE_URL` no `.env` local, o admin sem login do `bun dev` grava nesse banco: nunca pôr ali a URL de produção.
+- Blog no banco: sem `DATABASE_URL`, o `bun dev` abre um PGlite em `.dados/pglite` e migra sozinho; apagar a pasta volta aos 3 posts de exemplo. Fora do `bun dev`, a falta de `DATABASE_URL` é erro na primeira consulta, e o build nunca consulta o banco (`leitura.ts` chama `connection()`). O PGlite precisa estar em `serverExternalPackages`. Testes de banco usam `// @vitest-environment node` e `abrirPglite()` em memória (ADR 0003). Em produção, as migrações rodam no pre-deploy do serviço `site` na Railway com `node scripts/banco-migrar.mjs` (campo `deploy.preDeployCommand`, configurado no serviço e não no repo). Com `DATABASE_URL` no `.env` local, o admin do `bun dev` grava nesse banco: nunca pôr ali a URL de produção.
 - Grid pattern de fundo: a implementação viva é `components/layout/gridPatternBg(Mobile).tsx` (usada em ~20 rotas). As variantes em `components/` raiz e `magicui/` (`grid-pattern`, `animated-grid-pattern`, `interactive-grid-pattern`) são código morto — candidatas a remoção, não usar.
+- Admin do blog: login por `ADMIN_USUARIO`, `ADMIN_SENHA_HASH` (de `node scripts/admin-gerar-hash.mjs > arquivo`) e `ADMIN_SESSAO_SEGREDO` (32+ caracteres); faltando qualquer um, o login fica fechado (ADR 0004). Para testar a UI local sem senha: `ADMIN_DEV_SEM_LOGIN=1 bun dev` sem `DATABASE_URL`; com `DATABASE_URL`, ou fora do `next dev`, o atalho é ignorado. Mais de 10 tentativas em 15 minutos fecham o login para todos; para destravar antes, apague a linha `global` de `admin_tentativas_login`. O cookie `admin_sessao` é `sameSite: strict` em `path: /admin`: um link de fora para o admin chega sem cookie e cai no login. As Server Actions aceitam o Origin de `www.profills.com` e `profills.com` (`experimental.serverActions.allowedOrigins` no next.config), porque o Host atrás do proxy da Railway é interno.
 - `text-animate` existe em `ui/` e `magicui/` — verificar qual variante a rota vizinha já usa antes de importar.
 - Tema é light-mode único com seções dark (`bg-secondary`) — não há toggle dark/light.
 - Conteúdo do site é em pt-BR.

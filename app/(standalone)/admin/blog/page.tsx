@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import { abrirAdminBlog } from '@/lib/blog/admin';
 import { assuntos } from '@/lib/blog/tipos';
 
+import { enderecoDeEntrada } from '../entrar/volta';
 import { dataPorExtenso } from './_components/datas';
 import { Lateral } from './_components/lateral';
 
@@ -16,7 +17,7 @@ const colunas =
 export default async function PostsPage() {
   const admin = await abrirAdminBlog();
 
-  if (!admin) notFound();
+  if (!admin) redirect(enderecoDeEntrada('/admin/blog'));
 
   const posts = await admin.listar();
 

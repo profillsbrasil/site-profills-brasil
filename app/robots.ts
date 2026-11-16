@@ -10,7 +10,8 @@ export default function robots(): MetadataRoute.Robots {
       // /api/ é só form handler e entrega de catálogo por token, nada a indexar.
       // /catalogo.pdf serve o PDF de 81 MB direto: fora do índice para o download
       // continuar passando pelo formulário de /download, que segue liberada.
-      disallow: ['/api/', '/catalogo.pdf']
+      // /admin/ é o admin do blog, atrás de login.
+      disallow: ['/api/', '/catalogo.pdf', '/admin/']
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL

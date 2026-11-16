@@ -156,7 +156,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
     } catch {
       resultado = {
         ok: false,
-        erro: 'O servidor do bun dev não respondeu. Veja se ele ainda está rodando.'
+        erro: 'O servidor não respondeu. Confira a conexão e tente de novo; o texto continua aqui.'
       };
     }
 
@@ -219,7 +219,8 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
       } catch {
         setFase({
           fase: 'erro',
-          motivo: 'O servidor do bun dev não respondeu ao envio da imagem.'
+          motivo:
+            'O servidor não respondeu ao envio da imagem. Confira a conexão e tente de novo.'
         });
 
         return null;

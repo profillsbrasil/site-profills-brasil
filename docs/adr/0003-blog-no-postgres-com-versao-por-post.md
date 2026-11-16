@@ -26,7 +26,7 @@ O blog gravava cada post num JSON em `conteudo/blog/posts/`, e o admin só exist
 
 ## Consequências
 
-- O admin continua só no `bun dev` até o login (B2). As imagens continuam em `public/blog/` por uma interface `Armazem` mínima até o bucket (B3).
+- O admin continua só no `bun dev` até o login (B2, ADR 0004, que tirou essa restrição). As imagens continuam em `public/blog/` por uma interface `Armazem` mínima até o bucket (B3).
 - O banco passa a ser a única cópia dos posts. O backup do Postgres da Railway precisa ser conferido antes de alguém escrever post de verdade.
 - Migração só aditiva: durante o pre-deploy, o código antigo ainda roda contra o esquema novo.
 - `'novo'` vive em `SLUGS_RESERVADOS` e no `check` do SQL; um teste insere cada slug reservado direto no banco e espera a recusa.

@@ -1,7 +1,7 @@
 'use server';
 
 import { abrirAdminBlog } from '@/lib/blog/admin';
-import { comMotivo } from '@/lib/blog/erro';
+import { MOTIVO_SEM_SESSAO, comMotivo } from '@/lib/blog/erro';
 import type { EntradaEditor, Intencao, PostGuardado } from '@/lib/blog/tipos';
 import { entradaEditorSchema, intencaoSchema } from '@/lib/schemas/post-blog';
 
@@ -19,8 +19,7 @@ export async function gravarPost(
 ): Promise<ResultadoGravacao> {
   const admin = await abrirAdminBlog();
 
-  if (!admin)
-    return { ok: false, erro: 'O admin do blog só grava no bun dev.' };
+  if (!admin) return { ok: false, erro: MOTIVO_SEM_SESSAO };
 
   const lida = entradaEditorSchema.safeParse(entrada);
 
