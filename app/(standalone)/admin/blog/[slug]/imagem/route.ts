@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 import { abrirAdminBlog } from '@/lib/blog/admin';
-import { MOTIVO_SEM_SESSAO, comMotivo } from '@/lib/blog/erro';
+import { MOTIVO_SEM_SESSAO, comMotivo, motivosImagem } from '@/lib/blog/erro';
+import { IMAGEM_LIMITE_BYTES } from '@/lib/blog/tipos';
 import { slugSchema } from '@/lib/schemas/post-blog';
 
 /**
@@ -25,6 +26,9 @@ function origemDoSite(request: Request) {
     (emDev && hostDaOrigem === URL.parse(request.url)?.host)
   );
 }
+
+// Folga para as fronteiras e os cabeçalhos do multipart em volta da imagem.
+const CORPO_LIMITE_BYTES = IMAGEM_LIMITE_BYTES + 64 * 1024;
 
 // Route handler e não Server Action: a Server Action limita o corpo a 1 MB, e a imagem vai até 5 MB.
 export async function POST(
@@ -51,6 +55,11 @@ export async function POST(
       { erro: 'Endereço do post inválido.' },
       { status: 400 }
     );
+  }
+
+  // Sem Content-Length, o limite vale depois do formData(), no repositório.
+  if (Number(request.headers.get('content-length')) > CORPO_LIMITE_BYTES) {
+    return NextResponse.json({ erro: motivosImagem.tamanho }, { status: 413 });
   }
 
   const arquivo = (await request.formData()).get('arquivo');

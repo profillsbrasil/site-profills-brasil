@@ -16,6 +16,7 @@
     "clear": "rm -rf node_modules && rm -rf .next && rm -rf .turbo && rm -rf pnpm-lock.yaml && rm -rf bun.lock && rm -rf bun.lockb && rm -rf package-lock.json && rm -rf yarn.lock "
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1169.0",
     "@google/model-viewer": "4.2.0",
     "@hookform/resolvers": "^5.2.2",
     "@next/third-parties": "^16.3.3",

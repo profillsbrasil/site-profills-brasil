@@ -1,3 +1,4 @@
+import { ErroConfiguracao } from '@/lib/utils/erro-configuracao';
 import { logger } from '@/lib/utils/logger';
 
 import { abrirPglite } from './pglite';
@@ -5,10 +6,6 @@ import type { Consulta } from './tipos';
 import path from 'node:path';
 import pg from 'pg';
 import 'server-only';
-
-export class ErroConfiguracao extends Error {
-  override name = 'ErroConfiguracao';
-}
 
 function abrir(): Promise<Consulta> {
   const url = process.env.DATABASE_URL;

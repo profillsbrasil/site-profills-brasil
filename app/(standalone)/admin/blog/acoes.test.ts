@@ -1,6 +1,11 @@
 // @vitest-environment node
-import { ErroBlog, MOTIVO_SEM_SESSAO } from '@/lib/blog/erro';
-import type { EntradaEditor, Post, PostGuardado } from '@/lib/blog/tipos';
+import { ErroBlog, MOTIVO_SEM_SESSAO, motivosImagem } from '@/lib/blog/erro';
+import {
+  type EntradaEditor,
+  IMAGEM_LIMITE_BYTES,
+  type Post,
+  type PostGuardado
+} from '@/lib/blog/tipos';
 
 import { POST as enviarImagem } from './[slug]/imagem/route';
 import { gravarPost } from './acoes';
@@ -112,6 +117,48 @@ describe('gravação do admin do blog', () => {
       expect(admin.enviarImagem).not.toHaveBeenCalled();
     }
   );
+
+  it('recusa pelo Content-Length acima do limite sem ler o corpo', async () => {
+    const pedido = new Request(
+      'http://localhost:8080/admin/blog/catalogo-novo/imagem',
+      {
+        method: 'POST',
+        headers: {
+          origin: SITE,
+          'content-length': String(IMAGEM_LIMITE_BYTES + 1024 * 1024)
+        },
+        body: new FormData()
+      }
+    );
+
+    const resposta = await enviarImagem(pedido, {
+      params: Promise.resolve({ slug: 'catalogo-novo' })
+    });
+
+    expect(resposta.status).toBe(413);
+    expect(await resposta.json()).toEqual({ erro: motivosImagem.tamanho });
+    expect(pedido.bodyUsed).toBe(false);
+    expect(admin.enviarImagem).not.toHaveBeenCalled();
+  });
+
+  it('sem Content-Length, lê o corpo como antes', async () => {
+    const corpo = new FormData();
+    corpo.set('arquivo', new File([new Uint8Array([0x89])], 'a.png'));
+
+    const pedido = new Request(
+      'http://localhost:8080/admin/blog/catalogo-novo/imagem',
+      { method: 'POST', headers: { origin: SITE }, body: corpo }
+    );
+
+    expect(pedido.headers.get('content-length')).toBeNull();
+
+    const resposta = await enviarImagem(pedido, {
+      params: Promise.resolve({ slug: 'catalogo-novo' })
+    });
+
+    expect(resposta.status).toBe(200);
+    expect(admin.enviarImagem).toHaveBeenCalledOnce();
+  });
 
   it('sem SITE_URL, aceita qualquer Origin só no next dev', async () => {
     vi.stubEnv('SITE_URL', '');

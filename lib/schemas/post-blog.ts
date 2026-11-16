@@ -22,6 +22,9 @@ export const slugSchema = z
 export const PADRAO_CAMINHO_IMAGEM =
   /^\/blog\/[a-z0-9]+(?:-[a-z0-9]+)*\/[a-z0-9]+(?:-[a-z0-9]+)*\.(?:png|jpg|webp|avif)$/;
 
+/** O nome que o upload grava termina no hash do conteúdo; caminho sem ele nunca esteve no armazém. */
+export const SUFIXO_HASH_IMAGEM = /-[0-9a-f]{10}\.(?:png|jpg|webp|avif)$/;
+
 const caminhoImagem = z
   .string()
   .regex(PADRAO_CAMINHO_IMAGEM, 'A imagem precisa ser enviada pelo editor')

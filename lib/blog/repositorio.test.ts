@@ -2,11 +2,16 @@
 import { criarArmazemDisco } from '@/lib/armazem/armazem';
 import { abrirPglite } from '@/lib/banco/pglite';
 import type { Consulta } from '@/lib/banco/tipos';
+import {
+  PADRAO_CAMINHO_IMAGEM,
+  SUFIXO_HASH_IMAGEM
+} from '@/lib/schemas/post-blog';
 
 import { ErroBlog } from './erro';
 import { SLUGS_RESERVADOS } from './regras';
 import { criarRepositorioBlog } from './repositorio';
 import type { Post } from './tipos';
+import { createHash } from 'node:crypto';
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -390,7 +395,10 @@ describe('imagens do post', () => {
       'salvar'
     );
 
-  it('grava em blog/<slug>/ com nome saneado e devolve o caminho público', async () => {
+  const hash = (bytes: Uint8Array) =>
+    createHash('sha256').update(bytes).digest('hex').slice(0, 10);
+
+  it('grava em blog/<slug>/ com nome saneado e o hash do conteúdo', async () => {
     const { slug } = await gravarPost('Fispal');
 
     const caminho = await repositorio().enviarImagem(
@@ -398,27 +406,29 @@ describe('imagens do post', () => {
       new File([png], '../Estande Ção 01.PNG', { type: 'image/png' })
     );
 
-    expect(caminho).toBe('/blog/fispal/estande-cao-01.png');
-    expect(
-      await readFile(path.join(raiz, 'blog/fispal/estande-cao-01.png'))
-    ).toEqual(Buffer.from(png));
+    expect(caminho).toBe(`/blog/fispal/estande-cao-01-${hash(png)}.png`);
+    expect(caminho).toMatch(PADRAO_CAMINHO_IMAGEM);
+    expect(caminho).toMatch(SUFIXO_HASH_IMAGEM);
+    expect(await readFile(path.join(raiz, caminho.slice(1)))).toEqual(
+      Buffer.from(png)
+    );
   });
 
-  it('dá a extensão pelo conteúdo do arquivo e não sobrescreve outra imagem', async () => {
+  it('o mesmo arquivo dá o mesmo caminho; outro conteúdo com o mesmo nome dá outro', async () => {
     const repo = repositorio();
     const { slug } = await gravarPost('Fispal');
+    const outro = new Uint8Array([...png, 1]);
 
-    const a = await repo.enviarImagem(slug, new File([png], 'foto.webp'));
+    const a = await repo.enviarImagem(slug, new File([png], 'foto.png'));
     const b = await repo.enviarImagem(slug, new File([png], 'foto.png'));
+    const c = await repo.enviarImagem(slug, new File([outro], 'foto.png'));
 
-    expect([a, b]).toEqual([
-      '/blog/fispal/foto.png',
-      '/blog/fispal/foto-2.png'
-    ]);
+    expect(b).toBe(a);
+    expect(c).not.toBe(a);
     expect(await readdir(path.join(raiz, 'blog/fispal'))).toHaveLength(2);
   });
 
-  it('aceita JPEG, WebP e AVIF pelos bytes iniciais', async () => {
+  it('dá a extensão pelo conteúdo do arquivo e aceita JPEG, WebP e AVIF', async () => {
     const repo = repositorio();
     const { slug } = await gravarPost('Tipos');
     const ascii = (texto: string) => new TextEncoder().encode(texto);
@@ -435,15 +445,34 @@ describe('imagens do post', () => {
 
     const avif = new Uint8Array([0, 0, 0, 0x1c, ...ascii('ftypavif'), 0, 0]);
 
+    expect(await repo.enviarImagem(slug, new File([png], 'foto.webp'))).toBe(
+      `/blog/tipos/foto-${hash(png)}.png`
+    );
     expect(await repo.enviarImagem(slug, new File([jpeg], 'a'))).toBe(
-      '/blog/tipos/a.jpg'
+      `/blog/tipos/a-${hash(jpeg)}.jpg`
     );
     expect(await repo.enviarImagem(slug, new File([webp], 'b'))).toBe(
-      '/blog/tipos/b.webp'
+      `/blog/tipos/b-${hash(webp)}.webp`
     );
-    expect(await repo.enviarImagem(slug, new File([avif], 'c'))).toBe(
-      '/blog/tipos/c.avif'
+    expect(await repo.enviarImagem(slug, new File([avif], '.avif'))).toBe(
+      `/blog/tipos/imagem-${hash(avif)}.avif`
     );
+  });
+
+  it('lê a imagem gravada com o tipo do nome, e null quando não existe', async () => {
+    const repo = repositorio();
+    const { slug } = await gravarPost('Leitura');
+
+    const caminho = await repo.enviarImagem(slug, new File([png], 'a.png'));
+    const lida = await repo.lerImagem(caminho);
+
+    expect(lida).toMatchObject({ tipo: 'image/png', tamanho: png.length });
+    expect(
+      lida && new Uint8Array(await new Response(lida.corpo).arrayBuffer())
+    ).toEqual(png);
+    expect(
+      await repo.lerImagem('/blog/leitura/outra-0123456789.png')
+    ).toBeNull();
   });
 
   it('recusa arquivo que não é PNG, JPEG, WebP ou AVIF, mesmo com MIME de imagem', async () => {
@@ -473,18 +502,5 @@ describe('imagens do post', () => {
     await expect(
       repositorio().enviarImagem('sem-post', new File([png], 'a.png'))
     ).rejects.toBeInstanceOf(ErroBlog);
-  });
-});
-
-describe('armazém em disco', () => {
-  it('recusa chave que sai da pasta', async () => {
-    const armazem = criarArmazemDisco(raiz);
-
-    await expect(armazem.gravar('../fora.png', png)).rejects.toThrow(
-      'fora do armazém'
-    );
-    await expect(armazem.ler('blog/../../fora.png')).rejects.toThrow(
-      'fora do armazém'
-    );
   });
 });

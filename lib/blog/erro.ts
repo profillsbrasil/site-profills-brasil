@@ -1,3 +1,5 @@
+import { ErroConfiguracao } from '@/lib/utils/erro-configuracao';
+
 /** Erro com motivo para mostrar ao autor do post, em pt-BR. */
 export class ErroBlog extends Error {
   override name = 'ErroBlog';
@@ -25,6 +27,10 @@ export async function comMotivo<T>(
   } catch (erro) {
     if (erro instanceof ErroBlog) {
       return { ok: false, motivo: erro.message, doAutor: true };
+    }
+
+    if (erro instanceof ErroConfiguracao) {
+      return { ok: false, motivo: erro.message, doAutor: false };
     }
 
     const motivo =

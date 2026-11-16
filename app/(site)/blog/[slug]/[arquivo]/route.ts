@@ -1,0 +1,62 @@
+import { lerImagem } from '@/lib/blog/leitura';
+import {
+  PADRAO_CAMINHO_IMAGEM,
+  SUFIXO_HASH_IMAGEM
+} from '@/lib/schemas/post-blog';
+import { logger } from '@/lib/utils/logger';
+
+const ausente = () =>
+  new Response(null, {
+    status: 404,
+    headers: { 'Cache-Control': 'public, max-age=60' }
+  });
+
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string; arquivo: string }> }
+) {
+  const { slug, arquivo } = await params;
+  const caminho = `/blog/${slug}/${arquivo}`;
+
+  // Sem o hash no nome, a imagem não veio do upload: responde 404 sem ir ao bucket.
+  if (
+    !PADRAO_CAMINHO_IMAGEM.test(caminho) ||
+    !SUFIXO_HASH_IMAGEM.test(caminho)
+  ) {
+    return ausente();
+  }
+
+  let imagem;
+
+  try {
+    imagem = await lerImagem(caminho);
+  } catch (erro) {
+    logger.error(`Armazém fora ao ler ${caminho}`, erro);
+
+    return new Response(null, {
+      status: 503,
+      headers: { 'Cache-Control': 'no-store' }
+    });
+  }
+
+  if (!imagem) return ausente();
+
+  const headers = {
+    'Content-Type': imagem.tipo,
+    'Content-Length': String(imagem.tamanho),
+    'X-Content-Type-Options': 'nosniff',
+    // O nome carrega o hash do conteúdo: a mesma URL nunca muda de bytes.
+    'Cache-Control': 'public, max-age=31536000, immutable'
+  };
+
+  // O HEAD do Next responde sem ler o corpo; o stream aberto prenderia o socket do bucket.
+  if (request.method === 'HEAD') {
+    await imagem.corpo.cancel();
+
+    return new Response(null, { headers });
+  }
+
+  return new Response(imagem.corpo, { headers });
+}
+
+export const HEAD = GET;

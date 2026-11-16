@@ -56,7 +56,7 @@ function PreviaBloco({ bloco }: { bloco: Bloco }) {
         <figure className='flex flex-col gap-1.5'>
           <div className='relative grid aspect-[4/3] place-items-center overflow-hidden border border-dashed border-[rgba(148,178,235,0.3)] bg-[rgba(15,23,43,0.82)]'>
             {bloco.src ? (
-              // A imagem vem de URL.createObjectURL, que o next/image não otimiza.
+              // O caminho público serve o original; a prévia não passa pelo otimizador.
               // oxlint-disable-next-line nextjs/no-img-element
               <img
                 src={bloco.src}
@@ -246,7 +246,7 @@ export function PreviaPost({
           </div>
         </div>
         {post.capa ? (
-          // A capa pode vir de URL.createObjectURL, que o next/image não otimiza.
+          // O caminho público serve o original; a prévia não passa pelo otimizador.
           // oxlint-disable-next-line nextjs/no-img-element
           <img
             src={post.capa}
