@@ -52,6 +52,49 @@ describe('migrador do banco', { timeout: 30_000 }, () => {
     expect(await retrato(consulta)).toEqual(depoisDaPrimeira);
   });
 
+  it('limita a espera pela trava antes de pegá-la', async () => {
+    const consulta = await bancoVazio();
+    const pasta = await mkdtemp(path.join(tmpdir(), 'migracoes-'));
+    const instrucoes: string[] = [];
+
+    await migrar(async (sql, valores) => {
+      instrucoes.push(sql);
+
+      return consulta(sql, valores);
+    }, pasta);
+
+    expect(instrucoes.slice(0, 2)).toEqual([
+      "set lock_timeout = '60s'",
+      'select pg_advisory_lock($1)'
+    ]);
+    expect((await consulta('show lock_timeout')).rows).toEqual([
+      { lock_timeout: '1min' }
+    ]);
+    await rm(pasta, { recursive: true, force: true });
+  });
+
+  it('mantém a causa original quando a conexão cai no meio da migração', async () => {
+    const consulta = await bancoVazio();
+    const pasta = await mkdtemp(path.join(tmpdir(), 'migracoes-'));
+
+    await writeFile(path.join(pasta, '0000_a.sql'), 'select 1 / 0;');
+
+    const caiu: Consulta = async (sql, valores) => {
+      if (sql === 'rollback' || sql.includes('pg_advisory_unlock'))
+        throw new Error('Connection terminated');
+
+      return consulta(sql, valores);
+    };
+
+    await expect(migrar(caiu, pasta)).rejects.toMatchObject({
+      message: 'A migração 0000_a.sql falhou, e o rollback também.',
+      cause: expect.objectContaining({
+        message: expect.stringMatching(/division by zero/)
+      })
+    });
+    await rm(pasta, { recursive: true, force: true });
+  });
+
   it('desfaz a migração que falha e aplica de novo depois de corrigida', async () => {
     const consulta = await bancoVazio();
     const pasta = await mkdtemp(path.join(tmpdir(), 'migracoes-'));
