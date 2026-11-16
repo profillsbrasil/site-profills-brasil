@@ -249,3 +249,70 @@ describe('placa: clique, teclado e fora', () => {
     }
   });
 });
+
+describe('placa: dispensar com o ponteiro em cima', () => {
+  const abertoNoGatilho = (): EventoPlaca[] => [
+    ...hoverAbre('maquinas', 100),
+    moveu('maquinas', 100, 100 + CLIQUE_IGNORA_MS + 50)
+  ];
+
+  const fecharPorClique: EventoPlaca = {
+    tipo: 'clique',
+    menu: 'maquinas',
+    agora: 100 + CLIQUE_IGNORA_MS + 100
+  };
+
+  const tremerEVencer = (agora: number): EventoPlaca[] => [
+    moveu('maquinas', 101, agora),
+    { tipo: 'venceu-abre', agora: agora + REPOUSO_MS },
+    moveu('maquinas', 100, agora + REPOUSO_MS + 10),
+    { tipo: 'venceu-abre', agora: agora + 2 * REPOUSO_MS + 10 }
+  ];
+
+  it('fechar por clique e tremer 1 px não reabre', () => {
+    const e = rodar(
+      ...abertoNoGatilho(),
+      fecharPorClique,
+      ...tremerEVencer(1000)
+    );
+
+    expect(menuVisivel(e)).toBeNull();
+  });
+
+  it('fechar por Esc e tremer 1 px não reabre', () => {
+    const e = rodar(
+      ...abertoNoGatilho(),
+      { tipo: 'esc' },
+      ...tremerEVencer(1000)
+    );
+
+    expect(menuVisivel(e)).toBeNull();
+  });
+
+  it('sair do gatilho e voltar depois da dispensa abre ao repousar', () => {
+    for (const fechar of [fecharPorClique, { tipo: 'esc' } as const]) {
+      const e = rodar(
+        ...abertoNoGatilho(),
+        fechar,
+        { tipo: 'ponteiro-saiu' },
+        moveu('maquinas', 100, 2000),
+        { tipo: 'venceu-abre', agora: 2000 + REPOUSO_MS }
+      );
+
+      expect(menuVisivel(e)).toBe('maquinas');
+    }
+  });
+
+  it('repousar em outro gatilho depois da dispensa abre o outro', () => {
+    for (const fechar of [fecharPorClique, { tipo: 'esc' } as const]) {
+      const e = rodar(
+        ...abertoNoGatilho(),
+        fechar,
+        moveu('projetos', 480, 2000),
+        { tipo: 'venceu-abre', agora: 2000 + REPOUSO_MS }
+      );
+
+      expect(menuVisivel(e)).toBe('projetos');
+    }
+  });
+});
