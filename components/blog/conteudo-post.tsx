@@ -192,7 +192,7 @@ function BlocoPost({ bloco, ctx }: { bloco: Bloco; ctx: Contexto }) {
                     <td
                       key={`${x}-${c}`}
                       className={cn(
-                        'px-4 py-2.5',
+                        'px-4 py-2.5 whitespace-nowrap',
                         x > 0 && 'font-mono text-white tabular-nums'
                       )}>
                       {c}
@@ -295,7 +295,7 @@ function BlocoPost({ bloco, ctx }: { bloco: Bloco; ctx: Contexto }) {
             <b className='block leading-snug font-semibold text-white'>
               {maquina.seo.titulo}
             </b>
-            <small className='text-[0.82rem] text-[#b6c5e2]'>
+            <small className='mt-0.5 block text-[0.82rem] leading-snug text-[#b6c5e2]'>
               {maquina.headline}
             </small>
           </span>
