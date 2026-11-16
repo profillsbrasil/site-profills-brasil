@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { abrirAdminBlog } from '@/lib/blog/admin';
-import { comMotivo } from '@/lib/blog/erro';
+import { MOTIVO_SEM_SESSAO, comMotivo } from '@/lib/blog/erro';
 import { slugSchema } from '@/lib/schemas/post-blog';
 
 // Route handler e não Server Action: a Server Action limita o corpo a 1 MB, e a imagem vai até 5 MB.
@@ -12,7 +12,7 @@ export async function POST(
   const admin = await abrirAdminBlog();
 
   if (!admin) {
-    return NextResponse.json({ erro: 'Não encontrado.' }, { status: 404 });
+    return NextResponse.json({ erro: MOTIVO_SEM_SESSAO }, { status: 401 });
   }
 
   const slug = slugSchema.safeParse((await params).slug);

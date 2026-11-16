@@ -1,8 +1,8 @@
 // @vitest-environment node
-import { ErroBlog } from '@/lib/blog/erro';
+import { ErroBlog, MOTIVO_SEM_SESSAO } from '@/lib/blog/erro';
 import type { EntradaEditor, Post, PostGuardado } from '@/lib/blog/tipos';
 
-import { POST as enviarImagem } from './[slug]/imagem/route.dev';
+import { POST as enviarImagem } from './[slug]/imagem/route';
 import { gravarPost } from './acoes';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -13,9 +13,12 @@ const admin = vi.hoisted(() => ({
   enviarImagem: vi.fn()
 }));
 
-const porta = vi.hoisted(() => ({ abrirAdminBlog: vi.fn() }));
+// Sessão falsa: a action e a rota passam pela abrirAdminBlog de verdade, que pergunta à sessão.
+const sessao = vi.hoisted(() => ({ autorAtual: vi.fn() }));
 
-vi.mock('@/lib/blog/admin', () => porta);
+vi.mock('@/lib/admin/sessao', () => sessao);
+
+vi.mock('@/lib/blog/repositorio', () => ({ repositorioBlog: admin }));
 
 const post: Post = {
   assunto: 'nota',
@@ -51,7 +54,7 @@ const pedidoImagem = (slug: string) => {
 };
 
 beforeEach(() => {
-  porta.abrirAdminBlog.mockResolvedValue(admin);
+  sessao.autorAtual.mockResolvedValue({ usuario: 'dono' });
 });
 
 afterEach(() => {
@@ -66,11 +69,18 @@ describe('gravação do admin do blog', () => {
     expect(admin.gravar).toHaveBeenCalledWith(novo, 'publicar');
   });
 
-  it('recusa sem a porta do admin, sem tocar no banco nem no disco', async () => {
-    porta.abrirAdminBlog.mockResolvedValue(null);
+  it('recusa sem sessão, sem tocar no banco nem no disco', async () => {
+    sessao.autorAtual.mockResolvedValue(null);
 
-    expect(await gravarPost(novo, 'salvar')).toMatchObject({ ok: false });
-    expect((await pedidoImagem('catalogo-novo')).status).toBe(404);
+    expect(await gravarPost(novo, 'salvar')).toEqual({
+      ok: false,
+      erro: MOTIVO_SEM_SESSAO
+    });
+
+    const imagem = await pedidoImagem('catalogo-novo');
+
+    expect(imagem.status).toBe(401);
+    expect(await imagem.json()).toEqual({ erro: MOTIVO_SEM_SESSAO });
     expect(admin.gravar).not.toHaveBeenCalled();
     expect(admin.enviarImagem).not.toHaveBeenCalled();
   });
