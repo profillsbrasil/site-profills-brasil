@@ -52,5 +52,8 @@ next-env.d.ts
 .env.local
 .env.local
 
+# banco PGlite e arquivos locais do bun dev
+/.dados/
+
 # worktrees de agentes: cada um traz um .oxlintrc.json que o oxlint carregaria
 .claude/worktrees/

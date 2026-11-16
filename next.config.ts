@@ -5,6 +5,8 @@ import { buildMaquinaRedirects } from './lib/data/maquinas/redirects';
 
 const nextConfig: NextConfig = {
   compress: true,
+  // O PGlite do bun dev carrega WASM e módulos opcionais em runtime; empacotado pelo Turbopack, quebra.
+  serverExternalPackages: ['@electric-sql/pglite'],
   images: {
     formats: ['image/avif', 'image/webp']
   },
