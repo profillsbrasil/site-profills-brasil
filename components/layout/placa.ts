@@ -181,17 +181,12 @@ export interface Placa {
     onKeyDown: (e: KeyboardEvent) => void;
     ref: (el: HTMLButtonElement | null) => void;
   };
-  readonly gaveta: {
-    ref: RefObject<HTMLDivElement | null>;
-    onPointerEnter: (e: PointerEvent) => void;
-    onPointerLeave: (e: PointerEvent) => void;
-    onKeyDown: (e: KeyboardEvent) => void;
-  };
-  idPainel(menu: IdMenu): string;
+  /** A gaveta: o hook liga nela o ponteiro e o Tab que sai pelo fim. */
+  readonly gaveta: RefObject<HTMLDivElement | null>;
 }
 
-const idPainel = (menu: IdMenu) => `placa-painel-${menu}`;
-const idGatilho = (menu: IdMenu) => `placa-gatilho-${menu}`;
+export const idPainel = (menu: IdMenu) => `placa-painel-${menu}`;
+export const idGatilho = (menu: IdMenu) => `placa-gatilho-${menu}`;
 
 function linksDoPainel(menu: IdMenu): HTMLAnchorElement[] {
   return [
@@ -313,33 +308,60 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     [aberto]
   );
 
-  const aoTeclarNaGaveta = (e: KeyboardEvent) => {
-    if (e.key !== 'Tab' || aberto === null) return;
+  useEffect(() => {
+    const el = gaveta.current;
 
-    const links = linksDoPainel(aberto);
-    const dono = gatilhos.current.get(aberto);
+    if (!el) return;
 
-    if (e.shiftKey && document.activeElement === links[0]) {
-      e.preventDefault();
-      dono?.focus();
+    const aoEntrar = (e: globalThis.PointerEvent) => {
+      if (e.pointerType !== 'touch') {
+        despachar({ tipo: 'ponteiro-entrou-gaveta' });
+      }
+    };
 
-      return;
-    }
+    const aoSair = (e: globalThis.PointerEvent) => {
+      if (e.pointerType !== 'touch') despachar({ tipo: 'ponteiro-saiu' });
+    };
 
-    if (!e.shiftKey && document.activeElement === links.at(-1)) {
-      e.preventDefault();
+    const aoTeclar = (e: globalThis.KeyboardEvent) => {
+      if (e.key !== 'Tab' || aberto === null) return;
 
-      const focaveis = [
-        ...(dono?.closest('nav')?.querySelectorAll<HTMLElement>('a, button') ??
-          [])
-      ];
+      const links = linksDoPainel(aberto);
+      const dono = gatilhos.current.get(aberto);
 
-      const proximo = dono ? focaveis[focaveis.indexOf(dono) + 1] : undefined;
+      if (e.shiftKey && document.activeElement === links[0]) {
+        e.preventDefault();
+        dono?.focus();
 
-      despachar({ tipo: 'fora' });
-      proximo?.focus();
-    }
-  };
+        return;
+      }
+
+      if (!e.shiftKey && document.activeElement === links.at(-1)) {
+        e.preventDefault();
+
+        const focaveis = [
+          ...(dono
+            ?.closest('nav')
+            ?.querySelectorAll<HTMLElement>('a, button') ?? [])
+        ];
+
+        const proximo = dono ? focaveis[focaveis.indexOf(dono) + 1] : undefined;
+
+        despachar({ tipo: 'fora' });
+        proximo?.focus();
+      }
+    };
+
+    el.addEventListener('pointerenter', aoEntrar);
+    el.addEventListener('pointerleave', aoSair);
+    el.addEventListener('keydown', aoTeclar);
+
+    return () => {
+      el.removeEventListener('pointerenter', aoEntrar);
+      el.removeEventListener('pointerleave', aoSair);
+      el.removeEventListener('keydown', aoTeclar);
+    };
+  }, [aberto]);
 
   return {
     aberto,
@@ -347,19 +369,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     sentido: sentidoDaTroca(estado, ordem),
     raiz,
     gatilho,
-    gaveta: {
-      ref: gaveta,
-      onPointerEnter: (e) => {
-        if (e.pointerType !== 'touch') {
-          despachar({ tipo: 'ponteiro-entrou-gaveta' });
-        }
-      },
-      onPointerLeave: (e) => {
-        if (e.pointerType !== 'touch') despachar({ tipo: 'ponteiro-saiu' });
-      },
-      onKeyDown: aoTeclarNaGaveta
-    },
-    idPainel
+    gaveta
   };
 }
 

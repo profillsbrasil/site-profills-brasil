@@ -1,447 +1,501 @@
 'use client';
 
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
+import { LinkDaArvore } from '@/components/layout/linkDaArvore';
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from '@/components/layout/customNavigationMenu';
-import { ICONE_CATEGORIA } from '@/components/layout/iconesCategorias';
+  type ChaveVitrine,
+  type FolhaFoto,
+  type FolhaVitrine,
+  type IdMenu,
+  NAVEGACAO,
+  type NoMenu,
+  ehAtual
+} from '@/components/layout/navegacao';
+import {
+  type Placa,
+  idGatilho,
+  idPainel,
+  usePlaca,
+  useRolouAlem
+} from '@/components/layout/placa';
 import type { VitrinesDoMenu } from '@/lib/data/maquinas/menu';
-import {
-  type CategoriaCatalogo,
-  categoriasCatalogo
-} from '@/lib/data/maquinas/types';
-import servicosPersonalizados from '@/lib/images/extras/cortador.jpg';
-import pecasImg from '@/lib/images/extras/pecas-producao.png';
+import { cn } from '@/lib/utils';
 import logoProfills from '@/public/logo-branco.png';
 
-import {
-  Brain,
-  Calendar,
-  Cloud,
-  ExternalLink,
-  Globe,
-  GraduationCap,
-  Landmark,
-  Layers,
-  Leaf,
-  Store
-} from 'lucide-react';
+import { ArrowUpRight, ChevronDown } from 'lucide-react';
 
-const projetos: {
-  title: string;
-  href: string;
-  description: string;
-  icon: React.ReactNode;
-}[] = [
-  {
-    title: 'Profills P&D',
-    href: '/projetos/profills-pd',
-    description: 'IA e Indústria 4.0, com menos paradas e falhas.',
-    icon: <Brain className='text-accent mr-2 size-6' />
-  },
+const ORDEM_MENUS = NAVEGACAO.menus.map((m) => m.id);
+const LIMIAR_COMPACTA = 24;
+const SAIDA = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
-  {
-    title: 'Profills ERP',
-    href: '/projetos/profills-erp',
-    description: 'Gestão integrada em nuvem, automação e menos erros.',
-    icon: <Cloud className='text-accent mr-2 size-6' />
-  },
-  {
-    title: 'Profills Bank',
-    href: '/projetos/profills-bank',
-    description: 'Finanças digitais acessíveis e seguras.',
-    icon: <Landmark className='text-accent mr-2 size-6' />
-  },
-  {
-    title: 'Profills HUB',
-    href: '/projetos/profills-hub',
-    description:
-      'Presença internacional, embalagens seguras e soluções completas',
-    icon: <Globe className='text-accent mr-2 size-6' />
-  },
-  {
-    title: 'Profills Locação',
-    href: '/projetos/profills-locacao',
-    description: 'Máquinas por assinatura, acesso fácil e baixo risco.',
-    icon: <Calendar className='text-accent mr-2 size-6' />
-  },
-  {
-    title: 'Profills Marketplace',
-    href: '/projetos/profills-marketplace',
-    description:
-      'Conexão digital segura entre produtores, clientes e parceiros.',
-    icon: <Store className='text-accent mr-2 size-6' />
-  },
-  {
-    title: 'Profills School',
-    href: '/projetos/profills-school',
-    description: 'Educação técnica acessível para capacitar e gerar impacto.',
-    icon: <GraduationCap className='text-accent mr-2 size-6' />
-  },
-  {
-    title: 'Profills Sustentabilidade',
-    href: '/projetos/profills-sustentabilidade',
-    description: 'Soluções em alimento, educação e futuro com impacto.',
-    icon: <Leaf className='text-accent mr-2 size-6' />
+// A navbar vive fora de .tema-navy: as cores são literais (Regra da Cor Explícita do DESIGN.md).
+const TRACEJADO = 'border-[rgba(148,178,235,0.3)]';
+const TRACEJADO_SUTIL = 'border-[rgba(148,178,235,0.22)]';
+const NAVY_CARD = 'bg-[oklch(0.2503_0.0417_266.3592)]';
+
+const ITEM =
+  'group/item inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs border border-transparent px-3 text-sm leading-none font-medium whitespace-nowrap text-white outline-none max-[1100px]:px-2.5 hover:border-dashed hover:border-[rgba(148,178,235,0.3)] hover:bg-[oklch(0.2734_0.0428_266.3592)] focus-visible:border-dashed focus-visible:border-[rgba(148,178,235,0.3)] focus-visible:bg-[oklch(0.2734_0.0428_266.3592)] aria-expanded:border-dashed aria-expanded:border-[rgba(148,178,235,0.3)] aria-expanded:bg-slate-900/60 aria-[current=page]:border-dashed aria-[current=page]:border-[rgba(148,178,235,0.3)] aria-[current=page]:bg-slate-900/60';
+
+const LINHA_DO_PAINEL =
+  'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-white outline-none hover:border-solid hover:border-accent hover:bg-slate-900/60 focus-visible:border-solid focus-visible:border-accent focus-visible:bg-slate-900/60';
+
+const CANTO = 'pointer-events-none absolute z-[2] size-2 border-accent';
+
+function Cantos() {
+  return (
+    <>
+      <span
+        aria-hidden
+        className={cn(CANTO, '-top-px -left-px border-t border-l')}
+      />
+      <span
+        aria-hidden
+        className={cn(CANTO, '-right-px -bottom-px border-r border-b')}
+      />
+    </>
+  );
+}
+
+function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
+  const pathname = usePathname();
+
+  return (
+    <li>
+      <button
+        type='button'
+        {...placa.gatilho(menu.id)}
+        aria-current={ehAtual(menu, pathname) ? 'page' : undefined}
+        className={ITEM}>
+        {menu.rotuloCurto ?? menu.rotulo}
+        <ChevronDown
+          aria-hidden
+          className='size-3.5 text-[#b6c5e2] transition-transform duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-aria-expanded/item:rotate-180 group-aria-expanded/item:text-accent motion-reduce:transition-none'
+        />
+      </button>
+    </li>
+  );
+}
+
+function PainelVitrine({
+  folhas,
+  vitrines,
+  preparado
+}: {
+  folhas: readonly FolhaVitrine[];
+  vitrines: VitrinesDoMenu;
+  preparado: boolean;
+}) {
+  const [foco, setFoco] = useState<ChaveVitrine>('todas');
+  const vitrine = vitrines[foco];
+  const [todas, ...categorias] = folhas;
+
+  const linha = (folha: FolhaVitrine, extra?: string) => (
+    <LinkDaArvore
+      key={folha.id}
+      alvo={folha}
+      className={cn(LINHA_DO_PAINEL, extra)}
+      onPointerEnter={() => setFoco(folha.vitrine)}
+      onFocus={() => setFoco(folha.vitrine)}>
+      <folha.icone aria-hidden className='size-5 shrink-0 text-accent' />
+      <span className='min-w-0 flex-1 truncate'>{folha.rotulo}</span>
+    </LinkDaArvore>
+  );
+
+  return (
+    <div className='grid grid-cols-[minmax(0,1fr)_340px] gap-5 max-[1100px]:grid-cols-[minmax(0,1fr)_260px]'>
+      <div>
+        {todas && linha(todas, 'font-semibold')}
+        <div
+          aria-hidden
+          className={cn('my-2 border-t border-dashed', TRACEJADO_SUTIL)}
+        />
+        <div className='grid grid-cols-2 gap-x-3 gap-y-1'>
+          {categorias.map((folha) => linha(folha))}
+        </div>
+      </div>
+      <figure
+        className={cn(
+          'relative m-0 flex flex-col rounded-xs border border-dashed [contain:size]',
+          TRACEJADO
+        )}>
+        <Cantos />
+        {preparado && vitrine && (
+          <div
+            key={vitrine.slug}
+            className='animate-in fade-in flex min-h-0 flex-1 flex-col duration-200 motion-reduce:animate-none'>
+            <Image
+              src={vitrine.imagem}
+              alt={vitrine.nome}
+              sizes='340px'
+              className='min-h-0 w-full flex-1 object-contain p-3'
+            />
+            <figcaption
+              className={cn(
+                'border-t border-dashed bg-slate-900/60 px-3 py-2',
+                TRACEJADO_SUTIL
+              )}>
+              <strong className='block text-sm font-bold text-white'>
+                {vitrine.nome}
+              </strong>
+              <small className='block font-mono text-[10px] leading-[1.4] tracking-[0.08em] text-[#b6c5e2] uppercase'>
+                {vitrine.subtitulo}
+              </small>
+            </figcaption>
+          </div>
+        )}
+        {preparado && !vitrine && (
+          <div className='animate-in fade-in flex min-h-0 flex-1 flex-col items-center justify-center gap-2 bg-slate-900/60 duration-200 motion-reduce:animate-none'>
+            <span
+              aria-hidden
+              className='font-mono text-2xl leading-none text-accent'>
+              +
+            </span>
+            <span className='text-center font-mono text-[11px] leading-[1.6] tracking-[0.2em] text-[#b6c5e2] uppercase'>
+              Solução de engenharia
+              <br />
+              sob projeto
+            </span>
+          </div>
+        )}
+      </figure>
+    </div>
+  );
+}
+
+function PainelFotos({
+  folhas,
+  preparado
+}: {
+  folhas: readonly FolhaFoto[];
+  preparado: boolean;
+}) {
+  const [foco, setFoco] = useState(0);
+
+  return (
+    <div className='grid grid-cols-[360px_minmax(0,1fr)] gap-5 max-[1100px]:grid-cols-[300px_minmax(0,1fr)]'>
+      <div className='grid gap-1'>
+        {folhas.map((folha, i) => (
+          <LinkDaArvore
+            key={folha.id}
+            alvo={folha}
+            className={cn(LINHA_DO_PAINEL, 'group/servico')}
+            onPointerEnter={() => setFoco(i)}
+            onFocus={() => setFoco(i)}>
+            <span className='min-w-0 flex-1 truncate'>{folha.rotulo}</span>
+            <ArrowUpRight
+              aria-hidden
+              className='size-4 shrink-0 text-[#b6c5e2] group-hover/servico:text-accent group-focus-visible/servico:text-accent'
+            />
+          </LinkDaArvore>
+        ))}
+      </div>
+      <div
+        className={cn(
+          'relative overflow-hidden rounded-xs border border-dashed',
+          TRACEJADO
+        )}>
+        {preparado &&
+          folhas.map((folha, i) => (
+            <Image
+              key={folha.id}
+              src={folha.foto}
+              alt={folha.altFoto}
+              fill
+              sizes='(min-width: 1280px) 800px, 60vw'
+              className={cn(
+                'object-cover opacity-0 transition-opacity duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+                i === foco && 'opacity-100'
+              )}
+            />
+          ))}
+      </div>
+    </div>
+  );
+}
+
+function ConteudoPainel({
+  menu,
+  vitrines,
+  preparado
+}: {
+  menu: NoMenu;
+  vitrines: VitrinesDoMenu;
+  preparado: boolean;
+}) {
+  const { painel } = menu;
+
+  switch (painel.forma) {
+    case 'vitrine':
+      return (
+        <PainelVitrine
+          folhas={painel.folhas}
+          vitrines={vitrines}
+          preparado={preparado}
+        />
+      );
+    case 'cartoes':
+      return (
+        <div className='grid grid-cols-4 gap-3 max-[1100px]:grid-cols-2'>
+          {painel.folhas.map((folha) => (
+            <LinkDaArvore
+              key={folha.id}
+              alvo={folha}
+              className={cn(
+                'grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-xs border border-dashed bg-slate-900/60 p-3.5 text-white outline-none hover:border-solid hover:border-accent focus-visible:border-solid focus-visible:border-accent',
+                TRACEJADO_SUTIL
+              )}>
+              <folha.icone
+                aria-hidden
+                className='row-span-2 size-[22px] text-accent'
+              />
+              <strong className='truncate text-sm font-semibold'>
+                {folha.rotulo}
+              </strong>
+              <span className='line-clamp-2 min-h-[2.8em] text-[13px] leading-[1.4] text-[#b6c5e2]'>
+                {folha.descricao}
+              </span>
+            </LinkDaArvore>
+          ))}
+        </div>
+      );
+    case 'fotos':
+      return <PainelFotos folhas={painel.folhas} preparado={preparado} />;
   }
-];
+}
+
+function deslizar(el: HTMLElement | null, de: number, para: number) {
+  el?.animate?.(
+    [
+      { transform: `translateX(${de}px)` },
+      { transform: `translateX(${para}px)` }
+    ],
+    { duration: 340, easing: SAIDA }
+  );
+}
 
 export default function NavbarDesktop({
   vitrines
 }: {
   vitrines: VitrinesDoMenu;
 }) {
-  const [scrolled, setScrolled] = useState(false);
+  const placa = usePlaca(ORDEM_MENUS);
+  const compacta = useRolouAlem(LIMIAR_COMPACTA);
+  const { aberto, sentido, prestes, raiz, gaveta } = placa;
+  const nav = useRef<HTMLElement>(null);
+  const corpo = useRef<HTMLDivElement>(null);
+  const base = useRef<HTMLSpanElement>(null);
+  const indicador = useRef<HTMLSpanElement>(null);
+  const anterior = useRef<IdMenu | null>(null);
+  // Imagem de painel só entra no DOM depois que o menu abre ou está para abrir.
+  const [preparados, setPreparados] = useState<ReadonlySet<IdMenu>>(new Set());
 
-  const [categoriaVitrine, setCategoriaVitrine] =
-    useState<CategoriaCatalogo | null>(null);
+  if (prestes && !preparados.has(prestes)) {
+    setPreparados(new Set([...preparados, prestes]));
+  }
 
-  const vitrine = vitrines[categoriaVitrine ?? 'todas'];
+  useLayoutEffect(() => {
+    const posicionar = () => {
+      const corpoEl = corpo.current;
+      const baseEl = base.current;
+      const indicadorEl = indicador.current;
 
-  useEffect(() => {
-    let ticking = false;
+      if (!corpoEl || !baseEl || !indicadorEl || !nav.current) return;
 
-    const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 10);
-        ticking = false;
-      });
+      if (aberto === null) {
+        corpoEl.style.clipPath = '';
+        baseEl.style.transform = '';
+
+        return;
+      }
+
+      const daPlaca = nav.current.getBoundingClientRect();
+
+      const doGatilho = document
+        .getElementById(idGatilho(aberto))
+        ?.getBoundingClientRect();
+
+      const painel = document.getElementById(idPainel(aberto));
+      const altura = (painel?.getBoundingClientRect().height ?? 0) + 1;
+      const total = corpoEl.getBoundingClientRect().height;
+
+      if (doGatilho) {
+        indicadorEl.style.transform = `translateX(${doGatilho.left - daPlaca.left - 1}px) scaleX(${doGatilho.width})`;
+      }
+
+      corpoEl.style.clipPath = `inset(0 0 ${Math.max(0, total - altura)}px 0)`;
+      baseEl.style.transform = `translateY(${altura - 1}px)`;
     };
 
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const indicadorEl = indicador.current;
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (anterior.current === null && aberto !== null && indicadorEl) {
+      indicadorEl.style.transition = 'none';
+      posicionar();
+      void indicadorEl.offsetWidth;
+      indicadorEl.style.transition = '';
+    } else {
+      posicionar();
+    }
+
+    const reduzido = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (!reduzido && sentido !== 0 && anterior.current && aberto) {
+      deslizar(document.getElementById(idPainel(aberto)), sentido * 24, 0);
+      deslizar(
+        document.getElementById(idPainel(anterior.current)),
+        0,
+        -sentido * 24
+      );
+    }
+
+    anterior.current = aberto;
+
+    window.addEventListener('resize', posicionar);
+    const navEl = nav.current;
+    navEl?.addEventListener('transitionend', posicionar);
+
+    return () => {
+      window.removeEventListener('resize', posicionar);
+      navEl?.removeEventListener('transitionend', posicionar);
+    };
+  }, [aberto, compacta, sentido]);
 
   return (
-    <NavigationMenu
-      viewport={false}
-      delayDuration={0}
-      skipDelayDuration={500}
-      className={`fixed top-0 z-50 hidden h-16 min-w-full border-b md:flex transition-all duration-300 ${
-        scrolled
-          ? 'bg-secondary/95 backdrop-blur-md border-secondary-foreground/10 shadow-lg shadow-black/20'
-          : 'bg-secondary border-secondary-foreground/5'
-      }`}>
-      <NavigationMenuList className='flex h-full w-7xl items-center justify-center'>
-        <NavigationMenuItem className='h-full'>
-          <Link href='/'>
-            <Image
-              src={logoProfills}
-              alt='Logo Profills'
-              priority
-              sizes='314px'
-              className='h-full'
-            />
-          </Link>
-        </NavigationMenuItem>
-        <div className='flex h-full w-full items-center justify-center gap-2'>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href='/'>Início</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href='/sobre'>Sobre</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href='/clientes'>Clientes</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Máquinas</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className='flex w-[640px] gap-3'>
-                <div className='flex min-w-0 flex-1 flex-col gap-1 whitespace-nowrap'>
-                  <ListItem
-                    href='/maquinas'
-                    title='Todas as máquinas'
-                    className='w-full'
-                    icon={<Layers className='text-accent mr-2 size-6' />}
-                    onMouseEnter={() => setCategoriaVitrine(null)}
-                    onFocus={() => setCategoriaVitrine(null)}
-                  />
-                  <div
-                    aria-hidden
-                    className='my-1 border-t border-dashed border-[rgba(148,178,235,0.22)]'
-                  />
-                  {categoriasCatalogo.map((categoria) => {
-                    const Icone = ICONE_CATEGORIA[categoria];
-
-                    return (
-                      <ListItem
-                        key={categoria}
-                        href={`/maquinas?categoria=${encodeURIComponent(categoria)}`}
-                        title={categoria}
-                        className='w-full'
-                        icon={<Icone className='text-accent mr-2 size-6' />}
-                        onMouseEnter={() => setCategoriaVitrine(categoria)}
-                        onFocus={() => setCategoriaVitrine(categoria)}
-                      />
-                    );
-                  })}
-                </div>
-                <div className='relative flex w-[250px] shrink-0 flex-col rounded-xs border border-dashed border-[rgba(148,178,235,0.3)]'>
-                  <span
-                    aria-hidden
-                    className='border-accent absolute -top-px -left-px z-10 h-2 w-2 border-t border-l'
-                  />
-                  <span
-                    aria-hidden
-                    className='border-accent absolute -right-px -bottom-px z-10 h-2 w-2 border-r border-b'
-                  />
-                  {vitrine ? (
-                    <div
-                      key={vitrine.slug}
-                      className='animate-in fade-in flex min-h-0 flex-1 flex-col duration-200 motion-reduce:animate-none'>
-                      <Image
-                        src={vitrine.imagem}
-                        alt={vitrine.nome}
-                        className='min-h-0 w-full flex-1 object-contain p-3'
-                      />
-                      <div className='border-t border-dashed border-[rgba(148,178,235,0.22)] bg-slate-900/60 px-3 py-2'>
-                        <p className='text-sm font-bold text-white'>
-                          {vitrine.nome}
-                        </p>
-                        <p className='text-muted-foreground/70 font-mono text-[10px] tracking-wider uppercase'>
-                          {vitrine.subtitulo}
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className='animate-in fade-in flex min-h-0 flex-1 flex-col items-center justify-center gap-2 rounded-xs bg-slate-900/60 p-4 duration-200 motion-reduce:animate-none'>
-                      <span className='text-accent font-mono text-2xl'>+</span>
-                      <span className='text-muted-foreground/70 px-2 text-center font-mono text-[11px] tracking-[0.2em] uppercase'>
-                        Solução de engenharia
-                        <br />
-                        sob projeto
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem className='hidden'>
-            <NavigationMenuTrigger>Peças</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className='grid h-full w-[500px] grid-cols-[1fr_1fr] gap-2'>
-                <div className='flex h-full w-full gap-2'>
-                  <div className='flex w-1/2 flex-col gap-2'>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/sensores'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Sensores <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/resistencias'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Resistência{' '}
-                        <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/atuadores'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Atuadores <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/silenciadores'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Silenciadores{' '}
-                        <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/corte'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Laminas <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                  </div>
-                  <div className='flex w-1/2 flex-col gap-2 pr-2'>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/valvulas'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Válvulas <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/molas'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Molas <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Selagem <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/aquecimento-e-selagem'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Fitas <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href='https://profillsbrasil.lojaintegrada.com.br/conexoes-pneumaticas'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='flex w-full items-center gap-1 text-left'>
-                        Conexões <ExternalLink className='size-3 opacity-50' />
-                      </Link>
-                    </NavigationMenuLink>
-                  </div>
-                </div>
-                <div className='relative h-full w-full'>
-                  <Image
-                    src={pecasImg}
-                    alt='Peças a venda'
-                    className='absolute h-full w-full object-cover'
-                  />
-                </div>
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Projetos</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <span className='grid w-[500px] gap-2 md:grid-cols-2'>
-                {projetos.map((projeto) => (
-                  <ListItem
-                    key={projeto.title}
-                    title={projeto.title}
-                    href={projeto.href}
-                    icon={projeto.icon}>
-                    {projeto.description}
-                  </ListItem>
-                ))}
-              </span>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href='/montar-fabrica'>Monte a sua fábrica</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href='/montar-maquina'>Monte a sua máquina</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Outros Serviços</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className='grid w-[350px] grid-cols-2 gap-4'>
-                <div className='flex flex-col gap-2'>
-                  <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>Corte a Laser</Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>
-                      Dobra e Corte CNC
-                    </Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>Usinagem CNC</Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href='/servicos-personalizados'>Soldagem</Link>
-                  </NavigationMenuLink>
-                </div>
-                <div className='relative h-full w-full'>
-                  <Image
-                    src={servicosPersonalizados}
-                    alt='Serviços Personalizados'
-                    className='absolute inset-0 h-full w-full rounded-xs object-cover'
-                  />
-                </div>
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </div>
-      </NavigationMenuList>
-    </NavigationMenu>
-  );
-}
-
-function ListItem({
-  title,
-  children,
-  href,
-  className,
-  icon,
-  ...props
-}: React.ComponentPropsWithoutRef<'li'> & {
-  href: string;
-  icon?: React.ReactNode;
-}) {
-  return (
-    <span {...props} className={`group w-full ${className}`}>
-      <NavigationMenuLink asChild>
-        <Link
-          href={href}
-          className='flex w-full flex-row items-center justify-start gap-2'>
-          {icon}
-          <div className='flex flex-1 flex-col items-start justify-center'>
-            <div className='group-hover:text-accent/90 text-accent mb-1 text-sm leading-none font-bold'>
-              {title}
-            </div>
-            {children && (
-              <p className='line-clamp-1 text-sm leading-tight text-secondary-foreground/70 group-hover:text-secondary-foreground'>
-                {children}
-              </p>
+    <div
+      ref={raiz}
+      data-compacta={compacta || undefined}
+      data-aberta={aberto !== null || undefined}
+      className='group/placa fixed inset-x-0 top-0 z-50 hidden h-0 lg:block'>
+      <div className='relative mx-auto w-[min(1216px,calc(100%_-_2*clamp(16px,2.5vw,32px)))]'>
+        <nav
+          ref={nav}
+          aria-label='Principal'
+          className={cn(
+            'absolute inset-x-0 top-0 grid translate-y-3 grid-rows-[62px] rounded-xs border border-dashed transition-[translate,grid-template-rows] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:translate-y-2 group-data-[compacta]/placa:grid-rows-[46px] motion-reduce:transition-none',
+            TRACEJADO
+          )}>
+          <span
+            aria-hidden
+            className='pointer-events-none absolute inset-0 -z-10 rounded-xs bg-[color-mix(in_oklch,oklch(0.2503_0.0417_266.3592)_76%,transparent)] backdrop-blur-[14px] backdrop-saturate-[1.15]'
+          />
+          <span
+            aria-hidden
+            className={cn(
+              'pointer-events-none absolute inset-0 -z-10 rounded-xs transition-opacity duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:opacity-0 motion-reduce:duration-[120ms] motion-reduce:ease-linear',
+              NAVY_CARD
             )}
+          />
+          <Cantos />
+          <div className='grid min-w-0 grid-cols-[252px_minmax(0,1fr)_auto] items-center gap-x-7 pr-3 pl-4 transition-[grid-template-columns,column-gap] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:grid-cols-[26px_minmax(0,1fr)_auto] group-data-[compacta]/placa:gap-x-5 max-[1100px]:grid-cols-[26px_minmax(0,1fr)_auto] max-[1100px]:gap-x-4 motion-reduce:transition-none'>
+            <LinkDaArvore
+              alvo={NAVEGACAO.marca}
+              className='group/logo block h-[38.4px] rounded-xs outline-none'>
+              <Image
+                src={logoProfills}
+                alt='Profills, página inicial'
+                priority
+                sizes='252px'
+                className='h-[38.4px] w-auto max-w-none origin-left [clip-path:inset(0_0_0_0)] transition-[clip-path,scale,opacity] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/logo:opacity-80 group-focus-visible/logo:opacity-80 group-data-[compacta]/placa:scale-80 group-data-[compacta]/placa:[clip-path:inset(0_87.5%_0_0)] max-[1100px]:scale-80 max-[1100px]:[clip-path:inset(0_87.5%_0_0)] motion-reduce:transition-none'
+              />
+            </LinkDaArvore>
+            <ul className='m-0 flex min-w-0 list-none items-center gap-1 p-0'>
+              {NAVEGACAO.menus.map((menu) => (
+                <Gatilho key={menu.id} menu={menu} placa={placa} />
+              ))}
+              <li
+                aria-hidden
+                className={cn('mx-2 h-5 w-0 border-l border-dashed', TRACEJADO)}
+              />
+              {NAVEGACAO.links.map((link) => (
+                <li key={link.id}>
+                  <LinkDaArvore alvo={link} className={ITEM}>
+                    {link.rotulo}
+                  </LinkDaArvore>
+                </li>
+              ))}
+            </ul>
+            <div
+              role='group'
+              aria-label='Monte a sua'
+              className='flex items-center gap-2.5'>
+              <span
+                aria-hidden
+                className='text-[13px] leading-none whitespace-nowrap text-[#b6c5e2] max-[1100px]:hidden'>
+                Monte a sua
+              </span>
+              <div className='flex gap-0.5'>
+                {NAVEGACAO.monte.map((no) => (
+                  <LinkDaArvore
+                    key={no.id}
+                    alvo={no}
+                    aria-label={no.rotulo}
+                    className='inline-flex h-9 items-center gap-[7px] border border-white bg-white px-3.5 text-sm leading-none font-semibold whitespace-nowrap text-secondary outline-none first:rounded-l-xs last:rounded-r-xs hover:border-accent hover:bg-accent hover:text-white focus-visible:border-accent focus-visible:bg-accent focus-visible:text-white aria-[current=page]:border-accent aria-[current=page]:bg-slate-900/60 aria-[current=page]:text-white'>
+                    <no.icone aria-hidden className='size-4' />
+                    {no.rotuloCurto}
+                  </LinkDaArvore>
+                ))}
+              </div>
+            </div>
           </div>
-        </Link>
-      </NavigationMenuLink>
-    </span>
+          <span
+            ref={indicador}
+            aria-hidden
+            className='pointer-events-none absolute -bottom-px left-0 h-0.5 w-px origin-left bg-accent opacity-0 transition-[transform,opacity] duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[aberta]/placa:opacity-100 motion-reduce:transition-none'
+          />
+        </nav>
+        <div
+          ref={gaveta}
+          className="pointer-events-none invisible absolute inset-x-0 top-0 translate-y-[84px] [transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_220ms] before:absolute before:inset-x-0 before:-top-2.5 before:h-2.5 before:content-[''] group-data-[aberta]/placa:pointer-events-auto group-data-[aberta]/placa:visible group-data-[aberta]/placa:[transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s] group-data-[compacta]/placa:translate-y-[62px] motion-reduce:transition-none">
+          <div
+            ref={corpo}
+            className={cn(
+              'grid rounded-t-xs border border-b-0 border-dashed [clip-path:inset(0_0_100%_0)] transition-[clip-path] duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+              TRACEJADO,
+              NAVY_CARD
+            )}>
+            {NAVEGACAO.menus.map((menu) => {
+              const ativo = aberto === menu.id;
+
+              return (
+                <section
+                  key={menu.id}
+                  id={idPainel(menu.id)}
+                  aria-label={menu.rotulo}
+                  inert={!ativo}
+                  className={cn(
+                    'invisible self-start p-5 opacity-0 [grid-area:1/1] [transition:opacity_140ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_140ms] motion-reduce:[transition:opacity_120ms_linear,visibility_0s]',
+                    ativo &&
+                      'visible opacity-100 [transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1)_40ms,visibility_0s]'
+                  )}>
+                  <ConteudoPainel
+                    menu={menu}
+                    vitrines={vitrines}
+                    preparado={preparados.has(menu.id)}
+                  />
+                </section>
+              );
+            })}
+          </div>
+          <span
+            ref={base}
+            aria-hidden
+            className={cn(
+              'absolute inset-x-0 top-0 h-px border-t border-dashed opacity-0 transition-[transform,opacity] duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[aberta]/placa:opacity-100 motion-reduce:transition-none',
+              TRACEJADO
+            )}>
+            <span
+              aria-hidden
+              className={cn(CANTO, '-right-px bottom-0 border-r border-b')}
+            />
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
