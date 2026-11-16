@@ -34,7 +34,11 @@ export type EstadoPlaca =
     };
 
 export type EventoPlaca =
-  | { readonly tipo: 'ponteiro-entrou'; readonly menu: IdMenu }
+  | {
+      readonly tipo: 'ponteiro-entrou';
+      readonly menu: IdMenu;
+      readonly agora: number;
+    }
   | { readonly tipo: 'ponteiro-entrou-gaveta' }
   | { readonly tipo: 'ponteiro-saiu' }
   | { readonly tipo: 'clique'; readonly menu: IdMenu; readonly agora: number }
@@ -92,7 +96,7 @@ export function reduzirPlaca(
 
       return estado.menu === evento.menu && estado.fase === 'aberta'
         ? estado
-        : abrir(estado, evento.menu, estado.abertaEm);
+        : abrir(estado, evento.menu, evento.agora);
     }
 
     case 'ponteiro-entrou-gaveta':
@@ -279,7 +283,11 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
       'aria-controls': idPainel(menu),
       onPointerEnter: (e: PointerEvent) => {
         if (e.pointerType !== 'touch') {
-          despachar({ tipo: 'ponteiro-entrou', menu });
+          despachar({
+            tipo: 'ponteiro-entrou',
+            menu,
+            agora: performance.now()
+          });
         }
       },
       onPointerLeave: (e: PointerEvent) => {

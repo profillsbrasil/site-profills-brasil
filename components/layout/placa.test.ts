@@ -17,14 +17,14 @@ const rodar = (...eventos: EventoPlaca[]): EstadoPlaca =>
   eventos.reduce(reduzirPlaca, PLACA_INICIAL);
 
 const hoverAbre = (menu: (typeof ORDEM)[number], agora = 80): EventoPlaca[] => [
-  { tipo: 'ponteiro-entrou', menu },
+  { tipo: 'ponteiro-entrou', menu, agora: agora - 80 },
   { tipo: 'venceu-abre', agora }
 ];
 
 describe('placa: intenção de hover', () => {
   it('passar pelo gatilho sem parar não abre', () => {
     const e = rodar(
-      { tipo: 'ponteiro-entrou', menu: 'maquinas' },
+      { tipo: 'ponteiro-entrou', menu: 'maquinas', agora: 0 },
       { tipo: 'ponteiro-saiu' },
       { tipo: 'venceu-abre', agora: 80 }
     );
@@ -39,14 +39,19 @@ describe('placa: intenção de hover', () => {
   it('com a gaveta aberta a troca é imediata e o sentido segue a ordem', () => {
     const e = rodar(...hoverAbre('servicos'), {
       tipo: 'ponteiro-entrou',
-      menu: 'projetos'
+      menu: 'projetos',
+      agora: 200
     });
 
     expect(menuVisivel(e)).toBe('projetos');
     expect(sentidoDaTroca(e, ORDEM)).toBe(-1);
     expect(
       sentidoDaTroca(
-        reduzirPlaca(e, { tipo: 'ponteiro-entrou', menu: 'servicos' }),
+        reduzirPlaca(e, {
+          tipo: 'ponteiro-entrou',
+          menu: 'servicos',
+          agora: 300
+        }),
         ORDEM
       )
     ).toBe(1);
@@ -95,6 +100,17 @@ describe('placa: clique, teclado e fora', () => {
     });
 
     expect(menuVisivel(e)).toBe('maquinas');
+  });
+
+  it('clique logo depois de o hover trocar de menu não fecha', () => {
+    const e = rodar(
+      ...hoverAbre('maquinas', 1000),
+      { tipo: 'ponteiro-saiu' },
+      { tipo: 'ponteiro-entrou', menu: 'projetos', agora: 2900 },
+      { tipo: 'clique', menu: 'projetos', agora: 3000 }
+    );
+
+    expect(menuVisivel(e)).toBe('projetos');
   });
 
   it('segundo clique no mesmo gatilho fecha', () => {
