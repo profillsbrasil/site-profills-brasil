@@ -105,7 +105,7 @@ Paleta navy monocromática com um único azul de ação — a raridade do accent
 
 ### Named Rules
 
-**A Regra da Cor Explícita.** Dentro de `.tema-navy`, use os tokens semânticos (`text-muted-foreground`, `bg-card`, `border-border`). Fora dela — hero, navbar, footer, que vivem em `bg-secondary` — os tokens resolvem para o tema claro: use cores literais (`#b6c5e2`, `rgba(148,178,235,·)`), como o hero faz.
+**A Regra da Cor Explícita.** Dentro de `.tema-navy`, use os tokens semânticos (`text-muted-foreground`, `bg-card`, `border-border`). Fora dela — hero e footer, que vivem em `bg-secondary` — os tokens resolvem para o tema claro: use cores literais (`#b6c5e2`, `rgba(148,178,235,·)`), como o hero faz. A navbar desktop é a exceção: as cores dela são variáveis `--placa-*` do `globals.css`, trocadas pelo `data-tema` que `temaDoTopo` dá a cada rota (navy ou claro).
 
 **A Regra do Accent Raro.** O Azul de Ação nunca vira fundo de seção nem cor de texto corrido. Ele pontua: um botão, uma borda acesa, uma palavra no título.
 
