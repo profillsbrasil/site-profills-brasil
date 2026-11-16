@@ -19,6 +19,10 @@
   "categories": {
     "correctness": "error"
   },
+  // Diretiva de disable que não silencia nada é justificativa morta.
+  "options": {
+    "reportUnusedDisableDirectives": "error"
+  },
   "env": {
     "browser": true,
     "node": true,

@@ -57,7 +57,6 @@ export default function CatalogoMaquinas() {
   // useSearchParams de propósito: o hook aborta o prerender estático e o HTML
   // de /maquinas saía sem os cards (issue #30). A URL só muda por
   // router.replace daqui mesmo, então uma leitura no mount basta.
-  /* eslint-disable react-hooks/set-state-in-effect -- sincroniza com a URL, sistema externo */
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const categoriaFromUrl = searchParams.get('categoria');
@@ -76,7 +75,6 @@ export default function CatalogoMaquinas() {
       setBusca(buscaFromUrl);
     }
   }, []);
-  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Digitação atualiza a listagem na hora; a URL só depois de uma pausa,
   // para o replace do router não rodar a cada tecla. Pula o mount: ali o
