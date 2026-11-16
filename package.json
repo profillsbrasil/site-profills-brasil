@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "test": "vitest run",
+    "tipos": "next typegen && tsc --noEmit",
     "lint": "oxlint --type-aware",
     "lint:fix": "oxlint --type-aware --fix",
     "format": "prettier --write .",
