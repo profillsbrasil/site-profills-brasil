@@ -7,7 +7,7 @@ Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind v4 · s
 - `bun dev` — dev server (Turbopack)
 - `bun run test` — Vitest (jsdom + Testing Library, setup em `vitest.setup.ts`)
 - `bun run tipos` gera o `next-env.d.ts` com `next typegen` e roda `tsc --noEmit`
-- `bun run lint` / `bun run lint:fix` — Oxlint type-aware com a config em `.oxlintrc.json`; cada regra desligada leva o motivo num comentário ali
+- `bun run lint` / `bun run lint:fix` — Oxlint type-aware com a config em `.oxlintrc.json`; cada regra desligada leva o motivo num comentário ali, e diretiva de disable que não silencia nada reprova o lint
 - `bun run format` — Prettier (ordena classes Tailwind e imports automaticamente)
 - Pre-commit (lefthook, instalado pelo `prepare` no `bun install`) roda oxlint e `prettier --check` só nos arquivos staged
 - Pre-push (lefthook) roda `bun run tipos` e depois `bun run test`, em sequência
