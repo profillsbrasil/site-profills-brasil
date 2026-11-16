@@ -8,6 +8,9 @@ import path from 'node:path';
 // Módulos que tocam o banco ou o disco direto; o app entra por lib/blog/admin.ts (escrita) ou lib/blog/leitura.ts (público).
 const INTERNOS = ['lib/banco/', 'lib/armazem/', 'lib/blog/repositorio'];
 
+// Pacotes que abrem conexão própria com o banco, contornando lib/banco/conexao.ts.
+const PACOTES = ['pg', '@electric-sql/pglite'];
+
 // Quem pode importá-los: o próprio domínio, os scripts de deploy e os testes.
 const DONOS = ['lib/banco/', 'lib/armazem/', 'lib/blog/', 'scripts/'];
 
@@ -15,7 +18,7 @@ const DONOS = ['lib/banco/', 'lib/armazem/', 'lib/blog/', 'scripts/'];
 function destino(fonte: string, arquivo: string): string | null {
   let relativo: string;
 
-  if (fonte.startsWith('@/')) relativo = fonte.slice(2);
+  if (fonte.startsWith('@/')) relativo = path.posix.normalize(fonte.slice(2));
   else if (fonte.startsWith('.'))
     relativo = path.posix.join(path.posix.dirname(arquivo), fonte);
   else return null;
@@ -26,12 +29,25 @@ function destino(fonte: string, arquivo: string): string | null {
 const ehInterno = (modulo: string) =>
   INTERNOS.some((i) => (i.endsWith('/') ? modulo.startsWith(i) : modulo === i));
 
+const ehPacoteDeBanco = (fonte: string) =>
+  PACOTES.some((p) => fonte === p || fonte.startsWith(`${p}/`));
+
+/** Texto fixo do import(): literal ou template sem expressão; null quando é calculado. */
+function textoFixo(fonte: ESTree.Expression): string | null {
+  if (fonte.type === 'Literal' && ehTexto(fonte.value)) return fonte.value;
+
+  if (fonte.type === 'TemplateLiteral' && fonte.expressions.length === 0)
+    return fonte.quasis[0]?.value.cooked ?? null;
+
+  return null;
+}
+
 export const semBancoDiretoRule = defineRule({
   meta: {
     type: 'problem',
     docs: {
       description:
-        'Proíbe importar lib/banco, lib/armazem ou lib/blog/repositorio fora do domínio do blog, dos scripts e dos testes.'
+        'Proíbe importar lib/banco, lib/armazem, lib/blog/repositorio, pg ou @electric-sql/pglite fora do domínio do blog, dos scripts e dos testes.'
     },
     messages: {
       interno:
@@ -51,7 +67,10 @@ export const semBancoDiretoRule = defineRule({
     function checar(node: ESTree.Node, fonte: string, soTipo: boolean) {
       const modulo = destino(fonte, arquivo);
 
-      if (!soTipo && modulo !== null && ehInterno(modulo)) {
+      const proibido =
+        modulo === null ? ehPacoteDeBanco(fonte) : ehInterno(modulo);
+
+      if (!soTipo && proibido) {
         context.report({ node, messageId: 'interno', data: { fonte } });
       }
     }
@@ -68,8 +87,9 @@ export const semBancoDiretoRule = defineRule({
         checar(node, node.source.value, soTipo);
       },
       ImportExpression(node) {
-        if (node.source.type === 'Literal' && ehTexto(node.source.value))
-          checar(node, node.source.value, false);
+        const fonte = textoFixo(node.source);
+
+        if (fonte !== null) checar(node, fonte, false);
       },
       ExportNamedDeclaration(node) {
         if (node.source)

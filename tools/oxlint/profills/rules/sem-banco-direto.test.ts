@@ -43,7 +43,15 @@ tester.run('profills/sem-banco-direto', semBancoDiretoRule, {
       code: "import { abrirPglite } from '@/lib/banco/pglite';",
       filename: '/repo/app/(standalone)/admin/blog/acoes.test.ts'
     },
-    { code: "import pg from 'pg';", filename: acao }
+    { code: "import pg from 'pg';", filename: '/repo/lib/banco/conexao.ts' },
+    {
+      code: "import { PGlite } from '@electric-sql/pglite';",
+      filename: '/repo/lib/banco/pglite.ts'
+    },
+    { code: "import type { Pool } from 'pg';", filename: acao },
+    { code: "import { z } from 'zod';", filename: acao },
+    { code: "import { pgTabela } from 'pg-utilitario';", filename: acao },
+    { code: 'const m = import(`@/lib/${nome}`);', filename: acao }
   ],
   invalid: [
     {
@@ -79,6 +87,36 @@ tester.run('profills/sem-banco-direto', semBancoDiretoRule, {
     {
       code: "export { consultar } from '@/lib/banco/conexao';",
       filename: '/repo/lib/utils/banco.ts',
+      errors: [{ messageId: 'interno' }]
+    },
+    {
+      code: "import pg from 'pg';",
+      filename: acao,
+      errors: [{ messageId: 'interno' }]
+    },
+    {
+      code: "import { Client } from 'pg/lib/client';",
+      filename: '/repo/app/api/blog/route.ts',
+      errors: [{ messageId: 'interno' }]
+    },
+    {
+      code: "import { PGlite } from '@electric-sql/pglite';",
+      filename: '/repo/components/qualquer.tsx',
+      errors: [{ messageId: 'interno' }]
+    },
+    {
+      code: "const pg = import('pg');",
+      filename: acao,
+      errors: [{ messageId: 'interno' }]
+    },
+    {
+      code: 'const banco = import(`@/lib/banco/conexao`);',
+      filename: '/repo/app/(site)/blog/page.tsx',
+      errors: [{ messageId: 'interno' }]
+    },
+    {
+      code: "import { consultar } from '@/lib/../lib/banco/conexao';",
+      filename: acao,
       errors: [{ messageId: 'interno' }]
     }
   ]
