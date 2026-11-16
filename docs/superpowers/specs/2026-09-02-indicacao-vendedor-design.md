@@ -1,7 +1,7 @@
 # Indicação de vendedor via link (`?ref=`) — design
 
 Data: 2026-09-02 · Issue: #28 · Branch: `issue-28-e`
-Glossário: `CONTEXT.md` (seção Indicação, Contatos, Leads). Este documento usa os termos de lá.
+Glossário: `GLOSSARY.md` (seção Indicação, Contatos, Leads). Este documento usa os termos de lá.
 
 ## 1. Objetivo
 

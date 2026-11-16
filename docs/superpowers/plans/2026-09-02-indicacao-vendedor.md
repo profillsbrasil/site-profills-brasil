@@ -8,7 +8,7 @@
 
 **Tech Stack:** Next.js 16.2.6 (App Router, `proxy.ts`), React 19, TypeScript, `jose` (já instalado), `server-only` (novo), Vitest + Testing Library, Bun.
 
-**Spec:** `docs/superpowers/specs/2026-09-02-indicacao-vendedor-design.md` · ADR: `docs/adr/0001-indicacao-por-cookie-assinado-no-proxy.md` · Glossário: `CONTEXT.md`
+**Spec:** `docs/superpowers/specs/2026-09-02-indicacao-vendedor-design.md` · ADR: `docs/adr/0001-indicacao-por-cookie-assinado-no-proxy.md` · Glossário: `GLOSSARY.md`
 
 ## Global Constraints
 
@@ -2338,7 +2338,7 @@ lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte
 
 Na seção "Fontes da verdade", trocar a linha do `.env.example` por: "as 8 env vars dos forms, downloads e Indicação (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`, `CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET`)". Em "Armadilhas não-óbvias", acrescentar: "Contato comercial (telefone, WhatsApp, e-mail de vendas) nunca é hardcoded: vem de `useContatoComercial()` no client ou de `CONTATO_PADRAO` no servidor, porque a Indicação (`?ref=`) troca esses valores por visitante. Suporte, Compras e JSON-LD usam sempre `CONTATO_PADRAO`."
 
-Acrescentar também `CONTEXT.md` na seção "Fontes da verdade": "`CONTEXT.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs."
+Acrescentar também `GLOSSARY.md` na seção "Fontes da verdade": "`GLOSSARY.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs."
 
 - [ ] **Step 2: Rodar a suíte completa, lint, tipos e build**
 

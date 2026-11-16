@@ -1,6 +1,6 @@
 # Indicação de vendedor: como verificar e onde ler os dados
 
-Guia operacional da Indicação (`?ref=CODIGO`) e do seu analytics. Design em `docs/superpowers/specs/2026-09-02-indicacao-vendedor-design.md`, decisões em `docs/adr/0001` e `docs/adr/0002`, glossário em `CONTEXT.md`.
+Guia operacional da Indicação (`?ref=CODIGO`) e do seu analytics. Design em `docs/superpowers/specs/2026-09-02-indicacao-vendedor-design.md`, decisões em `docs/adr/0001` e `docs/adr/0002`, glossário em `GLOSSARY.md`.
 
 ## O que acontece quando alguém abre um link de vendedor
 
