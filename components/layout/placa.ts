@@ -18,26 +18,56 @@ import type { IdMenu } from '@/components/layout/navegacao';
 
 import { flushSync } from 'react-dom';
 
-export const ABRE_MS = 80;
+/**
+ * Intenção de hover: o menu abre, ou troca com a gaveta aberta, quando o
+ * ponteiro fica REPOUSO_MS dentro de um raio de REPOUSO_PX sobre o gatilho.
+ * Quem cruza um gatilho a caminho de outro lugar não repousa nele.
+ */
+export const REPOUSO_MS = 90;
+export const REPOUSO_PX = 6;
 export const FECHA_MS = 150;
 
 /** O clique que chega logo depois de o hover abrir é o mesmo gesto: não fecha. */
 export const CLIQUE_IGNORA_MS = 350;
 
+/** Onde e desde quando o ponteiro está parado sobre um gatilho. */
+export interface Repouso {
+  readonly menu: IdMenu;
+  readonly x: number;
+  readonly y: number;
+  readonly desde: number;
+}
+
+interface GavetaAberta {
+  readonly menu: IdMenu;
+  readonly anterior: IdMenu | null;
+  readonly abertaEm: number;
+}
+
 export type EstadoPlaca =
-  | { readonly fase: 'fechada'; readonly devolverFocoA: IdMenu | null }
-  | { readonly fase: 'armando'; readonly alvo: IdMenu }
   | {
-      readonly fase: 'aberta' | 'fechando';
-      readonly menu: IdMenu;
-      readonly anterior: IdMenu | null;
-      readonly abertaEm: number;
-    };
+      readonly fase: 'fechada';
+      readonly devolverFocoA: IdMenu | null;
+      /**
+       * Fechado por clique ou Esc com o ponteiro talvez em cima: o hover só
+       * volta a armar esse menu depois de o ponteiro sair do gatilho.
+       */
+      readonly dispensado: IdMenu | null;
+    }
+  | { readonly fase: 'armando'; readonly repouso: Repouso }
+  | (GavetaAberta & {
+      readonly fase: 'aberta';
+      /** Outro gatilho sob o ponteiro: vira o menu aberto se o ponteiro repousar nele. */
+      readonly candidato: Repouso | null;
+    })
+  | (GavetaAberta & { readonly fase: 'fechando' });
 
 export type EventoPlaca =
   | {
-      readonly tipo: 'ponteiro-entrou';
+      readonly tipo: 'ponteiro-entrou' | 'ponteiro-moveu';
       readonly menu: IdMenu;
+      readonly x: number;
+      readonly y: number;
       readonly agora: number;
     }
   | { readonly tipo: 'ponteiro-entrou-gaveta' }
@@ -56,7 +86,8 @@ export type EventoPlaca =
 
 export const PLACA_INICIAL: EstadoPlaca = {
   fase: 'fechada',
-  devolverFocoA: null
+  devolverFocoA: null,
+  dispensado: null
 };
 
 export function menuVisivel(estado: EstadoPlaca): IdMenu | null {
@@ -66,50 +97,118 @@ export function menuVisivel(estado: EstadoPlaca): IdMenu | null {
 }
 
 function abrir(estado: EstadoPlaca, menu: IdMenu, agora: number): EstadoPlaca {
-  const visivel = menuVisivel(estado);
-
-  if (visivel === null) {
-    return { fase: 'aberta', menu, anterior: null, abertaEm: agora };
+  if (estado.fase !== 'aberta' && estado.fase !== 'fechando') {
+    return {
+      fase: 'aberta',
+      menu,
+      anterior: null,
+      abertaEm: agora,
+      candidato: null
+    };
   }
 
-  if (estado.fase !== 'aberta' && estado.fase !== 'fechando') return estado;
+  return estado.menu === menu
+    ? {
+        fase: 'aberta',
+        menu,
+        anterior: estado.anterior,
+        abertaEm: estado.abertaEm,
+        candidato: null
+      }
+    : {
+        fase: 'aberta',
+        menu,
+        anterior: estado.menu,
+        abertaEm: agora,
+        candidato: null
+      };
+}
 
-  return visivel === menu
-    ? { ...estado, fase: 'aberta' }
-    : { fase: 'aberta', menu, anterior: visivel, abertaEm: agora };
+/** O mesmo repouso enquanto o ponteiro não sai do raio; senão, a espera recomeça. */
+function seguirRepouso(
+  atual: Repouso | null,
+  { menu, x, y, agora }: { menu: IdMenu; x: number; y: number; agora: number }
+): Repouso {
+  return atual?.menu === menu &&
+    Math.hypot(x - atual.x, y - atual.y) <= REPOUSO_PX
+    ? atual
+    : { menu, x, y, desde: agora };
+}
+
+/** O repouso que o relógio espera vencer, se houver. */
+export function repousoPendente(estado: EstadoPlaca): Repouso | null {
+  if (estado.fase === 'armando') return estado.repouso;
+
+  return estado.fase === 'aberta' ? estado.candidato : null;
 }
 
 /**
  * Transição pura. Timer atrasado ou repetido devolve o mesmo estado:
- * venceu-abre só age em armando e venceu-fecha só em fechando.
+ * venceu-abre só age num repouso que já durou REPOUSO_MS e venceu-fecha
+ * só em fechando.
  */
 export function reduzirPlaca(
   estado: EstadoPlaca,
   evento: EventoPlaca
 ): EstadoPlaca {
   switch (evento.tipo) {
-    case 'ponteiro-entrou': {
-      if (estado.fase === 'fechada' || estado.fase === 'armando') {
-        return estado.fase === 'armando' && estado.alvo === evento.menu
-          ? estado
-          : { fase: 'armando', alvo: evento.menu };
+    case 'ponteiro-entrou':
+    case 'ponteiro-moveu': {
+      if (
+        estado.fase === 'fechada' &&
+        evento.tipo === 'ponteiro-moveu' &&
+        estado.dispensado === evento.menu
+      ) {
+        return estado;
       }
 
-      return estado.menu === evento.menu && estado.fase === 'aberta'
+      if (estado.fase === 'fechada' || estado.fase === 'armando') {
+        const atual = estado.fase === 'armando' ? estado.repouso : null;
+        const repouso = seguirRepouso(atual, evento);
+
+        return repouso === atual ? estado : { fase: 'armando', repouso };
+      }
+
+      if (estado.menu === evento.menu) {
+        return estado.fase === 'aberta' && estado.candidato === null
+          ? estado
+          : abrir(estado, evento.menu, evento.agora);
+      }
+
+      const atual = estado.fase === 'aberta' ? estado.candidato : null;
+      const candidato = seguirRepouso(atual, evento);
+
+      return candidato === atual
         ? estado
-        : abrir(estado, evento.menu, evento.agora);
+        : {
+            fase: 'aberta',
+            menu: estado.menu,
+            anterior: estado.anterior,
+            abertaEm: estado.abertaEm,
+            candidato
+          };
     }
 
     case 'ponteiro-entrou-gaveta':
       return estado.fase === 'fechando'
-        ? { ...estado, fase: 'aberta' }
+        ? { ...estado, fase: 'aberta', candidato: null }
         : estado;
 
     case 'ponteiro-saiu':
-      if (estado.fase === 'armando') return PLACA_INICIAL;
+      if (
+        estado.fase === 'armando' ||
+        (estado.fase === 'fechada' && estado.dispensado !== null)
+      ) {
+        return PLACA_INICIAL;
+      }
 
       return estado.fase === 'aberta'
-        ? { ...estado, fase: 'fechando' }
+        ? {
+            fase: 'fechando',
+            menu: estado.menu,
+            anterior: estado.anterior,
+            abertaEm: estado.abertaEm
+          }
         : estado;
 
     case 'clique': {
@@ -120,7 +219,11 @@ export function reduzirPlaca(
         (estado.fase === 'aberta' || estado.fase === 'fechando') &&
         evento.agora - estado.abertaEm > CLIQUE_IGNORA_MS
       ) {
-        return PLACA_INICIAL;
+        return {
+          fase: 'fechada',
+          devolverFocoA: null,
+          dispensado: evento.menu
+        };
       }
 
       return abrir(estado, evento.menu, evento.agora);
@@ -134,19 +237,24 @@ export function reduzirPlaca(
 
       return visivel === null
         ? estado
-        : { fase: 'fechada', devolverFocoA: visivel };
+        : { fase: 'fechada', devolverFocoA: visivel, dispensado: visivel };
     }
 
     case 'fora':
     case 'navegou':
-      return estado.fase === 'fechada' && estado.devolverFocoA === null
+      return estado.fase === 'fechada' &&
+        estado.devolverFocoA === null &&
+        estado.dispensado === null
         ? estado
         : PLACA_INICIAL;
 
-    case 'venceu-abre':
-      return estado.fase === 'armando'
-        ? abrir(PLACA_INICIAL, estado.alvo, evento.agora)
+    case 'venceu-abre': {
+      const repouso = repousoPendente(estado);
+
+      return repouso && evento.agora - repouso.desde >= REPOUSO_MS
+        ? abrir(estado, repouso.menu, evento.agora)
         : estado;
+    }
 
     case 'venceu-fecha':
       return estado.fase === 'fechando' ? PLACA_INICIAL : estado;
@@ -181,6 +289,7 @@ export interface Placa {
     'aria-expanded': boolean;
     'aria-controls': string;
     onPointerEnter: (e: PointerEvent) => void;
+    onPointerMove: (e: PointerEvent) => void;
     onPointerLeave: (e: PointerEvent) => void;
     onClick: () => void;
     onKeyDown: (e: KeyboardEvent) => void;
@@ -214,10 +323,16 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
   const aberto = menuVisivel(estado);
 
   useEffect(() => {
-    if (estado.fase === 'armando') {
+    const repouso = repousoPendente(estado);
+
+    if (repouso) {
+      // O evento leva o prazo, não a hora do disparo: o setTimeout trunca o
+      // atraso fracionário e pode disparar uma fração de ms antes dele.
+      const prazo = repouso.desde + REPOUSO_MS;
+
       const t = setTimeout(
-        () => despachar({ tipo: 'venceu-abre', agora: performance.now() }),
-        ABRE_MS
+        () => despachar({ tipo: 'venceu-abre', agora: prazo }),
+        Math.max(0, prazo - performance.now())
       );
 
       return () => clearTimeout(t);
@@ -278,42 +393,52 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
   }, [aberto]);
 
   const gatilho = useCallback(
-    (menu: IdMenu) => ({
-      id: idGatilho(menu),
-      'aria-expanded': aberto === menu,
-      'aria-controls': idPainel(menu),
-      onPointerEnter: (e: PointerEvent) => {
+    (menu: IdMenu) => {
+      const apontou = (
+        tipo: 'ponteiro-entrou' | 'ponteiro-moveu',
+        e: PointerEvent
+      ) => {
         if (e.pointerType !== 'touch') {
           despachar({
-            tipo: 'ponteiro-entrou',
+            tipo,
             menu,
+            x: e.clientX,
+            y: e.clientY,
             agora: performance.now()
           });
         }
-      },
-      onPointerLeave: (e: PointerEvent) => {
-        if (e.pointerType !== 'touch') despachar({ tipo: 'ponteiro-saiu' });
-      },
-      onClick: () =>
-        despachar({ tipo: 'clique', menu, agora: performance.now() }),
-      onKeyDown: (e: KeyboardEvent) => {
-        const entrarNoPainel =
-          e.key === 'ArrowDown' ||
-          (e.key === 'Tab' && !e.shiftKey && aberto === menu);
+      };
 
-        if (!entrarNoPainel) return;
+      return {
+        id: idGatilho(menu),
+        'aria-expanded': aberto === menu,
+        'aria-controls': idPainel(menu),
+        onPointerEnter: (e: PointerEvent) => apontou('ponteiro-entrou', e),
+        onPointerMove: (e: PointerEvent) => apontou('ponteiro-moveu', e),
+        onPointerLeave: (e: PointerEvent) => {
+          if (e.pointerType !== 'touch') despachar({ tipo: 'ponteiro-saiu' });
+        },
+        onClick: () =>
+          despachar({ tipo: 'clique', menu, agora: performance.now() }),
+        onKeyDown: (e: KeyboardEvent) => {
+          const entrarNoPainel =
+            e.key === 'ArrowDown' ||
+            (e.key === 'Tab' && !e.shiftKey && aberto === menu);
 
-        e.preventDefault();
-        flushSync(() =>
-          despachar({ tipo: 'teclado-abriu', menu, agora: performance.now() })
-        );
-        linksDoPainel(menu)[0]?.focus();
-      },
-      ref: (el: HTMLButtonElement | null) => {
-        if (el) gatilhos.current.set(menu, el);
-        else gatilhos.current.delete(menu);
-      }
-    }),
+          if (!entrarNoPainel) return;
+
+          e.preventDefault();
+          flushSync(() =>
+            despachar({ tipo: 'teclado-abriu', menu, agora: performance.now() })
+          );
+          linksDoPainel(menu)[0]?.focus();
+        },
+        ref: (el: HTMLButtonElement | null) => {
+          if (el) gatilhos.current.set(menu, el);
+          else gatilhos.current.delete(menu);
+        }
+      };
+    },
     [aberto]
   );
 
@@ -374,7 +499,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
   return {
     aberto,
-    prestes: estado.fase === 'armando' ? estado.alvo : aberto,
+    prestes: estado.fase === 'armando' ? estado.repouso.menu : aberto,
     sentido: sentidoDaTroca(estado, ordem),
     raiz,
     gatilho,

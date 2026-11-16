@@ -45,6 +45,11 @@ const ITEM =
 const LINHA_DO_PAINEL =
   'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-(--placa-texto) outline-none hover:border-solid hover:border-accent hover:bg-(--placa-recuo) focus-visible:border-solid focus-visible:border-accent focus-visible:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
+// Cobre o gap-1 entre gatilhos na área de hit, sem mudar o visual. O inset
+// conta da borda de padding: -4 px passam 3 px da borda do botão.
+const ALCANCE_DO_GATILHO =
+  "relative after:absolute after:inset-y-0 after:-inset-x-1 after:content-['']";
+
 const CANTO = 'pointer-events-none absolute z-[2] size-2 border-accent';
 
 function Cantos() {
@@ -71,7 +76,7 @@ function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
         type='button'
         {...placa.gatilho(menu.id)}
         aria-current={ehAtual(menu, pathname) ? 'page' : undefined}
-        className={ITEM}>
+        className={cn(ITEM, ALCANCE_DO_GATILHO)}>
         {menu.rotuloCurto ?? menu.rotulo}
         <ChevronDown
           aria-hidden
@@ -459,7 +464,7 @@ export default function NavbarDesktop({
         </nav>
         <div
           ref={gaveta}
-          className="pointer-events-none invisible absolute inset-x-0 top-0 translate-y-[84px] [transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_220ms] before:absolute before:inset-x-0 before:-top-2.5 before:h-2.5 before:content-[''] group-data-[aberta]/placa:pointer-events-auto group-data-[aberta]/placa:visible group-data-[aberta]/placa:[transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s] group-data-[compacta]/placa:translate-y-[62px] motion-reduce:transition-none">
+          className="pointer-events-none invisible absolute inset-x-0 top-0 translate-y-[84px] [transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_220ms] before:absolute before:inset-x-0 before:-top-[22px] before:h-[22px] before:content-[''] group-data-[compacta]/placa:before:-top-3 group-data-[compacta]/placa:before:h-3 group-data-[aberta]/placa:pointer-events-auto group-data-[aberta]/placa:visible group-data-[aberta]/placa:[transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s] group-data-[compacta]/placa:translate-y-[62px] motion-reduce:transition-none">
           <div
             ref={corpo}
             className={cn(
@@ -477,9 +482,9 @@ export default function NavbarDesktop({
                   aria-label={menu.rotulo}
                   inert={!ativo}
                   className={cn(
-                    'invisible self-start p-5 opacity-0 [grid-area:1/1] [transition:opacity_140ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_140ms] motion-reduce:[transition:opacity_120ms_linear,visibility_0s]',
+                    'invisible self-start p-5 opacity-0 [grid-area:1/1] [transition:opacity_220ms_linear,visibility_0s_linear_220ms] motion-reduce:[transition:opacity_120ms_linear,visibility_0s]',
                     ativo &&
-                      'visible opacity-100 [transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1)_40ms,visibility_0s]'
+                      'visible opacity-100 [transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1),visibility_0s]'
                   )}>
                   <ConteudoPainel
                     menu={menu}
