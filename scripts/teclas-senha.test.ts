@@ -1,5 +1,6 @@
 // @vitest-environment node
-import { digitar } from './teclas-senha.mjs';
+import { TAMANHO_MINIMO_SENHA } from '../lib/admin/senha.mjs';
+import { digitar, linhaDaSenha } from './teclas-senha.mjs';
 import { describe, expect, it } from 'vitest';
 
 const SETAS = ['\x1b[A', '\x1b[B', '\x1b[C', '\x1b[D', '\x1bOA', '\x1b[3~'];
@@ -24,5 +25,14 @@ describe('teclas da senha do admin', () => {
       senha: 'abc',
       fim: null
     });
+  });
+
+  it('mostra um asterisco por letra e nunca a senha', () => {
+    expect(linhaDaSenha('Senha: ', '')).toBe('\r\x1b[KSenha: ');
+    expect(linhaDaSenha('Senha: ', 'abç😀')).toBe('\r\x1b[KSenha: ****');
+  });
+
+  it('pede 10 caracteres ou mais', () => {
+    expect(TAMANHO_MINIMO_SENHA).toBe(10);
   });
 });

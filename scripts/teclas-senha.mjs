@@ -12,6 +12,16 @@ export const letras = (texto) =>
   Array.from(new Intl.Segmenter('pt-BR').segment(texto), (s) => s.segment);
 
 /**
+ * O que o terminal mostra enquanto a pessoa digita: volta ao começo da linha, limpa e
+ * escreve o rótulo com um asterisco por letra. Redesenhar a linha inteira cobre o apagar.
+ *
+ * @param {string} rotulo
+ * @param {string} senha
+ */
+export const linhaDaSenha = (rotulo, senha) =>
+  `\r\x1b[K${rotulo}${'*'.repeat(letras(senha).length)}`;
+
+/**
  * Ctrl-D, Tab e os outros controles C0 e C1 não são letra de senha.
  *
  * @param {string} tecla
