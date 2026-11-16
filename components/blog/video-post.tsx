@@ -5,6 +5,9 @@ import { useState } from 'react';
 import { Moldura } from './moldura';
 import { Play } from 'lucide-react';
 
+// O botão sai do DOM no clique; sem isso, o foco do teclado cairia no body.
+const focarAoMontar = (iframe: HTMLIFrameElement | null) => iframe?.focus();
+
 /** O iframe do YouTube só entra no clique: a página não baixa o player de quem não assiste. */
 export function VideoYoutube({ id, legenda }: { id: string; legenda: string }) {
   const [tocando, setTocando] = useState(false);
@@ -13,6 +16,7 @@ export function VideoYoutube({ id, legenda }: { id: string; legenda: string }) {
     <Moldura className='aspect-video'>
       {tocando ? (
         <iframe
+          ref={focarAoMontar}
           src={`https://www.youtube-nocookie.com/embed/${id}?autoplay=1`}
           title={legenda || 'Vídeo do post'}
           allow='autoplay; encrypted-media; picture-in-picture; fullscreen'

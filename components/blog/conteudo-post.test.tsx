@@ -110,6 +110,19 @@ describe('ConteudoPost na página pública', () => {
     ).toBe('https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1');
   });
 
+  it('o foco do teclado passa do botão para o player', () => {
+    renderizar([linha(todos[6])]);
+
+    const botao = screen.getByRole('button', {
+      name: 'Tocar o vídeo: A troca em 40 segundos'
+    });
+
+    botao.focus();
+    fireEvent.click(botao);
+
+    expect(screen.getByTitle('A troca em 40 segundos')).toHaveFocus();
+  });
+
   it('bloco sem conteúdo some da página', () => {
     renderizar([
       linha({ id: 'p', tipo: 'paragrafo', texto: '  ' }),
