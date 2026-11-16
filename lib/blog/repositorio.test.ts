@@ -414,16 +414,19 @@ describe('repositório de posts no Postgres', () => {
   });
 });
 
-describe('posts de exemplo da migração 0001', { timeout: 30_000 }, () => {
-  it('entram os três como rascunho, no formato atual', async () => {
-    const semente = criarRepositorioBlog({
+describe('posts que as migrações gravam', { timeout: 30_000 }, () => {
+  const abrirSemente = async () =>
+    criarRepositorioBlog({
       consulta: await abrirPglite(),
       armazem: criarArmazemDisco(raiz)
     });
 
+  it('entram os 3 de exemplo e os 8 do LinkedIn como rascunho, no formato atual', async () => {
+    const semente = await abrirSemente();
     const lista = await semente.listar();
 
-    expect(lista).toHaveLength(3);
+    expect(lista.filter((p) => p.slug.startsWith('exemplo-'))).toHaveLength(3);
+    expect(lista).toHaveLength(11);
     expect(lista.every((p) => p.estado === 'rascunho')).toBe(true);
 
     for (const { slug } of lista) {
@@ -431,6 +434,33 @@ describe('posts de exemplo da migração 0001', { timeout: 30_000 }, () => {
         versao: 1,
         publicadoEm: null
       });
+    }
+  });
+
+  it('os posts do LinkedIn apontam imagens do próprio slug, com o hash que o upload grava', async () => {
+    const semente = await abrirSemente();
+    const lista = await semente.listar();
+
+    const doLinkedin = lista.filter((p) => !p.slug.startsWith('exemplo-'));
+
+    for (const { slug } of doLinkedin) {
+      const guardado = await semente.ler(slug);
+
+      const blocos = (guardado?.post.linhas ?? []).flatMap(
+        (linha) => linha.colunas
+      );
+
+      const imagens = [
+        guardado?.post.capa,
+        ...blocos.map((bloco) => (bloco.tipo === 'imagem' ? bloco.src : null))
+      ].flatMap((caminho) => caminho ?? []);
+
+      expect(imagens.length).toBeGreaterThan(0);
+
+      for (const caminho of imagens) {
+        expect(caminho.startsWith(`/blog/${slug}/`)).toBe(true);
+        expect(caminho).toMatch(SUFIXO_HASH_IMAGEM);
+      }
     }
   });
 });
