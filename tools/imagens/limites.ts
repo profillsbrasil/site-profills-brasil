@@ -4,15 +4,15 @@ import { extname, join } from 'node:path';
 // Maior largura de deviceSizes no Next 16 (node_modules/next/dist/shared/lib/image-config.js); o next.config.ts não muda a lista.
 export const LARGURA_MAXIMA = 3840;
 
-// Check Weigher.png (9,5 MiB, 3381 px) é o maior original que a recompressão lossless não reduziu em 10%.
-export const TETO_BYTES = 10 * 1024 * 1024;
+// pouch-render-maximo.png (4,35 MiB depois de recomprimido) é o maior original que o site usa; a folga até 5 MiB não cabe outro igual.
+export const TETO_BYTES = 5 * 1024 * 1024;
 
 // Medido com tools/imagens/recomprimir.ts em 16/11/2026. A entrada sai quando o arquivo for reduzido ou apagado.
 export const EXCECOES = {
   'lib/images/logoClientes/petruz.png':
     'reduzir para 3840 px deixa o derivado de 1920 com SSIM 0,9889',
   'lib/images/logoClientes/verduranet.png':
-    'PNG com paleta: reduzido vira truecolor de 532 KiB contra 227 KiB',
+    'reduzir para 3840 px dá 532 KiB contra 202 KiB na largura original',
   'lib/images/novasImagens/maquinasEmbalagens/maquinas/TP85.png':
     'PNG com paleta: reduzido vira truecolor de 4.111 KiB contra 1.159 KiB'
 } satisfies Record<string, string>;
