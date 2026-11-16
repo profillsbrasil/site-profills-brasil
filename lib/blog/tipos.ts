@@ -1,13 +1,50 @@
+/**
+ * `chamada` fecha o cartão do post na listagem. `fim` escolhe o que vem
+ * depois do texto: a máquina e o especialista, os contatos ou só outros posts.
+ */
 export const assuntos = {
-  maquina: { nome: 'Máquina', descricao: 'Máquina nova ou versão nova' },
+  maquina: {
+    nome: 'Máquina',
+    plural: 'Máquinas',
+    descricao: 'Máquina nova ou versão nova',
+    chamada: 'Ver a máquina',
+    fim: 'maquina'
+  },
   embalagem: {
     nome: 'Embalagem',
-    descricao: 'Formato que a Profills passa a envasar'
+    plural: 'Embalagens',
+    descricao: 'Formato que a Profills passa a envasar',
+    chamada: 'Ver a embalagem',
+    fim: 'leitura'
   },
-  parceiro: { nome: 'Parceiro', descricao: 'Fornecedor ou parceria nova' },
-  evento: { nome: 'Evento', descricao: 'Feira, visita ou encontro' },
-  nota: { nome: 'Nota', descricao: 'Lançamento curto, catálogo, novidade' },
-  aviso: { nome: 'Aviso', descricao: 'Recesso, mudança de horário' }
+  parceiro: {
+    nome: 'Parceiro',
+    plural: 'Parceiros',
+    descricao: 'Fornecedor ou parceria nova',
+    chamada: 'Conhecer o parceiro',
+    fim: 'leitura'
+  },
+  evento: {
+    nome: 'Evento',
+    plural: 'Eventos',
+    descricao: 'Feira, visita ou encontro',
+    chamada: 'Ler a cobertura',
+    fim: 'leitura'
+  },
+  nota: {
+    nome: 'Nota',
+    plural: 'Notas',
+    descricao: 'Lançamento curto, catálogo, novidade',
+    chamada: 'Ler a nota',
+    fim: 'leitura'
+  },
+  aviso: {
+    nome: 'Aviso',
+    plural: 'Avisos',
+    descricao: 'Recesso, mudança de horário',
+    chamada: 'Ler o aviso',
+    fim: 'contato'
+  }
 } as const;
 
 export type Assunto = keyof typeof assuntos;
