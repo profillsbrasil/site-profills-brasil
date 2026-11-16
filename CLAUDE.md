@@ -46,6 +46,7 @@ private/downloads/        ← arquivos NÃO públicos (catálogo 77MB), servidos
 types/                    ← declarações globais (model-viewer.d.ts, css-variaveis.d.ts para `--var` no style)
 tools/oxlint/profills/    ← plugin local do Oxlint: regras de carregamento (sizes, eager, vídeo, opacity de scroll, 3D)
 tools/oxlint/anti-slop/   ← plugin anti-slop vendorizado de dmmulroy/anti-slop; não editar à mão, origem e desvios no UPSTREAM.md
+tools/imagens/            ← recomprimir.ts (SSIM ≥ 0,99 nos derivados do Next) e orfas.ts; os testes ao lado travam o teto e a imagem órfã
 docs/superpowers/         ← specs/ e plans/ do fluxo de trabalho
 docs/adr/                 ← decisões de arquitetura (0001 indicação por cookie, 0002 analytics da indicação, 0003 blog no Postgres)
 docs/agents/              ← config das skills de engenharia: issue tracker, labels de triagem e docs do domínio
@@ -74,6 +75,7 @@ lib/analytics/            ← eventos de GA4 e Meta (só código do vendedor, nu
 | Componente de uma rota só  | `app/(site)/<rota>/_components/` (forms complexos ganham subpasta com `components/` interno)                                                                           |
 | Componente reutilizável    | Wrapper genérico → `components/` raiz (padrão: `AnimatedContainer`) · bloco composto → `blocks/` · casca → `layout/`                                                   |
 | Imagem usada em componente | `lib/images/<categoria>/` + import estático (`import img from '@/lib/images/...'`) — nunca string de path. Exceções legadas em `public/images/` (`gt3000.png`)         |
+| Imagem nova em lib/images  | Antes do commit: `node tools/imagens/recomprimir.ts --aplicar <arquivo>`. O `bun run test` reprova imagem sem import, acima de 3840 px ou de 5 MiB                     |
 | Imagem/asset com URL fixa  | `public/` (og-image, favicon, logo referenciado por URL)                                                                                                               |
 | Vídeo                      | `public/videos/`. Padrão de referência (hero): trio webm + mp4 + poster webp, `preload='metadata'`. Há exceção legada com mp4 único (`servico-personalizado.mp4`)      |
 | Modelo 3D                  | `public/embalagens-3d/*.glb`, < 2MB (exceção legada: `caixa-teste-3d.glb` na raiz de `public/`) — renderizar via `components/modelo3d/`, nunca `<model-viewer>` direto |
