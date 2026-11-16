@@ -16,16 +16,18 @@ const PDF_FILENAME = 'Catalogo_ProfillsCompany.pdf';
 export const runtime = 'nodejs';
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   context: { params: Promise<{ token: string }> }
 ) {
   const { token } = await context.params;
   const result = await verifyCatalogToken(token);
 
   if (!result.ok) {
-    const url = new URL(`/download?error=${result.reason}`, request.url);
-
-    return Response.redirect(url, 302);
+    // Location relativo: atrás de proxy, o request.url traz o host interno do servidor.
+    return new Response(null, {
+      status: 302,
+      headers: { Location: `/download?error=${result.reason}` }
+    });
   }
 
   if (!fs.existsSync(PDF_PATH)) {
