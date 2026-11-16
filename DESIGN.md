@@ -2,68 +2,68 @@
 name: Profills Brasil
 description: Site institucional de máquinas envasadoras — navy blueprint industrial
 colors:
-  navy-base: "oklch(0.2084 0.0417 266.3592)"
-  navy-faixa: "oklch(0.2380 0.0430 266)"
-  navy-card: "oklch(0.2503 0.0417 266.3592)"
-  navy-muted: "oklch(0.2734 0.0428 266.3592)"
-  navy-recuo: "rgba(15, 23, 42, 0.6)"
-  azul-acao: "oklch(0.6207 0.1894 259.9358)"
-  azul-claro-texto: "oklch(0.8206 0.0417 262)"
-  tracejado: "rgba(148, 178, 235, 0.3)"
-  tracejado-sutil: "rgba(148, 178, 235, 0.22)"
-  branco: "#ffffff"
-  tinta-clara: "oklch(0.2138 0.0019 286.2347)"
+  navy-base: 'oklch(0.2084 0.0417 266.3592)'
+  navy-faixa: 'oklch(0.2380 0.0430 266)'
+  navy-card: 'oklch(0.2503 0.0417 266.3592)'
+  navy-muted: 'oklch(0.2734 0.0428 266.3592)'
+  navy-recuo: 'rgba(15, 23, 42, 0.6)'
+  azul-acao: 'oklch(0.6207 0.1894 259.9358)'
+  azul-claro-texto: 'oklch(0.8206 0.0417 262)'
+  tracejado: 'rgba(148, 178, 235, 0.3)'
+  tracejado-sutil: 'rgba(148, 178, 235, 0.22)'
+  branco: '#ffffff'
+  tinta-clara: 'oklch(0.2138 0.0019 286.2347)'
 typography:
   display:
-    fontFamily: "Geist Sans, ui-sans-serif, system-ui"
-    fontSize: "clamp(1.9rem, 3.9vw, 3.5rem)"
+    fontFamily: 'Geist Sans, ui-sans-serif, system-ui'
+    fontSize: 'clamp(1.9rem, 3.9vw, 3.5rem)'
     fontWeight: 800
     lineHeight: 1.06
-    letterSpacing: "-0.025em"
+    letterSpacing: '-0.025em'
   headline:
-    fontFamily: "Geist Sans, ui-sans-serif, system-ui"
-    fontSize: "1.875rem"
+    fontFamily: 'Geist Sans, ui-sans-serif, system-ui'
+    fontSize: '1.875rem'
     fontWeight: 700
     lineHeight: 1.25
   body:
-    fontFamily: "Geist Sans, ui-sans-serif, system-ui"
-    fontSize: "1rem"
+    fontFamily: 'Geist Sans, ui-sans-serif, system-ui'
+    fontSize: '1rem'
     fontWeight: 400
     lineHeight: 1.625
   data:
-    fontFamily: "Geist Mono, ui-monospace"
-    fontSize: "1.35rem"
+    fontFamily: 'Geist Mono, ui-monospace'
+    fontSize: '1.35rem'
     fontWeight: 600
     lineHeight: 1.2
   label:
-    fontFamily: "Geist Sans, ui-sans-serif, system-ui"
-    fontSize: "0.68rem"
+    fontFamily: 'Geist Sans, ui-sans-serif, system-ui'
+    fontSize: '0.68rem'
     fontWeight: 400
-    letterSpacing: "0.05em"
+    letterSpacing: '0.05em'
 rounded:
-  xs: "2px"
+  xs: '2px'
 spacing:
-  sm: "0.75rem"
-  md: "1.25rem"
-  lg: "2rem"
+  sm: '0.75rem'
+  md: '1.25rem'
+  lg: '2rem'
 components:
   placa-tecnica:
-    backgroundColor: "{colors.navy-recuo}"
-    textColor: "{colors.azul-claro-texto}"
-    rounded: "{rounded.xs}"
-    padding: "24px"
+    backgroundColor: '{colors.navy-recuo}'
+    textColor: '{colors.azul-claro-texto}'
+    rounded: '{rounded.xs}'
+    padding: '24px'
   botao-solido:
-    backgroundColor: "{colors.branco}"
-    textColor: "#0f172a"
-    rounded: "{rounded.xs}"
+    backgroundColor: '{colors.branco}'
+    textColor: '#0f172a'
+    rounded: '{rounded.xs}'
   botao-acao:
-    backgroundColor: "{colors.azul-acao}"
-    textColor: "{colors.branco}"
-    rounded: "{rounded.xs}"
+    backgroundColor: '{colors.azul-acao}'
+    textColor: '{colors.branco}'
+    rounded: '{rounded.xs}'
   chip-marca:
-    backgroundColor: "{colors.navy-card}"
-    rounded: "{rounded.xs}"
-    padding: "12px"
+    backgroundColor: '{colors.navy-card}'
+    rounded: '{rounded.xs}'
+    padding: '12px'
 ---
 
 # Design System: Profills Brasil
@@ -97,7 +97,7 @@ Paleta navy monocromática com um único azul de ação — a raridade do accent
 - **Navy Base** (`oklch(0.2084 0.0417 266.3592)` ≈ rgb(15,23,43)): fundo de toda a home (`.tema-navy`), hero, navbar e footer (`--secondary`).
 - **Navy Faixa** (`oklch(0.2380 0.0430 266)`): faixas elevadas que criam o ritmo claro↔escuro entre seções.
 - **Navy Card** (`oklch(0.2503 0.0417 266.3592)`): superfície de card elevada (`--card` sob `.tema-navy`), chips de marca.
-- **Navy Recuo** (`rgba(15,23,42,0.6)` — `bg-slate-900/60`): fundo das placas técnicas, um passo *abaixo* da superfície onde estão; escurece para `/85` no hover.
+- **Navy Recuo** (`rgba(15,23,42,0.6)` — `bg-slate-900/60`): fundo das placas técnicas, um passo _abaixo_ da superfície onde estão; escurece para `/85` no hover.
 - **Azul Claro de Texto** (`oklch(0.8206 0.0417 262)` ≈ #b6c5e2): todo texto secundário/descritivo sobre navy (`--muted-foreground` sob `.tema-navy`; literal `#b6c5e2` fora dela). Contraste 10:1.
 - **Tracejado** (`rgba(148,178,235,0.3)` e sutil `0.22`): a cor de toda linha tracejada — bordas de placa, réguas, separadores de seção.
 - **Branco** (#ffffff): títulos e nomes sobre navy; fundo do botão sólido.
@@ -128,7 +128,7 @@ Paleta navy monocromática com um único azul de ação — a raridade do accent
 
 ### Named Rules
 
-**A Regra do Leading Depois.** Em `cn()`, `leading-*` sempre *depois* de `text-[<tamanho arbitrário>]` — o tailwind-merge descarta um leading declarado antes do font-size (classificado como conflito de line-height). Bug real: o hero renderizou meses com leading 1.5 em vez de 1.06.
+**A Regra do Leading Depois.** Em `cn()`, `leading-*` sempre _depois_ de `text-[<tamanho arbitrário>]` — o tailwind-merge descarta um leading declarado antes do font-size (classificado como conflito de line-height). Bug real: o hero renderizou meses com leading 1.5 em vez de 1.06.
 
 ## Layout
 
@@ -144,7 +144,7 @@ Conteúdo em colunas centradas de `max-w-6xl` (seções) a `max-w-7xl` (mídia l
 
 ## Shapes
 
-Pontas quadradas com quebra mínima: `rounded-xs` (2px) em absolutamente tudo — cards, botões, chips, molduras, imagens. Bordas de 1px; a *textura* da borda carrega significado: **tracejada** = fronteira em repouso, **sólida em Azul de Ação** = estado ativo/hover. Cantoneiras de cota (spans de 8×8px com borda accent em cantos opostos) assinam as molduras de mídia. A marca "+" em mono decora o canto das placas técnicas como marca de registro de prancheta.
+Pontas quadradas com quebra mínima: `rounded-xs` (2px) em absolutamente tudo — cards, botões, chips, molduras, imagens. Bordas de 1px; a _textura_ da borda carrega significado: **tracejada** = fronteira em repouso, **sólida em Azul de Ação** = estado ativo/hover. Cantoneiras de cota (spans de 8×8px com borda accent em cantos opostos) assinam as molduras de mídia. A marca "+" em mono decora o canto das placas técnicas como marca de registro de prancheta.
 
 ## Components
 
@@ -183,7 +183,7 @@ Sem setas visíveis: cada card alterna máquina↔embalagem sozinho, em interval
 
 ### Navigation & Footer
 
-Navbar e footer sobre Navy Base em todas as páginas. Footer: fronteira superior tracejada (sem fades de gradiente), contatos em placas técnicas, sociais em chips tracejados, divisores tracejados.
+Navbar desktop (de 1024 px para cima): a placa flutuante, solta 12 px do topo na coluna de 1216 px, em Navy Card com borda tracejada e duas cantoneiras. Rolando 24 px, ela baixa de 64 para 48 px, vira vidro e o logo recolhe ao símbolo. Os menus abrem uma gaveta única da largura da placa, e "Monte a sua" fica sempre visível à direita como dois botões brancos. Abaixo de 1024 px, faixa Navy Base de 64 px com drawer. Os itens das duas vêm de `components/layout/navegacao.ts`. Footer sobre Navy Base em todas as páginas: fronteira superior tracejada (sem fades de gradiente), contatos em placas técnicas, sociais em chips tracejados, divisores tracejados.
 
 ## Do's and Don'ts
 

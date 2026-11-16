@@ -32,7 +32,7 @@ components/
 ├── magicui/              ← efeitos visuais Magic UI (registry @magicui no components.json)
 ├── blocks/               ← blocos compostos reutilizáveis (scrollHint, progress-indicator…)
 ├── blog/                 ← ConteudoPost: o renderizador único dos blocos do post, na leitura pública e na prévia do admin
-├── layout/               ← navbarDesktop/Mobile, footer, gridPatternBg(Mobile), socialLinks
+├── layout/               ← navegacao.ts (fonte única dos itens das navbars; navbar.paridade.test.tsx trava desktop e mobile nela), navbarDesktop (placa flutuante, estado em placa.ts), navbarMobile, linkDaArvore, footer, gridPatternBg(Mobile), socialLinks
 └── modelo3d/             ← domínio 3D: caixaHome3d, embalagem3d, WebGLFallback, hooks/
 
 lib/
