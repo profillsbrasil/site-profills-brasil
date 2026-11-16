@@ -259,7 +259,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
       if (
         alvo instanceof Node &&
         !gaveta.current?.contains(alvo) &&
-        alvo !== gatilhos.current.get(aberto)
+        ![...gatilhos.current.values()].some((g) => g === alvo)
       ) {
         despachar({ tipo: 'fora' });
       }
