@@ -230,11 +230,11 @@ export function LinhaEditor({
           <div
             aria-hidden='true'
             data-alvo-lado={ladoAlvo}
-            className={`pointer-events-none absolute top-8 bottom-0 w-2 bg-[#3b80f6] ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}
+            className={`pointer-events-none absolute top-8 bottom-0 w-1 bg-[#3b80f6] ${ladoAlvo === 'esquerda' ? 'left-0' : 'right-0'}`}
           />
           <span
             data-rotulo-lado={ladoAlvo}
-            className={`pointer-events-none absolute top-1 z-10 flex h-6 items-center gap-1 rounded-xs bg-[#3b80f6] px-2 text-xs font-medium whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}>
+            className={`pointer-events-none absolute top-1 z-10 flex h-6 items-center gap-1 rounded-xs bg-[#3b80f6] px-2 text-xs font-medium whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? 'left-0' : 'right-0'}`}>
             {ladoAlvo === 'esquerda' ? (
               <ArrowLeft aria-hidden='true' className='size-3.5' />
             ) : null}
