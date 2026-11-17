@@ -25,6 +25,7 @@ import {
 } from 'node:http';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { setTimeout as esperar } from 'node:timers/promises';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
@@ -109,6 +110,20 @@ function contrato(nome: string, abrir: () => Promise<Armazem>, pular = false) {
       const lido = await armazem.ler(chave);
 
       expect(lido && (await lerTudo(lido.corpo))).toEqual(bytes);
+    });
+
+    it('gravar de novo uma chave guardada não muda a data da primeira gravação', async () => {
+      const prefixo = `blog/teste-${randomUUID()}/`;
+      const chave = `${prefixo}a-0123456789.png`;
+
+      await armazem.gravar(chave, bytes, 'image/png');
+      const [primeira] = await armazem.listar(prefixo);
+
+      await esperar(20);
+      await armazem.gravar(chave, bytes, 'image/png');
+      const [depois] = await armazem.listar(prefixo);
+
+      expect(depois?.modificadoEm).toEqual(primeira?.modificadoEm);
     });
   });
 }
@@ -379,7 +394,7 @@ describe('armazém S3 contra o bucket local', () => {
         'image/png'
       );
 
-      expect(pedidos).toEqual([
+      expect(pedidos.filter((p) => p.metodo === 'PUT')).toEqual([
         estiloCaminho
           ? {
               metodo: 'PUT',
@@ -427,6 +442,30 @@ describe('armazém S3 contra o bucket local', () => {
 });
 
 describe('armazém S3 com bucket mudo', () => {
+  it('desiste da listagem em menos de 6 s, sem esperar as novas tentativas', async () => {
+    const mudo = await bucketLocal(() => {});
+
+    const armazem = criarArmazemS3({
+      endpoint: `http://127.0.0.1:${mudo.porta}`,
+      regiao: 'auto',
+      bucket: 'bucket',
+      chave: 'chave',
+      segredo: 'segredo',
+      estiloCaminho: true
+    });
+
+    const inicio = performance.now();
+
+    try {
+      await expect(armazem.listar('blog/')).rejects.toMatchObject({
+        name: 'AbortError'
+      });
+      expect(performance.now() - inicio).toBeLessThan(6_000);
+    } finally {
+      mudo.fechar();
+    }
+  }, 20_000);
+
   it('desiste da leitura quando o bucket aceita a conexão e não responde', async () => {
     const mudo = await bucketLocal(() => {});
 

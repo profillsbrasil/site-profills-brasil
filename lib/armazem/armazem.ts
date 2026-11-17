@@ -1,8 +1,10 @@
 import { ErroConfiguracao } from '@/lib/utils/erro-configuracao';
 import {
   GetObjectCommand,
+  HeadObjectCommand,
   ListObjectsV2Command,
   NoSuchKey,
+  NotFound,
   PutObjectCommand,
   S3Client
 } from '@aws-sdk/client-s3';
@@ -26,7 +28,7 @@ export type ObjetoListado = {
 
 /** Bytes guardados por chave, como `blog/<slug>/foto-1a2b3c4d5e.webp`. */
 export type Armazem = {
-  /** Gravar de novo a mesma chave com os mesmos bytes não muda nada. */
+  /** Uma chave já guardada fica como está, com a data da primeira gravação: o nome da imagem leva o hash dos bytes. */
   gravar: (chave: string, bytes: Uint8Array, tipo: string) => Promise<void>;
   /** null quando a chave não existe; lança quando o armazém não responde. */
   ler: (chave: string) => Promise<ObjetoGuardado | null>;
@@ -35,6 +37,9 @@ export type Armazem = {
 };
 
 const SUFIXO_TEMPORARIO = '.tmp';
+
+/** A listagem inteira, com todas as páginas e novas tentativas, desiste depois disto. */
+export const PRAZO_LISTAGEM_MS = 5_000;
 
 /** Armazém numa pasta do disco. A chave nunca sai da pasta. */
 export function criarArmazemDisco(raiz: string): Armazem {
@@ -53,6 +58,19 @@ export function criarArmazemDisco(raiz: string): Armazem {
   return {
     async gravar(chave, bytes) {
       const alvo = caminho(chave);
+
+      try {
+        await stat(alvo);
+
+        return;
+      } catch (erro) {
+        if (
+          !(erro instanceof Error && 'code' in erro && erro.code === 'ENOENT')
+        ) {
+          throw erro;
+        }
+      }
+
       const temporario = `${alvo}.${crypto.randomUUID()}${SUFIXO_TEMPORARIO}`;
 
       await mkdir(path.dirname(alvo), { recursive: true });
@@ -139,6 +157,16 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
 
   return {
     async gravar(chave, bytes, tipo) {
+      try {
+        await cliente.send(
+          new HeadObjectCommand({ Bucket: config.bucket, Key: chave })
+        );
+
+        return;
+      } catch (erro) {
+        if (!(erro instanceof NotFound)) throw erro;
+      }
+
       await cliente.send(
         new PutObjectCommand({
           Bucket: config.bucket,
@@ -171,6 +199,8 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
     },
 
     async listar(prefixo) {
+      const prazo = AbortSignal.timeout(PRAZO_LISTAGEM_MS);
+
       // O S3 devolve no máximo 1.000 chaves por página, e cada página pede o token da anterior.
       const desde = async (continuacao?: string): Promise<ObjetoListado[]> => {
         const pagina = await cliente.send(
@@ -178,7 +208,8 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
             Bucket: config.bucket,
             Prefix: prefixo,
             ContinuationToken: continuacao
-          })
+          }),
+          { abortSignal: prazo }
         );
 
         const objetos = (pagina.Contents ?? []).map(
