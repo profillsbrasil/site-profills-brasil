@@ -1,5 +1,6 @@
 import { ErroConfiguracao } from '@/lib/utils/erro-configuracao';
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   HeadObjectCommand,
   ListObjectsV2Command,
@@ -9,7 +10,7 @@ import {
 } from '@aws-sdk/client-s3';
 
 import { openAsBlob } from 'node:fs';
-import { mkdir, readdir, rename, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, rename, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import 'server-only';
 import { z } from 'zod';
@@ -33,12 +34,14 @@ export type Armazem = {
   ler: (chave: string) => Promise<ObjetoGuardado | null>;
   /** Toda chave que começa por `prefixo`, sem ordem garantida; lança quando o armazém não responde. */
   listar: (prefixo: string) => Promise<ObjetoListado[]>;
+  /** Devolve as chaves que ficaram; chave que já não existe conta como apagada, então repetir não falha. */
+  apagar: (chaves: string[]) => Promise<string[]>;
 };
 
 const SUFIXO_TEMPORARIO = '.tmp';
 
-/** A listagem inteira, com todas as páginas e novas tentativas, desiste depois disto. */
-export const PRAZO_LISTAGEM_MS = 5_000;
+/** A listagem inteira, ou o apagar inteiro, com todas as páginas e novas tentativas, desiste depois disto. */
+export const PRAZO_LOTE_MS = 5_000;
 
 /** Armazém numa pasta do disco. A chave nunca sai da pasta. */
 export function criarArmazemDisco(raiz: string): Armazem {
@@ -127,6 +130,16 @@ export function criarArmazemDisco(raiz: string): Armazem {
           return { chave, tamanho: size, modificadoEm: mtime };
         })
       );
+    },
+
+    async apagar(chaves) {
+      const alvos = chaves.map(caminho);
+
+      const resultados = await Promise.allSettled(
+        alvos.map((alvo) => rm(alvo, { force: true }))
+      );
+
+      return chaves.filter((_, i) => resultados[i]?.status === 'rejected');
     }
   };
 }
@@ -199,7 +212,7 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
     },
 
     async listar(prefixo) {
-      const prazo = AbortSignal.timeout(PRAZO_LISTAGEM_MS);
+      const prazo = AbortSignal.timeout(PRAZO_LOTE_MS);
 
       // O S3 devolve no máximo 1.000 chaves por página, e cada página pede o token da anterior.
       const desde = async (continuacao?: string): Promise<ObjetoListado[]> => {
@@ -228,6 +241,23 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
       };
 
       return desde();
+    },
+
+    // Um DeleteObject por chave, e não o DeleteObjects em lote: o lote exige Content-MD5 ou checksum do
+    // corpo, que cada S3 compatível trata de um jeito, e um post tem poucas imagens.
+    async apagar(chaves) {
+      const prazo = AbortSignal.timeout(PRAZO_LOTE_MS);
+
+      const resultados = await Promise.allSettled(
+        chaves.map((chave) =>
+          cliente.send(
+            new DeleteObjectCommand({ Bucket: config.bucket, Key: chave }),
+            { abortSignal: prazo }
+          )
+        )
+      );
+
+      return chaves.filter((_, i) => resultados[i]?.status === 'rejected');
     }
   };
 }
@@ -276,7 +306,7 @@ const ambienteS3 = z
 function armazemIndisponivel(motivo: string): Armazem {
   const falhar = () => Promise.reject(new ErroConfiguracao(motivo));
 
-  return { gravar: falhar, ler: falhar, listar: falhar };
+  return { gravar: falhar, ler: falhar, listar: falhar, apagar: falhar };
 }
 
 export type LeituraS3 =
