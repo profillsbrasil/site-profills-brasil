@@ -5,6 +5,7 @@ import { type MouseEvent, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { assuntos } from '@/lib/blog/tipos';
 import logoBranco from '@/public/logo-branco.png';
 
 import { sairDoAdmin } from '../../entrar/acoes';
@@ -19,19 +20,27 @@ import {
   Tags
 } from 'lucide-react';
 
-export type PaginaAdmin = 'posts' | 'novo' | 'editor';
+export type PaginaAdmin = 'posts' | 'novo' | 'editor' | 'imagens' | 'assuntos';
+
+/** `imagens` é null quando o armazém não respondeu: o item fica sem número. */
+export type TotaisLateral = { posts: number; imagens: number | null };
 
 type Props = {
   atual: PaginaAdmin;
-  totalPosts: number;
+  totais: TotaisLateral;
   /** Chama `preventDefault()` no evento para segurar a saída da página. */
   aoNavegar?: (evento: MouseEvent<HTMLAnchorElement>, href: string) => void;
 };
 
-type ItemLateral = { nome: string; Icone: LucideIcon } & (
-  | { tipo: 'link'; href: string; total: number }
-  | { tipo: 'emBreve' }
-);
+type ItemLateral = {
+  nome: string;
+  Icone: LucideIcon;
+  href: string;
+  pagina: PaginaAdmin;
+  total: number | null;
+};
+
+const TOTAL_ASSUNTOS = Object.keys(assuntos).length;
 
 /** `reaberta` é a lateral que o user abriu de novo: só nela os rótulos entram em fade. */
 type EstadoLateral = 'aberta' | 'recolhida' | 'reaberta';
@@ -45,7 +54,7 @@ const classeFade =
 
 const classeLink = `${classeItem} transition-colors outline-none hover:bg-[rgba(148,178,235,0.12)] hover:text-white focus-visible:bg-[rgba(148,178,235,0.12)] focus-visible:text-white motion-reduce:transition-none aria-[current=page]:bg-[rgba(148,178,235,0.18)] aria-[current=page]:text-white`;
 
-export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
+export function Lateral({ atual, totais, aoNavegar }: Props) {
   const [estado, setEstado] = useState<EstadoLateral>('aberta');
   const recolhida = estado === 'recolhida';
   const fade = estado === 'reaberta' ? classeFade : '';
@@ -54,14 +63,26 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
 
   const itens: ItemLateral[] = [
     {
-      tipo: 'link',
       nome: 'Posts',
       Icone: FileText,
       href: '/admin/blog',
-      total: totalPosts
+      pagina: 'posts',
+      total: totais.posts
     },
-    { tipo: 'emBreve', nome: 'Imagens', Icone: Images },
-    { tipo: 'emBreve', nome: 'Assuntos', Icone: Tags }
+    {
+      nome: 'Imagens',
+      Icone: Images,
+      href: '/admin/blog/imagens',
+      pagina: 'imagens',
+      total: totais.imagens
+    },
+    {
+      nome: 'Assuntos',
+      Icone: Tags,
+      href: '/admin/blog/assuntos',
+      pagina: 'assuntos',
+      total: TOTAL_ASSUNTOS
+    }
   ];
 
   return (
@@ -104,56 +125,29 @@ export function Lateral({ atual, totalPosts, aoNavegar }: Props) {
         {recolhida ? null : <span className={fade}>Novo post</span>}
       </Link>
 
-      {itens.map((item) => {
-        const { nome, Icone } = item;
-
-        const icone = (
+      {itens.map(({ nome, Icone, href, pagina, total }) => (
+        <Link
+          key={nome}
+          href={href}
+          aria-label={recolhida ? nome : undefined}
+          aria-current={atual === pagina ? 'page' : undefined}
+          title={nome}
+          onClick={(e) => aoNavegar?.(e, href)}
+          className={classeLink}>
           <Icone aria-hidden='true' className='size-[18px] shrink-0' />
-        );
-
-        if (item.tipo === 'emBreve') {
-          return (
-            <div
-              key={nome}
-              title={recolhida ? `${nome}, em breve` : undefined}
-              className={`${classeItem} opacity-50`}>
-              {icone}
-              {recolhida ? (
-                <span className='sr-only'>{nome}, em breve</span>
-              ) : (
-                <>
-                  <span className={fade}>{nome}</span>
-                  <span className={`ml-auto text-xs ${fade}`}>em breve</span>
-                </>
-              )}
-            </div>
-          );
-        }
-
-        const { href, total } = item;
-
-        return (
-          <Link
-            key={nome}
-            href={href}
-            aria-label={recolhida ? nome : undefined}
-            aria-current={atual === 'posts' ? 'page' : undefined}
-            title={nome}
-            onClick={(e) => aoNavegar?.(e, href)}
-            className={classeLink}>
-            {icone}
-            {recolhida ? null : (
-              <>
-                <span className={fade}>{nome}</span>
+          {recolhida ? null : (
+            <>
+              <span className={fade}>{nome}</span>
+              {total === null ? null : (
                 <span
                   className={`ml-auto font-mono text-xs text-[#b6c5e2] ${fade}`}>
                   {total}
                 </span>
-              </>
-            )}
-          </Link>
-        );
-      })}
+              )}
+            </>
+          )}
+        </Link>
+      ))}
 
       <form action={sairDoAdmin} className='mt-auto'>
         <button

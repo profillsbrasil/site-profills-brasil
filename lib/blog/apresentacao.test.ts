@@ -1,12 +1,15 @@
 import {
+  agruparPorAssunto,
   dataCurta,
   idYoutube,
   minutosDeLeitura,
   montarListagem,
   outrosPosts,
-  primeiraMaquina
+  primeiraMaquina,
+  tamanhoDoArquivo,
+  usoDasImagens
 } from './apresentacao';
-import type { Post, ResumoPublicado } from './tipos';
+import type { Post, ResumoAdmin, ResumoPublicado } from './tipos';
 import { describe, expect, it } from 'vitest';
 
 const resumo = (
@@ -163,4 +166,87 @@ describe('idYoutube', () => {
       expect(idYoutube(url)).toBeNull();
     }
   );
+});
+
+describe('tamanhoDoArquivo', () => {
+  it('mostra KB abaixo de 1 MB e MB com uma casa e vírgula acima', () => {
+    expect(tamanhoDoArquivo(12)).toBe('1 KB');
+    expect(tamanhoDoArquivo(421_888)).toBe('412 KB');
+    expect(tamanhoDoArquivo(1024 * 1024)).toBe('1,0 MB');
+    expect(tamanhoDoArquivo(1_258_291)).toBe('1,2 MB');
+  });
+});
+
+describe('agruparPorAssunto', () => {
+  const resumoAdmin = (
+    slug: string,
+    assunto: ResumoAdmin['assunto']
+  ): ResumoAdmin => ({
+    slug,
+    assunto,
+    titulo: slug,
+    estado: 'rascunho',
+    atualizadoEm: '2026-11-17T12:00:00.000Z'
+  });
+
+  it('devolve os seis assuntos na ordem do registry, inclusive os vazios', () => {
+    const grupos = agruparPorAssunto([
+      resumoAdmin('a', 'evento'),
+      resumoAdmin('b', 'maquina'),
+      resumoAdmin('c', 'evento')
+    ]);
+
+    expect(
+      grupos.map(({ assunto, posts }) => [assunto, posts.map((p) => p.slug)])
+    ).toEqual([
+      ['maquina', ['b']],
+      ['embalagem', []],
+      ['parceiro', []],
+      ['evento', ['a', 'c']],
+      ['nota', []],
+      ['aviso', []]
+    ]);
+  });
+});
+
+describe('usoDasImagens', () => {
+  it('marca capa e texto, e capa vence quando a mesma imagem está nos dois', () => {
+    const usos = usoDasImagens([
+      {
+        ...post([
+          {
+            id: 'l',
+            proporcao: 50,
+            colunas: [
+              {
+                id: 'a',
+                tipo: 'imagem',
+                src: '/blog/a/texto.png',
+                legenda: ''
+              },
+              {
+                id: 'b',
+                tipo: 'imagem',
+                src: '/blog/a/dupla.png',
+                legenda: ''
+              }
+            ]
+          },
+          {
+            id: 'm',
+            proporcao: 50,
+            colunas: [{ id: 'c', tipo: 'imagem', src: null, legenda: '' }]
+          }
+        ]),
+        capa: '/blog/a/capa.png'
+      },
+      { ...post([]), capa: '/blog/a/dupla.png' }
+    ]);
+
+    expect(Object.fromEntries(usos)).toEqual({
+      '/blog/a/texto.png': 'texto',
+      '/blog/a/dupla.png': 'capa',
+      '/blog/a/capa.png': 'capa'
+    });
+  });
 });

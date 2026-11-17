@@ -23,9 +23,10 @@ export default async function EditarPostPage({
 
   if (!slug.success) notFound();
 
-  const [guardado, posts] = await Promise.all([
+  const [guardado, posts, imagens] = await Promise.all([
     admin.ler(slug.data),
-    admin.listar()
+    admin.listar(),
+    admin.contarImagens()
   ]);
 
   if (!guardado) notFound();
@@ -34,7 +35,7 @@ export default async function EditarPostPage({
     <EditorBlog
       key={guardado.slug}
       inicial={guardado}
-      totalPosts={posts.length}
+      totais={{ posts: posts.length, imagens }}
     />
   );
 }

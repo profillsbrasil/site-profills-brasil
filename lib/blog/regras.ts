@@ -2,7 +2,8 @@ import { ErroBlog } from './erro';
 import type { Intencao, Post, PostGuardado } from './tipos';
 
 /** `novo` é o endereço do editor de post novo; o check do banco repete esta lista. */
-export const SLUGS_RESERVADOS = ['novo'];
+// Cada um é uma rota fixa em /admin/blog/: um post com esse slug teria o editor inalcançável. As migrações 0000 e 0005 repetem a lista.
+export const SLUGS_RESERVADOS = ['novo', 'imagens', 'assuntos'];
 
 const formatoHora = new Intl.DateTimeFormat('pt-BR', {
   hour: '2-digit',

@@ -172,6 +172,8 @@ describe('guarda do admin', () => {
         'blog/novo/page.tsx',
         'blog/[slug]/page.tsx',
         'blog/[slug]/imagem/route.ts',
+        'blog/imagens/page.tsx',
+        'blog/assuntos/page.tsx',
         'blog/acoes.ts',
         'entrar/acoes.ts',
         'entrar/page.tsx'

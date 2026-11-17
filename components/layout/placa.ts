@@ -18,12 +18,12 @@ import type { IdMenu } from '@/components/layout/navegacao';
 import { flushSync } from 'react-dom';
 
 /**
- * Intenção de hover: o menu abre, ou troca com a gaveta aberta, quando o
- * ponteiro fica REPOUSO_MS dentro de um raio de REPOUSO_PX sobre o gatilho.
- * Quem cruza um gatilho a caminho de outro lugar não repousa nele.
+ * Intenção de hover: o menu abre no primeiro movimento sobre o gatilho e,
+ * com a gaveta aberta, outro gatilho assume na hora. A exceção é o ponteiro
+ * que desce a caminho da gaveta: a troca fica retida e só acontece se ele
+ * parar PARADO_MS sobre o outro gatilho.
  */
-export const REPOUSO_MS = 90;
-export const REPOUSO_PX = 6;
+export const PARADO_MS = 50;
 export const FECHA_MS = 150;
 
 /** O clique que chega logo depois de o hover abrir é o mesmo gesto: não fecha. */
@@ -38,11 +38,13 @@ interface Ponto {
   readonly y: number;
 }
 
-/** Onde e desde quando o ponteiro está parado sobre um gatilho. */
-export interface Repouso {
+interface PontoNoTempo extends Ponto {
+  readonly t: number;
+}
+
+/** Outro gatilho sob o ponteiro que segue para a gaveta, desde o último movimento. */
+interface TrocaRetida {
   readonly menu: IdMenu;
-  readonly x: number;
-  readonly y: number;
   readonly desde: number;
 }
 
@@ -62,27 +64,25 @@ export type EstadoPlaca =
        */
       readonly dispensado: IdMenu | null;
     }
-  | { readonly fase: 'armando'; readonly repouso: Repouso }
   | (GavetaAberta & {
       readonly fase: 'aberta';
-      /** Outro gatilho sob o ponteiro: vira o menu aberto se o ponteiro repousar nele. */
-      readonly candidato: Repouso | null;
+      readonly retida: TrocaRetida | null;
     })
   | (GavetaAberta & { readonly fase: 'fechando' });
 
 /**
  * Eventos do ponteiro na zona da navbar (placa, ponte e gaveta). `real` é
  * falso quando o evento repete as coordenadas do último pointermove: veio de
- * layout, não da mão, e não arma nem reinicia repouso ou candidato.
+ * layout, não da mão, e não abre, não troca nem retém.
  */
 export type EventoPlaca =
   | {
       readonly tipo: 'ponteiro-entrou' | 'ponteiro-moveu';
       readonly menu: IdMenu;
-      readonly x: number;
-      readonly y: number;
       readonly agora: number;
       readonly real: boolean;
+      /** O ponteiro desce a caminho da gaveta (ver rumoAGaveta). */
+      readonly rumoAGaveta: boolean;
     }
   | {
       readonly tipo: 'ponteiro-fora-de-gatilho';
@@ -101,7 +101,7 @@ export type EventoPlaca =
   | { readonly tipo: 'esc' }
   | { readonly tipo: 'fora' }
   | { readonly tipo: 'navegou' }
-  | { readonly tipo: 'venceu-abre'; readonly agora: number }
+  | { readonly tipo: 'venceu-retida'; readonly agora: number }
   | { readonly tipo: 'venceu-fecha' };
 
 export const PLACA_INICIAL: EstadoPlaca = {
@@ -123,7 +123,7 @@ function abrir(estado: EstadoPlaca, menu: IdMenu, agora: number): EstadoPlaca {
       menu,
       anterior: null,
       abertaEm: agora,
-      candidato: null
+      retida: null
     };
   }
 
@@ -133,38 +133,20 @@ function abrir(estado: EstadoPlaca, menu: IdMenu, agora: number): EstadoPlaca {
         menu,
         anterior: estado.anterior,
         abertaEm: estado.abertaEm,
-        candidato: null
+        retida: null
       }
     : {
         fase: 'aberta',
         menu,
         anterior: estado.menu,
         abertaEm: agora,
-        candidato: null
+        retida: null
       };
-}
-
-/** O mesmo repouso enquanto o ponteiro não sai do raio; senão, a espera recomeça. */
-function seguirRepouso(
-  atual: Repouso | null,
-  { menu, x, y, agora }: { menu: IdMenu; x: number; y: number; agora: number }
-): Repouso {
-  return atual?.menu === menu &&
-    Math.hypot(x - atual.x, y - atual.y) <= REPOUSO_PX
-    ? atual
-    : { menu, x, y, desde: agora };
-}
-
-/** O repouso que o relógio espera vencer, se houver. */
-export function repousoPendente(estado: EstadoPlaca): Repouso | null {
-  if (estado.fase === 'armando') return estado.repouso;
-
-  return estado.fase === 'aberta' ? estado.candidato : null;
 }
 
 /**
  * Transição pura. Timer atrasado ou repetido devolve o mesmo estado:
- * venceu-abre só age num repouso que já durou REPOUSO_MS e venceu-fecha
+ * venceu-retida só age numa troca retida parada há PARADO_MS e venceu-fecha
  * só em fechando.
  */
 export function reduzirPlaca(
@@ -184,46 +166,37 @@ export function reduzirPlaca(
         return estado;
       }
 
-      if (estado.fase === 'fechada' || estado.fase === 'armando') {
-        const atual = estado.fase === 'armando' ? estado.repouso : null;
-        const repouso = seguirRepouso(atual, evento);
-
-        return repouso === atual ? estado : { fase: 'armando', repouso };
+      if (estado.fase === 'fechada') {
+        return abrir(estado, evento.menu, evento.agora);
       }
 
       if (estado.menu === evento.menu) {
-        return estado.fase === 'aberta' && estado.candidato === null
+        return estado.fase === 'aberta' && estado.retida === null
           ? estado
           : abrir(estado, evento.menu, evento.agora);
       }
 
-      const atual = estado.fase === 'aberta' ? estado.candidato : null;
-      const candidato = seguirRepouso(atual, evento);
-
-      return candidato === atual
-        ? estado
-        : {
+      return evento.rumoAGaveta
+        ? {
             fase: 'aberta',
             menu: estado.menu,
             anterior: estado.anterior,
             abertaEm: estado.abertaEm,
-            candidato
-          };
+            retida: { menu: evento.menu, desde: evento.agora }
+          }
+        : abrir(estado, evento.menu, evento.agora);
     }
 
     case 'ponteiro-fora-de-gatilho':
       if (!evento.real) return estado;
 
-      if (
-        estado.fase === 'armando' ||
-        (estado.fase === 'fechada' && estado.dispensado !== null)
-      ) {
-        return PLACA_INICIAL;
+      if (estado.fase === 'fechada') {
+        return estado.dispensado === null ? estado : PLACA_INICIAL;
       }
 
       if (estado.fase === 'fechando') {
         return evento.onde === 'gaveta'
-          ? { ...estado, fase: 'aberta', candidato: null }
+          ? { ...estado, fase: 'aberta', retida: null }
           : estado;
       }
 
@@ -239,21 +212,16 @@ export function reduzirPlaca(
         };
       }
 
-      return estado.candidato === null
-        ? estado
-        : { ...estado, candidato: null };
+      return estado.retida === null ? estado : { ...estado, retida: null };
 
     case 'ponteiro-entrou-na-zona':
       return estado.fase === 'fechando'
-        ? { ...estado, fase: 'aberta', candidato: null }
+        ? { ...estado, fase: 'aberta', retida: null }
         : estado;
 
     case 'ponteiro-saiu-da-zona':
-      if (
-        estado.fase === 'armando' ||
-        (estado.fase === 'fechada' && estado.dispensado !== null)
-      ) {
-        return PLACA_INICIAL;
+      if (estado.fase === 'fechada') {
+        return estado.dispensado === null ? estado : PLACA_INICIAL;
       }
 
       return estado.fase === 'aberta'
@@ -302,17 +270,76 @@ export function reduzirPlaca(
         ? estado
         : PLACA_INICIAL;
 
-    case 'venceu-abre': {
-      const repouso = repousoPendente(estado);
-
-      return repouso && evento.agora - repouso.desde >= REPOUSO_MS
-        ? abrir(estado, repouso.menu, evento.agora)
+    case 'venceu-retida':
+      return estado.fase === 'aberta' &&
+        estado.retida !== null &&
+        evento.agora - estado.retida.desde >= PARADO_MS
+        ? abrir(estado, estado.retida.menu, evento.agora)
         : estado;
-    }
 
     case 'venceu-fecha':
       return estado.fase === 'fechando' ? PLACA_INICIAL : estado;
   }
+}
+
+/**
+ * Quem anda pela barra deriva até 6 px de um gatilho ao vizinho, 0,06 px por
+ * px de lado; a reta mais deitada do centro de um gatilho a um link, cartão
+ * ou foto do painel desce 0,116. A inclinação mínima fica entre as duas,
+ * medida no recuo: em menos caminho o tremor de 1 px pesa mais que a descida.
+ * A folga cobre esse tremor nas duas pontas da medida.
+ */
+export const RUMO_INCLINACAO = 0.1;
+export const RUMO_RECUO_PX = 56;
+export const RUMO_FOLGA_PX = 2;
+
+/** Subir e depois descer isto dentro do rastro é uma virada, não tremor. */
+export const RUMO_VIRADA_PX = 3;
+
+/**
+ * O rastro do gesto: do ponto mais recente a RUMO_RECUO_PX ou mais do atual
+ * até o atual. Depois de PARADO_MS sem mover, recomeça no ponto de repouso.
+ */
+export function estenderRastro(
+  rastro: readonly PontoNoTempo[],
+  ponto: PontoNoTempo
+): readonly PontoNoTempo[] {
+  const ultimo = rastro.at(-1);
+
+  if (!ultimo) return [ponto];
+
+  if (ponto.t - ultimo.t >= PARADO_MS) return [ultimo, ponto];
+
+  const inicio = rastro.findLastIndex(
+    (p) => Math.hypot(ponto.x - p.x, ponto.y - p.y) >= RUMO_RECUO_PX
+  );
+
+  return [...rastro.slice(Math.max(inicio, 0)), ponto];
+}
+
+/**
+ * O ponteiro desce a caminho da gaveta: do começo do rastro até aqui, desceu
+ * RUMO_INCLINACAO px ou mais por px de lado. Quem subiu ao gatilho e virou
+ * para baixo é medido do ponto mais alto. Sem caminho para medir, vale como
+ * rumo, e a troca espera o ponteiro parar.
+ */
+export function rumoAGaveta(rastro: readonly Ponto[]): boolean {
+  const atual = rastro.at(-1);
+  const inicio = rastro[0];
+
+  if (!atual || !inicio) return false;
+
+  const topo = rastro.reduce((alto, p) => (p.y <= alto.y ? p : alto));
+
+  const virou =
+    atual.y - topo.y >= RUMO_VIRADA_PX && inicio.y - topo.y >= RUMO_VIRADA_PX;
+
+  const ancora = virou ? topo : inicio;
+
+  return (
+    atual.y - ancora.y + RUMO_FOLGA_PX >=
+    RUMO_INCLINACAO * Math.abs(atual.x - ancora.x)
+  );
 }
 
 export function ehMovimentoReal(
@@ -345,8 +372,8 @@ export function sentidoDaTroca(
 
 export interface Placa {
   readonly aberto: IdMenu | null;
-  /** Menu que abriu ou está para abrir: a gaveta só carrega as imagens dele. */
-  readonly prestes: IdMenu | null;
+  /** Ponteiro na zona: a gaveta prepara a primeira imagem de cada painel. */
+  readonly naZona: boolean;
   readonly sentido: -1 | 0 | 1;
   /** Ponteiro na zona ou menu aberto: a geometria da placa não pode mudar. */
   readonly travada: boolean;
@@ -405,6 +432,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     if (!zona) return;
 
     let ultimo: Ponto | null = null;
+    let rastro: readonly PontoNoTempo[] = [];
     let sob: IdMenu | null = null;
 
     // No documento, e não na zona, para saber onde o ponteiro parou também
@@ -412,20 +440,29 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     const aoMover = (e: globalThis.PointerEvent) => {
       if (e.pointerType === 'touch') return;
 
-      const real = ehMovimentoReal(ultimo, e.clientX, e.clientY);
+      const ponto = { x: e.clientX, y: e.clientY };
+      const real = ehMovimentoReal(ultimo, ponto.x, ponto.y);
+      const agora = performance.now();
 
-      ultimo = { x: e.clientX, y: e.clientY };
+      ultimo = ponto;
 
-      if (!(e.target instanceof Element) || !zona.contains(e.target)) return;
+      if (real) rastro = estenderRastro(rastro, { ...ponto, t: agora });
 
-      const id = e.target.closest<HTMLElement>('[data-menu]')?.dataset.menu;
+      const alvo =
+        e.target instanceof Element && zona.contains(e.target)
+          ? e.target
+          : null;
+
+      const id = alvo?.closest<HTMLElement>('[data-menu]')?.dataset.menu;
       const menu = ordem.find((m) => m === id) ?? null;
+
+      if (!alvo) return;
 
       if (menu === null) {
         if (real) sob = null;
         despachar({
           tipo: 'ponteiro-fora-de-gatilho',
-          onde: ondeNaZona(e.target, gaveta.current),
+          onde: ondeNaZona(alvo, gaveta.current),
           real
         });
 
@@ -438,10 +475,9 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
       despachar({
         tipo,
         menu,
-        x: e.clientX,
-        y: e.clientY,
-        agora: performance.now(),
-        real
+        agora,
+        real,
+        rumoAGaveta: real && rumoAGaveta(rastro)
       });
     };
 
@@ -472,15 +508,13 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
   }, [ordem]);
 
   useEffect(() => {
-    const repouso = repousoPendente(estado);
-
-    if (repouso) {
+    if (estado.fase === 'aberta' && estado.retida) {
       // O evento leva o prazo, não a hora do disparo: o setTimeout trunca o
       // atraso fracionário e pode disparar uma fração de ms antes dele.
-      const prazo = repouso.desde + REPOUSO_MS;
+      const prazo = estado.retida.desde + PARADO_MS;
 
       const t = setTimeout(
-        () => despachar({ tipo: 'venceu-abre', agora: prazo }),
+        () => despachar({ tipo: 'venceu-retida', agora: prazo }),
         Math.max(0, prazo - performance.now())
       );
 
@@ -610,7 +644,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
   return {
     aberto,
-    prestes: estado.fase === 'armando' ? estado.repouso.menu : aberto,
+    naZona,
     sentido: sentidoDaTroca(estado, ordem),
     travada: naZona || aberto !== null,
     raiz,

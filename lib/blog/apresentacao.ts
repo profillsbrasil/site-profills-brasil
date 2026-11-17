@@ -1,8 +1,11 @@
 import {
   type Assunto,
+  type AssuntoComPosts,
   type Bloco,
   type Post,
+  type ResumoAdmin,
   type ResumoPublicado,
+  type UsoImagem,
   assuntos,
   ehAssunto
 } from './tipos';
@@ -37,6 +40,52 @@ export function dataCurta(iso: string) {
   );
 
   return `${partes.day} ${MESES[Number(partes.month) - 1]} ${partes.year}`;
+}
+
+/** Cada assunto do registry, na ordem dele, com os posts que o usam; assunto sem post vem com a lista vazia. */
+export function agruparPorAssunto(posts: ResumoAdmin[]): AssuntoComPosts[] {
+  return Object.keys(assuntos)
+    .filter(ehAssunto)
+    .map((assunto) => ({
+      assunto,
+      posts: posts.filter((p) => p.assunto === assunto)
+    }));
+}
+
+/** O uso de cada caminho de imagem citado pelos posts; caminho fora do mapa está sem uso. */
+export function usoDasImagens(posts: Post[]) {
+  const usos = new Map<string, UsoImagem>();
+
+  for (const post of posts) {
+    for (const linha of post.linhas) {
+      for (const bloco of linha.colunas) {
+        if (bloco.tipo === 'imagem' && bloco.src && !usos.has(bloco.src)) {
+          usos.set(bloco.src, 'texto');
+        }
+      }
+    }
+  }
+
+  for (const post of posts) {
+    if (post.capa) usos.set(post.capa, 'capa');
+  }
+
+  return usos;
+}
+
+const KIB = 1024;
+const MIB = KIB * KIB;
+
+const formatoMb = new Intl.NumberFormat('pt-BR', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1
+});
+
+/** "412 KB" abaixo de 1 MB e "1,2 MB" daí para cima, em base 1.024. */
+export function tamanhoDoArquivo(bytes: number) {
+  if (bytes < MIB) return `${Math.max(1, Math.round(bytes / KIB))} KB`;
+
+  return `${formatoMb.format(bytes / MIB)} MB`;
 }
 
 const PALAVRAS_POR_MINUTO = 200;

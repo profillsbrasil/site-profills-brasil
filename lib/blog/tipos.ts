@@ -122,6 +122,24 @@ export type ResumoAdmin = Pick<
 > &
   Pick<Post, 'titulo' | 'assunto'>;
 
+/** Capa vence texto: a imagem que é capa de um post e aparece no texto de outro conta como capa. */
+export type UsoImagem = 'capa' | 'texto' | 'semUso';
+
+/** Uma imagem do armazém, cruzada com os posts que apontam para ela. Não existe tabela de imagens (ADR 0005). */
+export type ImagemDoArmazem = {
+  /** O caminho público, como `/blog/<slug>/foto-1a2b3c4d5e.webp`. */
+  caminho: string;
+  arquivo: string;
+  tamanho: number;
+  enviadaEm: string;
+  /** O slug da pasta da imagem; o título é null quando nenhum post tem esse slug. */
+  slug: string;
+  tituloDoPost: string | null;
+  uso: UsoImagem;
+};
+
+export type AssuntoComPosts = { assunto: Assunto; posts: ResumoAdmin[] };
+
 export type ResumoPublicado = Pick<
   PostPublicado,
   'slug' | 'publicadoEm' | 'atualizadoEm'

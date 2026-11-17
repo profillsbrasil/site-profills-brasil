@@ -19,11 +19,14 @@ export default async function PostsPage() {
 
   if (!admin) redirect(enderecoDeEntrada('/admin/blog'));
 
-  const posts = await admin.listar();
+  const [posts, imagens] = await Promise.all([
+    admin.listar(),
+    admin.contarImagens()
+  ]);
 
   return (
     <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
-      <Lateral atual='posts' totalPosts={posts.length} />
+      <Lateral atual='posts' totais={{ posts: posts.length, imagens }} />
 
       <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-[#f3f4f6] text-[#1b1c1f]'>
         <header className='flex min-h-14 items-center gap-3 border-b border-[#dfe2e8] bg-white px-5 py-3'>
