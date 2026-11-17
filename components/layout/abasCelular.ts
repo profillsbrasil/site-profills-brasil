@@ -60,6 +60,9 @@ export type Aba = AbasDoCelular[number];
 
 export type IdAba = Aba['id'];
 
+/** As três abas de folha como união: AbaFolha<IdFolha> não aceita AbaFolha<'maquinas'>. */
+export type AbaComFolha = Extract<Aba, { readonly tipo: 'folha' }>;
+
 const ehMenuVitrine = (m: NoMenu): m is NoMenuVitrine =>
   m.painel.forma === 'vitrine';
 

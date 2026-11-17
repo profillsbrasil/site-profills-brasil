@@ -118,12 +118,14 @@ export function passoDaFaixa(
 export interface NavCelular {
   readonly folha: EstadoFolha;
   readonly faixaRecolhida: boolean;
-  tocarAba(folha: IdFolha): void;
+  readonly tocarAba: (folha: IdFolha) => void;
   /** Para o onOpenChange do Drawer, que só chama com false aqui. */
-  dispensar(): void;
-  refAba(folha: IdFolha): RefCallback<HTMLButtonElement>;
+  readonly dispensar: () => void;
+  /** Toque num link da barra: fecha sem devolver o foco, mesmo sem mudar de página. */
+  readonly navegar: () => void;
+  readonly refAba: (folha: IdFolha) => RefCallback<HTMLButtonElement>;
   /** onCloseAutoFocus do painel: o foco volta à aba só quando focoNaAba. */
-  aoDevolverFoco(evento: Event): void;
+  readonly aoDevolverFoco: (evento: Event) => void;
 }
 
 export function useNavCelular(): NavCelular {
@@ -174,6 +176,7 @@ export function useNavCelular(): NavCelular {
   );
 
   const dispensar = useCallback(() => despachar({ tipo: 'dispensou' }), []);
+  const navegar = useCallback(() => despachar({ tipo: 'navegou' }), []);
 
   const refAba = useCallback((id: IdFolha) => {
     let ref = refs.current.get(id);
@@ -205,6 +208,7 @@ export function useNavCelular(): NavCelular {
     faixaRecolhida,
     tocarAba,
     dispensar,
+    navegar,
     refAba,
     aoDevolverFoco
   };
