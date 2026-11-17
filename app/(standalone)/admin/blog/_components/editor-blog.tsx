@@ -5,7 +5,8 @@ import {
   useEffect,
   useReducer,
   useRef,
-  useState
+  useState,
+  useTransition
 } from 'react';
 
 import { useRouter } from 'next/navigation';
@@ -134,10 +135,12 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
   const [gravacao, setGravacao] = useState(inicial);
   const [fase, setFase] = useState<Fase>({ fase: 'parado' });
   const [saida, setSaida] = useState<Saida | null>(null);
+  const [gravandoParaSair, gravarParaSair] = useTransition();
+  const chaveGravada = useRef<string | null>(null);
   const [dispositivo, setDispositivo] = useState<Dispositivo>('computador');
 
   const sujo = post !== postSalvo;
-  const ocupado = fase.fase === 'gravando';
+  const ocupado = fase.fase === 'gravando' || gravandoParaSair;
   const publicado = gravacao?.estado === 'publicado';
 
   useEffect(() => {
@@ -186,7 +189,27 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
     return () => navigation.removeEventListener('navigate', aoTravessar);
   }, []);
 
-  const gravar = async (acao: Intencao) => {
+  // "Salvar e sair" pelo voltar ou pelo avançar: o roteador do Next só pode
+  // ter uma coisa em voo sobre o histórico. A transição termina quando ele
+  // assenta a gravação; só então a travessia sai, e a rota de destino só é
+  // atualizada com a travessia terminada. Com a gravação ainda em voo, o
+  // roteador escreve a URL do editor em cima da entrada de destino.
+  useEffect(() => {
+    const chave = chaveGravada.current;
+
+    if (chave === null || gravandoParaSair) return;
+
+    chaveGravada.current = null;
+
+    window.navigation.traverseTo(chave).finished?.then(
+      () => router.refresh(),
+      // A travessia cancelada (nova mudança pendente, que pergunta de novo)
+      // não chega a um destino para atualizar.
+      () => undefined
+    );
+  }, [gravandoParaSair, router]);
+
+  const gravar = async (acao: Intencao, atualizarRota = inicial !== null) => {
     const enviado = post;
 
     setFase({ fase: 'gravando', acao });
@@ -199,7 +222,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
           ? { slug: gravacao.slug, versao: gravacao.versao, post: enviado }
           : { slug: null, versao: null, post: enviado },
         acao,
-        inicial !== null
+        atualizarRota
       );
     } catch {
       resultado = {
@@ -300,7 +323,19 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
 
     setSaida(null);
 
-    if (destinoSaida && (await gravar('salvar'))) sair(destinoSaida);
+    if (!destinoSaida) return;
+
+    if (destinoSaida.para === 'link') {
+      if (await gravar('salvar')) sair(destinoSaida);
+
+      return;
+    }
+
+    gravarParaSair(async () => {
+      if (await gravar('salvar', false)) {
+        chaveGravada.current = destinoSaida.chave;
+      }
+    });
   };
 
   const inserir = (tipo: TipoBloco, destino: Destino) =>
@@ -359,7 +394,9 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
               {publicado ? 'Publicado' : 'Rascunho'}
             </span>
             <p aria-live='polite' className='text-xs text-[#5a6172]'>
-              {textoStatus(fase, gravacao, sujo)}
+              {gravandoParaSair
+                ? `${textoGravando.salvar}…`
+                : textoStatus(fase, gravacao, sujo)}
             </p>
             <div className='ml-auto flex gap-2'>
               {publicado ? (

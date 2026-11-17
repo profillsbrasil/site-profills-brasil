@@ -19,6 +19,8 @@ export type ResultadoGravacao =
  * re-renderiza a rota no lugar; sem isso, o voltar e o avançar mostram a lista
  * e o editor de antes da gravação. O editor aberto em /admin/blog/novo passa
  * false: lá a URL já é a do post, e o re-render troca a rota e remonta o editor.
+ * O "Salvar e sair" pelo voltar ou pelo avançar também passa false e atualiza
+ * a rota de destino depois da travessia.
  */
 export async function gravarPost(
   entrada: EntradaEditor,
