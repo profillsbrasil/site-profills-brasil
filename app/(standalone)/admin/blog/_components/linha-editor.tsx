@@ -19,7 +19,11 @@ import {
 import type { Carga } from './arraste';
 import { CamposBloco } from './campos-bloco';
 import type { AcaoEditor } from './editor-reducer';
-import { classeBotaoContorno, classeIcone } from './estilos';
+import {
+  classeBotaoContorno,
+  classeBotaoPequeno,
+  classeIcone
+} from './estilos';
 import { registroBlocos } from './registro-blocos';
 import {
   ArrowLeft,
@@ -102,7 +106,7 @@ export function LinhaEditor({
       data-linha-id={linha.id}
       data-colunas={linha.colunas.length}
       className={`relative ${arrastando ? 'opacity-40' : ''}`}>
-      <div className='mb-1 flex items-center gap-0.5'>
+      <div className='mb-1 flex items-center gap-1'>
         <Button
           type='button'
           variant='ghost'
@@ -138,7 +142,7 @@ export function LinhaEditor({
             type='button'
             variant='outline'
             size='sm'
-            className={`${classeBotaoContorno} h-7 px-2 text-xs`}
+            className={`${classeBotaoContorno} ${classeBotaoPequeno} h-7 text-xs`}
             onClick={() =>
               dispatch({
                 tipo: 'separarColunas',
@@ -230,7 +234,7 @@ export function LinhaEditor({
           />
           <span
             data-rotulo-lado={ladoAlvo}
-            className={`pointer-events-none absolute top-1 z-10 flex h-6 items-center gap-1 rounded-xs bg-[#3b80f6] px-2.5 text-xs font-medium whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}>
+            className={`pointer-events-none absolute top-1 z-10 flex h-6 items-center gap-1 rounded-xs bg-[#3b80f6] px-2 text-xs font-medium whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}>
             {ladoAlvo === 'esquerda' ? (
               <ArrowLeft aria-hidden='true' className='size-3.5' />
             ) : null}

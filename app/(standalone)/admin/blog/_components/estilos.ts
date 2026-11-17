@@ -8,6 +8,9 @@ export const classeBotaoCheio =
 export const classeBotaoContorno =
   'rounded-xs border-[#dfe2e8] bg-white text-[#1b1c1f] shadow-none hover:border-[#8a90a0] hover:bg-[#f7f8fa] focus-visible:border-[#8a90a0] focus-visible:bg-[#f7f8fa] focus-visible:ring-0 motion-reduce:transition-none';
 
+// O Button sm do components/ui traz gap-1.5 e has-[>svg]:px-2.5 (6 e 10 px); o admin segue a grade de 4 px sem mudar o site.
+export const classeBotaoPequeno = 'gap-2 has-[>svg]:px-2';
+
 export const classeIcone =
   'size-8 rounded-xs text-[#5a6172] hover:bg-[#eceef2] hover:text-[#1b1c1f] focus-visible:bg-[#eceef2] focus-visible:text-[#1b1c1f] focus-visible:ring-0 motion-reduce:transition-none';
 
