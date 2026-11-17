@@ -27,7 +27,7 @@ import {
   classeBotaoContorno,
   classeBotaoPequeno
 } from './estilos';
-import { Lateral } from './lateral';
+import { Lateral, type TotaisLateral } from './lateral';
 import { LinhaEditor } from './linha-editor';
 import { Paleta } from './paleta';
 import { type Dispositivo, PreviaPost } from './previa-post';
@@ -112,10 +112,10 @@ function Vao({ ativo }: { ativo: boolean }) {
 type Props = {
   /** null no post novo, que ganha slug na primeira gravação. */
   inicial: PostGuardado | null;
-  totalPosts: number;
+  totais: TotaisLateral;
 };
 
-export function EditorBlog({ inicial, totalPosts }: Props) {
+export function EditorBlog({ inicial, totais }: Props) {
   const router = useRouter();
 
   const [post, dispatch] = useReducer(
@@ -288,7 +288,10 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
       <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
         <Lateral
           atual={inicial ? 'editor' : 'novo'}
-          totalPosts={totalPosts + (!inicial && gravacao ? 1 : 0)}
+          totais={{
+            ...totais,
+            posts: totais.posts + (!inicial && gravacao ? 1 : 0)
+          }}
           aoNavegar={aoNavegar}
         />
 

@@ -19,7 +19,7 @@ const alternar = (nome: RegExp) =>
 
 describe('Lateral', () => {
   it('troca de largura sem transição de layout', () => {
-    render(<Lateral atual='posts' totalPosts={3} />);
+    render(<Lateral atual='posts' totais={{ posts: 3, imagens: 18 }} />);
     const nav = screen.getByRole('navigation', { name: 'Admin do blog' });
 
     expect(nav.className).toContain('w-56');
@@ -29,7 +29,7 @@ describe('Lateral', () => {
   });
 
   it('recolhida, esconde os rótulos e mantém o nome acessível', () => {
-    render(<Lateral atual='posts' totalPosts={3} />);
+    render(<Lateral atual='posts' totais={{ posts: 3, imagens: 18 }} />);
     alternar(/recolher o menu/i);
 
     expect(screen.queryByText('Posts')).toBeNull();
@@ -39,7 +39,7 @@ describe('Lateral', () => {
   });
 
   it('só faz o fade dos rótulos quando o user reabre, e só sem reduced motion', () => {
-    render(<Lateral atual='posts' totalPosts={3} />);
+    render(<Lateral atual='posts' totais={{ posts: 3, imagens: 18 }} />);
 
     for (const rotulo of rotulos())
       expect(rotulo.className).not.toContain('fade-in');
@@ -52,5 +52,35 @@ describe('Lateral', () => {
       expect(rotulo.className).toContain('motion-safe:fade-in');
       expect(rotulo.className).not.toMatch(/(^|\s)(animate-in|fade-in)/);
     }
+  });
+
+  it('leva a Imagens e Assuntos com o total e marca só a página aberta', () => {
+    render(<Lateral atual='imagens' totais={{ posts: 11, imagens: 18 }} />);
+
+    const link = (nome: string) =>
+      screen.getByRole('link', { name: new RegExp(`^${nome}`) });
+
+    expect(link('Imagens').getAttribute('href')).toBe('/admin/blog/imagens');
+    expect(link('Assuntos').getAttribute('href')).toBe('/admin/blog/assuntos');
+    expect(link('Posts').textContent).toBe('Posts11');
+    expect(link('Imagens').textContent).toBe('Imagens18');
+    expect(link('Assuntos').textContent).toBe('Assuntos6');
+    expect(link('Imagens').getAttribute('aria-current')).toBe('page');
+    expect(link('Posts').getAttribute('aria-current')).toBeNull();
+    expect(link('Assuntos').getAttribute('aria-current')).toBeNull();
+    expect(screen.queryByText(/em breve/i)).toBeNull();
+  });
+
+  it('sem resposta do armazém, Imagens continua link e fica sem número', () => {
+    render(<Lateral atual='assuntos' totais={{ posts: 2, imagens: null }} />);
+
+    const imagens = screen.getByRole('link', { name: /^Imagens/ });
+
+    expect(imagens.textContent).toBe('Imagens');
+    expect(
+      screen
+        .getByRole('link', { name: /^Assuntos/ })
+        .getAttribute('aria-current')
+    ).toBe('page');
   });
 });
