@@ -47,7 +47,7 @@ const LINHA_DO_PAINEL =
 // O pé do traço é o pé da placa: o botão (h-9) fica centrado na linha de
 // 62 px, ou 46 na compacta, e o bottom conta da borda de padding dele.
 const TRACO =
-  'pointer-events-none absolute -inset-x-px -bottom-[15px] h-0.5 origin-left bg-accent opacity-0 [transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1),bottom_340ms_cubic-bezier(0.22,1,0.36,1)] group-aria-expanded/item:opacity-100 group-data-[aberta]/placa:[transition:bottom_340ms_cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:-bottom-[7px] motion-reduce:transition-none';
+  'pointer-events-none absolute -inset-x-px -bottom-[15px] h-0.5 origin-left bg-accent opacity-0 group-aria-expanded/item:opacity-100 group-data-[compacta]/placa:-bottom-[7px] motion-safe:[transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1),bottom_340ms_cubic-bezier(0.22,1,0.36,1)] motion-safe:group-data-[aberta]/placa:[transition:bottom_340ms_cubic-bezier(0.22,1,0.36,1)]';
 
 const CANTO = 'pointer-events-none absolute z-[2] size-2 border-accent';
 
