@@ -36,7 +36,12 @@ const moveu = (
   real
 });
 
-const FORA: EventoPlaca = { tipo: 'ponteiro-fora-de-gatilho', real: true };
+const FORA: EventoPlaca = {
+  tipo: 'ponteiro-fora-de-gatilho',
+  onde: 'fundo',
+  real: true
+};
+
 const SAIU: EventoPlaca = { tipo: 'ponteiro-saiu-da-zona' };
 const VOLTOU: EventoPlaca = { tipo: 'ponteiro-entrou-na-zona' };
 
@@ -473,7 +478,11 @@ describe('placa: zona e eventos de layout', () => {
       armando
     );
     expect(
-      reduzirPlaca(armando, { tipo: 'ponteiro-fora-de-gatilho', real: false })
+      reduzirPlaca(armando, {
+        tipo: 'ponteiro-fora-de-gatilho',
+        onde: 'fundo',
+        real: false
+      })
     ).toBe(armando);
   });
 
@@ -487,6 +496,7 @@ describe('placa: zona e eventos de layout', () => {
     expect(
       reduzirPlaca(dispensado, {
         tipo: 'ponteiro-fora-de-gatilho',
+        onde: 'fundo',
         real: false
       })
     ).toBe(dispensado);
@@ -532,5 +542,43 @@ describe('placa: histerese da compacta', () => {
 
   it('quem chega já rolado entra compacto', () => {
     expect(seguir([600])).toEqual([true]);
+  });
+});
+
+describe('placa: outros itens da placa', () => {
+  const em = (
+    onde: 'gaveta' | 'fundo' | 'outro-item',
+    real = true
+  ): EventoPlaca => ({ tipo: 'ponteiro-fora-de-gatilho', onde, real });
+
+  it('parar em outro item da placa fecha como sair da zona', () => {
+    const saindo = rodar(...hoverAbre('maquinas'), em('outro-item'));
+
+    expect(saindo.fase).toBe('fechando');
+    expect(
+      menuVisivel(reduzirPlaca(saindo, { tipo: 'venceu-fecha' }))
+    ).toBeNull();
+  });
+
+  it('voltar à gaveta antes do prazo mantém aberto', () => {
+    const e = rodar(...hoverAbre('maquinas'), em('outro-item'), em('gaveta'), {
+      tipo: 'venceu-fecha'
+    });
+
+    expect(e.fase).toBe('aberta');
+  });
+
+  it('passar pelo fundo da placa não segura o fechamento', () => {
+    const e = rodar(...hoverAbre('maquinas'), em('outro-item'), em('fundo'), {
+      tipo: 'venceu-fecha'
+    });
+
+    expect(menuVisivel(e)).toBeNull();
+  });
+
+  it('outro item que chega por layout não fecha', () => {
+    const aberta = rodar(...hoverAbre('maquinas'));
+
+    expect(reduzirPlaca(aberta, em('outro-item', false))).toBe(aberta);
   });
 });

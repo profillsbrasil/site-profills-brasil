@@ -29,6 +29,7 @@ function Banco() {
           </button>
         </div>
       ))}
+      <a href='#blog'>blog</a>
       <div ref={gaveta} data-testid='gaveta' />
     </div>
   );
@@ -164,6 +165,24 @@ describe('usePlaca: zona do ponteiro', () => {
       'aria-expanded',
       'true'
     );
+  });
+
+  it('parar em outro item da placa fecha, e a gaveta segura', () => {
+    vi.useFakeTimers();
+    render(<Banco />);
+    abrirPorHover('maquinas');
+
+    const maquinas = screen.getByText('maquinas');
+
+    mover(screen.getByText('blog'), 400);
+    passar(FECHA_MS - 10);
+    mover(screen.getByTestId('gaveta'), 400, 120);
+    passar(FECHA_MS * 2);
+    expect(maquinas).toHaveAttribute('aria-expanded', 'true');
+
+    mover(screen.getByText('blog'), 400);
+    passar(FECHA_MS);
+    expect(maquinas).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('sair da zona fecha depois de FECHA_MS, e voltar antes cancela', () => {
