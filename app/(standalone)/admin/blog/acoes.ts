@@ -1,5 +1,7 @@
 'use server';
 
+import { refresh } from 'next/cache';
+
 import { abrirAdminBlog } from '@/lib/blog/admin';
 import { MOTIVO_SEM_SESSAO, comMotivo } from '@/lib/blog/erro';
 import type { EntradaEditor, Intencao, PostGuardado } from '@/lib/blog/tipos';
@@ -12,10 +14,16 @@ export type ResultadoGravacao =
 /**
  * Salvar, publicar e despublicar numa gravação só. O tipo da entrada é o que o
  * editor promete; o zod confere o que chegou de fato.
+ *
+ * Com `atualizarRota`, a gravação invalida o cache do roteador no navegador e
+ * re-renderiza a rota no lugar; sem isso, o voltar e o avançar mostram a lista
+ * e o editor de antes da gravação. O editor aberto em /admin/blog/novo passa
+ * false: lá a URL já é a do post, e o re-render troca a rota e remonta o editor.
  */
 export async function gravarPost(
   entrada: EntradaEditor,
-  intencao: Intencao
+  intencao: Intencao,
+  atualizarRota = true
 ): Promise<ResultadoGravacao> {
   const admin = await abrirAdminBlog();
 
@@ -39,7 +47,9 @@ export async function gravarPost(
 
   const tentativa = await comMotivo(() => admin.gravar(lida.data, qual.data));
 
-  return tentativa.ok
-    ? { ok: true, guardado: tentativa.valor }
-    : { ok: false, erro: tentativa.motivo };
+  if (!tentativa.ok) return { ok: false, erro: tentativa.motivo };
+
+  if (atualizarRota) refresh();
+
+  return { ok: true, guardado: tentativa.valor };
 }

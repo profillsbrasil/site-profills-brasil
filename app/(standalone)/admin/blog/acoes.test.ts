@@ -92,6 +92,16 @@ describe('gravação do admin do blog', () => {
     expect(cache.refresh).toHaveBeenCalledOnce();
   });
 
+  it('sem atualizarRota, grava e não invalida o cache do roteador', async () => {
+    admin.gravar.mockResolvedValue(guardado);
+
+    expect(await gravarPost(novo, 'salvar', false)).toEqual({
+      ok: true,
+      guardado
+    });
+    expect(cache.refresh).not.toHaveBeenCalled();
+  });
+
   it('gravação recusada não invalida o cache do roteador', async () => {
     admin.gravar.mockRejectedValue(new ErroBlog('Salvo em outra aba.'));
 

@@ -136,7 +136,8 @@ describe('voltar do navegador no editor', () => {
           titulo: 'Recesso de fim de ano na fábrica editado'
         })
       }),
-      'salvar'
+      'salvar',
+      true
     );
     expect(push).not.toHaveBeenCalled();
   });
@@ -209,6 +210,25 @@ describe('voltar do navegador no editor', () => {
 
     expect(push).toHaveBeenCalledWith('/admin/blog');
     expect(window.history.length).toBe(entradas);
+  });
+
+  it('o post novo grava sem pedir a atualização da rota', async () => {
+    gravarComSucesso();
+    window.history.replaceState(null, '', '/admin/blog/novo');
+    render(<EditorBlog inicial={null} totalPosts={1} />);
+    await editarTitulo();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Salvar rascunho' })
+    );
+
+    await waitFor(() =>
+      expect(gravarPost).toHaveBeenCalledWith(
+        expect.objectContaining({ slug: null }),
+        'salvar',
+        false
+      )
+    );
   });
 
   it('salvar pelo botão não deixa entrada a mais no histórico', async () => {

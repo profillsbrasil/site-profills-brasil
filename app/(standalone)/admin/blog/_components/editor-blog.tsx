@@ -198,7 +198,8 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
         gravacao
           ? { slug: gravacao.slug, versao: gravacao.versao, post: enviado }
           : { slug: null, versao: null, post: enviado },
-        acao
+        acao,
+        inicial !== null
       );
     } catch {
       resultado = {
