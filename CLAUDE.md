@@ -32,7 +32,7 @@ components/
 ├── magicui/              ← efeitos visuais Magic UI (registry @magicui no components.json)
 ├── blocks/               ← blocos compostos reutilizáveis (scrollHint, progress-indicator…)
 ├── blog/                 ← ConteudoPost: o renderizador único dos blocos do post, na leitura pública e na prévia do admin
-├── layout/               ← navegacao.ts (fonte única dos itens das navbars; navbar.paridade.test.tsx trava desktop e mobile nela), navbarDesktop (placa flutuante, estado em placa.ts), navbarMobile, linkDaArvore, footer, gridPatternBg(Mobile), socialLinks
+├── layout/               ← navegacao.ts (fonte única dos itens das navbars; navbar.paridade.test.tsx trava desktop e mobile nela), navbarDesktop (placa flutuante, estado em placa.ts), navbarMobile (barra de abas no pé e folhas do vaul; abas em abasCelular.ts, estado em estadoCelular.ts), linkDaArvore, footer, gridPatternBg(Mobile), socialLinks
 └── modelo3d/             ← domínio 3D: caixaHome3d, embalagem3d, WebGLFallback, hooks/
 
 lib/
@@ -132,6 +132,7 @@ Contexto único: `GLOSSARY.md` e `docs/adr/` na raiz. Ver `docs/agents/domain.md
 - Animação scroll-driven de **opacity** usa `useTransform(() => ...)` em forma de função — a forma de array descarrega para ScrollTimeline nativa e o progresso renderiza invertido (spec: `docs/superpowers/specs/2026-05-19-hero-video-viewtimeline-bug-design.md`).
 - Toda animação nova respeita `useReducedMotion` — padrão do repo é fallback estático.
 - Componentes 3D/WebGL (`CaixaHome3d`, `OptimizedEmbalagem3d`, globe) sempre entram via `dynamic(() => import(...), { ssr: false })` — padrão consistente nos 4 usos existentes.
+- Abaixo de 1024 px a navegação é a barra de abas de 64 px no pé e a faixa do logo de 48 px no topo, que recolhe ao rolar. O `globals.css` dá ao body a folga do pé sozinho; elemento sticky no topo do celular usa `top-(--topo-celular)`, que vira 0 com a faixa recolhida.
 - Hero mobile e desktop são duas árvores montadas alternadas por CSS (`md:hidden` / `hidden md:block`) — código eager (3D, observers) checa `getClientRects()` para ignorar a árvore invisível.
 - Produção roda na Railway (projeto `site-profills-brasil`, serviço `site`, `next start` atrás de proxy, deploy a cada push na `main`). Em route handler o `request.url` traz o host interno (`localhost:8080`): redirect usa `Location` relativo, e URL absoluta sai de `SITE_URL`. O `profills.com` sem `www` ainda aponta para a Vercel, que só redireciona para o `www`; a KingHost não tem ALIAS para a raiz.
 - Sem `.env` local, as rotas de e-mail/download falham — não é bug do seu código; ver `.env.example`.
