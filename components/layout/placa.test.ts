@@ -6,7 +6,9 @@ import {
   PLACA_INICIAL,
   REPOUSO_MS,
   REPOUSO_PX,
+  ehMovimentoReal,
   menuVisivel,
+  proximaCompacta,
   reduzirPlaca,
   sentidoDaTroca
 } from '@/components/layout/placa';
@@ -20,13 +22,23 @@ const rodar = (...eventos: EventoPlaca[]): EstadoPlaca =>
 
 type Menu = (typeof ORDEM)[number];
 
-const moveu = (menu: Menu, x: number, agora: number): EventoPlaca => ({
+const moveu = (
+  menu: Menu,
+  x: number,
+  agora: number,
+  real = true
+): EventoPlaca => ({
   tipo: 'ponteiro-moveu',
   menu,
   x,
   y: 44,
-  agora
+  agora,
+  real
 });
+
+const FORA: EventoPlaca = { tipo: 'ponteiro-fora-de-gatilho', real: true };
+const SAIU: EventoPlaca = { tipo: 'ponteiro-saiu-da-zona' };
+const VOLTOU: EventoPlaca = { tipo: 'ponteiro-entrou-na-zona' };
 
 const hoverAbre = (menu: Menu, agora = REPOUSO_MS): EventoPlaca[] => [
   moveu(menu, 100, agora - REPOUSO_MS),
@@ -47,7 +59,7 @@ function varrer(menus: readonly Menu[], inicio: number): EventoPlaca[] {
       agora += 16;
     }
 
-    eventos.push({ tipo: 'ponteiro-saiu' });
+    eventos.push(FORA);
   }
 
   return eventos;
@@ -55,14 +67,10 @@ function varrer(menus: readonly Menu[], inicio: number): EventoPlaca[] {
 
 describe('placa: intenção de hover', () => {
   it('passar pelo gatilho sem parar não abre', () => {
-    const e = rodar(
-      moveu('maquinas', 100, 0),
-      { tipo: 'ponteiro-saiu' },
-      {
-        tipo: 'venceu-abre',
-        agora: REPOUSO_MS
-      }
-    );
+    const e = rodar(moveu('maquinas', 100, 0), FORA, {
+      tipo: 'venceu-abre',
+      agora: REPOUSO_MS
+    });
 
     expect(menuVisivel(e)).toBeNull();
   });
@@ -105,9 +113,9 @@ describe('placa: intenção de hover', () => {
   it('com a gaveta aberta, cruzar outro gatilho a caminho do painel não troca', () => {
     const e = rodar(
       ...hoverAbre('maquinas'),
-      { tipo: 'ponteiro-saiu' },
+      FORA,
       ...varrer(['projetos'], 200),
-      { tipo: 'ponteiro-entrou-gaveta' },
+      FORA,
       { tipo: 'venceu-abre', agora: 2000 },
       { tipo: 'venceu-fecha' }
     );
@@ -118,7 +126,7 @@ describe('placa: intenção de hover', () => {
   it('com a gaveta aberta, repousar em outro gatilho troca e o sentido segue a ordem', () => {
     const e = rodar(
       ...hoverAbre('servicos'),
-      { tipo: 'ponteiro-saiu' },
+      FORA,
       moveu('projetos', 480, 200)
     );
 
@@ -136,9 +144,9 @@ describe('placa: intenção de hover', () => {
   it('voltar ao gatilho do menu aberto descarta a troca pendente', () => {
     const e = rodar(
       ...hoverAbre('maquinas'),
-      { tipo: 'ponteiro-saiu' },
+      FORA,
       moveu('projetos', 480, 200),
-      { tipo: 'ponteiro-saiu' },
+      FORA,
       moveu('maquinas', 420, 220),
       { tipo: 'venceu-abre', agora: 1000 }
     );
@@ -149,20 +157,20 @@ describe('placa: intenção de hover', () => {
   it('candidato que segue para a gaveta não troca com o timer atrasado', () => {
     const e = rodar(
       ...hoverAbre('maquinas'),
-      { tipo: 'ponteiro-saiu' },
+      FORA,
       moveu('projetos', 480, 200),
-      { tipo: 'ponteiro-saiu' },
-      { tipo: 'ponteiro-entrou-gaveta' },
+      FORA,
       { tipo: 'venceu-abre', agora: 200 + REPOUSO_MS }
     );
 
     expect(menuVisivel(e)).toBe('maquinas');
   });
 
-  it('fechando, chegar a outro gatilho segura a gaveta e troca no repouso', () => {
+  it('fechando, voltar à zona por outro gatilho segura a gaveta e troca no repouso', () => {
     const e = rodar(
       ...hoverAbre('maquinas'),
-      { tipo: 'ponteiro-saiu' },
+      SAIU,
+      VOLTOU,
       moveu('projetos', 480, 200),
       { tipo: 'venceu-fecha' }
     );
@@ -194,8 +202,8 @@ describe('placa: intenção de hover', () => {
     expect(sentidoDaTroca(rodar(...hoverAbre('projetos')), ORDEM)).toBe(0);
   });
 
-  it('sair da placa fecha só quando o timer de fechar vence', () => {
-    const saindo = rodar(...hoverAbre('maquinas'), { tipo: 'ponteiro-saiu' });
+  it('sair da zona fecha só quando o timer de fechar vence', () => {
+    const saindo = rodar(...hoverAbre('maquinas'), SAIU);
 
     expect(menuVisivel(saindo)).toBe('maquinas');
     expect(
@@ -203,13 +211,10 @@ describe('placa: intenção de hover', () => {
     ).toBeNull();
   });
 
-  it('entrar na gaveta antes de o timer vencer mantém aberto', () => {
-    const e = rodar(
-      ...hoverAbre('maquinas'),
-      { tipo: 'ponteiro-saiu' },
-      { tipo: 'ponteiro-entrou-gaveta' },
-      { tipo: 'venceu-fecha' }
-    );
+  it('voltar à zona antes de o timer vencer mantém aberto', () => {
+    const e = rodar(...hoverAbre('maquinas'), SAIU, VOLTOU, {
+      tipo: 'venceu-fecha'
+    });
 
     expect(menuVisivel(e)).toBe('maquinas');
   });
@@ -238,7 +243,7 @@ describe('placa: clique, teclado e fora', () => {
   it('clique logo depois de o hover trocar de menu não fecha', () => {
     const e = rodar(
       ...hoverAbre('maquinas', 1000),
-      { tipo: 'ponteiro-saiu' },
+      FORA,
       moveu('projetos', 480, 2900 - REPOUSO_MS),
       { tipo: 'venceu-abre', agora: 2900 },
       { tipo: 'clique', menu: 'projetos', agora: 3000 }
@@ -342,7 +347,7 @@ describe('placa: dispensar com o ponteiro em cima', () => {
       const e = rodar(
         ...abertoNoGatilho(),
         fechar,
-        { tipo: 'ponteiro-saiu' },
+        FORA,
         moveu('maquinas', 100, 2000),
         { tipo: 'venceu-abre', agora: 2000 + REPOUSO_MS }
       );
@@ -355,7 +360,14 @@ describe('placa: dispensar com o ponteiro em cima', () => {
     const e = rodar(
       { tipo: 'clique', menu: 'maquinas', agora: 0 },
       { tipo: 'clique', menu: 'maquinas', agora: 1000 },
-      { tipo: 'ponteiro-entrou', menu: 'maquinas', x: 100, y: 44, agora: 2000 },
+      {
+        tipo: 'ponteiro-entrou',
+        menu: 'maquinas',
+        x: 100,
+        y: 44,
+        agora: 2000,
+        real: true
+      },
       { tipo: 'venceu-abre', agora: 2000 + REPOUSO_MS }
     );
 
@@ -402,5 +414,123 @@ describe('placa: dispensar com o ponteiro em cima', () => {
 
       expect(menuVisivel(e)).toBe('projetos');
     }
+  });
+});
+
+describe('placa: zona e eventos de layout', () => {
+  it('dentro da zona, sair do gatilho para a gaveta não fecha', () => {
+    const e = rodar(...hoverAbre('maquinas'), FORA, { tipo: 'venceu-fecha' });
+
+    expect(e.fase).toBe('aberta');
+    expect(menuVisivel(e)).toBe('maquinas');
+  });
+
+  it('sair da zona e voltar sobre o mesmo gatilho deixa aberto', () => {
+    const e = rodar(
+      ...hoverAbre('maquinas'),
+      SAIU,
+      VOLTOU,
+      moveu('maquinas', 100, 300),
+      { tipo: 'venceu-fecha' }
+    );
+
+    expect(e.fase).toBe('aberta');
+  });
+
+  it('voltar à zona com tudo fechado não muda nada', () => {
+    expect(reduzirPlaca(PLACA_INICIAL, VOLTOU)).toBe(PLACA_INICIAL);
+  });
+
+  it('evento de layout sobre outro gatilho não cria candidato nem troca', () => {
+    const aberta = rodar(...hoverAbre('maquinas'));
+    const depois = reduzirPlaca(aberta, moveu('servicos', 300, 200, false));
+
+    expect(depois).toBe(aberta);
+    expect(
+      menuVisivel(reduzirPlaca(depois, { tipo: 'venceu-abre', agora: 1000 }))
+    ).toBe('maquinas');
+  });
+
+  it('evento de layout sobre um gatilho com tudo fechado não arma', () => {
+    for (const tipo of ['ponteiro-entrou', 'ponteiro-moveu'] as const) {
+      const e = reduzirPlaca(PLACA_INICIAL, {
+        tipo,
+        menu: 'maquinas',
+        x: 100,
+        y: 44,
+        agora: 0,
+        real: false
+      });
+
+      expect(e).toBe(PLACA_INICIAL);
+    }
+  });
+
+  it('evento de layout não reinicia o repouso em curso', () => {
+    const armando = rodar(moveu('maquinas', 100, 0));
+
+    expect(reduzirPlaca(armando, moveu('maquinas', 200, 50, false))).toBe(
+      armando
+    );
+    expect(
+      reduzirPlaca(armando, { tipo: 'ponteiro-fora-de-gatilho', real: false })
+    ).toBe(armando);
+  });
+
+  it('evento de layout fora do gatilho não desfaz a dispensa', () => {
+    const dispensado = rodar(
+      ...hoverAbre('maquinas', 100),
+      moveu('maquinas', 100, 600),
+      { tipo: 'esc' }
+    );
+
+    expect(
+      reduzirPlaca(dispensado, {
+        tipo: 'ponteiro-fora-de-gatilho',
+        real: false
+      })
+    ).toBe(dispensado);
+  });
+});
+
+describe('placa: movimento real', () => {
+  it('sem ponto anterior, conta como movimento', () => {
+    expect(ehMovimentoReal(null, 10, 20)).toBe(true);
+  });
+
+  it('coordenadas iguais às do último pointermove não são movimento', () => {
+    expect(ehMovimentoReal({ x: 10, y: 20 }, 10, 20)).toBe(false);
+  });
+
+  it('qualquer deslocamento é movimento', () => {
+    expect(ehMovimentoReal({ x: 10, y: 20 }, 10.5, 20)).toBe(true);
+    expect(ehMovimentoReal({ x: 10, y: 20 }, 10, 19)).toBe(true);
+  });
+});
+
+describe('placa: histerese da compacta', () => {
+  const seguir = (ys: readonly number[]) => {
+    let atual = false;
+
+    return ys.map((y) => (atual = proximaCompacta(atual, y)));
+  };
+
+  it('entra acima de 24 px e só sai em 4 px ou menos', () => {
+    expect(seguir([0, 34, 10, 34, 10])).toEqual([
+      false,
+      true,
+      true,
+      true,
+      true
+    ]);
+    expect(seguir([24, 25, 5, 4])).toEqual([false, true, true, false]);
+  });
+
+  it('3 px de rolagem não compacta', () => {
+    expect(seguir([3])).toEqual([false]);
+  });
+
+  it('quem chega já rolado entra compacto', () => {
+    expect(seguir([600])).toEqual([true]);
   });
 });
