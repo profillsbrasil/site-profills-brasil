@@ -47,7 +47,9 @@ const postVazio: Post = {
 };
 
 /** Para onde o editor sai depois da pergunta "Sair sem salvar?". */
-type Saida = { para: 'link'; href: string } | { para: 'voltar' };
+type Saida =
+  | { para: 'link'; href: string }
+  | { para: 'historico'; chave: string };
 
 type Fase =
   | { fase: 'parado' }
@@ -148,39 +150,40 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
     return () => window.removeEventListener('beforeunload', segurar);
   }, [sujo]);
 
-  // O voltar do navegador troca de rota no client e não dispara o
-  // beforeunload. Com mudança pendente, uma entrada repetida da mesma URL no
-  // histórico recebe o voltar, e o popstate abre a pergunta no lugar de sair.
+  // O voltar e o avançar do navegador trocam de rota no client e não disparam
+  // o beforeunload. O navigate da Navigation API chega antes do popstate que o
+  // roteador do Next escuta: com mudança pendente, o editor cancela a
+  // travessia, que então não mexe no histórico, e abre a pergunta.
   const sujoAgora = useRef(sujo);
-  const entradaExtra = useRef(false);
+  const saindo = useRef(false);
 
   useEffect(() => {
     sujoAgora.current = sujo;
-
-    if (!sujo || entradaExtra.current) return;
-
-    window.history.pushState(null, '', window.location.href);
-    entradaExtra.current = true;
   }, [sujo]);
 
   useEffect(() => {
-    const aoVoltar = () => {
-      if (!entradaExtra.current) return;
+    if (!('navigation' in window)) return;
 
-      if (!sujoAgora.current) {
-        entradaExtra.current = false;
-        window.history.back();
+    const { navigation } = window;
+
+    const aoTravessar = (e: NavigateEvent) => {
+      if (e.navigationType !== 'traverse') return;
+
+      if (saindo.current) {
+        saindo.current = false;
 
         return;
       }
 
-      window.history.pushState(null, '', window.location.href);
-      setSaida({ para: 'voltar' });
+      if (!sujoAgora.current || !e.cancelable) return;
+
+      e.preventDefault();
+      setSaida({ para: 'historico', chave: e.destination.key });
     };
 
-    window.addEventListener('popstate', aoVoltar);
+    navigation.addEventListener('navigate', aoTravessar);
 
-    return () => window.removeEventListener('popstate', aoVoltar);
+    return () => navigation.removeEventListener('navigate', aoTravessar);
   }, []);
 
   const gravar = async (acao: Intencao) => {
@@ -285,8 +288,10 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
       return;
     }
 
-    entradaExtra.current = false;
-    window.history.go(-2);
+    // Depois de um avançar cancelado, o Chrome ignora o history.go(1); o
+    // traverseTo pela chave da entrada chega ao destino nos dois sentidos.
+    saindo.current = true;
+    window.navigation.traverseTo(destino.chave);
   };
 
   const salvarESair = async () => {
