@@ -2,7 +2,13 @@ import type { StaticImageData } from 'next/image';
 
 import NavbarMobile from '@/components/layout/navbarMobile';
 import type { VitrinesDoMenu } from '@/lib/data/maquinas/menu';
-import { render, screen, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -12,8 +18,24 @@ const rota = vi.hoisted(() => ({ atual: '/' }));
 vi.mock('next/navigation', () => ({ usePathname: () => rota.atual }));
 
 vi.mock('next/image', () => ({
-  default: ({ alt, src }: { alt: string; src: StaticImageData | string }) => (
-    <span role='img' aria-label={alt} data-imagem={JSON.stringify(src)} />
+  default: ({
+    alt,
+    src,
+    onLoad,
+    'aria-hidden': escondida
+  }: {
+    alt: string;
+    src: StaticImageData | string;
+    onLoad?: React.ReactEventHandler<HTMLImageElement>;
+    'aria-hidden'?: boolean;
+  }) => (
+    // oxlint-disable-next-line nextjs/no-img-element -- o mock precisa do load de um img de verdade
+    <img
+      alt={alt}
+      aria-hidden={escondida}
+      data-imagem={JSON.stringify(src)}
+      onLoad={onLoad}
+    />
   )
 }));
 
@@ -64,12 +86,18 @@ const aba = (rotulo: string) =>
 
 const fotosDeConteudo = () =>
   [...document.body.querySelectorAll<HTMLElement>('[data-imagem]')].filter(
-    (img) => !img.getAttribute('aria-label')?.startsWith('Profills')
+    (img) => !img.getAttribute('alt')?.startsWith('Profills')
   );
+
+const vitrinesAMostra = () =>
+  fotosDeConteudo()
+    .filter((img) => img.getAttribute('aria-hidden') !== 'true')
+    .map((img) => img.dataset.imagem);
 
 describe('navbar do celular', () => {
   beforeEach(() => {
     rota.atual = '/';
+    HTMLImageElement.prototype.decode = () => Promise.resolve();
   });
 
   it.each([
@@ -180,9 +208,36 @@ describe('navbar do celular', () => {
       '/maquinas?categoria=Embalagens%20r%C3%ADgidas'
     );
     expect(within(folha).getByText('Rígida R')).toBeInTheDocument();
-    expect(fotosDeConteudo().map((img) => img.dataset.imagem)).toEqual([
-      JSON.stringify(foto('r'))
-    ]);
+  });
+
+  it('a vitrine anterior fica à mostra até a nova carregar', async () => {
+    const u = usuario();
+
+    render(<NavbarMobile vitrines={vitrines} />);
+    await u.click(aba('Máquinas'));
+
+    const folha = screen.getByRole('dialog', { name: 'Máquinas' });
+
+    fireEvent.load(fotosDeConteudo()[0]!);
+    await u.click(
+      within(folha).getByRole('button', {
+        name: /^Embalagens rígidas, 5 máquinas$/
+      })
+    );
+
+    expect(vitrinesAMostra()).toEqual([JSON.stringify(foto('a'))]);
+
+    const nova = fotosDeConteudo().find(
+      (img) => img.dataset.imagem === JSON.stringify(foto('r'))
+    );
+
+    fireEvent.load(nova!);
+
+    await waitFor(() =>
+      expect(fotosDeConteudo().map((img) => img.dataset.imagem)).toEqual([
+        JSON.stringify(foto('r'))
+      ])
+    );
   });
 
   it('categoria sem vitrine mostra o nome e a contagem, sem foto', async () => {

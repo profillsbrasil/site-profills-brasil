@@ -31,7 +31,7 @@ import {
   DrawerPortal,
   DrawerTitle
 } from '@/components/ui/drawer';
-import type { VitrinesDoMenu } from '@/lib/data/maquinas/menu';
+import type { VitrineMenu, VitrinesDoMenu } from '@/lib/data/maquinas/menu';
 import { cn } from '@/lib/utils';
 import logoBranco from '@/public/logo-branco.png';
 
@@ -381,11 +381,21 @@ function CorpoMaquinas({
 }) {
   const { folhas } = menu.painel;
   const [indice, setIndice] = useState(0);
+  // A última vitrine pintada: segue à mostra até a nova carregar e decodificar.
+  const [pintada, setPintada] = useState<VitrineMenu | null>(null);
   const escolhida = folhas[indice];
 
   if (!escolhida) return null;
 
   const { vitrine, total } = vitrines[escolhida.vitrine];
+  const visivel = vitrine && (pintada ?? vitrine);
+
+  const imagens =
+    visivel && vitrine && visivel.slug !== vitrine.slug
+      ? [visivel, vitrine]
+      : visivel
+        ? [visivel]
+        : [];
 
   return (
     <>
@@ -402,7 +412,11 @@ function CorpoMaquinas({
                 type='button'
                 aria-pressed={i === indice}
                 aria-label={`${f.rotulo}, ${contagem(vitrines[f.vitrine].total)}`}
-                onClick={() => setIndice(i)}
+                onClick={() => {
+                  setIndice(i);
+
+                  if (!vitrines[f.vitrine].vitrine) setPintada(null);
+                }}
                 className={LINHA}>
                 <f.icone aria-hidden className={ICONE_DA_LINHA} />
                 <span className='min-w-0 flex-1'>{f.rotulo}</span>
@@ -426,14 +440,29 @@ function CorpoMaquinas({
             aria-hidden
             className={cn(CANTO, '-right-px -bottom-px border-r border-b')}
           />
-          {vitrine ? (
-            <Image
-              key={vitrine.slug}
-              src={vitrine.imagem}
-              alt=''
-              sizes='104px'
-              className='animate-in fade-in-25 size-full object-contain p-1 duration-200 motion-reduce:animate-none'
-            />
+          {visivel ? (
+            imagens.map((v) => (
+              <Image
+                key={v.slug}
+                src={v.imagem}
+                alt=''
+                aria-hidden={v !== visivel || undefined}
+                sizes='104px'
+                onLoad={(evento) => {
+                  const img = evento.currentTarget;
+
+                  const pintar = () => {
+                    if (img.isConnected) setPintada(v);
+                  };
+
+                  img.decode().then(pintar, pintar);
+                }}
+                className={cn(
+                  'size-full object-contain p-1',
+                  v !== visivel && 'absolute inset-0 opacity-0'
+                )}
+              />
+            ))
           ) : (
             <Factory aria-hidden className='size-7 text-(--cel-texto-2)' />
           )}
