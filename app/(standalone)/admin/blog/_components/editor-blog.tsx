@@ -1,6 +1,13 @@
 'use client';
 
-import { type MouseEvent, useEffect, useReducer, useState } from 'react';
+import {
+  type MouseEvent,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+  useTransition
+} from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -43,6 +50,11 @@ const postVazio: Post = {
   capa: null,
   linhas: []
 };
+
+/** Para onde o editor sai depois da pergunta "Sair sem salvar?". */
+type Saida =
+  | { para: 'link'; href: string }
+  | { para: 'historico'; chave: string };
 
 type Fase =
   | { fase: 'parado' }
@@ -126,11 +138,13 @@ export function EditorBlog({ inicial, totais }: Props) {
   const [postSalvo, setPostSalvo] = useState(inicial?.post ?? postVazio);
   const [gravacao, setGravacao] = useState(inicial);
   const [fase, setFase] = useState<Fase>({ fase: 'parado' });
-  const [saida, setSaida] = useState<string | null>(null);
+  const [saida, setSaida] = useState<Saida | null>(null);
+  const [gravandoParaSair, gravarParaSair] = useTransition();
+  const chaveGravada = useRef<string | null>(null);
   const [dispositivo, setDispositivo] = useState<Dispositivo>('computador');
 
   const sujo = post !== postSalvo;
-  const ocupado = fase.fase === 'gravando';
+  const ocupado = fase.fase === 'gravando' || gravandoParaSair;
   const publicado = gravacao?.estado === 'publicado';
 
   useEffect(() => {
@@ -143,7 +157,63 @@ export function EditorBlog({ inicial, totais }: Props) {
     return () => window.removeEventListener('beforeunload', segurar);
   }, [sujo]);
 
-  const gravar = async (acao: Intencao) => {
+  // O voltar e o avançar do navegador trocam de rota no client e não disparam
+  // o beforeunload. O navigate da Navigation API chega antes do popstate que o
+  // roteador do Next escuta: com mudança pendente, o editor cancela a
+  // travessia, que então não mexe no histórico, e abre a pergunta.
+  const sujoAgora = useRef(sujo);
+  const saindo = useRef(false);
+
+  useEffect(() => {
+    sujoAgora.current = sujo;
+  }, [sujo]);
+
+  useEffect(() => {
+    if (!('navigation' in window)) return;
+
+    const { navigation } = window;
+
+    const aoTravessar = (e: NavigateEvent) => {
+      if (e.navigationType !== 'traverse') return;
+
+      if (saindo.current) {
+        saindo.current = false;
+
+        return;
+      }
+
+      if (!sujoAgora.current || !e.cancelable) return;
+
+      e.preventDefault();
+      setSaida({ para: 'historico', chave: e.destination.key });
+    };
+
+    navigation.addEventListener('navigate', aoTravessar);
+
+    return () => navigation.removeEventListener('navigate', aoTravessar);
+  }, []);
+
+  // "Salvar e sair" pelo voltar ou pelo avançar: o roteador do Next só pode
+  // ter uma coisa em voo sobre o histórico. A transição termina quando ele
+  // assenta a gravação; só então a travessia sai, e a rota de destino só é
+  // atualizada com a travessia terminada. Com a gravação ainda em voo, o
+  // roteador escreve a URL do editor em cima da entrada de destino.
+  useEffect(() => {
+    const chave = chaveGravada.current;
+
+    if (chave === null || gravandoParaSair) return;
+
+    chaveGravada.current = null;
+
+    window.navigation.traverseTo(chave).finished?.then(
+      () => router.refresh(),
+      // A travessia cancelada (nova mudança pendente, que pergunta de novo)
+      // não chega a um destino para atualizar.
+      () => undefined
+    );
+  }, [gravandoParaSair, router]);
+
+  const gravar = async (acao: Intencao, atualizarRota = inicial !== null) => {
     const enviado = post;
 
     setFase({ fase: 'gravando', acao });
@@ -155,7 +225,8 @@ export function EditorBlog({ inicial, totais }: Props) {
         gravacao
           ? { slug: gravacao.slug, versao: gravacao.versao, post: enviado }
           : { slug: null, versao: null, post: enviado },
-        acao
+        acao,
+        atualizarRota
       );
     } catch {
       resultado = {
@@ -235,7 +306,20 @@ export function EditorBlog({ inicial, totais }: Props) {
   const aoNavegar = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     if (!sujo) return;
     e.preventDefault();
-    setSaida(href);
+    setSaida({ para: 'link', href });
+  };
+
+  const sair = (destino: Saida) => {
+    if (destino.para === 'link') {
+      router.push(destino.href);
+
+      return;
+    }
+
+    // Depois de um avançar cancelado, o Chrome ignora o history.go(1); o
+    // traverseTo pela chave da entrada chega ao destino nos dois sentidos.
+    saindo.current = true;
+    window.navigation.traverseTo(destino.chave);
   };
 
   const salvarESair = async () => {
@@ -243,7 +327,19 @@ export function EditorBlog({ inicial, totais }: Props) {
 
     setSaida(null);
 
-    if (destinoSaida && (await gravar('salvar'))) router.push(destinoSaida);
+    if (!destinoSaida) return;
+
+    if (destinoSaida.para === 'link') {
+      if (await gravar('salvar')) sair(destinoSaida);
+
+      return;
+    }
+
+    gravarParaSair(async () => {
+      if (await gravar('salvar', false)) {
+        chaveGravada.current = destinoSaida.chave;
+      }
+    });
   };
 
   const inserir = (tipo: TipoBloco, destino: Destino) =>
@@ -305,7 +401,9 @@ export function EditorBlog({ inicial, totais }: Props) {
               {publicado ? 'Publicado' : 'Rascunho'}
             </span>
             <p aria-live='polite' className='text-xs text-[#5a6172]'>
-              {textoStatus(fase, gravacao, sujo)}
+              {gravandoParaSair
+                ? `${textoGravando.salvar}…`
+                : textoStatus(fase, gravacao, sujo)}
             </p>
             <div className='ml-auto flex gap-2'>
               {publicado ? (
@@ -488,7 +586,7 @@ export function EditorBlog({ inicial, totais }: Props) {
               variant='outline'
               className={classeBotaoContorno}
               onClick={() => {
-                if (saida) router.push(saida);
+                if (saida) sair(saida);
                 setSaida(null);
               }}>
               Sair sem salvar

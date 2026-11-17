@@ -21,6 +21,10 @@ const admin = vi.hoisted(() => ({
 // Sessão falsa: a action e a rota passam pela abrirAdminBlog de verdade, que pergunta à sessão.
 const sessao = vi.hoisted(() => ({ autorAtual: vi.fn() }));
 
+const cache = vi.hoisted(() => ({ refresh: vi.fn() }));
+
+vi.mock('next/cache', () => cache);
+
 vi.mock('@/lib/admin/sessao', () => sessao);
 
 vi.mock('@/lib/blog/repositorio', () => ({ repositorioBlog: admin }));
@@ -78,6 +82,33 @@ describe('gravação do admin do blog', () => {
 
     expect(await gravarPost(novo, 'publicar')).toEqual({ ok: true, guardado });
     expect(admin.gravar).toHaveBeenCalledWith(novo, 'publicar');
+  });
+
+  it('depois de gravar, invalida o cache do roteador do navegador', async () => {
+    admin.gravar.mockResolvedValue(guardado);
+
+    await gravarPost(novo, 'salvar');
+
+    expect(cache.refresh).toHaveBeenCalledOnce();
+  });
+
+  it('sem atualizarRota, grava e não invalida o cache do roteador', async () => {
+    admin.gravar.mockResolvedValue(guardado);
+
+    expect(await gravarPost(novo, 'salvar', false)).toEqual({
+      ok: true,
+      guardado
+    });
+    expect(cache.refresh).not.toHaveBeenCalled();
+  });
+
+  it('gravação recusada não invalida o cache do roteador', async () => {
+    admin.gravar.mockRejectedValue(new ErroBlog('Salvo em outra aba.'));
+
+    await gravarPost({ slug: 'catalogo-novo', versao: 1, post }, 'salvar');
+    await gravarPost({ ...novo, post: { ...post, capa: 'blob:x' } }, 'salvar');
+
+    expect(cache.refresh).not.toHaveBeenCalled();
   });
 
   it('recusa sem sessão, sem tocar no banco nem no disco', async () => {
