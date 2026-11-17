@@ -8,11 +8,15 @@ import { assuntos } from '@/lib/blog/tipos';
 import { enderecoDeEntrada } from '../entrar/volta';
 import { dataPorExtenso } from './_components/datas';
 import { Lateral } from './_components/lateral';
+import {
+  AvisosDeApagar,
+  LixeiraRascunho
+} from './_components/lixeira-rascunho';
 
 export const metadata: Metadata = { title: 'Posts' };
 
 const colunas =
-  'grid grid-cols-[minmax(0,1fr)_8rem_11rem_6.5rem] items-center gap-4 px-4';
+  'grid grid-cols-[minmax(0,1fr)_8rem_11rem_6.5rem_2rem] items-center gap-4 px-4';
 
 export default async function PostsPage() {
   const admin = await abrirAdminBlog();
@@ -29,59 +33,77 @@ export default async function PostsPage() {
       <Lateral atual='posts' totais={{ posts: posts.length, imagens }} />
 
       <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-[#f3f4f6] text-[#1b1c1f]'>
-        <header className='flex min-h-14 items-center gap-3 border-b border-[#dfe2e8] bg-white px-5 py-3'>
-          <h1 className='text-lg font-semibold'>Posts</h1>
-        </header>
-
-        <div className='min-h-0 flex-1 overflow-y-auto p-5'>
-          {posts.length === 0 ? (
-            <div className='grid justify-items-center gap-3 rounded-xs border border-dashed border-[#8a90a0] bg-white p-10 text-center'>
-              <h2 className='text-base font-semibold'>Nenhum post ainda</h2>
-              <p className='max-w-sm text-xs text-[#5a6172]'>
-                Clique em Novo post para escrever o primeiro. Ele fica guardado
-                como rascunho até você publicar.
-              </p>
-            </div>
-          ) : (
-            <div className='overflow-hidden rounded-xs border border-[#dfe2e8] bg-white'>
-              <div
-                aria-hidden='true'
-                className={`${colunas} border-b border-[#dfe2e8] bg-[#f7f8fa] py-2 text-xs font-medium text-[#5a6172]`}>
-                <span>Título</span>
-                <span>Assunto</span>
-                <span>Atualizado em</span>
-                <span>Estado</span>
+        <AvisosDeApagar
+          cabecalho={
+            <header className='flex min-h-14 items-center gap-3 border-b border-[#dfe2e8] bg-white px-5 py-3'>
+              <h1 className='text-lg font-semibold'>Posts</h1>
+            </header>
+          }>
+          <div className='min-h-0 flex-1 overflow-y-auto p-5'>
+            {posts.length === 0 ? (
+              <div className='grid justify-items-center gap-3 rounded-xs border border-dashed border-[#8a90a0] bg-white p-10 text-center'>
+                <h2 className='text-base font-semibold'>Nenhum post ainda</h2>
+                <p className='max-w-sm text-xs text-[#5a6172]'>
+                  Clique em Novo post para escrever o primeiro. Ele fica
+                  guardado como rascunho até você publicar.
+                </p>
               </div>
-              <ul>
-                {posts.map(
-                  ({ slug, estado, atualizadoEm, titulo, assunto }) => (
-                    <li
-                      key={slug}
-                      className='border-b border-[#eceef2] last:border-b-0'>
-                      <Link
-                        href={`/admin/blog/${slug}`}
-                        className={`${colunas} py-3 transition-colors outline-none hover:bg-[#f7f8fa] focus-visible:bg-[#f7f8fa] motion-reduce:transition-none`}>
-                        <span className='truncate font-medium'>
-                          {titulo || 'Sem título'}
-                        </span>
-                        <span className='text-[#5a6172]'>
-                          {assuntos[assunto].nome}
-                        </span>
-                        <span className='text-[#5a6172]'>
-                          {dataPorExtenso(atualizadoEm)}
-                        </span>
-                        <span
-                          className={`justify-self-start rounded-xs px-2 py-0.5 text-xs font-medium ${estado === 'publicado' ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
-                          {estado === 'publicado' ? 'Publicado' : 'Rascunho'}
-                        </span>
-                      </Link>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className='overflow-hidden rounded-xs border border-[#dfe2e8] bg-white'>
+                <div
+                  aria-hidden='true'
+                  className={`${colunas} border-b border-[#dfe2e8] bg-[#f7f8fa] py-2 text-xs font-medium text-[#5a6172]`}>
+                  <span>Título</span>
+                  <span>Assunto</span>
+                  <span>Atualizado em</span>
+                  <span>Estado</span>
+                  <span />
+                </div>
+                <ul>
+                  {posts.map(
+                    ({
+                      slug,
+                      versao,
+                      estado,
+                      atualizadoEm,
+                      titulo,
+                      assunto
+                    }) => (
+                      <li
+                        key={slug}
+                        className='group relative border-b border-[#eceef2] last:border-b-0'>
+                        <Link
+                          href={`/admin/blog/${slug}`}
+                          className={`${colunas} py-3 transition-colors outline-none group-hover:bg-[#f7f8fa] focus-visible:bg-[#f7f8fa] motion-reduce:transition-none`}>
+                          <span className='truncate font-medium'>
+                            {titulo || 'Sem título'}
+                          </span>
+                          <span className='text-[#5a6172]'>
+                            {assuntos[assunto].nome}
+                          </span>
+                          <span className='text-[#5a6172]'>
+                            {dataPorExtenso(atualizadoEm)}
+                          </span>
+                          <span
+                            className={`justify-self-start rounded-xs px-2 py-0.5 text-xs font-medium ${estado === 'publicado' ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
+                            {estado === 'publicado' ? 'Publicado' : 'Rascunho'}
+                          </span>
+                        </Link>
+                        {estado === 'rascunho' ? (
+                          <LixeiraRascunho
+                            slug={slug}
+                            versao={versao}
+                            titulo={titulo || 'Sem título'}
+                          />
+                        ) : null}
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+        </AvisosDeApagar>
       </main>
     </div>
   );

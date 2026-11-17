@@ -183,6 +183,7 @@ describe('agruparPorAssunto', () => {
     assunto: ResumoAdmin['assunto']
   ): ResumoAdmin => ({
     slug,
+    versao: 1,
     assunto,
     titulo: slug,
     estado: 'rascunho',

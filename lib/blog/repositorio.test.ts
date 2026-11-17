@@ -8,9 +8,9 @@ import {
 } from '@/lib/schemas/post-blog';
 
 import { ErroBlog } from './erro';
-import { SLUGS_RESERVADOS } from './regras';
+import { MOTIVO_APAGAR_PUBLICADO, SLUGS_RESERVADOS } from './regras';
 import { criarRepositorioBlog } from './repositorio';
-import type { Post } from './tipos';
+import type { Post, PostGuardado } from './tipos';
 import { createHash } from 'node:crypto';
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -230,6 +230,7 @@ describe('repositório de posts no Postgres', () => {
     expect(await repo.listar()).toEqual([
       {
         slug: 'antigo',
+        versao: 2,
         estado: 'rascunho',
         atualizadoEm: '2026-11-15T12:03:00.000Z',
         titulo: 'Antigo editado',
@@ -780,7 +781,8 @@ describe('imagens no admin', () => {
       armazem: {
         gravar: () => Promise.reject(new Error('fora')),
         ler: () => Promise.reject(new Error('fora')),
-        listar
+        listar,
+        apagar: () => Promise.reject(new Error('fora'))
       },
       agora: () => agora
     });
@@ -791,5 +793,256 @@ describe('imagens no admin', () => {
     expect(await fora.contarImagens()).toBeNull();
     expect(listar).toHaveBeenCalledTimes(1);
     await expect(fora.listarImagens()).rejects.toThrow('fora');
+  });
+});
+
+describe('apagar rascunho', () => {
+  const pngDe = (byte: number) => new Uint8Array([...png, byte]);
+
+  /** Rascunho com uma imagem na capa e outra num bloco, as duas na pasta dele. */
+  async function rascunhoComImagens(
+    repo: ReturnType<typeof criarRepositorioBlog>,
+    titulo: string
+  ) {
+    const salvo = await repo.gravar(
+      { slug: null, versao: null, post: post(titulo) },
+      'salvar'
+    );
+
+    const capa = await repo.enviarImagem(
+      salvo.slug,
+      new File([pngDe(1)], 'capa.png')
+    );
+
+    const noTexto = await repo.enviarImagem(
+      salvo.slug,
+      new File([pngDe(2)], 'texto.png')
+    );
+
+    const guardado = await repo.gravar(
+      {
+        slug: salvo.slug,
+        versao: salvo.versao,
+        post: {
+          ...post(titulo),
+          capa,
+          linhas: [
+            {
+              id: 'l1',
+              proporcao: 50,
+              colunas: [{ id: 'b1', tipo: 'imagem', src: noTexto, legenda: '' }]
+            }
+          ]
+        }
+      },
+      'salvar'
+    );
+
+    return { guardado, capa, noTexto };
+  }
+
+  const pedido = ({ slug, versao }: PostGuardado) => ({ slug, versao });
+
+  it('apaga o rascunho e as imagens da pasta dele', async () => {
+    const repo = repositorio();
+    const { guardado } = await rascunhoComImagens(repo, 'Fispal');
+
+    expect(await repo.apagarRascunho(pedido(guardado))).toEqual({
+      apagadas: 2,
+      falharam: 0
+    });
+    expect(await repo.ler(guardado.slug)).toBeNull();
+    expect(await repo.listar()).toEqual([]);
+    expect(await repo.listarImagens()).toEqual([]);
+  });
+
+  it('recusa post publicado, mesmo na versão certa, e não apaga nada', async () => {
+    const repo = repositorio();
+    const { guardado } = await rascunhoComImagens(repo, 'Fispal');
+
+    const publicado = await repo.gravar(
+      { slug: guardado.slug, versao: guardado.versao, post: guardado.post },
+      'publicar'
+    );
+
+    await expect(repo.apagarRascunho(pedido(publicado))).rejects.toThrow(
+      MOTIVO_APAGAR_PUBLICADO
+    );
+    expect((await repo.ler(guardado.slug))?.estado).toBe('publicado');
+    expect(await repo.listarImagens()).toHaveLength(2);
+  });
+
+  it('recusa a versão antiga com o aviso de outra aba e não apaga nada', async () => {
+    const repo = repositorio();
+    const { guardado } = await rascunhoComImagens(repo, 'Fispal');
+
+    await repo.gravar(
+      { slug: guardado.slug, versao: guardado.versao, post: guardado.post },
+      'salvar'
+    );
+
+    await expect(repo.apagarRascunho(pedido(guardado))).rejects.toThrow(
+      'outra aba'
+    );
+    expect(await repo.ler(guardado.slug)).not.toBeNull();
+    expect(await repo.listarImagens()).toHaveLength(2);
+  });
+
+  it('mantém a imagem da pasta que outro post usa', async () => {
+    const repo = repositorio();
+    const { guardado, capa } = await rascunhoComImagens(repo, 'Fispal');
+
+    await repo.gravar(
+      { slug: null, versao: null, post: { ...post('Recesso'), capa } },
+      'salvar'
+    );
+
+    expect(await repo.apagarRascunho(pedido(guardado))).toEqual({
+      apagadas: 1,
+      falharam: 0
+    });
+    expect(
+      (await repo.listarImagens()).map(({ caminho, uso }) => ({ caminho, uso }))
+    ).toEqual([{ caminho: capa, uso: 'capa' }]);
+  });
+
+  it('com o armazém falhando no meio, o post sai e as imagens que ficaram aparecem sem uso; repetir termina', async () => {
+    const disco = criarArmazemDisco(raiz);
+    const { guardado } = await rascunhoComImagens(repositorio(), 'Fispal');
+
+    const falhaNaPrimeira = criarRepositorioBlog({
+      consulta,
+      armazem: {
+        ...disco,
+        apagar: async (chaves) => {
+          await disco.apagar(chaves.slice(1));
+
+          return chaves.slice(0, 1);
+        }
+      },
+      agora: () => agora
+    });
+
+    expect(await falhaNaPrimeira.apagarRascunho(pedido(guardado))).toEqual({
+      apagadas: 1,
+      falharam: 1
+    });
+    expect(await falhaNaPrimeira.ler(guardado.slug)).toBeNull();
+    expect(
+      (await falhaNaPrimeira.listarImagens()).map(({ uso, tituloDoPost }) => ({
+        uso,
+        tituloDoPost
+      }))
+    ).toEqual([{ uso: 'semUso', tituloDoPost: null }]);
+
+    expect(await repositorio().apagarRascunho(pedido(guardado))).toEqual({
+      apagadas: 1,
+      falharam: 0
+    });
+    expect(await repositorio().apagarRascunho(pedido(guardado))).toEqual({
+      apagadas: 0,
+      falharam: 0
+    });
+    expect(await repositorio().listarImagens()).toEqual([]);
+  });
+
+  it('com o armazém fora, o post sai e as imagens contam como falha', async () => {
+    const { guardado } = await rascunhoComImagens(repositorio(), 'Fispal');
+
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const semApagar = criarRepositorioBlog({
+      consulta,
+      armazem: {
+        ...criarArmazemDisco(raiz),
+        apagar: () => Promise.reject(new Error('fora'))
+      },
+      agora: () => agora
+    });
+
+    expect(await semApagar.apagarRascunho(pedido(guardado))).toEqual({
+      apagadas: 0,
+      falharam: 2
+    });
+    expect(await semApagar.ler(guardado.slug)).toBeNull();
+    expect(await repositorio().listarImagens()).toHaveLength(2);
+  });
+
+  it('com o armazém sem listar a pasta, o post sai e o resultado é null', async () => {
+    const { guardado } = await rascunhoComImagens(repositorio(), 'Fispal');
+
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const semListar = criarRepositorioBlog({
+      consulta,
+      armazem: {
+        ...criarArmazemDisco(raiz),
+        listar: () => Promise.reject(new Error('fora'))
+      },
+      agora: () => agora
+    });
+
+    expect(await semListar.apagarRascunho(pedido(guardado))).toBeNull();
+    expect(await semListar.ler(guardado.slug)).toBeNull();
+  });
+
+  it('tira do total guardado da lateral as imagens apagadas', async () => {
+    const repo = repositorio();
+    const { guardado } = await rascunhoComImagens(repo, 'Fispal');
+
+    expect(await repo.contarImagens()).toBe(2);
+
+    await repo.apagarRascunho(pedido(guardado));
+
+    expect(await repo.contarImagens()).toBe(0);
+  });
+
+  it('não apaga a pasta de outro post cujo slug começa igual', async () => {
+    const repo = repositorio();
+    const { guardado } = await rascunhoComImagens(repo, 'Feira');
+    const vizinho = await rascunhoComImagens(repo, 'Feira Fispal');
+
+    await repo.enviarImagem(
+      vizinho.guardado.slug,
+      new File([pngDe(3)], 'solta.png')
+    );
+
+    expect(await repo.apagarRascunho(pedido(guardado))).toEqual({
+      apagadas: 2,
+      falharam: 0
+    });
+    expect((await repo.listarImagens()).map((imagem) => imagem.slug)).toEqual(
+      Array(3).fill('feira-fispal')
+    );
+  });
+
+  it('recusa quando outra aba grava entre a leitura e o delete, sem tocar nas imagens', async () => {
+    const { guardado } = await rascunhoComImagens(repositorio(), 'Fispal');
+
+    await repositorio().enviarImagem(
+      guardado.slug,
+      new File([pngDe(3)], 'solta.png')
+    );
+
+    const comCorrida = criarRepositorioBlog({
+      consulta: async (sql, valores) => {
+        if (sql.startsWith('delete')) {
+          await consulta(
+            'update blog_posts set versao = versao + 1 where slug = $1',
+            [guardado.slug]
+          );
+        }
+
+        return consulta(sql, valores);
+      },
+      armazem: criarArmazemDisco(raiz),
+      agora: () => agora
+    });
+
+    await expect(comCorrida.apagarRascunho(pedido(guardado))).rejects.toThrow(
+      'outra aba'
+    );
+    expect(await repositorio().ler(guardado.slug)).not.toBeNull();
+    expect(await repositorio().listarImagens()).toHaveLength(3);
   });
 });

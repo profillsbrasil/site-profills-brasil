@@ -28,6 +28,21 @@ export function conferirVersao(
   }
 }
 
+export const MOTIVO_APAGAR_PUBLICADO =
+  'Post publicado não pode ser apagado. Despublique antes de apagar.';
+
+/** Só rascunho sai, e só na versão que a tela leu. Post que já saiu passa: apagar de novo termina as imagens. */
+export function conferirApagamento(
+  atual: PostGuardado | null,
+  versaoLida: number
+) {
+  if (!atual) return;
+
+  conferirVersao(atual, versaoLida);
+
+  if (atual.estado === 'publicado') throw new ErroBlog(MOTIVO_APAGAR_PUBLICADO);
+}
+
 /**
  * O post depois de uma gravação. Salvar mantém o estado, publicar de novo
  * preserva a data da primeira publicação, despublicar volta para rascunho.

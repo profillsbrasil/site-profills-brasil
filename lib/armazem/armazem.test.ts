@@ -112,6 +112,34 @@ function contrato(nome: string, abrir: () => Promise<Armazem>, pular = false) {
       expect(lido && (await lerTudo(lido.corpo))).toEqual(bytes);
     });
 
+    it('apaga as chaves: a leitura dá null e a listagem não mostra', async () => {
+      const prefixo = `blog/teste-${randomUUID()}/`;
+
+      const [a, b, fica] = ['a', 'b', 'c'].map(
+        (nome) => `${prefixo}${nome}-0123456789.png`
+      );
+
+      for (const chave of [a, b, fica]) {
+        await armazem.gravar(chave, bytes, 'image/png');
+      }
+
+      expect(await armazem.apagar([a, b])).toEqual([]);
+      expect(await armazem.ler(a)).toBeNull();
+      expect((await armazem.listar(prefixo)).map((o) => o.chave)).toEqual([
+        fica
+      ]);
+    });
+
+    it('apagar de novo, ou chave que nunca existiu, conta como apagada', async () => {
+      const chave = chaveNova();
+
+      await armazem.gravar(chave, bytes, 'image/png');
+
+      expect(await armazem.apagar([chave])).toEqual([]);
+      expect(await armazem.apagar([chave, chaveNova()])).toEqual([]);
+      expect(await armazem.apagar([])).toEqual([]);
+    });
+
     it('gravar de novo uma chave guardada não muda a data da primeira gravação', async () => {
       const prefixo = `blog/teste-${randomUUID()}/`;
       const chave = `${prefixo}a-0123456789.png`;
@@ -203,6 +231,32 @@ describe('armazém em disco', () => {
       'fora do armazém'
     );
   });
+
+  it('recusa apagar chave que sai da pasta, sem apagar as outras do pedido', async () => {
+    const armazem = criarArmazemDisco(raiz);
+    const chave = chaveNova();
+
+    await armazem.gravar(chave, bytes, 'image/png');
+
+    await expect(armazem.apagar([chave, '../fora.png'])).rejects.toThrow(
+      'fora do armazém'
+    );
+    // Dá tempo a um rm que tenha saído antes da recusa; sem ele, a leitura não veria a falta.
+    await esperar(50);
+    expect(await armazem.ler(chave)).not.toBeNull();
+  });
+
+  it('devolve a chave que o disco não apagou e apaga as outras', async () => {
+    const armazem = criarArmazemDisco(raiz);
+    const chave = chaveNova();
+    const pasta = `blog/teste-${randomUUID()}/pasta-0123456789.png`;
+
+    await armazem.gravar(chave, bytes, 'image/png');
+    await mkdir(path.join(raiz, pasta), { recursive: true });
+
+    expect(await armazem.apagar([chave, pasta])).toEqual([pasta]);
+    expect(await armazem.ler(chave)).toBeNull();
+  });
 });
 
 /** Servidor HTTP local no lugar do bucket; devolve a porta e o fechamento. */
@@ -279,6 +333,23 @@ async function bucketFalso() {
     }
 
     pedidos.push({ metodo: pedido.method, host: pedido.headers.host, caminho });
+
+    if (pedido.method === 'DELETE') {
+      if (caminho.includes('negado')) {
+        const [status, xml] = erroS3(403, 'AccessDenied');
+
+        resposta
+          .writeHead(status, { 'content-type': 'application/xml' })
+          .end(xml);
+
+        return;
+      }
+
+      objetos.delete(onde);
+      resposta.writeHead(204).end();
+
+      return;
+    }
 
     if (pedido.method === 'PUT') {
       objetos.set(onde, { corpo, quando: new Date() });
@@ -440,6 +511,26 @@ describe('armazém S3 contra o bucket local', () => {
     ).rejects.toMatchObject({ name: 'AccessDenied' });
   });
 
+  it('apaga um DeleteObject por chave e devolve a que o bucket recusou', async () => {
+    const { armazem, pedidos } = await armazemFalso(false);
+
+    const [aceita, negada] = [
+      'blog/fispal/foto-0123456789.png',
+      'blog/fispal/negado-0123456789.png'
+    ];
+
+    await armazem.gravar(aceita, bytes, 'image/png');
+
+    expect(await armazem.apagar([aceita, negada])).toEqual([negada]);
+    expect(await armazem.ler(aceita)).toBeNull();
+    expect(
+      pedidos
+        .filter((p) => p.metodo === 'DELETE')
+        .map((p) => p.caminho)
+        .sort()
+    ).toEqual([`/${aceita}`, `/${negada}`]);
+  });
+
   it('grava mesmo quando o bucket nega a consulta que evita regravar', async () => {
     const { armazem, pedidos } = await armazemFalso(false);
 
@@ -472,6 +563,29 @@ describe('armazém S3 com bucket mudo', () => {
       await expect(armazem.listar('blog/')).rejects.toMatchObject({
         name: 'AbortError'
       });
+      expect(performance.now() - inicio).toBeLessThan(6_000);
+    } finally {
+      mudo.fechar();
+    }
+  }, 20_000);
+
+  it('desiste do apagar em menos de 6 s e devolve todas as chaves', async () => {
+    const mudo = await bucketLocal(() => {});
+
+    const armazem = criarArmazemS3({
+      endpoint: `http://127.0.0.1:${mudo.porta}`,
+      regiao: 'auto',
+      bucket: 'bucket',
+      chave: 'chave',
+      segredo: 'segredo',
+      estiloCaminho: true
+    });
+
+    const chaves = [chaveNova(), chaveNova()];
+    const inicio = performance.now();
+
+    try {
+      expect(await armazem.apagar(chaves)).toEqual(chaves);
       expect(performance.now() - inicio).toBeLessThan(6_000);
     } finally {
       mudo.fechar();

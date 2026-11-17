@@ -116,9 +116,18 @@ export type EntradaEditor = { post: Post } & (
   | { slug: string; versao: number }
 );
 
+/** O que a tela manda para apagar: o slug e a versão que ela leu. */
+export type PedidoApagar = { slug: string; versao: number };
+
+/**
+ * As imagens da pasta do post depois de apagar; a que outro post usa fica e não conta.
+ * null quando o armazém não listou a pasta: o post saiu, e as imagens aparecem como sem uso.
+ */
+export type ImagensApagadas = { apagadas: number; falharam: number } | null;
+
 export type ResumoAdmin = Pick<
   PostGuardado,
-  'slug' | 'estado' | 'atualizadoEm'
+  'slug' | 'versao' | 'estado' | 'atualizadoEm'
 > &
   Pick<Post, 'titulo' | 'assunto'>;
 

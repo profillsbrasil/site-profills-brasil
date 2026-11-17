@@ -4,8 +4,24 @@ import { refresh } from 'next/cache';
 
 import { abrirAdminBlog } from '@/lib/blog/admin';
 import { MOTIVO_SEM_SESSAO, comMotivo } from '@/lib/blog/erro';
-import type { EntradaEditor, Intencao, PostGuardado } from '@/lib/blog/tipos';
-import { entradaEditorSchema, intencaoSchema } from '@/lib/schemas/post-blog';
+import type {
+  EntradaEditor,
+  ImagensApagadas,
+  Intencao,
+  PedidoApagar,
+  PostGuardado
+} from '@/lib/blog/tipos';
+import {
+  entradaEditorSchema,
+  intencaoSchema,
+  slugSchema
+} from '@/lib/schemas/post-blog';
+
+import { z } from 'zod';
+
+export type ResultadoApagar =
+  | { ok: true; imagens: ImagensApagadas }
+  | { ok: false; erro: string };
 
 export type ResultadoGravacao =
   | { ok: true; guardado: PostGuardado }
@@ -54,4 +70,39 @@ export async function gravarPost(
   if (atualizarRota) refresh();
 
   return { ok: true, guardado: tentativa.valor };
+}
+
+const pedidoApagarSchema = z.object({
+  slug: slugSchema,
+  versao: z.number().int().positive()
+});
+
+/**
+ * Apaga o rascunho na versão que a tela leu e depois as imagens da pasta dele.
+ * Publicado e versão antiga voltam com o motivo. Falha no armazém depois do
+ * post apagado ainda é ok: `imagens` conta o que ficou, e repetir termina.
+ *
+ * `atualizarRota` funciona como em gravarPost. O editor do post apagado passa
+ * false, porque a rota dele re-renderizada daria 404, navega para /admin/blog
+ * e atualiza a rota de destino.
+ */
+export async function apagarRascunho(
+  pedido: PedidoApagar,
+  atualizarRota = true
+): Promise<ResultadoApagar> {
+  const admin = await abrirAdminBlog();
+
+  if (!admin) return { ok: false, erro: MOTIVO_SEM_SESSAO };
+
+  const lido = pedidoApagarSchema.safeParse(pedido);
+
+  if (!lido.success) return { ok: false, erro: 'Pedido de apagar inválido.' };
+
+  const tentativa = await comMotivo(() => admin.apagarRascunho(lido.data));
+
+  if (!tentativa.ok) return { ok: false, erro: tentativa.motivo };
+
+  if (atualizarRota) refresh();
+
+  return { ok: true, imagens: tentativa.valor };
 }

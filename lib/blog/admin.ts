@@ -8,6 +8,7 @@ export type AdminBlog = Pick<
   | 'listar'
   | 'ler'
   | 'gravar'
+  | 'apagarRascunho'
   | 'enviarImagem'
   | 'listarImagens'
   | 'contarImagens'
