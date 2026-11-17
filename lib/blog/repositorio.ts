@@ -3,17 +3,20 @@ import { escolherArmazem } from '@/lib/armazem/armazem';
 import { consultar } from '@/lib/banco/conexao';
 import type { Consulta, Linha, ValorSql } from '@/lib/banco/tipos';
 import {
+  PADRAO_CAMINHO_IMAGEM,
   postGuardadoSchema,
   resumoPublicadoSchema
 } from '@/lib/schemas/post-blog';
 import { logger } from '@/lib/utils/logger';
 import { LIMITE_SLUG, gerarSlug, textoParaSlug } from '@/lib/utils/slug';
 
+import { usoDasImagens } from './apresentacao';
 import { ErroBlog, motivosImagem } from './erro';
 import { SLUGS_RESERVADOS, conferirVersao, transicao } from './regras';
 import {
   type EntradaEditor,
   IMAGEM_LIMITE_BYTES,
+  type ImagemDoArmazem,
   type Intencao,
   type Post,
   type PostGuardado,
@@ -36,6 +39,10 @@ export type RepositorioBlog = {
   enviarImagem: (slug: string, arquivo: File) => Promise<string>;
   /** Recebe um caminho que já casou com PADRAO_CAMINHO_IMAGEM; null quando a imagem não existe. */
   lerImagem: (caminho: string) => Promise<ImagemGuardada | null>;
+  /** Toda imagem do armazém, da enviada mais recente para a mais antiga, com o uso que os posts fazem dela. */
+  listarImagens: () => Promise<ImagemDoArmazem[]>;
+  /** O total da lateral; null quando o armazém não responde, para a falha não derrubar a página. */
+  contarImagens: () => Promise<number | null>;
   /** Do publicado mais recente para o mais antigo. */
   listarPublicados: () => Promise<ResumoPublicado[]>;
   lerPublicado: (slug: string) => Promise<PostPublicado | null>;
@@ -163,6 +170,8 @@ function nomearImagem(
 /** A chave no armazém é o caminho público sem a barra inicial. */
 const chaveImagem = (caminho: string) => caminho.slice(1);
 
+const PREFIXO_IMAGENS = 'blog/';
+
 export function criarRepositorioBlog({
   consulta,
   armazem,
@@ -227,8 +236,65 @@ export function criarRepositorioBlog({
       : inserirNovo(post, intencao, quando, tentativa + 1);
   }
 
+  /** Só as chaves com cara de imagem do blog; a rota pública não serviria as outras. */
+  async function imagensGuardadas() {
+    const objetos = await armazem.listar(PREFIXO_IMAGENS);
+
+    return objetos.flatMap((objeto) => {
+      const caminho = `/${objeto.chave}`;
+
+      return PADRAO_CAMINHO_IMAGEM.test(caminho)
+        ? [{ ...objeto, caminho }]
+        : [];
+    });
+  }
+
   return {
     ler,
+
+    async listarImagens() {
+      const [objetos, { rows }] = await Promise.all([
+        imagensGuardadas(),
+        consulta(`select ${COLUNAS} from blog_posts`)
+      ]);
+
+      const posts = lerLista(rows, lerLinha);
+      const usos = usoDasImagens(posts.map((guardado) => guardado.post));
+
+      const titulos = new Map(
+        posts.map((guardado) => [guardado.slug, guardado.post.titulo])
+      );
+
+      return objetos
+        .map(({ caminho, tamanho, modificadoEm }): ImagemDoArmazem => {
+          const [, , slug = '', arquivo = ''] = caminho.split('/');
+
+          return {
+            caminho,
+            arquivo,
+            tamanho,
+            enviadaEm: modificadoEm.toISOString(),
+            slug,
+            tituloDoPost: titulos.get(slug) ?? null,
+            uso: usos.get(caminho) ?? 'semUso'
+          };
+        })
+        .sort(
+          (a, b) =>
+            b.enviadaEm.localeCompare(a.enviadaEm) ||
+            a.caminho.localeCompare(b.caminho)
+        );
+    },
+
+    async contarImagens() {
+      try {
+        return (await imagensGuardadas()).length;
+      } catch (erro) {
+        logger.warn('O armazém não respondeu à contagem de imagens', erro);
+
+        return null;
+      }
+    },
 
     async listar() {
       const { rows } = await consulta(

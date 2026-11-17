@@ -597,3 +597,110 @@ describe('imagens do post', () => {
     ).rejects.toBeInstanceOf(ErroBlog);
   });
 });
+
+describe('imagens no admin', () => {
+  const pngCom = (byte: number) => new Uint8Array([...png, byte]);
+
+  it('lista as imagens do armazém com o post da pasta, o tamanho e o uso', async () => {
+    const repo = repositorio();
+
+    const salvo = await repo.gravar(
+      { slug: null, versao: null, post: post('Fispal') },
+      'salvar'
+    );
+
+    const [capa, noTexto, solta] = await Promise.all(
+      [1, 2, 3].map((byte) =>
+        repo.enviarImagem(salvo.slug, new File([pngCom(byte)], `f${byte}.png`))
+      )
+    );
+
+    await repo.gravar(
+      {
+        slug: salvo.slug,
+        versao: salvo.versao,
+        post: {
+          ...post('Fispal'),
+          capa: capa ?? null,
+          linhas: [
+            {
+              id: 'l1',
+              proporcao: 50,
+              colunas: [
+                { id: 'b1', tipo: 'imagem', src: noTexto ?? null, legenda: '' }
+              ]
+            }
+          ]
+        }
+      },
+      'salvar'
+    );
+
+    const armazem = criarArmazemDisco(raiz);
+
+    await armazem.gravar(
+      'blog/post-apagado/velha-0123456789.png',
+      png,
+      'image/png'
+    );
+    await armazem.gravar('blog/notas.txt', png, 'text/plain');
+
+    const imagens = await repo.listarImagens();
+
+    expect(
+      imagens
+        .map(({ caminho, slug, tituloDoPost, tamanho, uso }) => ({
+          caminho,
+          slug,
+          tituloDoPost,
+          tamanho,
+          uso
+        }))
+        .sort((a, b) => a.caminho.localeCompare(b.caminho))
+    ).toEqual([
+      ...[
+        { caminho: capa, uso: 'capa' },
+        { caminho: noTexto, uso: 'texto' },
+        { caminho: solta, uso: 'semUso' }
+      ]
+        .map((imagem) => ({
+          ...imagem,
+          slug: 'fispal',
+          tituloDoPost: 'Fispal',
+          tamanho: png.length + 1
+        }))
+        .sort((a, b) => String(a.caminho).localeCompare(String(b.caminho))),
+      {
+        caminho: '/blog/post-apagado/velha-0123456789.png',
+        slug: 'post-apagado',
+        tituloDoPost: null,
+        tamanho: png.length,
+        uso: 'semUso'
+      }
+    ]);
+    expect(imagens[0]?.arquivo).toBe(imagens[0]?.caminho.split('/').at(-1));
+    expect(Number.isNaN(Date.parse(imagens[0]?.enviadaEm ?? ''))).toBe(false);
+    expect(await repo.contarImagens()).toBe(4);
+  });
+
+  it('sem imagem no armazém, a lista vem vazia e o total é 0', async () => {
+    expect(await repositorio().listarImagens()).toEqual([]);
+    expect(await repositorio().contarImagens()).toBe(0);
+  });
+
+  it('com o armazém fora, a contagem da lateral vira null e a lista lança', async () => {
+    const fora = criarRepositorioBlog({
+      consulta,
+      armazem: {
+        gravar: () => Promise.reject(new Error('fora')),
+        ler: () => Promise.reject(new Error('fora')),
+        listar: () => Promise.reject(new Error('fora'))
+      }
+    });
+
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    expect(await fora.contarImagens()).toBeNull();
+    await expect(fora.listarImagens()).rejects.toThrow('fora');
+  });
+});
