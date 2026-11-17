@@ -181,6 +181,12 @@ describe('guarda do admin', () => {
     );
   });
 
+  it('as actions do blog que o guarda confere incluem gravar e apagar', async () => {
+    expect((await exportsDe('blog/acoes.ts')).map(([nome]) => nome)).toEqual(
+      expect.arrayContaining(['gravarPost', 'apagarRascunho'])
+    );
+  });
+
   it('todo export de página, action e route handler fora do login recusa sem sessão e sem tocar no repositório', async () => {
     const entradas = (await entradasDoAdmin()).filter(
       (nome) => !SEM_SESSAO.some((livre) => nome.startsWith(livre))

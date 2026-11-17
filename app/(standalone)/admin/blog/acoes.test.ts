@@ -8,13 +8,14 @@ import {
 } from '@/lib/blog/tipos';
 
 import { POST as enviarImagem } from './[slug]/imagem/route';
-import { gravarPost } from './acoes';
+import { apagarRascunho, gravarPost } from './acoes';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const admin = vi.hoisted(() => ({
   listar: vi.fn(),
   ler: vi.fn(),
   gravar: vi.fn(),
+  apagarRascunho: vi.fn(),
   enviarImagem: vi.fn(),
   contarImagens: vi.fn()
 }));
@@ -284,5 +285,73 @@ describe('gravação do admin do blog', () => {
       ok: false,
       erro: 'Não foi possível gravar (ECONNREFUSED).'
     });
+  });
+});
+
+describe('apagar rascunho pelo admin', () => {
+  const pedido = { slug: 'catalogo-novo', versao: 3 };
+
+  it('apaga o pedido, devolve a contagem das imagens e invalida o cache do roteador', async () => {
+    admin.apagarRascunho.mockResolvedValue({ apagadas: 2, falharam: 1 });
+
+    expect(await apagarRascunho(pedido)).toEqual({
+      ok: true,
+      imagens: { apagadas: 2, falharam: 1 }
+    });
+    expect(admin.apagarRascunho).toHaveBeenCalledWith(pedido);
+    expect(cache.refresh).toHaveBeenCalledOnce();
+  });
+
+  it('sem atualizarRota, apaga e não invalida o cache do roteador', async () => {
+    admin.apagarRascunho.mockResolvedValue(null);
+
+    expect(await apagarRascunho(pedido, false)).toEqual({
+      ok: true,
+      imagens: null
+    });
+    expect(cache.refresh).not.toHaveBeenCalled();
+  });
+
+  it('recusa sem sessão, sem chegar ao repositório', async () => {
+    sessao.autorAtual.mockResolvedValue(null);
+
+    expect(await apagarRascunho(pedido)).toEqual({
+      ok: false,
+      erro: MOTIVO_SEM_SESSAO
+    });
+    expect(admin.apagarRascunho).not.toHaveBeenCalled();
+  });
+
+  it('recusa slug malicioso e versão fora do formato antes do repositório', async () => {
+    const pedidos = [
+      { slug: '../conteudo', versao: 1 },
+      { slug: 'a/b', versao: 1 },
+      { slug: 'catalogo-novo', versao: 0 },
+      { slug: 'catalogo-novo', versao: 1.5 },
+      JSON.parse('{"slug":"catalogo-novo","versao":null}')
+    ];
+
+    for (const errado of pedidos) {
+      expect(await apagarRascunho(errado)).toEqual({
+        ok: false,
+        erro: 'Pedido de apagar inválido.'
+      });
+    }
+
+    expect(admin.apagarRascunho).not.toHaveBeenCalled();
+  });
+
+  it('devolve o motivo do repositório, como o de post publicado, sem invalidar o cache', async () => {
+    admin.apagarRascunho.mockRejectedValue(
+      new ErroBlog(
+        'Post publicado não pode ser apagado. Despublique antes de apagar.'
+      )
+    );
+
+    expect(await apagarRascunho(pedido)).toEqual({
+      ok: false,
+      erro: 'Post publicado não pode ser apagado. Despublique antes de apagar.'
+    });
+    expect(cache.refresh).not.toHaveBeenCalled();
   });
 });
