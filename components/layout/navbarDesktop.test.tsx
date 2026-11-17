@@ -97,6 +97,57 @@ describe('painéis da gaveta', () => {
   });
 });
 
+describe('imagens dos painéis', () => {
+  const imagens = (menu: IdMenu) => painel(menu).querySelectorAll('img').length;
+
+  const servicos = NAVEGACAO.menus.find((m) => m.painel.forma === 'fotos');
+
+  const primeiraFoto =
+    servicos?.painel.forma === 'fotos' ? servicos.painel.folhas[0] : undefined;
+
+  it('nada no carregamento; a primeira foto de cada painel quando o ponteiro chega à navbar; o resto ao abrir', () => {
+    if (!servicos || !primeiraFoto || !VITRINES.todas.vitrine) {
+      throw new Error(
+        'o catálogo precisa da vitrine "todas" e de serviços com foto'
+      );
+    }
+
+    const { container } = montar();
+    const raiz = container.querySelector('.placa-navbar');
+
+    if (!raiz) throw new Error('sem a placa');
+
+    expect(raiz.querySelectorAll('section img')).toHaveLength(0);
+
+    fireEvent.pointerEnter(raiz, { pointerType: 'mouse' });
+
+    expect(imagens('maquinas')).toBe(1);
+    expect(
+      within(painel('maquinas')).getByAltText(VITRINES.todas.vitrine.nome)
+    ).toBeInTheDocument();
+    expect(imagens(servicos.id)).toBe(1);
+    expect(
+      within(painel(servicos.id)).getByAltText(primeiraFoto.altFoto)
+    ).toBeInTheDocument();
+
+    fireEvent.click(gatilho('maquinas'));
+
+    expect(imagens('maquinas')).toBeGreaterThan(1);
+    expect(imagens(servicos.id)).toBe(1);
+  });
+
+  it('toque não prepara foto ao entrar na navbar', () => {
+    const { container } = montar();
+    const raiz = container.querySelector('.placa-navbar');
+
+    if (!raiz) throw new Error('sem a placa');
+
+    fireEvent.pointerEnter(raiz, { pointerType: 'touch' });
+
+    expect(raiz.querySelectorAll('section img')).toHaveLength(0);
+  });
+});
+
 describe('vitrine de Máquinas', () => {
   // O jsdom não decodifica imagem: o stub resolve como o navegador depois do load.
   beforeEach(() => {
