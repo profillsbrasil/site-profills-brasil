@@ -408,10 +408,12 @@ export default function NavbarDesktop({
           <div className='grid min-w-0 grid-cols-[252px_minmax(0,1fr)_auto] items-center gap-x-7 pr-3 pl-4 transition-[grid-template-columns,column-gap] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:grid-cols-[26px_minmax(0,1fr)_auto] group-data-[compacta]/placa:gap-x-5 max-xl:grid-cols-[26px_minmax(0,1fr)_auto] max-xl:gap-x-4 motion-reduce:transition-none'>
             <LinkDaArvore
               alvo={NAVEGACAO.marca}
-              className='group/logo block h-[38.4px] rounded-xs outline-none'>
+              draggable={false}
+              className='group/logo block h-[38.4px] rounded-xs outline-none select-none'>
               <Image
                 src={tema === 'claro' ? logoCor : logoBranco}
                 alt='Profills, página inicial'
+                draggable={false}
                 priority
                 sizes='261px'
                 className='h-(--logo-altura) w-auto max-w-none [transform-origin:var(--logo-origem)] [translate:var(--logo-desloc)] [clip-path:var(--logo-recorte)] transition-[clip-path,scale,opacity] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/logo:opacity-80 group-focus-visible/logo:opacity-80 group-data-[compacta]/placa:scale-80 group-data-[compacta]/placa:[clip-path:var(--logo-recorte-simbolo)] max-xl:scale-80 max-xl:[clip-path:var(--logo-recorte-simbolo)] motion-reduce:transition-none'
