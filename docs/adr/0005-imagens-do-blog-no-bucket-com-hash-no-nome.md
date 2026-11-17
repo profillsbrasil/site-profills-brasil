@@ -8,7 +8,7 @@ O admin do blog grava imagens em produção (ADR 0004). O disco do serviço `sit
 
 ## Decisão
 
-1. Um `Armazem` mínimo em `lib/armazem/armazem.ts`: `gravar(chave, bytes, tipo)` e `ler(chave)`, que devolve stream e tamanho, `null` quando a chave não existe e lança quando o armazém não responde.
+1. Um `Armazem` mínimo em `lib/armazem/armazem.ts`: `gravar(chave, bytes, tipo)`, `ler(chave)`, que devolve stream e tamanho, `null` quando a chave não existe e lança quando o armazém não responde, e `listar(prefixo)`, que devolve chave, tamanho e data de cada objeto. No S3 a lista sai do `ListObjectsV2` e segue o `NextContinuationToken` até a última página; no disco sai do `readdir` recursivo, sem os `.tmp` de gravação pela metade. O `listar` entrou em 17/11/2026 com a tela Imagens do admin (issue #56).
 2. `escolherArmazem` decide pelo ambiente. Com qualquer uma das `AWS_*` (`AWS_ENDPOINT_URL`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_S3_BUCKET_NAME`, `AWS_DEFAULT_REGION`, `AWS_S3_URL_STYLE`), usa o S3 e valida o conjunto com zod. Sem nenhuma, o `bun dev` grava em `.dados/armazem`. Sem nenhuma fora do `bun dev`, ou com o conjunto incompleto, cada chamada falha com `ErroConfiguracao`, cuja mensagem cita só nomes de variável.
 3. `AWS_S3_URL_STYLE` ignora caixa e separador: `virtual-hosted` (o padrão quando falta) usa o host do bucket, `path` ou `path-style` liga o `forcePathStyle`. Outro valor é erro de configuração.
 4. O nome da imagem é `<nome-saneado>-<10 hex do sha256 do conteúdo>.<extensão pelos bytes>`, e a chave é o caminho sem a barra: `blog/<slug>/<arquivo>`. O mesmo arquivo dá o mesmo caminho, então o PUT é idempotente e não há corrida entre dois envios. Não existe tabela de imagens.
@@ -26,7 +26,8 @@ O admin do blog grava imagens em produção (ADR 0004). O disco do serviço `sit
 ## Consequências
 
 - Imagem de rascunho responde a quem souber o caminho com hash. Não há listagem pública.
-- Objetos órfãos ficam no bucket: trocar a capa ou apagar o bloco não apaga o arquivo. Não existe `apagar` nem limpeza nesta entrega.
+- Objetos órfãos ficam no bucket: trocar a capa ou apagar o bloco não apaga o arquivo. Não existe `apagar` nem limpeza nesta entrega. A tela `/admin/blog/imagens` lista o bucket e marca cada imagem como capa, no texto ou sem uso, pelo cruzamento com a capa e os blocos de imagem de todos os posts.
+- A lateral do admin conta as imagens pelo `listar` a cada página. Com o armazém fora, a contagem vira `null` e o item fica sem número, em vez de derrubar a lista de posts e o editor.
 - O backup do bucket não está configurado; junto do backup do Postgres (ADR 0003), precisa ser conferido antes de post de verdade.
 - O dev sem `AWS_*` grava em `.dados/armazem`; com as `AWS_*` no `.env` local, o `bun dev` grava no bucket delas: nunca pôr ali as credenciais de produção.
 - O teste de contrato roda o disco sempre e o S3 só com `TESTE_S3_ENDPOINT`, `TESTE_S3_CHAVE`, `TESTE_S3_SEGREDO` e `TESTE_S3_BUCKET` apontando para um S3 local descartável.
