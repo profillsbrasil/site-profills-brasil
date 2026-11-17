@@ -1,22 +1,59 @@
 import type { PostGuardado } from '@/lib/blog/tipos';
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import NovoPostPage from '../novo/page';
 import { EditorBlog } from './editor-blog';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { gravarPost, roteador } = vi.hoisted(() => ({
+const { gravarPost, roteador, caminho } = vi.hoisted(() => ({
   gravarPost: vi.fn(),
-  roteador: { push: vi.fn(), refresh: vi.fn() }
+  roteador: { push: vi.fn(), replace: vi.fn(), refresh: vi.fn() },
+  caminho: {
+    atual: '/admin/blog/novo',
+    ouvintes: new Set<() => void>(),
+    ir(endereco: string) {
+      this.atual = endereco;
+
+      for (const avisar of this.ouvintes) avisar();
+    }
+  }
 }));
 
-const { push, refresh } = roteador;
+const { push, replace, refresh } = roteador;
 
 vi.mock('../acoes', () => ({ gravarPost }));
 
 vi.mock('../../entrar/acoes', () => ({ sairDoAdmin: vi.fn() }));
 
-vi.mock('next/navigation', () => ({ useRouter: () => roteador }));
+vi.mock('next/navigation', async () => {
+  const { useSyncExternalStore } = await import('react');
+
+  const assinar = (avisar: () => void) => {
+    caminho.ouvintes.add(avisar);
+
+    return () => caminho.ouvintes.delete(avisar);
+  };
+
+  return {
+    useRouter: () => roteador,
+    usePathname: () => useSyncExternalStore(assinar, () => caminho.atual),
+    redirect: vi.fn()
+  };
+});
+
+vi.mock('@/lib/blog/admin', () => ({
+  abrirAdminBlog: async () => ({
+    listar: async () => [],
+    contarImagens: async () => 0
+  })
+}));
 
 vi.mock('next/image', () => ({ default: () => null }));
 
@@ -311,6 +348,94 @@ describe('voltar do navegador no editor', () => {
 
     await waitFor(() => expect(gravarPost).toHaveBeenCalled());
     expect(window.history.length).toBe(entradas);
+  });
+});
+
+describe('página de post novo', () => {
+  beforeEach(() => {
+    gravarPost.mockReset();
+    push.mockReset();
+    replace.mockReset();
+    caminho.atual = '/admin/blog/novo';
+    window.history.replaceState(null, '', '/admin/blog/novo');
+  });
+
+  const irPara = (endereco: string) => act(() => caminho.ir(endereco));
+
+  it('restaurada pelo avançar na URL do post já salvo, troca a rota pela do post e não mostra o editor vazio', async () => {
+    caminho.atual = '/admin/blog/recesso';
+
+    render(await NovoPostPage());
+
+    await waitFor(() =>
+      expect(replace).toHaveBeenCalledWith('/admin/blog/recesso')
+    );
+    expect(replace).toHaveBeenCalledTimes(1);
+    expect(push).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole('textbox', { name: /^Título/ })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Salvar rascunho' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('a primeira gravação troca a URL e mantém o editor, o texto e o foco', async () => {
+    gravarComSucesso();
+    render(await NovoPostPage());
+
+    const titulo = screen.getByRole('textbox', { name: /^Título/ });
+
+    await userEvent.type(titulo, 'Recesso');
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar rascunho' }));
+
+    await waitFor(() =>
+      expect(window.location.pathname).toBe('/admin/blog/recesso')
+    );
+    irPara(window.location.pathname);
+
+    expect(await screen.findByText(/^Rascunho salvo/)).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /^Título/ })).toBe(titulo);
+    expect(titulo).toHaveValue('Recesso');
+    expect(titulo).toHaveFocus();
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('depois de salvar, o link "Novo post" abre o editor vazio', async () => {
+    gravarComSucesso();
+    render(await NovoPostPage());
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: /^Título/ }),
+      'Recesso'
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Salvar rascunho' })
+    );
+    await screen.findByRole('heading', { name: 'Editar post' });
+    irPara(window.location.pathname);
+
+    irPara('/admin/blog/novo');
+
+    expect(
+      screen.getByRole('heading', { name: 'Novo post' })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /^Título/ })).toHaveValue('');
+    expect(replace).not.toHaveBeenCalled();
+  });
+
+  it('o voltar até a URL de outro post salvo aqui troca a rota pela desse post', async () => {
+    render(await NovoPostPage());
+
+    irPara('/admin/blog/outro-post');
+
+    await waitFor(() =>
+      expect(replace).toHaveBeenCalledWith('/admin/blog/outro-post')
+    );
+    expect(replace).toHaveBeenCalledTimes(1);
+    expect(
+      screen.queryByRole('textbox', { name: /^Título/ })
+    ).not.toBeInTheDocument();
   });
 });
 
