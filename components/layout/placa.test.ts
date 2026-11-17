@@ -438,41 +438,81 @@ describe('placa: zona', () => {
 describe('placa: rumo à gaveta', () => {
   const GAVETA = { left: 32, right: 1248, top: 84 };
 
-  it('descer com dy maior ou igual a |dx| é rumo', () => {
-    expect(rumoAGaveta({ x: 400, y: 40 }, { x: 404, y: 44 }, GAVETA)).toBe(
-      true
-    );
-    expect(rumoAGaveta({ x: 400, y: 40 }, { x: 400, y: 41 }, GAVETA)).toBe(
+  it('toda reta da âncora até a gaveta é rumo, com tremor de 2 px', () => {
+    const caminhos = [
+      [
+        { x: 437, y: 59 },
+        { x: 1057, y: 229 }
+      ],
+      [
+        { x: 539, y: 56 },
+        { x: 233, y: 127 }
+      ]
+    ] as const;
+
+    const tremores = [
+      [0, 0],
+      [2, 0],
+      [-2, 0],
+      [1, 0],
+      [2, -1],
+      [-2, -1]
+    ] as const;
+
+    const fora: string[] = [];
+
+    for (const [ancora, alvo] of caminhos) {
+      for (let k = 0.01; k <= 1; k += 0.01) {
+        const x = ancora.x + (alvo.x - ancora.x) * k;
+        const y = ancora.y + (alvo.y - ancora.y) * k;
+
+        if (y > GAVETA.top) break;
+
+        for (const [tx, ty] of tremores) {
+          const atual = { x: x + tx, y: y + ty };
+
+          if (!rumoAGaveta(ancora, atual, GAVETA)) {
+            fora.push(`${atual.x.toFixed(1)},${atual.y.toFixed(1)}`);
+          }
+        }
+      }
+    }
+
+    expect(fora).toEqual([]);
+  });
+
+  it('tremor que volta de lado perto da âncora é rumo', () => {
+    expect(
+      rumoAGaveta({ x: 543.7, y: 55.4 }, { x: 535.3, y: 55.5 }, GAVETA)
+    ).toBe(true);
+    expect(rumoAGaveta({ x: 438, y: 59 }, { x: 444, y: 58 }, GAVETA)).toBe(
       true
     );
   });
 
-  it('diagonal dentro do triângulo até os cantos de cima da gaveta é rumo', () => {
-    expect(rumoAGaveta({ x: 400, y: 30 }, { x: 410, y: 33 }, GAVETA)).toBe(
-      true
-    );
-    expect(rumoAGaveta({ x: 400, y: 30 }, { x: 390, y: 32 }, GAVETA)).toBe(
-      true
-    );
-  });
-
-  it('andar na horizontal, subir ou sair do triângulo não é rumo', () => {
-    expect(rumoAGaveta({ x: 400, y: 44 }, { x: 410, y: 44 }, GAVETA)).toBe(
+  it('andar pela barra além da folga não é rumo, nem com deriva de 3 px', () => {
+    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 450, y: 44 }, GAVETA)).toBe(
       false
     );
-    expect(rumoAGaveta({ x: 400, y: 44 }, { x: 402, y: 40 }, GAVETA)).toBe(
+    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 450, y: 43 }, GAVETA)).toBe(
       false
     );
-    expect(rumoAGaveta({ x: 400, y: 30 }, { x: 500, y: 32 }, GAVETA)).toBe(
+    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 468, y: 44.9 }, GAVETA)).toBe(
       false
     );
   });
 
-  it('sem ponto anterior ou sem deslocamento não é rumo', () => {
+  it('subir para outro gatilho não é rumo, nem saindo da gaveta', () => {
+    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 452, y: 40 }, GAVETA)).toBe(
+      false
+    );
+    expect(rumoAGaveta({ x: 300, y: 200 }, { x: 300, y: 44 }, GAVETA)).toBe(
+      false
+    );
+  });
+
+  it('sem âncora não é rumo', () => {
     expect(rumoAGaveta(null, { x: 400, y: 44 }, GAVETA)).toBe(false);
-    expect(rumoAGaveta({ x: 400, y: 44 }, { x: 400, y: 44 }, GAVETA)).toBe(
-      false
-    );
   });
 });
 

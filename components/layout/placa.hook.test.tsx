@@ -40,6 +40,23 @@ const MOUSE = { pointerType: 'mouse' } as const;
 const mover = (el: HTMLElement, x: number, y = 44) =>
   fireEvent.pointerMove(el, { ...MOUSE, clientX: x, clientY: y });
 
+function posicionarGaveta() {
+  vi.spyOn(
+    screen.getByTestId('gaveta'),
+    'getBoundingClientRect'
+  ).mockReturnValue({
+    x: 0,
+    y: 84,
+    left: 0,
+    top: 84,
+    right: 800,
+    bottom: 384,
+    width: 800,
+    height: 300,
+    toJSON: () => ({})
+  });
+}
+
 const passar = (ms: number) =>
   act(() => {
     vi.advanceTimersByTime(ms);
@@ -139,6 +156,7 @@ describe('usePlaca: hover na hora', () => {
   it('descer rumo à gaveta por outro gatilho retém a troca até parar PARADO_MS', () => {
     vi.useFakeTimers();
     render(<Banco />);
+    posicionarGaveta();
     abrirPorHover('maquinas');
 
     mover(screen.getByText('servicos'), 100, 60);
@@ -149,6 +167,42 @@ describe('usePlaca: hover na hora', () => {
     );
 
     passar(1);
+    expect(screen.getByText('servicos')).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+  });
+
+  it('tremer no caminho por outro gatilho até a gaveta não troca', () => {
+    vi.useFakeTimers();
+    render(<Banco />);
+    posicionarGaveta();
+    abrirPorHover('maquinas');
+
+    const servicos = screen.getByText('servicos');
+
+    mover(servicos, 106, 46);
+    mover(servicos, 112, 46);
+    mover(servicos, 110, 47);
+    mover(servicos, 118, 49);
+    mover(screen.getByTestId('gaveta'), 130, 90);
+    passar(PARADO_MS * 3);
+
+    expect(screen.getByText('maquinas')).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+  });
+
+  it('subir da gaveta para outro gatilho troca na hora', () => {
+    vi.useFakeTimers();
+    render(<Banco />);
+    posicionarGaveta();
+    abrirPorHover('maquinas');
+
+    mover(screen.getByTestId('gaveta'), 300, 200);
+    mover(screen.getByText('servicos'), 300, 44);
+
     expect(screen.getByText('servicos')).toHaveAttribute(
       'aria-expanded',
       'true'
