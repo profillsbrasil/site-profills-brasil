@@ -9,11 +9,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const rota = vi.hoisted(() => ({ atual: '/' }));
 
-// O jsdom não implementa a captura de ponteiro que o vaul pede no toque dentro da folha.
-Element.prototype.setPointerCapture = () => undefined;
-
-Element.prototype.releasePointerCapture = () => undefined;
-
 vi.mock('next/navigation', () => ({ usePathname: () => rota.atual }));
 
 vi.mock('next/image', () => ({

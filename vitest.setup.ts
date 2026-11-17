@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/vitest';
+
 import { vi } from 'vitest';
 
 class IntersectionObserverStub {
@@ -12,3 +13,8 @@ class IntersectionObserverStub {
 }
 
 vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);
+
+// O jsdom não implementa a captura de ponteiro que o vaul pede no toque dentro da folha.
+Element.prototype.setPointerCapture = () => undefined;
+
+Element.prototype.releasePointerCapture = () => undefined;

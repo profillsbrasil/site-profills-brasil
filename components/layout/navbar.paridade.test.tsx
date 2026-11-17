@@ -2,45 +2,14 @@ import NavbarDesktop from '@/components/layout/navbarDesktop';
 import NavbarMobile from '@/components/layout/navbarMobile';
 import { destinos } from '@/components/layout/navegacao';
 import type { VitrinesDoMenu } from '@/lib/data/maquinas/menu';
-import { render } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({ usePathname: () => '/' }));
 
 vi.mock('next/image', () => ({ default: 'img' }));
-
-vi.mock('@/components/ui/blur-fade', () => ({
-  BlurFade: ({ children }: { children: React.ReactNode }) => <>{children}</>
-}));
-
-// O vaul e o Radix só montam o conteúdo aberto: viram passagem para o teste
-// ler o que a navbar renderiza.
-vi.mock('@/components/ui/drawer', () => {
-  const P = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
-
-  return {
-    Drawer: P,
-    DrawerClose: P,
-    DrawerContent: P,
-    DrawerDescription: P,
-    DrawerFooter: (props: React.ComponentProps<'div'>) => <div {...props} />,
-    DrawerHeader: P,
-    DrawerTitle: P,
-    DrawerTrigger: P
-  };
-});
-
-vi.mock('@/components/ui/accordion', () => {
-  const P = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
-
-  return {
-    Accordion: P,
-    AccordionContent: P,
-    AccordionItem: P,
-    AccordionTrigger: P
-  };
-});
 
 const vitrinesVazias: VitrinesDoMenu = {
   todas: { vitrine: null, total: 0 },
@@ -54,14 +23,46 @@ const vitrinesVazias: VitrinesDoMenu = {
   'Linhas completas e automação': { vitrine: null, total: 0 }
 };
 
-function destinosRenderizados(raiz: HTMLElement): Map<string, string> {
-  const mapa = new Map<string, string>();
-
+function destinosRenderizados(
+  raiz: HTMLElement,
+  mapa = new Map<string, string>()
+): Map<string, string> {
   for (const a of raiz.querySelectorAll<HTMLAnchorElement>('a[data-nav]')) {
     const id = a.dataset.nav ?? '';
     const href = a.getAttribute('href') ?? '';
     expect(mapa.get(id) ?? href, `id ${id} com dois hrefs`).toBe(href);
     mapa.set(id, href);
+  }
+
+  return mapa;
+}
+
+function barraDoCelular(): HTMLElement {
+  const barra = document.querySelector<HTMLElement>('[data-barra-abas]');
+
+  expect(barra, 'barra de abas do celular').not.toBeNull();
+
+  return barra ?? document.body;
+}
+
+/** O mobile só monta a folha aberta: abre cada uma e toca cada categoria de Máquinas. */
+async function percorrerMobile(): Promise<Map<string, string>> {
+  const u = userEvent.setup({ pointerEventsCheck: 0 });
+  const mapa = destinosRenderizados(document.body);
+  const barra = barraDoCelular();
+
+  for (const rotulo of ['Montar', 'Máquinas', 'Menu']) {
+    await u.click(
+      within(barra).getByRole('button', { name: rotulo, hidden: true })
+    );
+    destinosRenderizados(document.body, mapa);
+
+    for (const categoria of screen
+      .getByRole('dialog')
+      .querySelectorAll<HTMLButtonElement>('button[aria-pressed]')) {
+      await u.click(categoria);
+      destinosRenderizados(document.body, mapa);
+    }
   }
 
   return mapa;
@@ -75,22 +76,40 @@ describe('navbar: paridade desktop e mobile', () => {
     expect(destinosRenderizados(container)).toEqual(gabarito);
   });
 
-  it('o mobile renderiza todo destino da árvore, com o href da árvore', () => {
-    const { container } = render(<NavbarMobile />);
-    expect(destinosRenderizados(container)).toEqual(gabarito);
+  it('o mobile alcança todo destino da árvore pelas abas, com o href da árvore', async () => {
+    render(<NavbarMobile vitrines={vitrinesVazias} />);
+    expect(await percorrerMobile()).toEqual(gabarito);
   });
 
-  it('nenhum link da navbar fica fora da árvore, salvo as redes sociais', () => {
-    const { container } = render(
+  it('nenhum link da navbar fica fora da árvore, nem dentro das folhas', async () => {
+    const soltos: (string | null)[] = [];
+
+    const juntarSoltos = () =>
+      soltos.push(
+        ...[...document.body.querySelectorAll('a:not([data-nav])')].map((a) =>
+          a.getAttribute('href')
+        )
+      );
+
+    render(
       <>
         <NavbarDesktop vitrines={vitrinesVazias} />
-        <NavbarMobile />
+        <NavbarMobile vitrines={vitrinesVazias} />
       </>
     );
+    juntarSoltos();
 
-    const soltos = [...container.querySelectorAll('a:not([data-nav])')].flatMap(
-      (a) => (a.closest('[data-redes]') ? [] : [a.getAttribute('href')])
-    );
+    const u = userEvent.setup({ pointerEventsCheck: 0 });
+
+    for (const rotulo of ['Montar', 'Máquinas', 'Menu']) {
+      await u.click(
+        within(barraDoCelular()).getByRole('button', {
+          name: rotulo,
+          hidden: true
+        })
+      );
+      juntarSoltos();
+    }
 
     expect(soltos).toEqual([]);
   });
