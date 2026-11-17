@@ -15,6 +15,9 @@ class IntersectionObserverStub {
 vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);
 
 // O jsdom não implementa a captura de ponteiro que o vaul pede no toque dentro da folha.
-Element.prototype.setPointerCapture = () => undefined;
+// Os testes de ambiente node não têm Element.
+if ('Element' in globalThis) {
+  Element.prototype.setPointerCapture = () => undefined;
 
-Element.prototype.releasePointerCapture = () => undefined;
+  Element.prototype.releasePointerCapture = () => undefined;
+}

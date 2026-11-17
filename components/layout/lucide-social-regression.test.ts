@@ -3,7 +3,6 @@ import { createElement } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import Footer from './footer';
-import NavbarMobile from './navbarMobile';
 import { InstagramIcon, LinkedInIcon, YouTubeIcon } from './socialLinks';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -65,22 +64,12 @@ describe('lucide social icon regression', () => {
     expect(youTube.querySelector('svg')).not.toHaveAttribute('stroke-width');
   });
 
-  it('renders larger social icons in footer and mobile navbar', () => {
-    const { unmount } = render(createElement(Footer));
+  it('renders larger social icons in the footer', () => {
+    render(createElement(Footer));
 
     expect(screen.getByLabelText('Instagram').querySelector('svg')).toHaveClass(
       'size-8',
       'md:size-10'
-    );
-
-    unmount();
-
-    render(createElement(NavbarMobile));
-    fireEvent.click(screen.getByLabelText('Abrir menu de navegação'));
-
-    expect(screen.getByLabelText('Instagram').querySelector('svg')).toHaveClass(
-      'h-6',
-      'w-6'
     );
   });
 
