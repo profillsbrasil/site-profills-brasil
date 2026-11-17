@@ -84,7 +84,12 @@ export type EventoPlaca =
       readonly agora: number;
       readonly real: boolean;
     }
-  | { readonly tipo: 'ponteiro-fora-de-gatilho'; readonly real: boolean }
+  | {
+      readonly tipo: 'ponteiro-fora-de-gatilho';
+      /** Na gaveta (ponte incluída), no fundo da placa ou sobre outro item dela (logo, links, Monte a sua). */
+      readonly onde: 'gaveta' | 'fundo' | 'outro-item';
+      readonly real: boolean;
+    }
   | { readonly tipo: 'ponteiro-entrou-na-zona' }
   | { readonly tipo: 'ponteiro-saiu-da-zona' }
   | { readonly tipo: 'clique'; readonly menu: IdMenu; readonly agora: number }
@@ -216,9 +221,27 @@ export function reduzirPlaca(
         return PLACA_INICIAL;
       }
 
-      return estado.fase === 'aberta' && estado.candidato !== null
-        ? { ...estado, candidato: null }
-        : estado;
+      if (estado.fase === 'fechando') {
+        return evento.onde === 'gaveta'
+          ? { ...estado, fase: 'aberta', candidato: null }
+          : estado;
+      }
+
+      if (estado.fase !== 'aberta') return estado;
+
+      // Outro item da placa é outro destino: a gaveta fecha como na saída da zona.
+      if (evento.onde === 'outro-item') {
+        return {
+          fase: 'fechando',
+          menu: estado.menu,
+          anterior: estado.anterior,
+          abertaEm: estado.abertaEm
+        };
+      }
+
+      return estado.candidato === null
+        ? estado
+        : { ...estado, candidato: null };
 
     case 'ponteiro-entrou-na-zona':
       return estado.fase === 'fechando'
@@ -349,6 +372,12 @@ export interface Placa {
 export const idPainel = (menu: IdMenu) => `placa-painel-${menu}`;
 export const idGatilho = (menu: IdMenu) => `placa-gatilho-${menu}`;
 
+function ondeNaZona(alvo: Element, gaveta: HTMLElement | null) {
+  if (gaveta?.contains(alvo)) return 'gaveta';
+
+  return alvo.closest('a, button') ? 'outro-item' : 'fundo';
+}
+
 function linksDoPainel(menu: IdMenu): HTMLAnchorElement[] {
   return [
     ...(document
@@ -394,7 +423,11 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
       if (menu === null) {
         if (real) sob = null;
-        despachar({ tipo: 'ponteiro-fora-de-gatilho', real });
+        despachar({
+          tipo: 'ponteiro-fora-de-gatilho',
+          onde: ondeNaZona(e.target, gaveta.current),
+          real
+        });
 
         return;
       }
