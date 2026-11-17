@@ -44,10 +44,10 @@ const ITEM =
 const LINHA_DO_PAINEL =
   'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-(--placa-texto) outline-none hover:border-solid hover:border-accent hover:bg-(--placa-recuo) focus-visible:border-solid focus-visible:border-accent focus-visible:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
-// Cobre o gap-1 entre gatilhos na área de hit, sem mudar o visual. O inset
-// conta da borda de padding: -4 px passam 3 px da borda do botão.
-const ALCANCE_DO_GATILHO =
-  "relative after:absolute after:inset-y-0 after:-inset-x-1 after:content-['']";
+// O pé do traço é o pé da placa: o botão (h-9) fica centrado na linha de
+// 62 px, ou 46 na compacta, e o bottom conta da borda de padding dele.
+const TRACO =
+  'pointer-events-none absolute -inset-x-px -bottom-[15px] h-0.5 origin-left bg-accent opacity-0 [transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1),bottom_340ms_cubic-bezier(0.22,1,0.36,1)] group-aria-expanded/item:opacity-100 group-data-[aberta]/placa:[transition:bottom_340ms_cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:-bottom-[7px] motion-reduce:transition-none';
 
 const CANTO = 'pointer-events-none absolute z-[2] size-2 border-accent';
 
@@ -69,22 +69,26 @@ function Cantos() {
 function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
   const pathname = usePathname();
 
+  // O li é a área de hit: os padding dos vizinhos dividem o vão ao meio.
   return (
-    <li {...placa.alvo(menu.id)}>
+    <li {...placa.alvo(menu.id)} className='px-0.5 first:pl-0'>
       <button
         type='button'
         {...placa.gatilho(menu.id)}
         aria-current={ehAtual(menu, pathname) ? 'page' : undefined}
-        className={cn(ITEM, ALCANCE_DO_GATILHO)}>
+        className={cn(ITEM, 'relative')}>
         {menu.rotuloCurto ?? menu.rotulo}
         <ChevronDown
           aria-hidden
           className='size-3.5 text-(--placa-texto-2) transition-transform duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-aria-expanded/item:rotate-180 group-aria-expanded/item:text-accent motion-reduce:transition-none'
         />
+        <span aria-hidden data-traco className={TRACO} />
       </button>
     </li>
   );
 }
+
+const SOB_PROJETO = 'sob-projeto';
 
 function PainelVitrine({
   folhas,
@@ -96,8 +100,36 @@ function PainelVitrine({
   preparado: boolean;
 }) {
   const [foco, setFoco] = useState<ChaveVitrine>('todas');
-  const { vitrine } = vitrines[foco];
+  const [prontas, setProntas] = useState<ReadonlySet<string>>(new Set());
+  const [mostrada, setMostrada] = useState<string | null>(null);
   const [todas, ...categorias] = folhas;
+  const alvo = vitrines[foco].vitrine;
+  const chave = alvo?.slug ?? SOB_PROJETO;
+
+  // A vitrine nova só toma o lugar da anterior depois de decodificada.
+  if (
+    preparado &&
+    chave !== mostrada &&
+    (alvo === null || prontas.has(alvo.slug))
+  ) {
+    setMostrada(chave);
+  }
+
+  const unicas = Object.values(vitrines)
+    .flatMap(({ vitrine }) => (vitrine ? [vitrine] : []))
+    .filter((v, i, lista) => lista.findIndex((o) => o.slug === v.slug) === i);
+
+  const exibida = unicas.find((v) => v.slug === mostrada);
+
+  const aoCarregar = (img: HTMLImageElement, slug: string) => {
+    const pronta = () =>
+      setProntas((atuais) =>
+        atuais.has(slug) ? atuais : new Set([...atuais, slug])
+      );
+
+    // Imagem que não decodifica entra assim mesmo, para a vitrine não ficar presa na anterior.
+    void img.decode().then(pronta, pronta);
+  };
 
   const linha = (folha: FolhaVitrine, extra?: string) => (
     <LinkDaArvore
@@ -132,43 +164,52 @@ function PainelVitrine({
           TRACEJADO
         )}>
         <Cantos />
-        {preparado && vitrine && (
-          <div
-            key={vitrine.slug}
-            className='animate-in fade-in flex min-h-0 flex-1 flex-col duration-200 motion-reduce:animate-none'>
-            <Image
-              src={vitrine.imagem}
-              alt={vitrine.nome}
-              sizes='340px'
-              className='min-h-0 w-full flex-1 object-contain p-3'
-            />
-            <figcaption
+        {preparado && (
+          <div className='grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)]'>
+            {unicas.map((v) => (
+              <Image
+                key={v.slug}
+                src={v.imagem}
+                alt={v.nome}
+                sizes='340px'
+                onLoad={(e) => aoCarregar(e.currentTarget, v.slug)}
+                className={cn(
+                  'size-full min-h-0 object-contain p-3 [grid-area:1/1]',
+                  mostrada !== v.slug && 'invisible'
+                )}
+              />
+            ))}
+            <div
               className={cn(
-                'border-t border-dashed bg-(--placa-recuo) px-3 py-2',
-                TRACEJADO_SUTIL
+                'flex min-h-0 flex-col items-center justify-center gap-2 bg-(--placa-recuo) [grid-area:1/1]',
+                mostrada !== SOB_PROJETO && 'invisible'
               )}>
-              <strong className='block text-sm font-bold text-(--placa-texto)'>
-                {vitrine.nome}
-              </strong>
-              <small className='block font-mono text-[10px] leading-[1.4] tracking-[0.08em] text-(--placa-texto-2) uppercase'>
-                {vitrine.subtitulo}
-              </small>
-            </figcaption>
+              <span
+                aria-hidden
+                className='font-mono text-2xl leading-none text-accent'>
+                +
+              </span>
+              <span className='text-center font-mono text-[11px] leading-[1.6] tracking-[0.2em] text-(--placa-texto-2) uppercase'>
+                Solução de engenharia
+                <br />
+                sob projeto
+              </span>
+            </div>
           </div>
         )}
-        {preparado && !vitrine && (
-          <div className='animate-in fade-in flex min-h-0 flex-1 flex-col items-center justify-center gap-2 bg-(--placa-recuo) duration-200 motion-reduce:animate-none'>
-            <span
-              aria-hidden
-              className='font-mono text-2xl leading-none text-accent'>
-              +
-            </span>
-            <span className='text-center font-mono text-[11px] leading-[1.6] tracking-[0.2em] text-(--placa-texto-2) uppercase'>
-              Solução de engenharia
-              <br />
-              sob projeto
-            </span>
-          </div>
+        {exibida && (
+          <figcaption
+            className={cn(
+              'border-t border-dashed bg-(--placa-recuo) px-3 py-2',
+              TRACEJADO_SUTIL
+            )}>
+            <strong className='block text-sm font-bold text-(--placa-texto)'>
+              {exibida.nome}
+            </strong>
+            <small className='block font-mono text-[10px] leading-[1.4] tracking-[0.08em] text-(--placa-texto-2) uppercase'>
+              {exibida.subtitulo}
+            </small>
+          </figcaption>
         )}
       </figure>
     </div>
@@ -276,13 +317,42 @@ function ConteudoPainel({
   }
 }
 
-function deslizar(el: HTMLElement | null, de: number, para: number) {
+function deslizar(el: HTMLElement | null, de: number) {
   el?.animate?.(
-    [
-      { transform: `translateX(${de}px)` },
-      { transform: `translateX(${para}px)` }
-    ],
+    [{ transform: `translateX(${de}px)` }, { transform: 'translateX(0)' }],
     { duration: 340, easing: SAIDA }
+  );
+}
+
+/** O traço do gatilho novo sai de onde estava o do anterior; sem anterior, acende. */
+function animarTraco(de: IdMenu | null, para: IdMenu) {
+  const destino = document.getElementById(idGatilho(para));
+  const traco = destino?.querySelector<HTMLElement>('[data-traco]');
+
+  if (!destino || !traco?.animate) return;
+
+  const origem = de && document.getElementById(idGatilho(de));
+
+  if (!origem) {
+    traco.animate([{ opacity: 0 }, { opacity: 1 }], {
+      duration: 220,
+      easing: SAIDA
+    });
+
+    return;
+  }
+
+  const a = origem.getBoundingClientRect();
+  const b = destino.getBoundingClientRect();
+
+  traco.animate(
+    [
+      {
+        transform: `translateX(${a.left - b.left}px) scaleX(${a.width / b.width})`
+      },
+      { transform: 'none' }
+    ],
+    { duration: 220, easing: SAIDA }
   );
 }
 
@@ -293,27 +363,28 @@ export default function NavbarDesktop({
 }) {
   const tema = temaDoTopo(usePathname());
   const placa = usePlaca(ORDEM_MENUS);
-  const { compacta, animar } = useCompacta(placa.travada);
-  const { aberto, sentido, prestes, raiz, gaveta } = placa;
-  const nav = useRef<HTMLElement>(null);
+  const { aberto, sentido, prestes, raiz, gaveta, travada } = placa;
+  const { compacta, animar } = useCompacta(travada);
   const corpo = useRef<HTMLDivElement>(null);
   const base = useRef<HTMLSpanElement>(null);
-  const indicador = useRef<HTMLSpanElement>(null);
   const anterior = useRef<IdMenu | null>(null);
   // Imagem de painel só entra no DOM depois que o menu abre ou está para abrir.
   const [preparados, setPreparados] = useState<ReadonlySet<IdMenu>>(new Set());
+  // Ao fechar, o último painel fica no lugar enquanto o recorte fecha.
+  const [exibido, setExibido] = useState<IdMenu | null>(null);
 
   if (prestes && !preparados.has(prestes)) {
     setPreparados(new Set([...preparados, prestes]));
   }
 
+  if (aberto !== null && aberto !== exibido) setExibido(aberto);
+
   useLayoutEffect(() => {
     const posicionar = () => {
       const corpoEl = corpo.current;
       const baseEl = base.current;
-      const indicadorEl = indicador.current;
 
-      if (!corpoEl || !baseEl || !indicadorEl || !nav.current) return;
+      if (!corpoEl || !baseEl) return;
 
       if (aberto === null) {
         corpoEl.style.clipPath = '';
@@ -322,59 +393,34 @@ export default function NavbarDesktop({
         return;
       }
 
-      const daPlaca = nav.current.getBoundingClientRect();
-
-      const doGatilho = document
-        .getElementById(idGatilho(aberto))
-        ?.getBoundingClientRect();
-
       const painel = document.getElementById(idPainel(aberto));
       const altura = (painel?.getBoundingClientRect().height ?? 0) + 1;
       const total = corpoEl.getBoundingClientRect().height;
-
-      if (doGatilho) {
-        indicadorEl.style.transform = `translateX(${doGatilho.left - daPlaca.left - 1}px) scaleX(${doGatilho.width})`;
-      }
 
       corpoEl.style.clipPath = `inset(0 0 ${Math.max(0, total - altura)}px 0)`;
       baseEl.style.transform = `translateY(${altura - 1}px)`;
     };
 
-    const indicadorEl = indicador.current;
-
-    if (anterior.current === null && aberto !== null && indicadorEl) {
-      indicadorEl.style.transition = 'none';
-      posicionar();
-      void indicadorEl.offsetWidth;
-      indicadorEl.style.transition = '';
-    } else {
-      posicionar();
-    }
+    posicionar();
 
     const reduzido = window.matchMedia?.(
       '(prefers-reduced-motion: reduce)'
     ).matches;
 
-    if (!reduzido && sentido !== 0 && anterior.current && aberto) {
-      deslizar(document.getElementById(idPainel(aberto)), sentido * 24, 0);
-      deslizar(
-        document.getElementById(idPainel(anterior.current)),
-        0,
-        -sentido * 24
-      );
+    if (!reduzido && aberto && aberto !== anterior.current) {
+      animarTraco(anterior.current, aberto);
+
+      if (sentido !== 0) {
+        deslizar(document.getElementById(idPainel(aberto)), sentido * 24);
+      }
     }
 
     anterior.current = aberto;
 
     window.addEventListener('resize', posicionar);
-    const navEl = nav.current;
-    navEl?.addEventListener('transitionend', posicionar);
 
-    return () => {
-      window.removeEventListener('resize', posicionar);
-      navEl?.removeEventListener('transitionend', posicionar);
-    };
-  }, [aberto, compacta, sentido]);
+    return () => window.removeEventListener('resize', posicionar);
+  }, [aberto, sentido]);
 
   return (
     <div
@@ -386,7 +432,6 @@ export default function NavbarDesktop({
       className='placa-navbar group/placa fixed inset-x-0 top-0 z-50 hidden h-0 lg:block'>
       <div className='relative mx-auto w-[min(1216px,calc(100%_-_2*clamp(16px,2.5vw,32px)))]'>
         <nav
-          ref={nav}
           aria-label='Principal'
           className={cn(
             'absolute inset-x-0 top-0 grid translate-y-3 grid-rows-[62px] rounded-xs border border-dashed shadow-(--placa-sombra) transition-[translate,grid-template-rows] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[compacta]/placa:translate-y-2 group-data-[compacta]/placa:grid-rows-[46px] motion-reduce:transition-none',
@@ -418,16 +463,19 @@ export default function NavbarDesktop({
                 className='h-(--logo-altura) w-auto max-w-none [transform-origin:var(--logo-origem)] [translate:var(--logo-desloc)] [clip-path:var(--logo-recorte)] transition-[clip-path,scale,opacity] duration-[340ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/logo:opacity-80 group-focus-visible/logo:opacity-80 group-data-[compacta]/placa:scale-80 group-data-[compacta]/placa:[clip-path:var(--logo-recorte-simbolo)] max-xl:scale-80 max-xl:[clip-path:var(--logo-recorte-simbolo)] motion-reduce:transition-none'
               />
             </LinkDaArvore>
-            <ul className='m-0 flex min-w-0 list-none items-center gap-1 p-0'>
+            <ul className='m-0 flex min-w-0 list-none items-center p-0'>
               {NAVEGACAO.menus.map((menu) => (
                 <Gatilho key={menu.id} menu={menu} placa={placa} />
               ))}
               <li
                 aria-hidden
-                className={cn('mx-2 h-5 w-0 border-l border-dashed', TRACEJADO)}
+                className={cn(
+                  'mx-2.5 h-5 w-0 border-l border-dashed',
+                  TRACEJADO
+                )}
               />
               {NAVEGACAO.links.map((link) => (
-                <li key={link.id}>
+                <li key={link.id} className='px-0.5'>
                   <LinkDaArvore alvo={link} className={ITEM}>
                     {link.rotulo}
                   </LinkDaArvore>
@@ -457,15 +505,11 @@ export default function NavbarDesktop({
               </div>
             </div>
           </div>
-          <span
-            ref={indicador}
-            aria-hidden
-            className='pointer-events-none absolute -bottom-px left-0 h-0.5 w-px origin-left bg-accent opacity-0 transition-[transform,opacity] duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[aberta]/placa:opacity-100 motion-reduce:transition-none'
-          />
         </nav>
+        {/* A ponte cobre só o vão entre a placa e a gaveta (8 px, 6 na compacta) e anda com as duas: nunca fica sobre um gatilho. */}
         <div
           ref={gaveta}
-          className="pointer-events-none invisible absolute inset-x-0 top-0 translate-y-[84px] [transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_220ms] before:absolute before:inset-x-0 before:-top-[22px] before:h-[22px] before:content-[''] group-data-[compacta]/placa:before:-top-3 group-data-[compacta]/placa:before:h-3 group-data-[aberta]/placa:pointer-events-auto group-data-[aberta]/placa:visible group-data-[aberta]/placa:[transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s] group-data-[compacta]/placa:translate-y-[62px] motion-reduce:transition-none">
+          className="pointer-events-none invisible absolute inset-x-0 top-0 translate-y-[84px] [transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_220ms] before:absolute before:inset-x-0 before:bottom-full before:h-2 before:transition-[height] before:duration-[340ms] before:ease-[cubic-bezier(0.22,1,0.36,1)] before:content-[''] group-data-[compacta]/placa:before:h-1.5 motion-reduce:before:transition-none group-data-[aberta]/placa:pointer-events-auto group-data-[aberta]/placa:visible group-data-[aberta]/placa:[transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s] group-data-[compacta]/placa:translate-y-[62px] motion-reduce:transition-none">
           <div
             ref={corpo}
             className={cn(
@@ -483,9 +527,8 @@ export default function NavbarDesktop({
                   aria-label={menu.rotulo}
                   inert={!ativo}
                   className={cn(
-                    'invisible self-start p-5 opacity-0 [grid-area:1/1] [transition:opacity_220ms_linear,visibility_0s_linear_220ms] motion-reduce:[transition:opacity_120ms_linear,visibility_0s]',
-                    ativo &&
-                      'visible opacity-100 [transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1),visibility_0s]'
+                    'self-start p-5 [grid-area:1/1]',
+                    menu.id !== exibido && 'invisible'
                   )}>
                   <ConteudoPainel
                     menu={menu}
