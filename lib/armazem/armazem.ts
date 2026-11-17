@@ -4,7 +4,6 @@ import {
   HeadObjectCommand,
   ListObjectsV2Command,
   NoSuchKey,
-  NotFound,
   PutObjectCommand,
   S3Client
 } from '@aws-sdk/client-s3';
@@ -157,15 +156,16 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
 
   return {
     async gravar(chave, bytes, tipo) {
-      try {
-        await cliente.send(
-          new HeadObjectCommand({ Bucket: config.bucket, Key: chave })
+      // A consulta só evita regravar. Se ela falha, por chave ausente ou por
+      // permissão, o envio segue e o PUT acusa o erro de verdade.
+      const guardada = await cliente
+        .send(new HeadObjectCommand({ Bucket: config.bucket, Key: chave }))
+        .then(
+          () => true,
+          () => false
         );
 
-        return;
-      } catch (erro) {
-        if (!(erro instanceof NotFound)) throw erro;
-      }
+      if (guardada) return;
 
       await cliente.send(
         new PutObjectCommand({

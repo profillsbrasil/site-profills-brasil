@@ -439,6 +439,18 @@ describe('armazém S3 contra o bucket local', () => {
       armazem.ler('blog/fispal/negado-0123456789.png')
     ).rejects.toMatchObject({ name: 'AccessDenied' });
   });
+
+  it('grava mesmo quando o bucket nega a consulta que evita regravar', async () => {
+    const { armazem, pedidos } = await armazemFalso(false);
+
+    await armazem.gravar(
+      'blog/fispal/negado-0123456789.png',
+      bytes,
+      'image/png'
+    );
+
+    expect(pedidos.filter((p) => p.metodo === 'PUT')).toHaveLength(1);
+  });
 });
 
 describe('armazém S3 com bucket mudo', () => {
