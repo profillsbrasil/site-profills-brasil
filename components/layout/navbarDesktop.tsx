@@ -363,18 +363,18 @@ export default function NavbarDesktop({
 }) {
   const tema = temaDoTopo(usePathname());
   const placa = usePlaca(ORDEM_MENUS);
-  const { aberto, sentido, prestes, raiz, gaveta, travada } = placa;
+  const { aberto, sentido, raiz, gaveta, travada } = placa;
   const { compacta, animar } = useCompacta(travada);
   const corpo = useRef<HTMLDivElement>(null);
   const base = useRef<HTMLSpanElement>(null);
   const anterior = useRef<IdMenu | null>(null);
-  // Imagem de painel só entra no DOM depois que o menu abre ou está para abrir.
+  // Imagem de painel só entra no DOM depois que o menu abre.
   const [preparados, setPreparados] = useState<ReadonlySet<IdMenu>>(new Set());
   // Ao fechar, o último painel fica no lugar enquanto o recorte fecha.
   const [exibido, setExibido] = useState<IdMenu | null>(null);
 
-  if (prestes && !preparados.has(prestes)) {
-    setPreparados(new Set([...preparados, prestes]));
+  if (aberto && !preparados.has(aberto)) {
+    setPreparados(new Set([...preparados, aberto]));
   }
 
   if (aberto !== null && aberto !== exibido) setExibido(aberto);

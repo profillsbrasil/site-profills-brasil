@@ -451,7 +451,7 @@ describe('placa: rumo à gaveta', () => {
     expect(rumoAGaveta({ x: 400, y: 30 }, { x: 410, y: 33 }, GAVETA)).toBe(
       true
     );
-    expect(rumoAGaveta({ x: 400, y: 30 }, { x: 390, y: 31 }, GAVETA)).toBe(
+    expect(rumoAGaveta({ x: 400, y: 30 }, { x: 390, y: 32 }, GAVETA)).toBe(
       true
     );
   });

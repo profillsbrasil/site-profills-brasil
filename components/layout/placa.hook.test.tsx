@@ -1,6 +1,6 @@
 import {
   FECHA_MS,
-  REPOUSO_MS,
+  PARADO_MS,
   useCompacta,
   usePlaca
 } from '@/components/layout/placa';
@@ -48,7 +48,6 @@ const passar = (ms: number) =>
 function abrirPorHover(menu: string) {
   fireEvent.pointerEnter(screen.getByTestId('raiz'), MOUSE);
   mover(screen.getByText(menu), 100);
-  passar(REPOUSO_MS);
 }
 
 function tocar(el: HTMLElement) {
@@ -91,7 +90,7 @@ describe('usePlaca: toque', () => {
       clientX: 100,
       clientY: 44
     });
-    passar(REPOUSO_MS * 3);
+    passar(PARADO_MS * 3);
 
     expect(screen.getByTestId('raiz')).toHaveAttribute('data-travada', 'false');
     expect(screen.getByText('maquinas')).toHaveAttribute(
@@ -120,8 +119,52 @@ describe('usePlaca: Esc', () => {
 
     mover(maquinas, 101);
     mover(maquinas, 100);
-    passar(REPOUSO_MS * 3);
+    passar(PARADO_MS * 3);
     expect(maquinas).toHaveAttribute('aria-expanded', 'false');
+  });
+});
+
+describe('usePlaca: hover na hora', () => {
+  it('o primeiro movimento sobre o gatilho abre sem esperar timer', () => {
+    vi.useFakeTimers();
+    render(<Banco />);
+    abrirPorHover('maquinas');
+
+    expect(screen.getByText('maquinas')).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+  });
+
+  it('descer rumo à gaveta por outro gatilho retém a troca até parar PARADO_MS', () => {
+    vi.useFakeTimers();
+    render(<Banco />);
+    abrirPorHover('maquinas');
+
+    mover(screen.getByText('servicos'), 100, 60);
+    passar(PARADO_MS - 1);
+    expect(screen.getByText('maquinas')).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+
+    passar(1);
+    expect(screen.getByText('servicos')).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+  });
+
+  it('andar de lado para outro gatilho troca na hora', () => {
+    vi.useFakeTimers();
+    render(<Banco />);
+    abrirPorHover('maquinas');
+
+    mover(screen.getByText('servicos'), 300);
+    expect(screen.getByText('servicos')).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
   });
 });
 
@@ -159,7 +202,7 @@ describe('usePlaca: zona do ponteiro', () => {
     abrirPorHover('maquinas');
 
     mover(screen.getByText('servicos'), 100);
-    passar(REPOUSO_MS * 3);
+    passar(PARADO_MS * 3);
 
     expect(screen.getByText('maquinas')).toHaveAttribute(
       'aria-expanded',
