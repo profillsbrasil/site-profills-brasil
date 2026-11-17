@@ -27,7 +27,7 @@ import { type ResultadoGravacao, gravarPost } from '../acoes';
 import { type Carga, useArraste } from './arraste';
 import { DadosPost } from './dados-post';
 import { dataPorExtenso, horaMinuto } from './datas';
-import { type Destino, editorReducer } from './editor-reducer';
+import { type Destino, editorReducer, mesmoPost } from './editor-reducer';
 import { type EnvioImagem, EnvioImagemContext } from './envio-imagem';
 import {
   classeBotaoCheio,
@@ -205,7 +205,7 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
   const chaveGravada = useRef<string | null>(null);
   const [dispositivo, setDispositivo] = useState<Dispositivo>('computador');
 
-  const sujo = post !== postSalvo;
+  const sujo = !mesmoPost(post, postSalvo);
   const ocupado = fase.fase === 'gravando' || gravandoParaSair;
   const publicado = gravacao?.estado === 'publicado';
 

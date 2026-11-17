@@ -29,6 +29,30 @@ export type AcaoEditor =
   | { tipo: 'editarBloco'; bloco: Bloco }
   | { tipo: 'editarDados'; dados: Partial<DadosPost> };
 
+// Um bloco que o reducer não trocou mantém a referência, então só o bloco
+// editado passa pelo JSON. Os dois lados nascem do mesmo spread, com as
+// chaves na mesma ordem.
+const mesmoConteudo = <T>(a: T, b: T) =>
+  a === b || JSON.stringify(a) === JSON.stringify(b);
+
+const mesmaLinha = (a: Linha, b: Linha) =>
+  a === b ||
+  (a.id === b.id &&
+    a.proporcao === b.proporcao &&
+    a.colunas.length === b.colunas.length &&
+    a.colunas.every((bloco, i) => mesmoConteudo(bloco, b.colunas[i])));
+
+export function mesmoPost(a: Post, b: Post) {
+  const { linhas: linhasA, ...dadosA } = a;
+  const { linhas: linhasB, ...dadosB } = b;
+
+  return (
+    mesmoConteudo(dadosA, dadosB) &&
+    linhasA.length === linhasB.length &&
+    linhasA.every((linha, i) => mesmaLinha(linha, linhasB[i]))
+  );
+}
+
 const limitarProporcao = (valor: number) =>
   Math.min(PROPORCAO_MAXIMA, Math.max(PROPORCAO_MINIMA, Math.round(valor)));
 

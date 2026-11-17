@@ -30,6 +30,8 @@ const CLASSE_FICHA =
 
 type Ponto = { x: number; y: number };
 
+type Tamanho = { largura: number; altura: number };
+
 export type AlvoLateral = { lado: Lado; esquerda: number; direita: number };
 
 const mesmoDestino = (a: Destino | null, b: Destino | null) =>
@@ -92,30 +94,52 @@ export function acharDestino(
   return { tipo: 'linha', posicao };
 }
 
+/** Depois do ponteiro quando cabe; senão antes dele. */
+const aoLadoDoPonteiro = (ponteiro: number, tamanho: number, tela: number) =>
+  ponteiro + FOLGA_DO_PONTEIRO + tamanho <= tela
+    ? ponteiro + FOLGA_DO_PONTEIRO
+    : ponteiro - FOLGA_DO_PONTEIRO - tamanho;
+
+const dentroDaTela = (inicio: number, tamanho: number, tela: number) =>
+  Math.min(Math.max(inicio, 0), tela - tamanho);
+
+function xDaFicha(
+  ponteiro: Ponto,
+  largura: number,
+  alvo: AlvoLateral | null,
+  tela: number
+) {
+  if (!alvo) return aoLadoDoPonteiro(ponteiro.x, largura, tela);
+
+  if (alvo.lado === 'esquerda')
+    return Math.min(ponteiro.x, alvo.esquerda) - FOLGA_DA_LINHA_ALVO - largura;
+
+  return Math.max(ponteiro.x, alvo.direita) + FOLGA_DA_LINHA_ALVO;
+}
+
 /**
- * Onde fica o canto da ficha que segue o ponteiro. Sobre um alvo lateral ela sai
- * para fora da borda da linha alvo, para não cobrir a zona nem o rótulo "Lado a lado".
+ * Onde fica o canto da ficha que segue o ponteiro, sempre inteira na tela. Sobre
+ * um alvo lateral ela sai para fora da borda da linha alvo, para não cobrir a
+ * zona nem o rótulo "Lado a lado".
  */
 export function posicaoDaFicha(
   ponteiro: Ponto,
-  largura: number,
-  alvo: AlvoLateral | null
+  ficha: Tamanho,
+  alvo: AlvoLateral | null,
+  tela: Tamanho
 ): Ponto {
-  if (!alvo)
-    return {
-      x: ponteiro.x + FOLGA_DO_PONTEIRO,
-      y: ponteiro.y + FOLGA_DO_PONTEIRO
-    };
-
-  const y = ponteiro.y + FOLGA_DO_PONTEIRO;
-
-  if (alvo.lado === 'esquerda')
-    return {
-      x: Math.min(ponteiro.x, alvo.esquerda) - FOLGA_DA_LINHA_ALVO - largura,
-      y
-    };
-
-  return { x: Math.max(ponteiro.x, alvo.direita) + FOLGA_DA_LINHA_ALVO, y };
+  return {
+    x: dentroDaTela(
+      xDaFicha(ponteiro, ficha.largura, alvo, tela.largura),
+      ficha.largura,
+      tela.largura
+    ),
+    y: dentroDaTela(
+      aoLadoDoPonteiro(ponteiro.y, ficha.altura, tela.altura),
+      ficha.altura,
+      tela.altura
+    )
+  };
 }
 
 function montarFicha(icone: Element | null, nome: string) {
@@ -179,7 +203,15 @@ export function useArraste(soltar: (carga: Carga, destino: Destino) => void) {
           ? { lado: destino.lado, esquerda: borda.left, direita: borda.right }
           : null;
 
-      const { x, y } = posicaoDaFicha(ponteiro, previa.el.offsetWidth, alvo);
+      const { x, y } = posicaoDaFicha(
+        ponteiro,
+        { largura: previa.el.offsetWidth, altura: previa.el.offsetHeight },
+        alvo,
+        {
+          largura: document.documentElement.clientWidth,
+          altura: document.documentElement.clientHeight
+        }
+      );
 
       previa.move(x, y);
     };

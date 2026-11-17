@@ -63,7 +63,10 @@ export function DadosPost({
           </SelectTrigger>
           <SelectContent className='tema-admin rounded-xs'>
             {Object.entries(assuntos).map(([valor, { nome, descricao }]) => (
-              <SelectItem key={valor} value={valor} className='rounded-xs'>
+              <SelectItem
+                key={valor}
+                value={valor}
+                className='h-12 rounded-xs py-0'>
                 <span className='flex flex-col'>
                   <span>{nome}</span>
                   <span className='text-xs text-[#5a6172]'>{descricao}</span>
