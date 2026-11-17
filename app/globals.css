@@ -357,6 +357,8 @@ input[type='number']::-webkit-outer-spin-button {
   --barra-celular: calc(4rem + env(safe-area-inset-bottom, 0px));
   --faixa-celular: 3rem;
   --topo-celular: var(--faixa-celular);
+  /* Distância do aviso (sonner) ao pé no celular: o padrão dele, 16 px, onde não há barra. */
+  --aviso-celular: 16px;
 }
 
 :root:has([data-faixa-logo][data-recolhida]) {
@@ -366,6 +368,7 @@ input[type='number']::-webkit-outer-spin-button {
 /* A barra de abas cobre os últimos 64 px: o fim da página sobe acima dela. */
 @media screen and (width < 64rem) {
   body:has([data-barra-abas]) {
+    --aviso-celular: calc(var(--barra-celular) + 8px);
     padding-bottom: var(--barra-celular);
   }
 
