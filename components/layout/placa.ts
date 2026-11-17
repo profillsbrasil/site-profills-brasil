@@ -77,7 +77,7 @@ export type EventoPlaca =
       readonly menu: IdMenu;
       readonly agora: number;
       readonly real: boolean;
-      /** O último passo do ponteiro aponta para a gaveta (ver rumoAGaveta). */
+      /** O ponteiro segue da âncora para a gaveta (ver rumoAGaveta). */
       readonly rumoAGaveta: boolean;
     }
   | {
@@ -279,12 +279,21 @@ export function reduzirPlaca(
 }
 
 /**
- * O passo de `anterior` a `atual` vai para a gaveta: desce mais do que anda
- * de lado, ou cai no triângulo entre o ponto anterior e os dois cantos de
- * cima da gaveta.
+ * Folgas para o tremor da mão. O raio cobre o tremor logo depois da âncora,
+ * onde o triângulo ainda é estreito; o lado alarga o triângulo só na
+ * horizontal, porque os lados quase deitados de uma gaveta larga reteriam por
+ * dezenas de px quem anda pela barra.
+ */
+export const FOLGA_ANCORA_PX = 10;
+export const FOLGA_LADO_PX = 3;
+
+/**
+ * O ponteiro está no triângulo entre a âncora e os dois cantos de cima da
+ * gaveta, que contém toda reta da âncora até ela. A âncora é a última posição
+ * do ponteiro fora de outro gatilho que não o do menu aberto.
  */
 export function rumoAGaveta(
-  anterior: Ponto | null,
+  ancora: Ponto | null,
   atual: Ponto,
   gaveta: {
     readonly left: number;
@@ -292,30 +301,23 @@ export function rumoAGaveta(
     readonly top: number;
   }
 ): boolean {
-  if (!anterior) return false;
+  if (!ancora) return false;
 
-  const dx = atual.x - anterior.x;
-  const dy = atual.y - anterior.y;
+  if (Math.hypot(atual.x - ancora.x, atual.y - ancora.y) <= FOLGA_ANCORA_PX) {
+    return true;
+  }
 
-  if (dx === 0 && dy === 0) return false;
+  const altura = gaveta.top - ancora.y;
+  const descida = atual.y - ancora.y;
 
-  if (dy > 0 && dy >= Math.abs(dx)) return true;
+  if (altura <= 0 || descida < 0 || descida > altura) return false;
 
-  const esquerda = { x: gaveta.left, y: gaveta.top };
-  const direita = { x: gaveta.right, y: gaveta.top };
+  const t = descida / altura;
 
-  const lado = (a: Ponto, b: Ponto) =>
-    (atual.x - b.x) * (a.y - b.y) - (a.x - b.x) * (atual.y - b.y);
-
-  const lados = [
-    lado(anterior, esquerda),
-    lado(esquerda, direita),
-    lado(direita, anterior)
-  ];
-
-  if (lados.every((d) => d === 0)) return false;
-
-  return !(lados.some((d) => d < 0) && lados.some((d) => d > 0));
+  return (
+    atual.x >= ancora.x + (gaveta.left - ancora.x) * t - FOLGA_LADO_PX &&
+    atual.x <= ancora.x + (gaveta.right - ancora.x) * t + FOLGA_LADO_PX
+  );
 }
 
 export function ehMovimentoReal(
@@ -401,6 +403,11 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
   const gatilhos = useRef(new Map<IdMenu, HTMLButtonElement>());
   const pathname = usePathname();
   const aberto = menuVisivel(estado);
+  const abertoAgora = useRef(aberto);
+
+  useLayoutEffect(() => {
+    abertoAgora.current = aberto;
+  }, [aberto]);
 
   useEffect(() => {
     const zona = raiz.current;
@@ -408,6 +415,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     if (!zona) return;
 
     let ultimo: Ponto | null = null;
+    let ancora: Ponto | null = null;
     let sob: IdMenu | null = null;
 
     // No documento, e não na zona, para saber onde o ponteiro parou também
@@ -415,21 +423,44 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     const aoMover = (e: globalThis.PointerEvent) => {
       if (e.pointerType === 'touch') return;
 
-      const real = ehMovimentoReal(ultimo, e.clientX, e.clientY);
-      const anterior = ultimo;
+      const ponto = { x: e.clientX, y: e.clientY };
+      const real = ehMovimentoReal(ultimo, ponto.x, ponto.y);
 
-      ultimo = { x: e.clientX, y: e.clientY };
+      ultimo = ponto;
 
-      if (!(e.target instanceof Element) || !zona.contains(e.target)) return;
+      const alvo =
+        e.target instanceof Element && zona.contains(e.target)
+          ? e.target
+          : null;
 
-      const id = e.target.closest<HTMLElement>('[data-menu]')?.dataset.menu;
+      const id = alvo?.closest<HTMLElement>('[data-menu]')?.dataset.menu;
       const menu = ordem.find((m) => m === id) ?? null;
+
+      const caixa =
+        real && menu !== null
+          ? gaveta.current?.getBoundingClientRect()
+          : undefined;
+
+      const rumo = caixa ? rumoAGaveta(ancora, ponto, caixa) : false;
+
+      // Sobre outro gatilho a âncora fica parada: é dela que sai o triângulo
+      // até a gaveta, e o tremor no caminho não a arrasta.
+      if (
+        real &&
+        (menu === null ||
+          abertoAgora.current === null ||
+          menu === abertoAgora.current)
+      ) {
+        ancora = ponto;
+      }
+
+      if (!alvo) return;
 
       if (menu === null) {
         if (real) sob = null;
         despachar({
           tipo: 'ponteiro-fora-de-gatilho',
-          onde: ondeNaZona(e.target, gaveta.current),
+          onde: ondeNaZona(alvo, gaveta.current),
           real
         });
 
@@ -438,15 +469,13 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
       const tipo = menu === sob ? 'ponteiro-moveu' : 'ponteiro-entrou';
 
-      const caixa = real ? gaveta.current?.getBoundingClientRect() : undefined;
-
       if (real) sob = menu;
       despachar({
         tipo,
         menu,
         agora: performance.now(),
         real,
-        rumoAGaveta: caixa ? rumoAGaveta(anterior, ultimo, caixa) : false
+        rumoAGaveta: rumo
       });
     };
 
