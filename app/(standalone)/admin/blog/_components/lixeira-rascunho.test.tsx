@@ -115,6 +115,37 @@ describe('Apagar rascunho na lista de posts', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
+  it.each([
+    ['Esc', () => userEvent.keyboard('{Escape}')],
+    [
+      'Cancelar',
+      () => userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+    ]
+  ])('devolve o foco à lixeira ao fechar com %s', async (_nome, fechar) => {
+    await abrir();
+    await confirmar();
+    await fechar();
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(document.activeElement).toBe(lixeira()));
+  });
+
+  it('leva o foco ao aviso depois de apagar', async () => {
+    apagarRascunho.mockResolvedValue({
+      ok: true,
+      imagens: { apagadas: 0, falharam: 0 }
+    });
+    await abrir();
+
+    const { botao } = await confirmar();
+
+    await userEvent.click(botao);
+
+    await waitFor(() =>
+      expect(document.activeElement).toBe(screen.getByRole('status'))
+    );
+  });
+
   it('mostra o motivo do servidor no diálogo e mantém o post', async () => {
     apagarRascunho.mockResolvedValue({
       ok: false,

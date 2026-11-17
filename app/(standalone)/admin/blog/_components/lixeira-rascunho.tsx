@@ -1,6 +1,13 @@
 'use client';
 
-import { type ReactNode, createContext, use, useRef, useState } from 'react';
+import {
+  type ReactNode,
+  type RefObject,
+  createContext,
+  use,
+  useRef,
+  useState
+} from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,7 +26,10 @@ import { Trash2 } from 'lucide-react';
 
 type Apagado = { titulo: string; imagens: ImagensApagadas };
 
-const AvisoContext = createContext<(apagado: Apagado) => void>(() => {});
+const AvisoContext = createContext<{
+  avisar: (apagado: Apagado) => void;
+  aviso: RefObject<HTMLParagraphElement | null>;
+}>({ avisar: () => {}, aviso: { current: null } });
 
 const imagens = (n: number) => (n === 1 ? '1 imagem' : `${n} imagens`);
 
@@ -57,14 +67,18 @@ export function AvisosDeApagar({
   children: ReactNode;
 }) {
   const [apagado, setApagado] = useState<Apagado | null>(null);
+  const aviso = useRef<HTMLParagraphElement>(null);
+  const [valor] = useState(() => ({ avisar: setApagado, aviso }));
 
   return (
-    <AvisoContext value={setApagado}>
+    <AvisoContext value={valor}>
       {cabecalho}
       {apagado ? (
         <p
+          ref={aviso}
           role='status'
-          className={`border-b px-5 py-2 text-xs font-medium ${falhou(apagado) ? 'border-[#f0d5b8] bg-[#fbeee0] text-[#9a4f12]' : 'border-[#bfe3cf] bg-[#e3f3ea] text-[#1f7a4d]'}`}>
+          tabIndex={-1}
+          className={`border-b px-5 py-2 text-xs font-medium outline-none ${falhou(apagado) ? 'border-[#f0d5b8] bg-[#fbeee0] text-[#9a4f12]' : 'border-[#bfe3cf] bg-[#e3f3ea] text-[#1f7a4d]'}`}>
           {textoDoAviso(apagado)}
         </p>
       ) : null}
@@ -87,9 +101,11 @@ export function LixeiraRascunho({
   versao: number;
   titulo: string;
 }) {
-  const avisar = use(AvisoContext);
+  const { avisar, aviso } = use(AvisoContext);
   const [etapa, setEtapa] = useState<Etapa>({ fase: 'fechado' });
   const enviando = useRef(false);
+  const lixeira = useRef<HTMLButtonElement>(null);
+  const apagou = useRef(false);
   const apagando = etapa.fase === 'apagando';
 
   async function apagar() {
@@ -117,6 +133,7 @@ export function LixeiraRascunho({
       return;
     }
 
+    apagou.current = true;
     setEtapa({ fase: 'fechado' });
     avisar({ titulo, imagens: resultado.imagens });
   }
@@ -124,6 +141,7 @@ export function LixeiraRascunho({
   return (
     <>
       <Button
+        ref={lixeira}
         type='button'
         variant='ghost'
         size='icon'
@@ -141,6 +159,11 @@ export function LixeiraRascunho({
         }}>
         <DialogContent
           showCloseButton={false}
+          // Sem DialogTrigger o Radix não sabe a quem devolver o foco. Depois de apagar a linha some, e o foco vai para o aviso.
+          onCloseAutoFocus={(evento) => {
+            evento.preventDefault();
+            (apagou.current ? aviso : lixeira).current?.focus();
+          }}
           className='tema-admin rounded-xs motion-reduce:data-[state=closed]:animate-none motion-reduce:data-[state=open]:animate-none'>
           <DialogHeader>
             <DialogTitle>Apagar rascunho?</DialogTitle>
