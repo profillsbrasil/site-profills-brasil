@@ -150,7 +150,7 @@ export default function NavbarMobile({
               onPointerDownOutside={naBarra}
               onFocusOutside={naBarra}
               className={cn(
-                'nav-celular fixed inset-x-0 bottom-0 z-50 flex max-h-[calc(100dvh-40px)] flex-col rounded-t-xs border-t border-dashed border-(--cel-tracejado) bg-(--cel-faixa) pb-(--barra-celular) outline-none lg:hidden',
+                'nav-celular fixed inset-x-0 bottom-0 z-[55] flex max-h-[calc(100dvh-40px)] flex-col rounded-t-xs border-t border-dashed border-(--cel-tracejado) bg-(--cel-faixa) pb-(--barra-celular) outline-none lg:hidden',
                 aba.altura === 'alta' && 'h-[calc(100dvh-40px)]'
               )}>
               <span
