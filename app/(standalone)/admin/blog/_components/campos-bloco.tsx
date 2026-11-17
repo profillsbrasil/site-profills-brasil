@@ -16,7 +16,12 @@ import type { Bloco, BlocoDoTipo, TipoBloco } from '@/lib/blog/tipos';
 import { maquinasCatalogo } from '@/lib/data/maquinas';
 
 import { EscolherImagem } from './escolher-imagem';
-import { classeBotaoContorno, classeCampo, classeIcone } from './estilos';
+import {
+  classeBotaoContorno,
+  classeBotaoPequeno,
+  classeCampo,
+  classeIcone
+} from './estilos';
 import { Plus, X } from 'lucide-react';
 
 type PropsCampos<T extends TipoBloco> = {
@@ -174,7 +179,7 @@ function CamposTabela({ bloco, mudar }: PropsCampos<'tabela'>) {
             type='button'
             variant='outline'
             size='sm'
-            className={classeBotaoContorno}
+            className={`${classeBotaoContorno} ${classeBotaoPequeno}`}
             disabled={!op.pode}
             onClick={op.fazer}>
             {op.icone ? <Plus aria-hidden='true' /> : null}

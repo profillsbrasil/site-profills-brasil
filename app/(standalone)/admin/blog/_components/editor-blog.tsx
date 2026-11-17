@@ -22,7 +22,11 @@ import { DadosPost } from './dados-post';
 import { dataPorExtenso, horaMinuto } from './datas';
 import { type Destino, editorReducer } from './editor-reducer';
 import { type EnvioImagem, EnvioImagemContext } from './envio-imagem';
-import { classeBotaoCheio, classeBotaoContorno } from './estilos';
+import {
+  classeBotaoCheio,
+  classeBotaoContorno,
+  classeBotaoPequeno
+} from './estilos';
 import { Lateral } from './lateral';
 import { LinhaEditor } from './linha-editor';
 import { Paleta } from './paleta';
@@ -87,7 +91,7 @@ function textoStatus(fase: Fase, gravacao: PostGuardado | null, sujo: boolean) {
 }
 
 const classeAba =
-  'h-full flex-none gap-2 rounded-xs border-0 px-3 text-xs text-[#5a6172] shadow-none hover:bg-[#eceef2] hover:text-[#1b1c1f] focus-visible:bg-[#eceef2] focus-visible:text-[#1b1c1f] focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-[#0f172b] data-[state=active]:text-white data-[state=active]:shadow-none';
+  'h-full flex-none gap-2 rounded-xs border-0 px-3 py-0 text-xs text-[#5a6172] shadow-none hover:bg-[#eceef2] hover:text-[#1b1c1f] focus-visible:bg-[#eceef2] focus-visible:text-[#1b1c1f] focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-[#0f172b] data-[state=active]:text-white data-[state=active]:shadow-none';
 
 function Vao({ ativo }: { ativo: boolean }) {
   return (
@@ -307,7 +311,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
                     type='button'
                     variant='outline'
                     size='sm'
-                    className={classeBotaoContorno}
+                    className={`${classeBotaoContorno} ${classeBotaoPequeno}`}
                     disabled={ocupado}
                     onClick={() => void gravar('despublicar')}>
                     Despublicar
@@ -315,7 +319,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
                   <Button
                     type='button'
                     size='sm'
-                    className={classeBotaoCheio}
+                    className={`${classeBotaoCheio} ${classeBotaoPequeno}`}
                     disabled={ocupado}
                     onClick={() => void gravar('salvar')}>
                     Salvar alterações
@@ -327,7 +331,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
                     type='button'
                     variant='outline'
                     size='sm'
-                    className={classeBotaoContorno}
+                    className={`${classeBotaoContorno} ${classeBotaoPequeno}`}
                     disabled={ocupado}
                     onClick={() => void gravar('salvar')}>
                     Salvar rascunho
@@ -335,7 +339,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
                   <Button
                     type='button'
                     size='sm'
-                    className={classeBotaoCheio}
+                    className={`${classeBotaoCheio} ${classeBotaoPequeno}`}
                     disabled={ocupado}
                     onClick={() => void gravar('publicar')}>
                     Publicar
@@ -428,7 +432,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
                   <h2 id='titulo-previa' className='text-base font-semibold'>
                     Como fica no site
                   </h2>
-                  <TabsList className='h-8 rounded-xs border border-[#dfe2e8] bg-white p-0.5'>
+                  <TabsList className='h-8 rounded-xs bg-white p-1 shadow-[inset_0_0_0_1px_#dfe2e8]'>
                     <TabsTrigger value='computador' className={classeAba}>
                       <Monitor aria-hidden='true' />
                       Computador
