@@ -90,14 +90,21 @@ function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
 
 const SOB_PROJETO = 'sob-projeto';
 
+/**
+ * Quanto de um painel com foto já está no DOM. Nada no carregamento da
+ * página; a primeira foto quando o ponteiro chega à navbar, para a primeira
+ * abertura não mostrar a caixa vazia; as outras quando o menu abre.
+ */
+type Preparo = 'nada' | 'primeira' | 'todas';
+
 function PainelVitrine({
   folhas,
   vitrines,
-  preparado
+  preparo
 }: {
   folhas: readonly FolhaVitrine[];
   vitrines: VitrinesDoMenu;
-  preparado: boolean;
+  preparo: Preparo;
 }) {
   const [foco, setFoco] = useState<ChaveVitrine>('todas');
   const [prontas, setProntas] = useState<ReadonlySet<string>>(new Set());
@@ -108,7 +115,7 @@ function PainelVitrine({
 
   // A vitrine nova só toma o lugar da anterior depois de decodificada.
   if (
-    preparado &&
+    preparo !== 'nada' &&
     chave !== mostrada &&
     (alvo === null || prontas.has(alvo.slug))
   ) {
@@ -117,7 +124,10 @@ function PainelVitrine({
 
   const unicas = Object.values(vitrines)
     .flatMap(({ vitrine }) => (vitrine ? [vitrine] : []))
-    .filter((v, i, lista) => lista.findIndex((o) => o.slug === v.slug) === i);
+    .filter((v, i, lista) => lista.findIndex((o) => o.slug === v.slug) === i)
+    .filter(
+      (v) => preparo === 'todas' || v.slug === vitrines.todas.vitrine?.slug
+    );
 
   const exibida = unicas.find((v) => v.slug === mostrada);
 
@@ -164,7 +174,7 @@ function PainelVitrine({
           TRACEJADO
         )}>
         <Cantos />
-        {preparado && (
+        {preparo !== 'nada' && (
           <div className='grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)]'>
             {unicas.map((v) => (
               <Image
@@ -218,12 +228,16 @@ function PainelVitrine({
 
 function PainelFotos({
   folhas,
-  preparado
+  preparo
 }: {
   folhas: readonly FolhaFoto[];
-  preparado: boolean;
+  preparo: Preparo;
 }) {
   const [foco, setFoco] = useState(0);
+
+  const carregadas = { nada: [], primeira: folhas.slice(0, 1), todas: folhas }[
+    preparo
+  ];
 
   return (
     <div className='grid grid-cols-[360px_minmax(0,1fr)] gap-5 max-[1100px]:grid-cols-[300px_minmax(0,1fr)]'>
@@ -248,20 +262,19 @@ function PainelFotos({
           'relative overflow-hidden rounded-xs border border-dashed',
           TRACEJADO
         )}>
-        {preparado &&
-          folhas.map((folha, i) => (
-            <Image
-              key={folha.id}
-              src={folha.foto}
-              alt={folha.altFoto}
-              fill
-              sizes='(min-width: 1280px) 800px, 60vw'
-              className={cn(
-                'object-cover opacity-0 transition-opacity duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
-                i === foco && 'opacity-100'
-              )}
-            />
-          ))}
+        {carregadas.map((folha, i) => (
+          <Image
+            key={folha.id}
+            src={folha.foto}
+            alt={folha.altFoto}
+            fill
+            sizes='(min-width: 1280px) 800px, 60vw'
+            className={cn(
+              'object-cover opacity-0 transition-opacity duration-[220ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+              i === foco && 'opacity-100'
+            )}
+          />
+        ))}
       </div>
     </div>
   );
@@ -270,11 +283,11 @@ function PainelFotos({
 function ConteudoPainel({
   menu,
   vitrines,
-  preparado
+  preparo
 }: {
   menu: NoMenu;
   vitrines: VitrinesDoMenu;
-  preparado: boolean;
+  preparo: Preparo;
 }) {
   const { painel } = menu;
 
@@ -284,7 +297,7 @@ function ConteudoPainel({
         <PainelVitrine
           folhas={painel.folhas}
           vitrines={vitrines}
-          preparado={preparado}
+          preparo={preparo}
         />
       );
     case 'cartoes':
@@ -313,7 +326,7 @@ function ConteudoPainel({
         </div>
       );
     case 'fotos':
-      return <PainelFotos folhas={painel.folhas} preparado={preparado} />;
+      return <PainelFotos folhas={painel.folhas} preparo={preparo} />;
   }
 }
 
@@ -363,19 +376,25 @@ export default function NavbarDesktop({
 }) {
   const tema = temaDoTopo(usePathname());
   const placa = usePlaca(ORDEM_MENUS);
-  const { aberto, sentido, raiz, gaveta, travada } = placa;
+  const { aberto, sentido, naZona, raiz, gaveta, travada } = placa;
   const { compacta, animar } = useCompacta(travada);
   const corpo = useRef<HTMLDivElement>(null);
   const base = useRef<HTMLSpanElement>(null);
   const anterior = useRef<IdMenu | null>(null);
-  // Imagem de painel só entra no DOM depois que o menu abre.
-  const [preparados, setPreparados] = useState<ReadonlySet<IdMenu>>(new Set());
+  const [apontada, setApontada] = useState(false);
+  const [abertos, setAbertos] = useState<ReadonlySet<IdMenu>>(new Set());
   // Ao fechar, o último painel fica no lugar enquanto o recorte fecha.
   const [exibido, setExibido] = useState<IdMenu | null>(null);
 
-  if (aberto && !preparados.has(aberto)) {
-    setPreparados(new Set([...preparados, aberto]));
-  }
+  if (naZona && !apontada) setApontada(true);
+
+  if (aberto && !abertos.has(aberto)) setAbertos(new Set([...abertos, aberto]));
+
+  const preparo = (menu: IdMenu): Preparo => {
+    if (abertos.has(menu)) return 'todas';
+
+    return apontada ? 'primeira' : 'nada';
+  };
 
   if (aberto !== null && aberto !== exibido) setExibido(aberto);
 
@@ -533,7 +552,7 @@ export default function NavbarDesktop({
                   <ConteudoPainel
                     menu={menu}
                     vitrines={vitrines}
-                    preparado={preparados.has(menu.id)}
+                    preparo={preparo(menu.id)}
                   />
                 </section>
               );
