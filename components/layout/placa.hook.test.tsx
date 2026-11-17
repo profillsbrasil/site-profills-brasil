@@ -209,6 +209,24 @@ describe('usePlaca: hover na hora', () => {
     );
   });
 
+  it('andar pela barra com deriva para baixo troca ao entrar no vizinho', () => {
+    vi.useFakeTimers();
+    render(<Banco />);
+    posicionarGaveta();
+    abrirPorHover('maquinas');
+
+    for (let i = 1; i <= 17; i++) {
+      mover(screen.getByText('maquinas'), 100 + 3 * i, 44 + (6 * i) / 35);
+    }
+
+    mover(screen.getByText('servicos'), 154, 44 + (6 * 18) / 35);
+
+    expect(screen.getByText('servicos')).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+  });
+
   it('andar de lado para outro gatilho troca na hora', () => {
     vi.useFakeTimers();
     render(<Banco />);

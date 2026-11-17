@@ -6,6 +6,7 @@ import {
   PARADO_MS,
   PLACA_INICIAL,
   ehMovimentoReal,
+  estenderRastro,
   menuVisivel,
   proximaCompacta,
   reduzirPlaca,
@@ -436,83 +437,164 @@ describe('placa: zona', () => {
 });
 
 describe('placa: rumo à gaveta', () => {
-  const GAVETA = { left: 32, right: 1248, top: 84 };
+  interface Passo {
+    readonly x: number;
+    readonly y: number;
+  }
 
-  it('toda reta da âncora até a gaveta é rumo, com tremor de 2 px', () => {
-    const caminhos = [
-      [
-        { x: 437, y: 59 },
-        { x: 1057, y: 229 }
-      ],
-      [
-        { x: 539, y: 56 },
-        { x: 233, y: 127 }
-      ]
-    ] as const;
+  /** O rumo de cada ponto, com um pointermove a cada 16 ms como no hook. */
+  const rumos = (pontos: readonly Passo[]): boolean[] => {
+    let rastro: ReturnType<typeof estenderRastro> = [];
 
-    const tremores = [
-      [0, 0],
-      [2, 0],
-      [-2, 0],
-      [1, 0],
-      [2, -1],
-      [-2, -1]
-    ] as const;
+    return pontos.map((ponto, i) => {
+      rastro = estenderRastro(rastro, { ...ponto, t: i * 16 });
 
-    const fora: string[] = [];
+      return rumoAGaveta(rastro);
+    });
+  };
 
-    for (const [ancora, alvo] of caminhos) {
-      for (let k = 0.01; k <= 1; k += 0.01) {
-        const x = ancora.x + (alvo.x - ancora.x) * k;
-        const y = ancora.y + (alvo.y - ancora.y) * k;
+  /** Reta em passos de `passo` px, com um ponto de tremor de lado a cada 3. */
+  const pelaBarra = (de: Passo, ateX: number, deriva: number, passo = 3) => {
+    const n = Math.ceil(Math.abs(ateX - de.x) / passo);
+    const pontos: Passo[] = [de];
 
-        if (y > GAVETA.top) break;
+    for (let i = 1; i <= n; i++) {
+      const x = de.x + Math.sign(ateX - de.x) * passo * i;
+      const y = de.y + (deriva * i) / n;
 
-        for (const [tx, ty] of tremores) {
-          const atual = { x: x + tx, y: y + ty };
+      pontos.push({ x, y });
 
-          if (!rumoAGaveta(ancora, atual, GAVETA)) {
-            fora.push(`${atual.x.toFixed(1)},${atual.y.toFixed(1)}`);
-          }
-        }
-      }
+      if (i % 3 === 0) pontos.push({ x: x + 1, y });
     }
 
-    expect(fora).toEqual([]);
+    return pontos;
+  };
+
+  /** Reta com partida suave e, a cada passo, um ponto de tremor em zigue-zague de 2 px de lado e 1 px de altura. */
+  const aoConteudo = (de: Passo, ate: Passo, passos = 48) => {
+    const pontos: Passo[] = [de];
+
+    for (let i = 1; i <= passos; i++) {
+      const u = i / passos;
+      const k = u * u * (3 - 2 * u);
+      const x = de.x + (ate.x - de.x) * k;
+      const y = de.y + (ate.y - de.y) * k;
+
+      pontos.push({ x, y });
+      pontos.push({ x: x + (i % 2 ? 2 : -2), y: y + (i % 2 ? 1 : -1) });
+    }
+
+    return pontos;
+  };
+
+  // Em 1280 px: Projetos de 437,7 a 539,1 e Serviços de 539,1 a 642,8, de y 26 a 62.
+  const SERVICOS_X = 539.1;
+
+  it('andar pela barra não é rumo ao entrar no vizinho, com deriva de até 6 px', () => {
+    for (const deriva of [-6, -3, 0, 3, 6]) {
+      const pontos = pelaBarra({ x: 488, y: 44 }, 591, deriva);
+      const entrada = pontos.findIndex((p) => p.x >= SERVICOS_X);
+
+      expect([deriva, rumos(pontos)[entrada]]).toEqual([deriva, false]);
+    }
   });
 
-  it('tremor que volta de lado perto da âncora é rumo', () => {
-    expect(
-      rumoAGaveta({ x: 543.7, y: 55.4 }, { x: 535.3, y: 55.5 }, GAVETA)
-    ).toBe(true);
-    expect(rumoAGaveta({ x: 438, y: 59 }, { x: 444, y: 58 }, GAVETA)).toBe(
-      true
-    );
+  it('andar pela barra por dois gatilhos não é rumo em nenhum ponto do segundo', () => {
+    const pontos = pelaBarra({ x: 383, y: 40 }, 591, 6);
+    const noSegundo = rumos(pontos).filter((_, i) => pontos[i].x >= SERVICOS_X);
+
+    expect(noSegundo).not.toContain(true);
   });
 
-  it('andar pela barra além da folga não é rumo, nem com deriva de 3 px', () => {
-    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 450, y: 44 }, GAVETA)).toBe(
-      false
-    );
-    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 450, y: 43 }, GAVETA)).toBe(
-      false
-    );
-    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 468, y: 44.9 }, GAVETA)).toBe(
-      false
-    );
+  it('a reta tremida do gatilho a um alvo do painel é rumo em todo ponto da faixa dos gatilhos', () => {
+    const casos = [
+      // 1100 px, da borda esquerda de Projetos ao último cartão da primeira linha.
+      { de: { x: 193.2, y: 44 }, ate: { x: 930.65, y: 150.2 }, base: 62 },
+      // 1280 px, do centro de Serviços ao segundo link, à esquerda.
+      { de: { x: 590.95, y: 44 }, ate: { x: 233, y: 127 }, base: 62 },
+      // 1920 px com a placa compacta, do centro de Projetos ao último cartão: a reta mais deitada.
+      { de: { x: 574.4, y: 32 }, ate: { x: 1404.75, y: 128.2 }, base: 50 },
+      // 1280 px, do canto de baixo de Máquinas, colado em Projetos, à vitrine.
+      { de: { x: 435.7, y: 60 }, ate: { x: 1057, y: 229.5 }, base: 62 }
+    ];
+
+    for (const { de, ate, base } of casos) {
+      const pontos = aoConteudo(de, ate);
+
+      const fora = rumos(pontos).flatMap((rumo, i) =>
+        !rumo && pontos[i].y <= base
+          ? [`${pontos[i].x.toFixed(1)},${pontos[i].y.toFixed(1)}`]
+          : []
+      );
+
+      expect([de, fora]).toEqual([de, []]);
+    }
   });
 
-  it('subir para outro gatilho não é rumo, nem saindo da gaveta', () => {
-    expect(rumoAGaveta({ x: 438, y: 44 }, { x: 452, y: 40 }, GAVETA)).toBe(
-      false
-    );
-    expect(rumoAGaveta({ x: 300, y: 200 }, { x: 300, y: 44 }, GAVETA)).toBe(
-      false
-    );
+  it('subir ao gatilho e virar para o conteúdo sem parar é rumo depois de descer 3 px', () => {
+    const subida = Array.from({ length: 20 }, (_, i) => ({
+      x: 400 + i,
+      y: 120 - 4 * i
+    }));
+
+    const descida = Array.from({ length: 30 }, (_, i) => ({
+      x: 419 + 4 * (i + 1),
+      y: 44 + i + 1
+    }));
+
+    const r = rumos([...subida, ...descida]);
+
+    expect(r[subida.length - 1]).toBe(false);
+    expect(r.slice(subida.length + 2)).not.toContain(false);
   });
 
-  it('sem âncora não é rumo', () => {
-    expect(rumoAGaveta(null, { x: 400, y: 44 }, GAVETA)).toBe(false);
+  it('subir da gaveta para outro gatilho não é rumo', () => {
+    const pontos = Array.from({ length: 14 }, (_, i) => ({
+      x: 300,
+      y: 200 - 12 * i
+    }));
+
+    expect(rumos(pontos).at(-1)).toBe(false);
+  });
+
+  it('saindo do repouso, é rumo até haver caminho para medir', () => {
+    const pontos = pelaBarra({ x: 536, y: 44 }, 591, 0);
+    const r = rumos(pontos);
+
+    expect(r[pontos.findIndex((p) => p.x >= 536 + 12)]).toBe(true);
+    expect(r[pontos.findIndex((p) => p.x >= 536 + 30)]).toBe(false);
+  });
+
+  it('o rastro recomeça no ponto de repouso depois de PARADO_MS sem mover', () => {
+    const andando = [
+      { x: 100, y: 44, t: 0 },
+      { x: 130, y: 44, t: 16 },
+      { x: 160, y: 44, t: 32 }
+    ].reduce<ReturnType<typeof estenderRastro>>(estenderRastro, []);
+
+    const depois = estenderRastro(andando, {
+      x: 161,
+      y: 45,
+      t: 32 + PARADO_MS
+    });
+
+    expect(depois.map((p) => p.x)).toEqual([160, 161]);
+    expect(rumoAGaveta(depois)).toBe(true);
+  });
+
+  it('o rastro guarda só o caminho recente', () => {
+    let rastro: ReturnType<typeof estenderRastro> = [];
+
+    for (let i = 0; i <= 100; i++) {
+      rastro = estenderRastro(rastro, { x: 100 + 4 * i, y: 44, t: i * 8 });
+    }
+
+    expect(rastro.length).toBeLessThan(20);
+    expect(rastro.at(-1)?.x).toBe(500);
+  });
+
+  it('sem rastro não é rumo', () => {
+    expect(rumoAGaveta([])).toBe(false);
   });
 });
 
