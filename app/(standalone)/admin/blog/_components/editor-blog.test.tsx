@@ -5,16 +5,18 @@ import userEvent from '@testing-library/user-event';
 import { EditorBlog } from './editor-blog';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { gravarPost, push } = vi.hoisted(() => ({
+const { gravarPost, roteador } = vi.hoisted(() => ({
   gravarPost: vi.fn(),
-  push: vi.fn()
+  roteador: { push: vi.fn(), refresh: vi.fn() }
 }));
+
+const { push, refresh } = roteador;
 
 vi.mock('../acoes', () => ({ gravarPost }));
 
 vi.mock('../../entrar/acoes', () => ({ sairDoAdmin: vi.fn() }));
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
+vi.mock('next/navigation', () => ({ useRouter: () => roteador }));
 
 vi.mock('next/image', () => ({ default: () => null }));
 
@@ -35,9 +37,14 @@ const inicial: PostGuardado = {
 };
 
 // O jsdom não tem a Navigation API. O falso segue o contrato do navegador: o
-// navigate sai antes da travessia e, cancelado, a travessia não acontece.
+// navigate sai antes da travessia e, cancelado, a travessia não acontece; o
+// traverseTo devolve a promessa finished, cumprida com a travessia terminada.
 const navegacao = Object.assign(new EventTarget(), {
-  traverseTo: vi.fn(() => window.history.back())
+  traverseTo: vi.fn((_chave: string) => {
+    window.history.back();
+
+    return { finished: Promise.resolve() };
+  })
 });
 
 function apertarVoltar() {
@@ -86,6 +93,7 @@ describe('voltar do navegador no editor', () => {
   beforeEach(() => {
     gravarPost.mockReset();
     push.mockReset();
+    refresh.mockReset();
     navegacao.traverseTo.mockClear();
     Object.defineProperty(window, 'navigation', {
       value: navegacao,
@@ -137,9 +145,68 @@ describe('voltar do navegador no editor', () => {
         })
       }),
       'salvar',
-      true
+      false
     );
     expect(push).not.toHaveBeenCalled();
+  });
+
+  it('"Salvar e sair" pelo voltar grava sem atualizar a rota e só atualiza o destino com a travessia terminada', async () => {
+    gravarComSucesso();
+
+    let terminarTravessia = () => {};
+
+    navegacao.traverseTo.mockImplementationOnce(() => ({
+      finished: new Promise<void>((cumprir) => {
+        terminarTravessia = cumprir;
+      })
+    }));
+
+    abrirEditor();
+    await editarTitulo();
+
+    await voltarAoDialogo();
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Salvar e sair' })
+    );
+
+    await waitFor(() =>
+      expect(navegacao.traverseTo).toHaveBeenCalledWith('lista')
+    );
+    expect(gravarPost).toHaveBeenCalledWith(
+      expect.objectContaining({ slug: 'recesso' }),
+      'salvar',
+      false
+    );
+    expect(gravarPost.mock.invocationCallOrder[0]).toBeLessThan(
+      navegacao.traverseTo.mock.invocationCallOrder[0]
+    );
+    expect(refresh).not.toHaveBeenCalled();
+
+    terminarTravessia();
+
+    await waitFor(() => expect(refresh).toHaveBeenCalledTimes(1));
+  });
+
+  it('"Salvar e sair" com a travessia cancelada não atualiza a rota', async () => {
+    gravarComSucesso();
+    navegacao.traverseTo.mockImplementationOnce(() => ({
+      finished: Promise.reject(new DOMException('cancelada', 'AbortError'))
+    }));
+
+    abrirEditor();
+    await editarTitulo();
+
+    await voltarAoDialogo();
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Salvar e sair' })
+    );
+
+    await waitFor(() => expect(navegacao.traverseTo).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(screen.getByText(/^Rascunho salvo/)).toBeInTheDocument()
+    );
+    expect(refresh).not.toHaveBeenCalled();
+    expect(window.location.pathname).toBe('/admin/blog/recesso');
   });
 
   it('o roteador não vê o voltar que a pergunta desfaz', async () => {
