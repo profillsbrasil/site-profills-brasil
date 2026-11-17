@@ -404,8 +404,9 @@ export function criarRepositorioBlog({
       );
 
       return lerLista(rows, lerLinha).map(
-        ({ slug, estado, atualizadoEm, post }) => ({
+        ({ slug, versao, estado, atualizadoEm, post }) => ({
           slug,
+          versao,
           estado,
           atualizadoEm,
           titulo: post.titulo,

@@ -127,7 +127,7 @@ export type ImagensApagadas = { apagadas: number; falharam: number } | null;
 
 export type ResumoAdmin = Pick<
   PostGuardado,
-  'slug' | 'estado' | 'atualizadoEm'
+  'slug' | 'versao' | 'estado' | 'atualizadoEm'
 > &
   Pick<Post, 'titulo' | 'assunto'>;
 

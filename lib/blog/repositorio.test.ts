@@ -230,6 +230,7 @@ describe('repositório de posts no Postgres', () => {
     expect(await repo.listar()).toEqual([
       {
         slug: 'antigo',
+        versao: 2,
         estado: 'rascunho',
         atualizadoEm: '2026-11-15T12:03:00.000Z',
         titulo: 'Antigo editado',
