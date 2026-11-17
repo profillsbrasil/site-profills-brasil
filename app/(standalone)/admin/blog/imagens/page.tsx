@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
-import { abrirAdminBlog } from '@/lib/blog/admin';
+import { type AdminBlog, abrirAdminBlog } from '@/lib/blog/admin';
 import { tamanhoDoArquivo } from '@/lib/blog/apresentacao';
 import type { UsoImagem } from '@/lib/blog/tipos';
+import { logger } from '@/lib/utils/logger';
 
 import { enderecoDeEntrada } from '../../entrar/volta';
 import { dataPorExtenso } from '../_components/datas';
@@ -21,6 +22,17 @@ const selos: Record<UsoImagem, { rotulo: string; classe: string }> = {
   semUso: { rotulo: 'Sem uso', classe: 'bg-[#fbeee0] text-[#9a4f12]' }
 };
 
+/** null quando o armazém não respondeu: a tela mostra o aviso e a lateral fica sem número. */
+async function imagensOuAviso(admin: AdminBlog) {
+  try {
+    return await admin.listarImagens();
+  } catch (erro) {
+    logger.warn('O armazém não respondeu à lista de imagens', erro);
+
+    return null;
+  }
+}
+
 export default async function ImagensPage() {
   const admin = await abrirAdminBlog();
 
@@ -28,14 +40,14 @@ export default async function ImagensPage() {
 
   const [posts, imagens] = await Promise.all([
     admin.listar(),
-    admin.listarImagens()
+    imagensOuAviso(admin)
   ]);
 
   return (
     <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
       <Lateral
         atual='imagens'
-        totais={{ posts: posts.length, imagens: imagens.length }}
+        totais={{ posts: posts.length, imagens: imagens?.length ?? null }}
       />
 
       <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-[#f3f4f6] text-[#1b1c1f]'>
@@ -44,7 +56,17 @@ export default async function ImagensPage() {
         </header>
 
         <div className='min-h-0 flex-1 overflow-y-auto p-5'>
-          {imagens.length === 0 ? (
+          {imagens === null ? (
+            <div className='grid justify-items-center gap-3 rounded-xs border border-dashed border-[#8a90a0] bg-white p-10 text-center'>
+              <h2 className='text-base font-semibold'>
+                O armazém de imagens não respondeu
+              </h2>
+              <p className='max-w-sm text-xs text-[#5a6172]'>
+                A lista não carregou agora. Os posts e o editor continuam
+                abertos; recarregue esta página em alguns minutos.
+              </p>
+            </div>
+          ) : imagens.length === 0 ? (
             <div className='grid justify-items-center gap-3 rounded-xs border border-dashed border-[#8a90a0] bg-white p-10 text-center'>
               <h2 className='text-base font-semibold'>Nenhuma imagem ainda</h2>
               <p className='max-w-sm text-xs text-[#5a6172]'>

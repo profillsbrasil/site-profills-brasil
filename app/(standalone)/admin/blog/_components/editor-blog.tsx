@@ -204,6 +204,7 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
   const [gravandoParaSair, gravarParaSair] = useTransition();
   const chaveGravada = useRef<string | null>(null);
   const [dispositivo, setDispositivo] = useState<Dispositivo>('computador');
+  const [totalImagens, setTotalImagens] = useState(totais.imagens);
 
   const sujo = !mesmoPost(post, postSalvo);
   const ocupado = fase.fase === 'gravando' || gravandoParaSair;
@@ -337,8 +338,11 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
           body: corpo
         });
 
-        const dados: { caminho?: string; erro?: string } =
-          await resposta.json();
+        const dados: {
+          caminho?: string;
+          erro?: string;
+          imagens?: number | null;
+        } = await resposta.json();
 
         if (!resposta.ok || !dados.caminho) {
           setFase({
@@ -354,6 +358,8 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
           acao: 'imagem',
           em: new Date().toISOString()
         });
+
+        if (dados.imagens !== undefined) setTotalImagens(dados.imagens);
 
         return dados.caminho;
       } catch {
@@ -450,8 +456,8 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
         <Lateral
           atual={inicial ? 'editor' : 'novo'}
           totais={{
-            ...totais,
-            posts: totais.posts + (!inicial && gravacao ? 1 : 0)
+            posts: totais.posts + (!inicial && gravacao ? 1 : 0),
+            imagens: totalImagens
           }}
           aoNavegar={aoNavegar}
         />

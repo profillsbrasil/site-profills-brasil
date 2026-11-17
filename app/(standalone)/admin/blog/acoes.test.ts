@@ -15,7 +15,8 @@ const admin = vi.hoisted(() => ({
   listar: vi.fn(),
   ler: vi.fn(),
   gravar: vi.fn(),
-  enviarImagem: vi.fn()
+  enviarImagem: vi.fn(),
+  contarImagens: vi.fn()
 }));
 
 // Sessão falsa: a action e a rota passam pela abrirAdminBlog de verdade, que pergunta à sessão.
@@ -69,6 +70,7 @@ beforeEach(() => {
   vi.stubEnv('SITE_URL', SITE);
   sessao.autorAtual.mockResolvedValue({ usuario: 'dono' });
   admin.enviarImagem.mockResolvedValue('/blog/catalogo-novo/a.png');
+  admin.contarImagens.mockResolvedValue(3);
 });
 
 afterEach(() => {
@@ -131,6 +133,10 @@ describe('gravação do admin do blog', () => {
     const resposta = await pedidoImagem('catalogo-novo');
 
     expect(resposta.status).toBe(200);
+    expect(await resposta.json()).toEqual({
+      caminho: '/blog/catalogo-novo/a.png',
+      imagens: 3
+    });
     expect(admin.enviarImagem).toHaveBeenCalledOnce();
   });
 
