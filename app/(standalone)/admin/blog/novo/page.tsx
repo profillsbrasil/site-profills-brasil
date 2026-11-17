@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { abrirAdminBlog } from '@/lib/blog/admin';
 
 import { enderecoDeEntrada } from '../../entrar/volta';
-import { EditorBlog } from '../_components/editor-blog';
+import { EditorPostNovo } from '../_components/editor-blog';
 
 export const metadata: Metadata = { title: 'Novo post' };
 
@@ -18,7 +18,5 @@ export default async function NovoPostPage() {
     admin.contarImagens()
   ]);
 
-  return (
-    <EditorBlog inicial={null} totais={{ posts: posts.length, imagens }} />
-  );
+  return <EditorPostNovo totais={{ posts: posts.length, imagens }} />;
 }
