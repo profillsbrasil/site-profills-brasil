@@ -20,6 +20,8 @@ vi.mock('next/navigation', () => ({ useRouter: () => roteador }));
 
 vi.mock('next/image', () => ({ default: () => null }));
 
+const totais = { posts: 1, imagens: 0 };
+
 const inicial: PostGuardado = {
   slug: 'recesso',
   versao: 1,
@@ -62,7 +64,7 @@ function abrirEditor() {
   window.history.replaceState(null, '', '/admin/blog');
   window.history.pushState(null, '', '/admin/blog/recesso');
 
-  render(<EditorBlog inicial={inicial} totalPosts={1} />);
+  render(<EditorBlog inicial={inicial} totais={totais} />);
 
   return window.history.length;
 }
@@ -282,7 +284,7 @@ describe('voltar do navegador no editor', () => {
   it('o post novo grava sem pedir a atualização da rota', async () => {
     gravarComSucesso();
     window.history.replaceState(null, '', '/admin/blog/novo');
-    render(<EditorBlog inicial={null} totalPosts={1} />);
+    render(<EditorBlog inicial={null} totais={totais} />);
     await editarTitulo();
 
     await userEvent.click(
