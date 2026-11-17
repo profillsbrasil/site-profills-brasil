@@ -1,6 +1,6 @@
 'use client';
 
-import { type Dispatch, useRef } from 'react';
+import type { Dispatch } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,6 +22,8 @@ import type { AcaoEditor } from './editor-reducer';
 import { classeBotaoContorno, classeIcone } from './estilos';
 import { registroBlocos } from './registro-blocos';
 import {
+  ArrowLeft,
+  ArrowRight,
   ChevronDown,
   ChevronUp,
   Columns2,
@@ -74,7 +76,7 @@ type Props = {
   onArrastar: (
     evento: React.PointerEvent<HTMLElement>,
     carga: Carga,
-    copiar: HTMLElement | null
+    nome: string
   ) => void;
 };
 
@@ -88,12 +90,15 @@ export function LinhaEditor({
   novoId,
   onArrastar
 }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
   const numero = indice + 1;
+  const numeroComZero = String(numero).padStart(2, '0');
+
+  const nomes = linha.colunas
+    .map((bloco) => registroBlocos[bloco.tipo].nome)
+    .join(' + ');
 
   return (
     <div
-      ref={ref}
       data-linha-id={linha.id}
       data-colunas={linha.colunas.length}
       className={`relative ${arrastando ? 'opacity-40' : ''}`}>
@@ -112,13 +117,13 @@ export function LinhaEditor({
                 linhaId: linha.id,
                 colunas: linha.colunas.length
               },
-              ref.current
+              `${numeroComZero} · ${nomes}`
             )
           }>
           <GripVertical />
         </Button>
         <span className='font-mono text-xs text-[#5a6172]'>
-          {String(numero).padStart(2, '0')}
+          {numeroComZero}
         </span>
         {linha.colunas.length === 2 ? (
           <span
@@ -217,15 +222,24 @@ export function LinhaEditor({
       )}
 
       {ladoAlvo ? (
-        <div
-          aria-hidden='true'
-          data-alvo-lado={ladoAlvo}
-          className={`pointer-events-none absolute top-8 bottom-0 flex w-2 items-center bg-[#3b80f6] ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}>
+        <>
+          <div
+            aria-hidden='true'
+            data-alvo-lado={ladoAlvo}
+            className={`pointer-events-none absolute top-8 bottom-0 w-2 bg-[#3b80f6] ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}
+          />
           <span
-            className={`absolute rounded-xs bg-[#3b80f6] px-2 py-0.5 text-xs font-medium whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? 'left-3' : 'right-3'}`}>
+            data-rotulo-lado={ladoAlvo}
+            className={`pointer-events-none absolute top-1 z-10 flex h-6 items-center gap-1 rounded-xs bg-[#3b80f6] px-2.5 text-xs font-medium whitespace-nowrap text-white ${ladoAlvo === 'esquerda' ? '-left-1' : '-right-1'}`}>
+            {ladoAlvo === 'esquerda' ? (
+              <ArrowLeft aria-hidden='true' className='size-3.5' />
+            ) : null}
             Lado a lado
+            {ladoAlvo === 'direita' ? (
+              <ArrowRight aria-hidden='true' className='size-3.5' />
+            ) : null}
           </span>
-        </div>
+        </>
       ) : null}
     </div>
   );
