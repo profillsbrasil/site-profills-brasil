@@ -228,7 +228,7 @@ export function FiltrosMobile(props: FiltrosProps) {
     Number(props.busca.trim() !== '');
 
   return (
-    <div className='bg-background sticky top-16 z-20 flex w-full items-center justify-between px-4 py-2 md:hidden'>
+    <div className='bg-background sticky top-(--topo-celular) z-20 flex w-full items-center justify-between px-4 py-2 md:hidden'>
       <Drawer open={aberto} onOpenChange={setAberto}>
         <DrawerTrigger asChild>
           <Button

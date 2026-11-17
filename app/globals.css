@@ -359,6 +359,21 @@ input[type='number']::-webkit-outer-spin-button {
   --topo-celular: var(--faixa-celular);
 }
 
+:root:has([data-faixa-logo][data-recolhida]) {
+  --topo-celular: 0px;
+}
+
+/* A barra de abas cobre os últimos 64 px: o fim da página sobe acima dela. */
+@media (width < 64rem) {
+  body:has([data-barra-abas]) {
+    padding-bottom: var(--barra-celular);
+  }
+
+  html:has([data-barra-abas]) {
+    scroll-padding-bottom: var(--barra-celular);
+  }
+}
+
 .nav-celular {
   --cel-faixa: oklch(0.238 0.043 266);
   --cel-card: oklch(0.2503 0.0417 266.3592);
