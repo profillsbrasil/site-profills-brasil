@@ -12,12 +12,19 @@ import { LIMITE_SLUG, gerarSlug, textoParaSlug } from '@/lib/utils/slug';
 
 import { usoDasImagens } from './apresentacao';
 import { ErroBlog, motivosImagem } from './erro';
-import { SLUGS_RESERVADOS, conferirVersao, transicao } from './regras';
+import {
+  SLUGS_RESERVADOS,
+  conferirApagamento,
+  conferirVersao,
+  transicao
+} from './regras';
 import {
   type EntradaEditor,
   IMAGEM_LIMITE_BYTES,
   type ImagemDoArmazem,
+  type ImagensApagadas,
   type Intencao,
+  type PedidoApagar,
   type Post,
   type PostGuardado,
   type PostPublicado,
@@ -35,6 +42,11 @@ export type RepositorioBlog = {
   ler: (slug: string) => Promise<PostGuardado | null>;
   /** Uma instrução SQL por gravação: salvar, publicar e despublicar nunca ficam pela metade. */
   gravar: (entrada: EntradaEditor, intencao: Intencao) => Promise<PostGuardado>;
+  /**
+   * Apaga o rascunho e depois as imagens da pasta dele que nenhum outro post usa. Falha no armazém
+   * não desfaz o post apagado: volta na contagem. Repetir termina as imagens que ficaram.
+   */
+  apagarRascunho: (pedido: PedidoApagar) => Promise<ImagensApagadas>;
   /** Devolve o caminho público da imagem, como `/blog/<slug>/foto-1a2b3c4d5e.webp`. O mesmo arquivo dá o mesmo caminho. */
   enviarImagem: (slug: string, arquivo: File) => Promise<string>;
   /** Recebe um caminho que já casou com PADRAO_CAMINHO_IMAGEM; null quando a imagem não existe. */
@@ -280,8 +292,73 @@ export function criarRepositorioBlog({
     return caminhos;
   }
 
+  /** Só as chaves que nenhum post cita, pela mesma regra do "sem uso" da tela Imagens. */
+  async function apagarImagensDaPasta(slug: string): Promise<ImagensApagadas> {
+    let objetos;
+
+    try {
+      objetos = await armazem.listar(`${PREFIXO_IMAGENS}${slug}/`);
+    } catch (erro) {
+      logger.warn(`O armazém não listou as imagens de ${slug}`, erro);
+
+      return null;
+    }
+
+    const { rows } = await consulta(`select ${COLUNAS} from blog_posts`);
+    const usos = usoDasImagens(lerLista(rows, lerLinha).map((g) => g.post));
+
+    const chaves = objetos
+      .map((objeto) => objeto.chave)
+      .filter((chave) => !usos.has(`/${chave}`));
+
+    let ficaram: Set<string>;
+
+    try {
+      ficaram = new Set(await armazem.apagar(chaves));
+    } catch (erro) {
+      logger.warn(`O armazém não apagou as imagens de ${slug}`, erro);
+      ficaram = new Set(chaves);
+    }
+
+    const contados = await contagem?.caminhos;
+
+    for (const chave of chaves) {
+      if (!ficaram.has(chave)) contados?.delete(`/${chave}`);
+    }
+
+    return { apagadas: chaves.length - ficaram.size, falharam: ficaram.size };
+  }
+
   return {
     ler,
+
+    async apagarRascunho({ slug, versao }) {
+      const atual = await ler(slug);
+
+      conferirApagamento(atual, versao);
+
+      if (atual) {
+        const { rows } = await consulta(
+          `delete from blog_posts where slug = $1 and versao = $2 and estado = 'rascunho' returning slug`,
+          [slug, atual.versao]
+        );
+
+        if (!rows[0]) {
+          // Outra gravação entrou entre a leitura e o delete.
+          const depois = await ler(slug);
+
+          conferirApagamento(depois, atual.versao);
+
+          if (depois) {
+            throw new ErroBlog(
+              'O post mudou durante a gravação. Tente de novo.'
+            );
+          }
+        }
+      }
+
+      return apagarImagensDaPasta(slug);
+    },
 
     async listarImagens() {
       const [objetos, { rows }] = await Promise.all([

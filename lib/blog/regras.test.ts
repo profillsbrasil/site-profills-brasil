@@ -1,5 +1,10 @@
 import { ErroBlog } from './erro';
-import { conferirVersao, transicao } from './regras';
+import {
+  MOTIVO_APAGAR_PUBLICADO,
+  conferirApagamento,
+  conferirVersao,
+  transicao
+} from './regras';
 import type { Post, PostGuardado } from './tipos';
 import { describe, expect, it } from 'vitest';
 
@@ -99,5 +104,25 @@ describe('conferência de versão', () => {
 
   it('recusa post que não existe mais', () => {
     expect(() => conferirVersao(null, 1)).toThrow(ErroBlog);
+  });
+});
+
+describe('apagar um post', () => {
+  it('rascunho na versão lida pode sair', () => {
+    expect(() => conferirApagamento(rascunho, 3)).not.toThrow();
+  });
+
+  it('post publicado é recusado com o motivo, mesmo na versão lida', () => {
+    expect(() => conferirApagamento(publicado, 3)).toThrow(
+      new ErroBlog(MOTIVO_APAGAR_PUBLICADO)
+    );
+  });
+
+  it('versão antiga é recusada com o aviso de outra aba', () => {
+    expect(() => conferirApagamento(rascunho, 2)).toThrow('outra aba');
+  });
+
+  it('post que já saiu passa, para repetir terminar as imagens', () => {
+    expect(() => conferirApagamento(null, 1)).not.toThrow();
   });
 });
