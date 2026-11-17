@@ -5,7 +5,12 @@ import 'server-only';
 
 export type AdminBlog = Pick<
   RepositorioBlog,
-  'listar' | 'ler' | 'gravar' | 'enviarImagem'
+  | 'listar'
+  | 'ler'
+  | 'gravar'
+  | 'enviarImagem'
+  | 'listarImagens'
+  | 'contarImagens'
 >;
 
 /**

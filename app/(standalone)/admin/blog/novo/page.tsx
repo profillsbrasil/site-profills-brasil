@@ -13,7 +13,12 @@ export default async function NovoPostPage() {
 
   if (!admin) redirect(enderecoDeEntrada('/admin/blog/novo'));
 
-  const posts = await admin.listar();
+  const [posts, imagens] = await Promise.all([
+    admin.listar(),
+    admin.contarImagens()
+  ]);
 
-  return <EditorBlog inicial={null} totalPosts={posts.length} />;
+  return (
+    <EditorBlog inicial={null} totais={{ posts: posts.length, imagens }} />
+  );
 }
