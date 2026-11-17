@@ -20,8 +20,8 @@ import { flushSync } from 'react-dom';
 /**
  * Intenção de hover: o menu abre no primeiro movimento sobre o gatilho e,
  * com a gaveta aberta, outro gatilho assume na hora. A exceção é o ponteiro
- * a caminho da gaveta: a troca fica retida e só acontece se ele parar
- * PARADO_MS sobre o outro gatilho.
+ * que desce a caminho da gaveta: a troca fica retida e só acontece se ele
+ * parar PARADO_MS sobre o outro gatilho.
  */
 export const PARADO_MS = 50;
 export const FECHA_MS = 150;
@@ -36,6 +36,10 @@ export const SAI_COMPACTA_PX = 4;
 interface Ponto {
   readonly x: number;
   readonly y: number;
+}
+
+interface PontoNoTempo extends Ponto {
+  readonly t: number;
 }
 
 /** Outro gatilho sob o ponteiro que segue para a gaveta, desde o último movimento. */
@@ -77,7 +81,7 @@ export type EventoPlaca =
       readonly menu: IdMenu;
       readonly agora: number;
       readonly real: boolean;
-      /** O ponteiro segue da âncora para a gaveta (ver rumoAGaveta). */
+      /** O ponteiro desce a caminho da gaveta (ver rumoAGaveta). */
       readonly rumoAGaveta: boolean;
     }
   | {
@@ -279,44 +283,62 @@ export function reduzirPlaca(
 }
 
 /**
- * Folgas para o tremor da mão. O raio cobre o tremor logo depois da âncora,
- * onde o triângulo ainda é estreito; o lado alarga o triângulo só na
- * horizontal, porque os lados quase deitados de uma gaveta larga reteriam por
- * dezenas de px quem anda pela barra.
+ * Quem anda pela barra deriva até 6 px de um gatilho ao vizinho, 0,06 px por
+ * px de lado; a reta mais deitada do centro de um gatilho a um link, cartão
+ * ou foto do painel desce 0,116. A inclinação mínima fica entre as duas,
+ * medida no recuo: em menos caminho o tremor de 1 px pesa mais que a descida.
+ * A folga cobre esse tremor nas duas pontas da medida.
  */
-export const FOLGA_ANCORA_PX = 10;
-export const FOLGA_LADO_PX = 3;
+export const RUMO_INCLINACAO = 0.1;
+export const RUMO_RECUO_PX = 56;
+export const RUMO_FOLGA_PX = 2;
+
+/** Subir e depois descer isto dentro do rastro é uma virada, não tremor. */
+export const RUMO_VIRADA_PX = 3;
 
 /**
- * O ponteiro está no triângulo entre a âncora e os dois cantos de cima da
- * gaveta, que contém toda reta da âncora até ela. A âncora é a última posição
- * do ponteiro fora de outro gatilho que não o do menu aberto.
+ * O rastro do gesto: do ponto mais recente a RUMO_RECUO_PX ou mais do atual
+ * até o atual. Depois de PARADO_MS sem mover, recomeça no ponto de repouso.
  */
-export function rumoAGaveta(
-  ancora: Ponto | null,
-  atual: Ponto,
-  gaveta: {
-    readonly left: number;
-    readonly right: number;
-    readonly top: number;
-  }
-): boolean {
-  if (!ancora) return false;
+export function estenderRastro(
+  rastro: readonly PontoNoTempo[],
+  ponto: PontoNoTempo
+): readonly PontoNoTempo[] {
+  const ultimo = rastro.at(-1);
 
-  if (Math.hypot(atual.x - ancora.x, atual.y - ancora.y) <= FOLGA_ANCORA_PX) {
-    return true;
-  }
+  if (!ultimo) return [ponto];
 
-  const altura = gaveta.top - ancora.y;
-  const descida = atual.y - ancora.y;
+  if (ponto.t - ultimo.t >= PARADO_MS) return [ultimo, ponto];
 
-  if (altura <= 0 || descida < 0 || descida > altura) return false;
+  const inicio = rastro.findLastIndex(
+    (p) => Math.hypot(ponto.x - p.x, ponto.y - p.y) >= RUMO_RECUO_PX
+  );
 
-  const t = descida / altura;
+  return [...rastro.slice(Math.max(inicio, 0)), ponto];
+}
+
+/**
+ * O ponteiro desce a caminho da gaveta: do começo do rastro até aqui, desceu
+ * RUMO_INCLINACAO px ou mais por px de lado. Quem subiu ao gatilho e virou
+ * para baixo é medido do ponto mais alto. Sem caminho para medir, vale como
+ * rumo, e a troca espera o ponteiro parar.
+ */
+export function rumoAGaveta(rastro: readonly Ponto[]): boolean {
+  const atual = rastro.at(-1);
+  const inicio = rastro[0];
+
+  if (!atual || !inicio) return false;
+
+  const topo = rastro.reduce((alto, p) => (p.y <= alto.y ? p : alto));
+
+  const virou =
+    atual.y - topo.y >= RUMO_VIRADA_PX && inicio.y - topo.y >= RUMO_VIRADA_PX;
+
+  const ancora = virou ? topo : inicio;
 
   return (
-    atual.x >= ancora.x + (gaveta.left - ancora.x) * t - FOLGA_LADO_PX &&
-    atual.x <= ancora.x + (gaveta.right - ancora.x) * t + FOLGA_LADO_PX
+    atual.y - ancora.y + RUMO_FOLGA_PX >=
+    RUMO_INCLINACAO * Math.abs(atual.x - ancora.x)
   );
 }
 
@@ -403,11 +425,6 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
   const gatilhos = useRef(new Map<IdMenu, HTMLButtonElement>());
   const pathname = usePathname();
   const aberto = menuVisivel(estado);
-  const abertoAgora = useRef(aberto);
-
-  useLayoutEffect(() => {
-    abertoAgora.current = aberto;
-  }, [aberto]);
 
   useEffect(() => {
     const zona = raiz.current;
@@ -415,7 +432,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     if (!zona) return;
 
     let ultimo: Ponto | null = null;
-    let ancora: Ponto | null = null;
+    let rastro: readonly PontoNoTempo[] = [];
     let sob: IdMenu | null = null;
 
     // No documento, e não na zona, para saber onde o ponteiro parou também
@@ -425,8 +442,11 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
       const ponto = { x: e.clientX, y: e.clientY };
       const real = ehMovimentoReal(ultimo, ponto.x, ponto.y);
+      const agora = performance.now();
 
       ultimo = ponto;
+
+      if (real) rastro = estenderRastro(rastro, { ...ponto, t: agora });
 
       const alvo =
         e.target instanceof Element && zona.contains(e.target)
@@ -435,24 +455,6 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
       const id = alvo?.closest<HTMLElement>('[data-menu]')?.dataset.menu;
       const menu = ordem.find((m) => m === id) ?? null;
-
-      const caixa =
-        real && menu !== null
-          ? gaveta.current?.getBoundingClientRect()
-          : undefined;
-
-      const rumo = caixa ? rumoAGaveta(ancora, ponto, caixa) : false;
-
-      // Sobre outro gatilho a âncora fica parada: é dela que sai o triângulo
-      // até a gaveta, e o tremor no caminho não a arrasta.
-      if (
-        real &&
-        (menu === null ||
-          abertoAgora.current === null ||
-          menu === abertoAgora.current)
-      ) {
-        ancora = ponto;
-      }
 
       if (!alvo) return;
 
@@ -473,9 +475,9 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
       despachar({
         tipo,
         menu,
-        agora: performance.now(),
+        agora,
         real,
-        rumoAGaveta: rumo
+        rumoAGaveta: real && rumoAGaveta(rastro)
       });
     };
 

@@ -40,23 +40,6 @@ const MOUSE = { pointerType: 'mouse' } as const;
 const mover = (el: HTMLElement, x: number, y = 44) =>
   fireEvent.pointerMove(el, { ...MOUSE, clientX: x, clientY: y });
 
-function posicionarGaveta() {
-  vi.spyOn(
-    screen.getByTestId('gaveta'),
-    'getBoundingClientRect'
-  ).mockReturnValue({
-    x: 0,
-    y: 84,
-    left: 0,
-    top: 84,
-    right: 800,
-    bottom: 384,
-    width: 800,
-    height: 300,
-    toJSON: () => ({})
-  });
-}
-
 const passar = (ms: number) =>
   act(() => {
     vi.advanceTimersByTime(ms);
@@ -156,7 +139,6 @@ describe('usePlaca: hover na hora', () => {
   it('descer rumo à gaveta por outro gatilho retém a troca até parar PARADO_MS', () => {
     vi.useFakeTimers();
     render(<Banco />);
-    posicionarGaveta();
     abrirPorHover('maquinas');
 
     mover(screen.getByText('servicos'), 100, 60);
@@ -176,7 +158,6 @@ describe('usePlaca: hover na hora', () => {
   it('tremer no caminho por outro gatilho até a gaveta não troca', () => {
     vi.useFakeTimers();
     render(<Banco />);
-    posicionarGaveta();
     abrirPorHover('maquinas');
 
     const servicos = screen.getByText('servicos');
@@ -197,7 +178,6 @@ describe('usePlaca: hover na hora', () => {
   it('subir da gaveta para outro gatilho troca na hora', () => {
     vi.useFakeTimers();
     render(<Banco />);
-    posicionarGaveta();
     abrirPorHover('maquinas');
 
     mover(screen.getByTestId('gaveta'), 300, 200);
@@ -212,7 +192,6 @@ describe('usePlaca: hover na hora', () => {
   it('andar pela barra com deriva para baixo troca ao entrar no vizinho', () => {
     vi.useFakeTimers();
     render(<Banco />);
-    posicionarGaveta();
     abrirPorHover('maquinas');
 
     for (let i = 1; i <= 17; i++) {
