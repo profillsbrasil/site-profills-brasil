@@ -346,7 +346,7 @@ input[type='number']::-webkit-outer-spin-button {
   --logo-recorte-simbolo: inset(13.33% 85.35% 19.56% 2.44%);
 }
 
-/* Sem transição até a hidratação: quem chega já rolado vê a placa compacta sem encolher (useRolouAlem). */
+/* Sem transição até a hidratação: quem chega já rolado vê a placa compacta sem encolher (useCompacta). */
 .placa-navbar[data-sem-transicao] * {
   transition: none;
 }
