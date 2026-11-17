@@ -224,3 +224,17 @@ describe('voltar do navegador no editor', () => {
     expect(window.history.length).toBe(entradas);
   });
 });
+
+describe('navegador sem Navigation API', () => {
+  it('monta o editor e o voltar sai sem perguntar', async () => {
+    expect('navigation' in window).toBe(false);
+
+    abrirEditor();
+    await editarTitulo();
+
+    window.history.back();
+
+    await waitFor(() => expect(window.location.pathname).toBe('/admin/blog'));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+});
