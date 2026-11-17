@@ -253,7 +253,7 @@ function AbaDeFolha({
       aria-haspopup='dialog'
       aria-expanded={aberta}
       aria-controls={idFolha(aba.id)}
-      aria-current={ehAtual || undefined}
+      aria-current={ehAtual ? 'page' : undefined}
       data-atual={ehAtual || undefined}
       onClick={() => aoTocar(aba.id)}
       className={cn(

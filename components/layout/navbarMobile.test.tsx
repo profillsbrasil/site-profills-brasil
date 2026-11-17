@@ -109,6 +109,7 @@ describe('navbar do celular', () => {
     render(<NavbarMobile vitrines={vitrines} />);
 
     expect(aba(rotulo)).toHaveAttribute('data-atual');
+    expect(aba(rotulo)).toHaveAttribute('aria-current', 'page');
     expect(
       within(barra())
         .getAllByRole('button')
