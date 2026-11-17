@@ -350,3 +350,72 @@ input[type='number']::-webkit-outer-spin-button {
 .placa-navbar[data-sem-transicao] * {
   transition: none;
 }
+
+/* Navbar do celular (navbarMobile.tsx): barra de abas, faixa do logo e folhas,
+   navy em toda rota, inclusive nas de topo claro. */
+:root {
+  --barra-celular: calc(4rem + env(safe-area-inset-bottom, 0px));
+  --faixa-celular: 3rem;
+  --topo-celular: var(--faixa-celular);
+  /* Distância do aviso (sonner) ao pé no celular: o padrão dele, 16 px, onde não há barra. */
+  --aviso-celular: 16px;
+}
+
+:root:has([data-faixa-logo][data-recolhida]) {
+  --topo-celular: 0px;
+}
+
+/* A barra de abas cobre os últimos 64 px: o fim da página sobe acima dela. */
+@media screen and (width < 64rem) {
+  body:has([data-barra-abas]) {
+    --aviso-celular: calc(var(--barra-celular) + 8px);
+    padding-bottom: var(--barra-celular);
+  }
+
+  html:has([data-barra-abas]) {
+    scroll-padding-bottom: var(--barra-celular);
+  }
+}
+
+.nav-celular {
+  --cel-faixa: oklch(0.238 0.043 266);
+  --cel-card: oklch(0.2503 0.0417 266.3592);
+  --cel-recuo: rgba(15, 23, 42, 0.6);
+  --cel-veu: rgba(15, 23, 42, 0.6);
+  --cel-texto-2: #b6c5e2;
+  --cel-tracejado: rgba(148, 178, 235, 0.3);
+  --cel-tracejado-sutil: rgba(148, 178, 235, 0.22);
+}
+
+/* O vaul anima em 500 ms pelo CSS que ele injeta e repõe a folha com transição
+   inline; a folha do celular entra em 280 ms e sai em 200 ms. */
+[data-folha-celular][data-vaul-drawer] {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-duration: 280ms !important;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+[data-veu-celular][data-vaul-overlay] {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-folha-celular][data-vaul-drawer][data-state='closed'],
+[data-veu-celular][data-vaul-overlay][data-state='closed'] {
+  animation-duration: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-folha-celular][data-vaul-drawer][data-vaul-snap-points='false'][data-vaul-drawer-direction='bottom'][data-state='open'] {
+    animation-name: fadeIn;
+    animation-duration: 140ms;
+    animation-timing-function: linear;
+  }
+
+  [data-folha-celular][data-vaul-drawer][data-vaul-snap-points='false'][data-vaul-drawer-direction='bottom'][data-state='closed'] {
+    animation-name: fadeOut;
+    animation-duration: 140ms;
+    animation-timing-function: linear;
+  }
+}

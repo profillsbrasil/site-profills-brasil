@@ -72,6 +72,19 @@ function DrawerContent({
   );
 }
 
+/** O Content solto, sem portal, véu nem alça: quem chama monta a casca e troca o painel por key. */
+function DrawerPainel({
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+  return <DrawerPrimitive.Content data-slot='drawer-painel' {...props} />;
+}
+
+function DrawerAlca({
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Handle>) {
+  return <DrawerPrimitive.Handle data-slot='drawer-alca' {...props} />;
+}
+
 function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -128,6 +141,8 @@ export {
   DrawerTrigger,
   DrawerClose,
   DrawerContent,
+  DrawerPainel,
+  DrawerAlca,
   DrawerHeader,
   DrawerFooter,
   DrawerTitle,

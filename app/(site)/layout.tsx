@@ -9,10 +9,12 @@ export default function SiteLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const vitrines = montarVitrinesDoMenu();
+
   return (
     <IndicacaoProvider>
-      <NavbarDesktop vitrines={montarVitrinesDoMenu()} />
-      <NavbarMobile />
+      <NavbarDesktop vitrines={vitrines} />
+      <NavbarMobile vitrines={vitrines} />
       <main id='main-content' className='relative h-full w-full'>
         {children}
       </main>

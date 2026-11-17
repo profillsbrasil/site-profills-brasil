@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/vitest';
+
 import { vi } from 'vitest';
 
 class IntersectionObserverStub {
@@ -12,3 +13,23 @@ class IntersectionObserverStub {
 }
 
 vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);
+
+// O jsdom não implementa a captura de ponteiro que o vaul pede no toque dentro da folha.
+// Os testes de ambiente node não têm Element.
+if ('Element' in globalThis) {
+  Element.prototype.setPointerCapture = () => undefined;
+
+  Element.prototype.releasePointerCapture = () => undefined;
+}
+
+// O jsdom não tem matchMedia; a navbar do celular escuta a troca de largura.
+if ('window' in globalThis && !window.matchMedia) {
+  window.matchMedia = (media) =>
+    Object.assign(new EventTarget(), {
+      media,
+      matches: false,
+      onchange: null,
+      addListener: () => undefined,
+      removeListener: () => undefined
+    });
+}
