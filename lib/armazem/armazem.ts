@@ -1,13 +1,14 @@
 import { ErroConfiguracao } from '@/lib/utils/erro-configuracao';
 import {
   GetObjectCommand,
+  ListObjectsV2Command,
   NoSuchKey,
   PutObjectCommand,
   S3Client
 } from '@aws-sdk/client-s3';
 
 import { openAsBlob } from 'node:fs';
-import { mkdir, rename, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, rename, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import 'server-only';
 import { z } from 'zod';
@@ -17,13 +18,23 @@ export type ObjetoGuardado = {
   tamanho: number;
 };
 
+export type ObjetoListado = {
+  chave: string;
+  tamanho: number;
+  modificadoEm: Date;
+};
+
 /** Bytes guardados por chave, como `blog/<slug>/foto-1a2b3c4d5e.webp`. */
 export type Armazem = {
   /** Gravar de novo a mesma chave com os mesmos bytes não muda nada. */
   gravar: (chave: string, bytes: Uint8Array, tipo: string) => Promise<void>;
   /** null quando a chave não existe; lança quando o armazém não responde. */
   ler: (chave: string) => Promise<ObjetoGuardado | null>;
+  /** Toda chave que começa por `prefixo`, sem ordem garantida; lança quando o armazém não responde. */
+  listar: (prefixo: string) => Promise<ObjetoListado[]>;
 };
+
+const SUFIXO_TEMPORARIO = '.tmp';
 
 /** Armazém numa pasta do disco. A chave nunca sai da pasta. */
 export function criarArmazemDisco(raiz: string): Armazem {
@@ -42,7 +53,7 @@ export function criarArmazemDisco(raiz: string): Armazem {
   return {
     async gravar(chave, bytes) {
       const alvo = caminho(chave);
-      const temporario = `${alvo}.${crypto.randomUUID()}.tmp`;
+      const temporario = `${alvo}.${crypto.randomUUID()}${SUFIXO_TEMPORARIO}`;
 
       await mkdir(path.dirname(alvo), { recursive: true });
       await writeFile(temporario, bytes);
@@ -61,6 +72,44 @@ export function criarArmazemDisco(raiz: string): Armazem {
 
         throw erro;
       }
+    },
+
+    async listar(prefixo) {
+      let entradas;
+
+      try {
+        entradas = await readdir(pasta, {
+          recursive: true,
+          withFileTypes: true
+        });
+      } catch (erro) {
+        if (erro instanceof Error && 'code' in erro && erro.code === 'ENOENT') {
+          return [];
+        }
+
+        throw erro;
+      }
+
+      const chaves = entradas
+        .filter((entrada) => entrada.isFile())
+        .map((entrada) =>
+          path
+            .relative(pasta, path.join(entrada.parentPath, entrada.name))
+            .split(path.sep)
+            .join('/')
+        )
+        .filter(
+          (chave) =>
+            chave.startsWith(prefixo) && !chave.endsWith(SUFIXO_TEMPORARIO)
+        );
+
+      return Promise.all(
+        chaves.map(async (chave) => {
+          const { size, mtime } = await stat(caminho(chave));
+
+          return { chave, tamanho: size, modificadoEm: mtime };
+        })
+      );
     }
   };
 }
@@ -119,6 +168,35 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
 
         throw erro;
       }
+    },
+
+    async listar(prefixo) {
+      // O S3 devolve no máximo 1.000 chaves por página, e cada página pede o token da anterior.
+      const desde = async (continuacao?: string): Promise<ObjetoListado[]> => {
+        const pagina = await cliente.send(
+          new ListObjectsV2Command({
+            Bucket: config.bucket,
+            Prefix: prefixo,
+            ContinuationToken: continuacao
+          })
+        );
+
+        const objetos = (pagina.Contents ?? []).map(
+          ({ Key, Size, LastModified }) => {
+            if (Key === undefined || Size === undefined || !LastModified) {
+              throw new Error(`O bucket listou um objeto incompleto: ${Key}`);
+            }
+
+            return { chave: Key, tamanho: Size, modificadoEm: LastModified };
+          }
+        );
+
+        return pagina.IsTruncated && pagina.NextContinuationToken
+          ? [...objetos, ...(await desde(pagina.NextContinuationToken))]
+          : objetos;
+      };
+
+      return desde();
     }
   };
 }
@@ -167,7 +245,7 @@ const ambienteS3 = z
 function armazemIndisponivel(motivo: string): Armazem {
   const falhar = () => Promise.reject(new ErroConfiguracao(motivo));
 
-  return { gravar: falhar, ler: falhar };
+  return { gravar: falhar, ler: falhar, listar: falhar };
 }
 
 export type LeituraS3 =

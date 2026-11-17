@@ -16,7 +16,7 @@ import {
 } from './armazem';
 import { randomUUID } from 'node:crypto';
 import { once } from 'node:events';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import {
   type IncomingMessage,
   type RequestListener,
@@ -66,6 +66,38 @@ function contrato(nome: string, abrir: () => Promise<Armazem>, pular = false) {
 
     it('devolve null para chave que não existe', async () => {
       expect(await armazem.ler(chaveNova())).toBeNull();
+    });
+
+    it('lista só as chaves do prefixo, com tamanho e data', async () => {
+      const prefixo = `blog/teste-${randomUUID()}/`;
+      const antes = Date.now() - 60_000;
+
+      await armazem.gravar(`${prefixo}a-0123456789.png`, bytes, 'image/png');
+      await armazem.gravar(
+        `${prefixo}b-0123456789.png`,
+        bytes.subarray(0, 4),
+        'image/png'
+      );
+      await armazem.gravar(chaveNova(), bytes, 'image/png');
+
+      const listados = await armazem.listar(prefixo);
+
+      expect(
+        listados
+          .map(({ chave, tamanho }) => ({ chave, tamanho }))
+          .sort((a, b) => a.chave.localeCompare(b.chave))
+      ).toEqual([
+        { chave: `${prefixo}a-0123456789.png`, tamanho: bytes.length },
+        { chave: `${prefixo}b-0123456789.png`, tamanho: 4 }
+      ]);
+
+      for (const { modificadoEm } of listados) {
+        expect(modificadoEm.getTime()).toBeGreaterThan(antes);
+      }
+    });
+
+    it('lista vazio quando nada tem o prefixo', async () => {
+      expect(await armazem.listar(`blog/vazio-${randomUUID()}/`)).toEqual([]);
     });
 
     it('gravar de novo a mesma chave com os mesmos bytes mantém o objeto', async () => {
@@ -124,6 +156,28 @@ contrato(
 );
 
 describe('armazém em disco', () => {
+  it('lista vazio quando a pasta ainda não existe', async () => {
+    expect(
+      await criarArmazemDisco(path.join(raiz, 'nunca-criada')).listar('blog/')
+    ).toEqual([]);
+  });
+
+  it('não lista o arquivo temporário de uma gravação pela metade', async () => {
+    const pasta = await mkdtemp(path.join(tmpdir(), 'armazem-tmp-'));
+
+    try {
+      await mkdir(path.join(pasta, 'blog', 'post'), { recursive: true });
+      await writeFile(
+        path.join(pasta, 'blog', 'post', 'foto-0123456789.png.1a2b.tmp'),
+        bytes
+      );
+
+      expect(await criarArmazemDisco(pasta).listar('blog/')).toEqual([]);
+    } finally {
+      await rm(pasta, { recursive: true, force: true });
+    }
+  });
+
   it('recusa chave que sai da pasta', async () => {
     const armazem = criarArmazemDisco(raiz);
 
@@ -154,7 +208,15 @@ async function bucketLocal(responder: RequestListener) {
   };
 }
 
-type PedidoS3 = { metodo?: string; host?: string; caminho: string };
+type PedidoS3 = {
+  metodo?: string;
+  host?: string;
+  caminho: string;
+  continuacao?: string | null;
+};
+
+/** Páginas pequenas obrigam o cliente a seguir o NextContinuationToken. */
+const CHAVES_POR_PAGINA = 2;
 
 const fechamentos: (() => void)[] = [];
 
@@ -164,7 +226,7 @@ afterAll(() => {
 
 /** Bucket em memória que responde como o S3: 404 NoSuchKey e 403 AccessDenied em XML. */
 async function bucketFalso() {
-  const objetos = new Map<string, Buffer>();
+  const objetos = new Map<string, { corpo: Buffer; quando: Date }>();
   const pedidos: PedidoS3[] = [];
 
   const erroS3 = (status: number, codigo: string) =>
@@ -185,13 +247,26 @@ async function bucketFalso() {
     corpo: Buffer,
     resposta: ServerResponse
   ) => {
-    const caminho = new URL(pedido.url ?? '/', 'http://x').pathname;
+    const url = new URL(pedido.url ?? '/', 'http://x');
+    const caminho = url.pathname;
     const onde = `${pedido.headers.host}${caminho}`;
+
+    if (url.searchParams.get('list-type') === '2') {
+      pedidos.push({
+        metodo: pedido.method,
+        host: pedido.headers.host,
+        caminho,
+        continuacao: url.searchParams.get('continuation-token')
+      });
+      listar(onde, url.searchParams, resposta);
+
+      return;
+    }
 
     pedidos.push({ metodo: pedido.method, host: pedido.headers.host, caminho });
 
     if (pedido.method === 'PUT') {
-      objetos.set(onde, corpo);
+      objetos.set(onde, { corpo, quando: new Date() });
       resposta.writeHead(200, { etag: '"0"' }).end();
 
       return;
@@ -214,9 +289,48 @@ async function bucketFalso() {
     resposta
       .writeHead(200, {
         'content-type': 'application/octet-stream',
-        'content-length': String(guardado.length)
+        'content-length': String(guardado.corpo.length)
       })
-      .end(guardado);
+      .end(guardado.corpo);
+  };
+
+  /** `onde` é o bucket: `<bucket>.host/` em virtual-host, `host/<bucket>` em path. */
+  const listar = (
+    onde: string,
+    busca: URLSearchParams,
+    resposta: ServerResponse
+  ) => {
+    const base = onde.endsWith('/') ? onde : `${onde}/`;
+    const prefixo = busca.get('prefix') ?? '';
+    const inicio = Number(busca.get('continuation-token') ?? 0);
+
+    const chaves = [...objetos.keys()]
+      .flatMap((guardado) => {
+        const chave = guardado.slice(base.length);
+
+        return guardado.startsWith(base) && chave.startsWith(prefixo)
+          ? [chave]
+          : [];
+      })
+      .sort();
+
+    const pagina = chaves.slice(inicio, inicio + CHAVES_POR_PAGINA);
+    const fim = inicio + CHAVES_POR_PAGINA;
+    const truncada = fim < chaves.length;
+
+    const conteudo = pagina
+      .map((chave) => {
+        const guardado = objetos.get(`${base}${chave}`);
+
+        return `<Contents><Key>${chave}</Key><LastModified>${guardado?.quando.toISOString()}</LastModified><Size>${guardado?.corpo.length}</Size></Contents>`;
+      })
+      .join('');
+
+    resposta
+      .writeHead(200, { 'content-type': 'application/xml' })
+      .end(
+        `<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>meu-bucket</Name><Prefix>${prefixo}</Prefix><KeyCount>${pagina.length}</KeyCount><MaxKeys>${CHAVES_POR_PAGINA}</MaxKeys><IsTruncated>${truncada}</IsTruncated>${truncada ? `<NextContinuationToken>${fim}</NextContinuationToken>` : ''}${conteudo}</ListBucketResult>`
+      );
   };
 
   fechamentos.push(servidor.fechar);
@@ -280,6 +394,27 @@ describe('armazém S3 contra o bucket local', () => {
       ]);
     }
   );
+
+  it('segue as páginas do ListObjectsV2 até a última', async () => {
+    const { armazem, pedidos } = await armazemFalso(false);
+
+    const chaves = [1, 2, 3, 4, 5].map(
+      (n) => `blog/fispal/foto-${n}-0123456789.png`
+    );
+
+    await Promise.all(
+      chaves.map((chave) => armazem.gravar(chave, bytes, 'image/png'))
+    );
+
+    const listados = await armazem.listar('blog/');
+
+    expect(listados.map((o) => o.chave).sort()).toEqual(chaves);
+    expect(
+      pedidos
+        .filter((p) => p.continuacao !== undefined)
+        .map((p) => p.continuacao)
+    ).toEqual([null, '2', '4']);
+  });
 
   it('chave que falta vira null e acesso negado vira exceção', async () => {
     const { armazem } = await armazemFalso(false);
