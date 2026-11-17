@@ -54,6 +54,12 @@ describe('transição da folha', () => {
     expect(duas).toBe(uma);
   });
 
+  it('sair da largura do celular fecha sem foco na aba', () => {
+    expect(transicaoFolha(aberta('menu'), { tipo: 'saiu-do-celular' })).toEqual(
+      { fase: 'fechada', folha: 'menu', focoNaAba: false }
+    );
+  });
+
   it('navegar depois de dispensar tira o foco da aba', () => {
     const dispensada = transicaoFolha(aberta('menu'), { tipo: 'dispensou' });
 

@@ -30,7 +30,9 @@ export type EventoFolha =
   /** Esc, véu, arraste, Fechar ou link da folha: tudo chega pelo onOpenChange(false) do vaul. */
   | { readonly tipo: 'dispensou' }
   /** O pathname mudou por fora, como no voltar do navegador: fecha sem roubar o foco. */
-  | { readonly tipo: 'navegou' };
+  | { readonly tipo: 'navegou' }
+  /** A largura passou do lg (tablet girado): a folha some por lg:hidden e o modal não pode ficar. */
+  | { readonly tipo: 'saiu-do-celular' };
 
 export const FOLHA_INICIAL: EstadoFolha = {
   fase: 'fechada',
@@ -54,6 +56,7 @@ export function transicaoFolha(
 
       return { fase: 'fechada', folha: estado.folha, focoNaAba: true };
     case 'navegou':
+    case 'saiu-do-celular':
       if (estado.fase === 'aberta') {
         return { fase: 'fechada', folha: estado.folha, focoNaAba: false };
       }
@@ -147,6 +150,18 @@ export function useNavCelular(): NavCelular {
     pathnameAnterior.current = pathname;
     despachar({ tipo: 'navegou' });
   }, [pathname]);
+
+  useEffect(() => {
+    const desktop = window.matchMedia('(width >= 64rem)');
+
+    const aoMudar = (evento: MediaQueryListEvent) => {
+      if (evento.matches) despachar({ tipo: 'saiu-do-celular' });
+    };
+
+    desktop.addEventListener('change', aoMudar);
+
+    return () => desktop.removeEventListener('change', aoMudar);
+  }, []);
 
   useEffect(() => {
     let faixa: EstadoFaixa = { ...FAIXA_INICIAL, ultimoY: window.scrollY };

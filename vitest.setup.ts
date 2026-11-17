@@ -21,3 +21,15 @@ if ('Element' in globalThis) {
 
   Element.prototype.releasePointerCapture = () => undefined;
 }
+
+// O jsdom não tem matchMedia; a navbar do celular escuta a troca de largura.
+if ('window' in globalThis && !window.matchMedia) {
+  window.matchMedia = (media) =>
+    Object.assign(new EventTarget(), {
+      media,
+      matches: false,
+      onchange: null,
+      addListener: () => undefined,
+      removeListener: () => undefined
+    });
+}

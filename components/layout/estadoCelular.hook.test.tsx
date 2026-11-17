@@ -5,6 +5,47 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const rota = vi.hoisted(() => ({ atual: '/' }));
 const quadros: FrameRequestCallback[] = [];
+let largura = 390;
+
+function avaliar(media: string, largura: number) {
+  const [, sinal, rem] = /^\(width (>=|<) (\d+)rem\)$/.exec(media) ?? [];
+
+  if (!sinal) throw new Error(`consulta sem fake: ${media}`);
+
+  return sinal === '>='
+    ? largura >= Number(rem) * 16
+    : largura < Number(rem) * 16;
+}
+
+class ListaFalsa extends EventTarget implements MediaQueryList {
+  onchange = null;
+  addListener = () => undefined;
+  removeListener = () => undefined;
+
+  constructor(readonly media: string) {
+    super();
+  }
+
+  get matches() {
+    return avaliar(this.media, largura);
+  }
+}
+
+const listas: ListaFalsa[] = [];
+
+function girarPara(nova: number) {
+  largura = nova;
+  act(() => {
+    for (const lista of listas) {
+      const evento = Object.assign(new Event('change'), {
+        matches: lista.matches,
+        media: lista.media
+      });
+
+      lista.dispatchEvent(evento);
+    }
+  });
+}
 
 vi.mock('next/navigation', () => ({ usePathname: () => rota.atual }));
 
@@ -23,6 +64,15 @@ describe('useNavCelular', () => {
       quadros.push(passo)
     );
     vi.stubGlobal('cancelAnimationFrame', () => undefined);
+    largura = 390;
+    listas.length = 0;
+    vi.stubGlobal('matchMedia', (media: string) => {
+      const lista = new ListaFalsa(media);
+
+      listas.push(lista);
+
+      return lista;
+    });
     rolarPara(0);
   });
 
@@ -64,6 +114,29 @@ describe('useNavCelular', () => {
       folha: 'maquinas',
       focoNaAba: false
     });
+  });
+
+  it('girar para 1280 px com a folha aberta fecha a folha', () => {
+    largura = 900;
+    const { result } = renderHook(() => useNavCelular());
+
+    act(() => result.current.tocarAba('menu'));
+    girarPara(1280);
+
+    expect(result.current.folha).toEqual({
+      fase: 'fechada',
+      folha: 'menu',
+      focoNaAba: false
+    });
+  });
+
+  it('girar dentro da largura do celular não fecha a folha', () => {
+    const { result } = renderHook(() => useNavCelular());
+
+    act(() => result.current.tocarAba('menu'));
+    girarPara(844);
+
+    expect(result.current.folha.fase).toBe('aberta');
   });
 
   it('dispensar devolve o foco à aba que abriu', () => {
