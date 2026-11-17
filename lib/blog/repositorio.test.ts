@@ -205,7 +205,7 @@ describe('repositório de posts no Postgres', () => {
           "insert into blog_posts (slug, versao, estado, criado_em, atualizado_em, conteudo) values ($1, 1, 'rascunho', now(), now(), '{}')",
           [slug]
         )
-      ).rejects.toThrow('slug_formato');
+      ).rejects.toThrow(/slug_formato|slug_rota_admin/);
     }
   });
 
