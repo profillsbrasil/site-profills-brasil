@@ -2,14 +2,13 @@
 
 import {
   type KeyboardEvent,
-  type PointerEvent,
   type RefObject,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useReducer,
   useRef,
-  useState,
-  useSyncExternalStore
+  useState
 } from 'react';
 
 import { usePathname } from 'next/navigation';
@@ -29,6 +28,15 @@ export const FECHA_MS = 150;
 
 /** O clique que chega logo depois de o hover abrir é o mesmo gesto: não fecha. */
 export const CLIQUE_IGNORA_MS = 350;
+
+/** A placa compacta acima de ENTRA_COMPACTA_PX e só volta em SAI_COMPACTA_PX ou menos. */
+export const ENTRA_COMPACTA_PX = 24;
+export const SAI_COMPACTA_PX = 4;
+
+interface Ponto {
+  readonly x: number;
+  readonly y: number;
+}
 
 /** Onde e desde quando o ponteiro está parado sobre um gatilho. */
 export interface Repouso {
@@ -62,6 +70,11 @@ export type EstadoPlaca =
     })
   | (GavetaAberta & { readonly fase: 'fechando' });
 
+/**
+ * Eventos do ponteiro na zona da navbar (placa, ponte e gaveta). `real` é
+ * falso quando o evento repete as coordenadas do último pointermove: veio de
+ * layout, não da mão, e não arma nem reinicia repouso ou candidato.
+ */
 export type EventoPlaca =
   | {
       readonly tipo: 'ponteiro-entrou' | 'ponteiro-moveu';
@@ -69,9 +82,11 @@ export type EventoPlaca =
       readonly x: number;
       readonly y: number;
       readonly agora: number;
+      readonly real: boolean;
     }
-  | { readonly tipo: 'ponteiro-entrou-gaveta' }
-  | { readonly tipo: 'ponteiro-saiu' }
+  | { readonly tipo: 'ponteiro-fora-de-gatilho'; readonly real: boolean }
+  | { readonly tipo: 'ponteiro-entrou-na-zona' }
+  | { readonly tipo: 'ponteiro-saiu-da-zona' }
   | { readonly tipo: 'clique'; readonly menu: IdMenu; readonly agora: number }
   | {
       readonly tipo: 'teclado-abriu';
@@ -154,6 +169,8 @@ export function reduzirPlaca(
   switch (evento.tipo) {
     case 'ponteiro-entrou':
     case 'ponteiro-moveu': {
+      if (!evento.real) return estado;
+
       if (
         estado.fase === 'fechada' &&
         evento.tipo === 'ponteiro-moveu' &&
@@ -189,12 +206,26 @@ export function reduzirPlaca(
           };
     }
 
-    case 'ponteiro-entrou-gaveta':
+    case 'ponteiro-fora-de-gatilho':
+      if (!evento.real) return estado;
+
+      if (
+        estado.fase === 'armando' ||
+        (estado.fase === 'fechada' && estado.dispensado !== null)
+      ) {
+        return PLACA_INICIAL;
+      }
+
+      return estado.fase === 'aberta' && estado.candidato !== null
+        ? { ...estado, candidato: null }
+        : estado;
+
+    case 'ponteiro-entrou-na-zona':
       return estado.fase === 'fechando'
         ? { ...estado, fase: 'aberta', candidato: null }
         : estado;
 
-    case 'ponteiro-saiu':
+    case 'ponteiro-saiu-da-zona':
       if (
         estado.fase === 'armando' ||
         (estado.fase === 'fechada' && estado.dispensado !== null)
@@ -261,6 +292,18 @@ export function reduzirPlaca(
   }
 }
 
+export function ehMovimentoReal(
+  ultimo: Ponto | null,
+  x: number,
+  y: number
+): boolean {
+  return ultimo === null || ultimo.x !== x || ultimo.y !== y;
+}
+
+export function proximaCompacta(atual: boolean, scrollY: number): boolean {
+  return scrollY > (atual ? SAI_COMPACTA_PX : ENTRA_COMPACTA_PX);
+}
+
 /** -1, 0 ou 1: o lado de onde o conteúdo novo entra na gaveta. */
 export function sentidoDaTroca(
   estado: EstadoPlaca,
@@ -282,20 +325,24 @@ export interface Placa {
   /** Menu que abriu ou está para abrir: a gaveta só carrega as imagens dele. */
   readonly prestes: IdMenu | null;
   readonly sentido: -1 | 0 | 1;
-  /** Envolve a placa e a gaveta: clique e foco fora dela fecham. */
+  /** Ponteiro na zona ou menu aberto: a geometria da placa não pode mudar. */
+  readonly travada: boolean;
+  /**
+   * A zona do ponteiro: placa, ponte e gaveta. Clique e foco fora dela
+   * fecham, e sair dela é o único jeito de o ponteiro fechar a gaveta.
+   */
   readonly raiz: RefObject<HTMLDivElement | null>;
+  /** Vai no elemento que é a área de hit do gatilho. */
+  alvo(menu: IdMenu): { 'data-menu': IdMenu };
   gatilho(menu: IdMenu): {
     id: string;
     'aria-expanded': boolean;
     'aria-controls': string;
-    onPointerEnter: (e: PointerEvent) => void;
-    onPointerMove: (e: PointerEvent) => void;
-    onPointerLeave: (e: PointerEvent) => void;
     onClick: () => void;
     onKeyDown: (e: KeyboardEvent) => void;
     ref: (el: HTMLButtonElement | null) => void;
   };
-  /** A gaveta: o hook liga nela o ponteiro e o Tab que sai pelo fim. */
+  /** A gaveta: o hook liga nela o Tab que sai pelo fim. */
   readonly gaveta: RefObject<HTMLDivElement | null>;
 }
 
@@ -316,11 +363,80 @@ function linksDoPainel(menu: IdMenu): HTMLAnchorElement[] {
  */
 export function usePlaca(ordem: readonly IdMenu[]): Placa {
   const [estado, despachar] = useReducer(reduzirPlaca, PLACA_INICIAL);
+  const [naZona, setNaZona] = useState(false);
   const raiz = useRef<HTMLDivElement | null>(null);
   const gaveta = useRef<HTMLDivElement | null>(null);
   const gatilhos = useRef(new Map<IdMenu, HTMLButtonElement>());
   const pathname = usePathname();
   const aberto = menuVisivel(estado);
+
+  useEffect(() => {
+    const zona = raiz.current;
+
+    if (!zona) return;
+
+    let ultimo: Ponto | null = null;
+    let sob: IdMenu | null = null;
+
+    // No documento, e não na zona, para saber onde o ponteiro parou também
+    // fora dela: a zona que cresce sob um ponteiro parado não é movimento.
+    const aoMover = (e: globalThis.PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+
+      const real = ehMovimentoReal(ultimo, e.clientX, e.clientY);
+
+      ultimo = { x: e.clientX, y: e.clientY };
+
+      if (!(e.target instanceof Element) || !zona.contains(e.target)) return;
+
+      const id = e.target.closest<HTMLElement>('[data-menu]')?.dataset.menu;
+      const menu = ordem.find((m) => m === id) ?? null;
+
+      if (menu === null) {
+        if (real) sob = null;
+        despachar({ tipo: 'ponteiro-fora-de-gatilho', real });
+
+        return;
+      }
+
+      const tipo = menu === sob ? 'ponteiro-moveu' : 'ponteiro-entrou';
+
+      if (real) sob = menu;
+      despachar({
+        tipo,
+        menu,
+        x: e.clientX,
+        y: e.clientY,
+        agora: performance.now(),
+        real
+      });
+    };
+
+    const aoEntrar = (e: globalThis.PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+
+      setNaZona(true);
+      despachar({ tipo: 'ponteiro-entrou-na-zona' });
+    };
+
+    const aoSair = (e: globalThis.PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+
+      sob = null;
+      setNaZona(false);
+      despachar({ tipo: 'ponteiro-saiu-da-zona' });
+    };
+
+    document.addEventListener('pointermove', aoMover, { passive: true });
+    zona.addEventListener('pointerenter', aoEntrar);
+    zona.addEventListener('pointerleave', aoSair);
+
+    return () => {
+      document.removeEventListener('pointermove', aoMover);
+      zona.removeEventListener('pointerenter', aoEntrar);
+      zona.removeEventListener('pointerleave', aoSair);
+    };
+  }, [ordem]);
 
   useEffect(() => {
     const repouso = repousoPendente(estado);
@@ -393,52 +509,30 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
   }, [aberto]);
 
   const gatilho = useCallback(
-    (menu: IdMenu) => {
-      const apontou = (
-        tipo: 'ponteiro-entrou' | 'ponteiro-moveu',
-        e: PointerEvent
-      ) => {
-        if (e.pointerType !== 'touch') {
-          despachar({
-            tipo,
-            menu,
-            x: e.clientX,
-            y: e.clientY,
-            agora: performance.now()
-          });
-        }
-      };
+    (menu: IdMenu) => ({
+      id: idGatilho(menu),
+      'aria-expanded': aberto === menu,
+      'aria-controls': idPainel(menu),
+      onClick: () =>
+        despachar({ tipo: 'clique', menu, agora: performance.now() }),
+      onKeyDown: (e: KeyboardEvent) => {
+        const entrarNoPainel =
+          e.key === 'ArrowDown' ||
+          (e.key === 'Tab' && !e.shiftKey && aberto === menu);
 
-      return {
-        id: idGatilho(menu),
-        'aria-expanded': aberto === menu,
-        'aria-controls': idPainel(menu),
-        onPointerEnter: (e: PointerEvent) => apontou('ponteiro-entrou', e),
-        onPointerMove: (e: PointerEvent) => apontou('ponteiro-moveu', e),
-        onPointerLeave: (e: PointerEvent) => {
-          if (e.pointerType !== 'touch') despachar({ tipo: 'ponteiro-saiu' });
-        },
-        onClick: () =>
-          despachar({ tipo: 'clique', menu, agora: performance.now() }),
-        onKeyDown: (e: KeyboardEvent) => {
-          const entrarNoPainel =
-            e.key === 'ArrowDown' ||
-            (e.key === 'Tab' && !e.shiftKey && aberto === menu);
+        if (!entrarNoPainel) return;
 
-          if (!entrarNoPainel) return;
-
-          e.preventDefault();
-          flushSync(() =>
-            despachar({ tipo: 'teclado-abriu', menu, agora: performance.now() })
-          );
-          linksDoPainel(menu)[0]?.focus();
-        },
-        ref: (el: HTMLButtonElement | null) => {
-          if (el) gatilhos.current.set(menu, el);
-          else gatilhos.current.delete(menu);
-        }
-      };
-    },
+        e.preventDefault();
+        flushSync(() =>
+          despachar({ tipo: 'teclado-abriu', menu, agora: performance.now() })
+        );
+        linksDoPainel(menu)[0]?.focus();
+      },
+      ref: (el: HTMLButtonElement | null) => {
+        if (el) gatilhos.current.set(menu, el);
+        else gatilhos.current.delete(menu);
+      }
+    }),
     [aberto]
   );
 
@@ -446,16 +540,6 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     const el = gaveta.current;
 
     if (!el) return;
-
-    const aoEntrar = (e: globalThis.PointerEvent) => {
-      if (e.pointerType !== 'touch') {
-        despachar({ tipo: 'ponteiro-entrou-gaveta' });
-      }
-    };
-
-    const aoSair = (e: globalThis.PointerEvent) => {
-      if (e.pointerType !== 'touch') despachar({ tipo: 'ponteiro-saiu' });
-    };
 
     const aoTeclar = (e: globalThis.KeyboardEvent) => {
       if (e.key !== 'Tab' || aberto === null) return;
@@ -486,46 +570,47 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
       }
     };
 
-    el.addEventListener('pointerenter', aoEntrar);
-    el.addEventListener('pointerleave', aoSair);
     el.addEventListener('keydown', aoTeclar);
 
-    return () => {
-      el.removeEventListener('pointerenter', aoEntrar);
-      el.removeEventListener('pointerleave', aoSair);
-      el.removeEventListener('keydown', aoTeclar);
-    };
+    return () => el.removeEventListener('keydown', aoTeclar);
   }, [aberto]);
 
   return {
     aberto,
     prestes: estado.fase === 'armando' ? estado.repouso.menu : aberto,
     sentido: sentidoDaTroca(estado, ordem),
+    travada: naZona || aberto !== null,
     raiz,
+    alvo: (menu: IdMenu) => ({ 'data-menu': menu }),
     gatilho,
     gaveta
   };
 }
 
-function assinarRolagem(avisar: () => void) {
-  window.addEventListener('scroll', avisar, { passive: true });
-
-  return () => window.removeEventListener('scroll', avisar);
-}
-
 /**
- * `rolou`: passou de `limiar` px de rolagem. `animar`: falso do HTML do
- * servidor até dois quadros depois da hidratação, para quem recarrega já
- * rolado ver a placa compacta sem a animação de encolher.
+ * `compacta` só muda com a placa destravada: enquanto `travada` vale, a
+ * rolagem não é lida, e a mudança pendente entra quando ela solta.
+ * `animar`: falso do HTML do servidor até dois quadros depois da hidratação,
+ * para quem recarrega já rolado ver a placa compacta sem a animação de encolher.
  */
-export function useRolouAlem(limiar: number) {
-  const rolou = useSyncExternalStore(
-    assinarRolagem,
-    () => window.scrollY > limiar,
-    () => false
-  );
-
+export function useCompacta(travada: boolean) {
+  const [compacta, setCompacta] = useState(false);
   const [animar, setAnimar] = useState(false);
+
+  useLayoutEffect(() => {
+    if (travada) return;
+
+    const seguir = () => {
+      const y = window.scrollY;
+
+      setCompacta((atual) => proximaCompacta(atual, y));
+    };
+
+    seguir();
+    window.addEventListener('scroll', seguir, { passive: true });
+
+    return () => window.removeEventListener('scroll', seguir);
+  }, [travada]);
 
   useEffect(() => {
     let quadro = requestAnimationFrame(() => {
@@ -535,5 +620,5 @@ export function useRolouAlem(limiar: number) {
     return () => cancelAnimationFrame(quadro);
   }, []);
 
-  return { rolou, animar };
+  return { compacta, animar };
 }

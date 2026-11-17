@@ -19,8 +19,8 @@ import {
   type Placa,
   idGatilho,
   idPainel,
-  usePlaca,
-  useRolouAlem
+  useCompacta,
+  usePlaca
 } from '@/components/layout/placa';
 import { temaDoTopo } from '@/components/layout/temaDoTopo';
 import type { VitrinesDoMenu } from '@/lib/data/maquinas/menu';
@@ -31,7 +31,6 @@ import logoCor from '@/public/logo.png';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 
 const ORDEM_MENUS = NAVEGACAO.menus.map((m) => m.id);
-const LIMIAR_COMPACTA = 24;
 const SAIDA = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
 // As cores da placa são variáveis de .placa-navbar (globals.css), trocadas pelo data-tema.
@@ -71,7 +70,7 @@ function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
   const pathname = usePathname();
 
   return (
-    <li>
+    <li {...placa.alvo(menu.id)}>
       <button
         type='button'
         {...placa.gatilho(menu.id)}
@@ -294,7 +293,7 @@ export default function NavbarDesktop({
 }) {
   const tema = temaDoTopo(usePathname());
   const placa = usePlaca(ORDEM_MENUS);
-  const { rolou: compacta, animar } = useRolouAlem(LIMIAR_COMPACTA);
+  const { compacta, animar } = useCompacta(placa.travada);
   const { aberto, sentido, prestes, raiz, gaveta } = placa;
   const nav = useRef<HTMLElement>(null);
   const corpo = useRef<HTMLDivElement>(null);
