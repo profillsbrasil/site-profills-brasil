@@ -41,7 +41,7 @@ export type RepositorioBlog = {
   lerImagem: (caminho: string) => Promise<ImagemGuardada | null>;
   /** Toda imagem do armazém, da enviada mais recente para a mais antiga, com o uso que os posts fazem dela. */
   listarImagens: () => Promise<ImagemDoArmazem[]>;
-  /** O total da lateral; null quando o armazém não responde, para a falha não derrubar a página. */
+  /** O total da lateral, guardado por VALIDADE_CONTAGEM_MS; null quando o armazém não respondeu, para a falha não derrubar a página. */
   contarImagens: () => Promise<number | null>;
   /** Do publicado mais recente para o mais antigo. */
   listarPublicados: () => Promise<ResumoPublicado[]>;
@@ -172,6 +172,9 @@ const chaveImagem = (caminho: string) => caminho.slice(1);
 
 const PREFIXO_IMAGENS = 'blog/';
 
+/** Cada página do admin mostra o total; listar o bucket a cada carga custaria uma requisição por mil imagens. */
+const VALIDADE_CONTAGEM_MS = 30_000;
+
 export function criarRepositorioBlog({
   consulta,
   armazem,
@@ -249,6 +252,34 @@ export function criarRepositorioBlog({
     });
   }
 
+  /** O envio acrescenta o caminho ao conjunto, então o total sobe sem listar de novo, e o reenvio não conta duas vezes. */
+  let contagem: {
+    caminhos: Promise<Set<string> | null>;
+    ate: number;
+  } | null = null;
+
+  function caminhosContados() {
+    const instante = agora().getTime();
+
+    if (contagem && instante < contagem.ate) return contagem.caminhos;
+
+    const caminhos = (async () => {
+      try {
+        const objetos = await imagensGuardadas();
+
+        return new Set(objetos.map((objeto) => objeto.caminho));
+      } catch (erro) {
+        logger.warn('O armazém não respondeu à contagem de imagens', erro);
+
+        return null;
+      }
+    })();
+
+    contagem = { caminhos, ate: instante + VALIDADE_CONTAGEM_MS };
+
+    return caminhos;
+  }
+
   return {
     ler,
 
@@ -287,13 +318,7 @@ export function criarRepositorioBlog({
     },
 
     async contarImagens() {
-      try {
-        return (await imagensGuardadas()).length;
-      } catch (erro) {
-        logger.warn('O armazém não respondeu à contagem de imagens', erro);
-
-        return null;
-      }
+      return (await caminhosContados())?.size ?? null;
     },
 
     async listar() {
@@ -368,6 +393,7 @@ export function criarRepositorioBlog({
       const caminho = `/blog/${slug}/${nomearImagem(nomeEnviado, bytes, tipo.extensao)}`;
 
       await armazem.gravar(chaveImagem(caminho), bytes, tipo.mime);
+      (await contagem?.caminhos)?.add(caminho);
 
       return caminho;
     },

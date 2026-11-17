@@ -75,8 +75,12 @@ export async function POST(
     admin.enviarImagem(slug.data, arquivo)
   );
 
+  // O total volta junto para a lateral do editor subir sem recarregar a página.
   return tentativa.ok
-    ? NextResponse.json({ caminho: tentativa.valor })
+    ? NextResponse.json({
+        caminho: tentativa.valor,
+        imagens: await admin.contarImagens()
+      })
     : NextResponse.json(
         { erro: tentativa.motivo },
         { status: tentativa.doAutor ? 400 : 500 }

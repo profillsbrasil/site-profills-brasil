@@ -15,6 +15,7 @@ import { createHash } from 'node:crypto';
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { setTimeout as esperar } from 'node:timers/promises';
 import {
   afterEach,
   beforeAll,
@@ -683,24 +684,112 @@ describe('imagens no admin', () => {
     expect(await repo.contarImagens()).toBe(4);
   });
 
+  it('com 5.000 imagens, cargas seguidas listam o armazém uma vez até o total vencer', async () => {
+    const listar = vi.fn(() =>
+      Promise.resolve(
+        Array.from({ length: 5_000 }, (_, n) => ({
+          chave: `blog/fispal/foto-${n}-0123456789.png`,
+          tamanho: 10,
+          modificadoEm: new Date('2026-11-15T12:00:00.000Z')
+        }))
+      )
+    );
+
+    const repo = criarRepositorioBlog({
+      consulta,
+      armazem: { ...criarArmazemDisco(raiz), listar },
+      agora: () => agora
+    });
+
+    expect(
+      await Promise.all([repo.contarImagens(), repo.contarImagens()])
+    ).toEqual([5_000, 5_000]);
+    expect(await repo.contarImagens()).toBe(5_000);
+    expect(listar).toHaveBeenCalledTimes(1);
+
+    avancar(1);
+
+    expect(await repo.contarImagens()).toBe(5_000);
+    expect(listar).toHaveBeenCalledTimes(2);
+  });
+
+  it('o total sobe com a imagem nova e não com a reenviada, sem listar de novo', async () => {
+    const disco = criarArmazemDisco(raiz);
+    const listar = vi.fn(disco.listar);
+
+    const repo = criarRepositorioBlog({
+      consulta,
+      armazem: { ...disco, listar },
+      agora: () => agora
+    });
+
+    const { slug } = await repo.gravar(
+      { slug: null, versao: null, post: post('Fispal') },
+      'salvar'
+    );
+
+    expect(await repo.contarImagens()).toBe(0);
+
+    await repo.enviarImagem(slug, new File([pngCom(1)], 'a.png'));
+    expect(await repo.contarImagens()).toBe(1);
+
+    await repo.enviarImagem(slug, new File([pngCom(1)], 'a.png'));
+    expect(await repo.contarImagens()).toBe(1);
+    expect(listar).toHaveBeenCalledTimes(1);
+  });
+
+  it('reenviar o mesmo arquivo não muda a posição da imagem na lista', async () => {
+    const repo = repositorio();
+
+    const { slug } = await repo.gravar(
+      { slug: null, versao: null, post: post('Fispal') },
+      'salvar'
+    );
+
+    const primeira = await repo.enviarImagem(
+      slug,
+      new File([pngCom(1)], 'a.png')
+    );
+
+    await esperar(20);
+
+    const segunda = await repo.enviarImagem(
+      slug,
+      new File([pngCom(2)], 'b.png')
+    );
+
+    await esperar(20);
+    await repo.enviarImagem(slug, new File([pngCom(1)], 'a.png'));
+
+    expect((await repo.listarImagens()).map((i) => i.caminho)).toEqual([
+      segunda,
+      primeira
+    ]);
+  });
+
   it('sem imagem no armazém, a lista vem vazia e o total é 0', async () => {
     expect(await repositorio().listarImagens()).toEqual([]);
     expect(await repositorio().contarImagens()).toBe(0);
   });
 
   it('com o armazém fora, a contagem da lateral vira null e a lista lança', async () => {
+    const listar = vi.fn(() => Promise.reject(new Error('fora')));
+
     const fora = criarRepositorioBlog({
       consulta,
       armazem: {
         gravar: () => Promise.reject(new Error('fora')),
         ler: () => Promise.reject(new Error('fora')),
-        listar: () => Promise.reject(new Error('fora'))
-      }
+        listar
+      },
+      agora: () => agora
     });
 
     vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     expect(await fora.contarImagens()).toBeNull();
+    expect(await fora.contarImagens()).toBeNull();
+    expect(listar).toHaveBeenCalledTimes(1);
     await expect(fora.listarImagens()).rejects.toThrow('fora');
   });
 });
