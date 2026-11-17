@@ -192,7 +192,8 @@ describe('guarda do admin', () => {
         expect(toques, `${nome} ${exportado}`).toEqual([]);
       }
     }
-  });
+    // Importa o admin inteiro: com a suíte em paralelo leva de 4 a 5 s, e 1,4 s sozinho.
+  }, 30_000);
 
   it('o login só exporta o que a lista conhece e não toca no blog', async () => {
     const livres = (await entradasDoAdmin()).filter((nome) =>
