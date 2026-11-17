@@ -1,6 +1,12 @@
 'use client';
 
-import { type MouseEvent, useEffect, useReducer, useState } from 'react';
+import {
+  type MouseEvent,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -39,6 +45,9 @@ const postVazio: Post = {
   capa: null,
   linhas: []
 };
+
+/** Para onde o editor sai depois da pergunta "Sair sem salvar?". */
+type Saida = { para: 'link'; href: string } | { para: 'voltar' };
 
 type Fase =
   | { fase: 'parado' }
@@ -122,7 +131,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
   const [postSalvo, setPostSalvo] = useState(inicial?.post ?? postVazio);
   const [gravacao, setGravacao] = useState(inicial);
   const [fase, setFase] = useState<Fase>({ fase: 'parado' });
-  const [saida, setSaida] = useState<string | null>(null);
+  const [saida, setSaida] = useState<Saida | null>(null);
   const [dispositivo, setDispositivo] = useState<Dispositivo>('computador');
 
   const sujo = post !== postSalvo;
@@ -138,6 +147,41 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
 
     return () => window.removeEventListener('beforeunload', segurar);
   }, [sujo]);
+
+  // O voltar do navegador troca de rota no client e não dispara o
+  // beforeunload. Com mudança pendente, uma entrada repetida da mesma URL no
+  // histórico recebe o voltar, e o popstate abre a pergunta no lugar de sair.
+  const sujoAgora = useRef(sujo);
+  const entradaExtra = useRef(false);
+
+  useEffect(() => {
+    sujoAgora.current = sujo;
+
+    if (!sujo || entradaExtra.current) return;
+
+    window.history.pushState(null, '', window.location.href);
+    entradaExtra.current = true;
+  }, [sujo]);
+
+  useEffect(() => {
+    const aoVoltar = () => {
+      if (!entradaExtra.current) return;
+
+      if (!sujoAgora.current) {
+        entradaExtra.current = false;
+        window.history.back();
+
+        return;
+      }
+
+      window.history.pushState(null, '', window.location.href);
+      setSaida({ para: 'voltar' });
+    };
+
+    window.addEventListener('popstate', aoVoltar);
+
+    return () => window.removeEventListener('popstate', aoVoltar);
+  }, []);
 
   const gravar = async (acao: Intencao) => {
     const enviado = post;
@@ -231,7 +275,18 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
   const aoNavegar = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     if (!sujo) return;
     e.preventDefault();
-    setSaida(href);
+    setSaida({ para: 'link', href });
+  };
+
+  const sair = (destino: Saida) => {
+    if (destino.para === 'link') {
+      router.push(destino.href);
+
+      return;
+    }
+
+    entradaExtra.current = false;
+    window.history.go(-2);
   };
 
   const salvarESair = async () => {
@@ -239,7 +294,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
 
     setSaida(null);
 
-    if (destinoSaida && (await gravar('salvar'))) router.push(destinoSaida);
+    if (destinoSaida && (await gravar('salvar'))) sair(destinoSaida);
   };
 
   const inserir = (tipo: TipoBloco, destino: Destino) =>
@@ -481,7 +536,7 @@ export function EditorBlog({ inicial, totalPosts }: Props) {
               variant='outline'
               className={classeBotaoContorno}
               onClick={() => {
-                if (saida) router.push(saida);
+                if (saida) sair(saida);
                 setSaida(null);
               }}>
               Sair sem salvar
