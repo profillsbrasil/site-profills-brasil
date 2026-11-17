@@ -9,7 +9,7 @@ import {
   useTransition
 } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -125,9 +125,71 @@ type Props = {
   /** null no post novo, que ganha slug na primeira gravação. */
   inicial: PostGuardado | null;
   totais: TotaisLateral;
+  /** Avisa a página de /novo, antes da troca, que a URL passa a ser a do post criado aqui. */
+  aoTrocarEndereco?: (endereco: string) => void;
 };
 
-export function EditorBlog({ inicial, totais }: Props) {
+const ENDERECO_NOVO = '/admin/blog/novo';
+
+/**
+ * A página /admin/blog/novo. A primeira gravação troca a URL pela do post sem
+ * trocar a rota, para não remontar o editor, e a entrada do histórico fica com
+ * a URL do post e a árvore de /novo. Por isso o roteador mostra esta página em
+ * URLs que não são a do editor montado: o voltar ou o avançar até a entrada de
+ * um post salvo aqui, e o link "Novo post" depois de salvar.
+ *
+ * A URL manda. Ao chegar em /novo o editor recomeça vazio; na URL de um post
+ * que o editor montado não criou, a página troca a rota pela do post, na mesma
+ * entrada do histórico.
+ */
+export function EditorPostNovo({ totais }: { totais: TotaisLateral }) {
+  const router = useRouter();
+  const endereco = usePathname();
+  const [visto, setVisto] = useState(endereco);
+  const [visita, setVisita] = useState(0);
+  const [criado, setCriado] = useState<string | null>(null);
+  const pedido = useRef<string | null>(null);
+
+  if (endereco !== visto) {
+    setVisto(endereco);
+
+    if (endereco === ENDERECO_NOVO) {
+      setVisita(visita + 1);
+      setCriado(null);
+    }
+  }
+
+  const trocando = endereco !== ENDERECO_NOVO && endereco !== criado;
+
+  useEffect(() => {
+    if (!trocando || pedido.current === endereco) return;
+
+    pedido.current = endereco;
+    router.replace(endereco);
+  }, [trocando, endereco, router]);
+
+  if (trocando) {
+    return (
+      <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
+        <Lateral atual='editor' totais={totais} />
+        <div aria-busy='true' className='my-2 mr-2 rounded-xs bg-[#f3f4f6]' />
+      </div>
+    );
+  }
+
+  // O setCriado sai antes do replaceState do editor, e o roteador do Next só
+  // muda o usePathname numa transição: a URL nova nunca chega aqui antes dele.
+  return (
+    <EditorBlog
+      key={visita}
+      inicial={null}
+      totais={totais}
+      aoTrocarEndereco={setCriado}
+    />
+  );
+}
+
+export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
   const router = useRouter();
 
   const [post, dispatch] = useReducer(
@@ -244,7 +306,10 @@ export function EditorBlog({ inicial, totais }: Props) {
     const { guardado } = resultado;
 
     if (!gravacao) {
-      window.history.replaceState(null, '', `/admin/blog/${guardado.slug}`);
+      const endereco = `/admin/blog/${guardado.slug}`;
+
+      aoTrocarEndereco?.(endereco);
+      window.history.replaceState(null, '', endereco);
     }
 
     setGravacao(guardado);
