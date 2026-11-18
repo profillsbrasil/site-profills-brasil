@@ -11,9 +11,6 @@ vi.mock('next/image', () => ({
   default: 'img'
 }));
 
-// embla-carousel lê matchMedia e ResizeObserver (ausentes no jsdom) para
-// configurar breakpoints e medir slides; mesmo stub de matchMedia usado em
-// cardsGridMaquinas.test.tsx.
 vi.stubGlobal('matchMedia', () => ({
   matches: false,
   media: '',
@@ -43,9 +40,7 @@ describe('Relacionadas', () => {
 
     const links = container.querySelectorAll('a');
     expect(links.length).toBe(esperado.length);
-    expect(esperado.length).toBeGreaterThan(3); // o carrossel tem o que deslizar
-    // mesma categoria (Stand-up pouch) abre a fila, rankeada por embalagem
-    // em comum + capacidade próxima
+    expect(esperado.length).toBeGreaterThan(3);
     expect(screen.getByText('Linha Pouch')).toBeInTheDocument();
     expect(screen.getByText('Linha Pouch Mini')).toBeInTheDocument();
     expect(screen.getByText('Linha Pouch Compacta')).toBeInTheDocument();
@@ -58,16 +53,12 @@ describe('Relacionadas', () => {
       expect(primeiros).toContain(`/maquinas/${m.slug}`);
     }
 
-    // nunca lista a própria máquina
     expect(
       container.querySelector(`a[href='/maquinas/${piloto.slug}']`)
     ).toBeNull();
   });
 
   it('máquina isolada (pool natural vazio) ganha a fileira mínima por complemento', () => {
-    // categoria onde só a Lavadora vive + zero embalagens em comum: pool
-    // ranqueado vazio — antes o bloco sumia; agora o complemento garante a
-    // fileira cheia do carrossel
     const sozinha: MaquinaCatalogo = {
       ...piloto,
       slug: 'maquina-lavagem-galoes',
@@ -77,7 +68,6 @@ describe('Relacionadas', () => {
 
     const { container } = render(<Relacionadas maquina={sozinha} />);
     expect(container.querySelectorAll('a').length).toBe(8);
-    // nunca ela mesma
     expect(
       container.querySelector(`a[href='/maquinas/maquina-lavagem-galoes']`)
     ).toBeNull();
@@ -120,7 +110,6 @@ describe('Relacionadas', () => {
       maquinasCatalogo.push(semFoto);
       const { container } = render(<Relacionadas maquina={piloto} />);
       expect(screen.queryByText('Máquina Sem Foto')).toBeNull();
-      // a fake sem foto não entra nem muda o tamanho do pool real
       expect(container.querySelectorAll('a').length).toBe(esperadoSemFake);
       expect(screen.getByText('Linha Pouch Compacta')).toBeInTheDocument();
     });

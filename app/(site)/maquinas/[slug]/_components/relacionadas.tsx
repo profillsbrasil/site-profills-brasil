@@ -12,14 +12,9 @@ import {
 import { type MaquinaCatalogo, maquinasCatalogo } from '@/lib/data/maquinas';
 import { getMaquinasRelacionadas } from '@/lib/data/maquinas/relacionadas';
 
-/* Setas-chip do carrossel: tracejado em repouso, accent no hover —
-   mesma gramática dos filtros da listagem. `static` desarma o
-   posicionamento absoluto default do shadcn. */
 const setaCarrossel =
   'static size-8 translate-y-0 rounded-xs border-dashed border-[rgba(148,178,235,0.4)] bg-transparent text-accent hover:border-solid hover:border-accent hover:bg-accent/10 hover:text-accent disabled:opacity-40';
 
-/* Fileira sempre cheia: com menos que isso o carrossel fica "magro" —
-   a vista desktop mostra ~3.3 cards, 8 garante deslize de verdade */
 const MINIMO_CARROSSEL = 8;
 
 export function Relacionadas({ maquina }: { maquina: MaquinaCatalogo }) {
@@ -42,8 +37,6 @@ export function Relacionadas({ maquina }: { maquina: MaquinaCatalogo }) {
               <CarouselNext className={setaCarrossel} />
             </div>
           </div>
-          {/* Trilho full-bleed de verdade: o 1º card nasce colado na borda
-              esquerda da página e a fileira corre até a direita */}
           <CarouselContent>
             {relacionadas.map((m) => (
               <CarouselItem

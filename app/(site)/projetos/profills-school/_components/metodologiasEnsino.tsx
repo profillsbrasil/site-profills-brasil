@@ -70,7 +70,6 @@ export default function MetodologiasEnsino() {
           </p>
         </div>
 
-        {/* Methodologies Grid */}
         <div className='mb-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
           {metodologias.map((metodologia, index) => {
             const IconComponent = metodologia.icon;

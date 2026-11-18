@@ -8,9 +8,6 @@ vi.mock('next/image', () => ({
   default: 'img'
 }));
 
-// embla-carousel lê matchMedia e ResizeObserver (ausentes no jsdom) para
-// configurar breakpoints e medir slides; mesmo stub de matchMedia usado em
-// lucide-social-regression.test.ts.
 vi.stubGlobal('matchMedia', () => ({
   matches: false,
   media: '',

@@ -7,8 +7,8 @@ import MaquinaCard from './maquinaCard';
 
 interface CardMaquinaProps {
   maquinas?: MaquinaCatalogo[];
-  filterKey?: string; // Chave para forçar re-renderização quando filtros mudam
-  filtersApplied?: boolean; // Indica se os filtros foram aplicados da URL
+  filterKey?: string;
+  filtersApplied?: boolean;
 }
 
 export default function CardMaquina({

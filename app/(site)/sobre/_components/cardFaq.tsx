@@ -67,7 +67,6 @@ export const faqQuestoes: FAQ[] = [
     ]
   },
 
-  // Perguntas extras úteis
   {
     pergunta: 'Vocês fazem instalação e treinamento?',
     resposta:
@@ -177,7 +176,6 @@ export default function CardFaq() {
             <h3 className='text-base font-semibold md:text-lg'>
               Não encontrou o que precisa?
             </h3>
-            {/* TODO: Adicionar link whatsapp */}
             <Link className='cursor-pointer' href='#'>
               <Button
                 variant='outline'

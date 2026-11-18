@@ -123,7 +123,6 @@ const MarqueeCard = ({
   description: string;
 }) => {
   return (
-    // Placa técnica: mesma linguagem dos cards de "Como podemos ajudar"
     <div className='relative z-10 h-full w-52 rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-4 transition-colors duration-300 hover:border-solid hover:border-accent hover:bg-slate-900/85 md:w-64 md:p-5'>
       <span
         aria-hidden

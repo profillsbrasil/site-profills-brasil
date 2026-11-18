@@ -76,7 +76,6 @@ export default function Instituicao() {
         </div>
       </BlurFade>
 
-      {/* Impact Numbers */}
       <BlurFade delay={0.2} inView>
         <div className='mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 md:mt-8 md:grid-cols-3 md:gap-8'>
           <div className='flex flex-col items-center justify-center rounded-xs border border-gray-200 bg-white py-3 text-center shadow-md backdrop-blur-sm'>

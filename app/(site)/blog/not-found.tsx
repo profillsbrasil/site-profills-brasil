@@ -6,7 +6,6 @@ import {
   classeWrap
 } from './_components/pagina-blog';
 
-// Sem este arquivo, o notFound() cairia no app/not-found.tsx, que redireciona para a home: post despublicado tem que dar 404.
 export default function PostNaoEncontrado() {
   return (
     <PaginaBlog tela='leitura'>

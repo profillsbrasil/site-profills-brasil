@@ -13,7 +13,6 @@ export default function CtaMonteSuaFabrica() {
     <div className='mx-auto w-full max-w-6xl px-4 py-10'>
       <BlurFade delay={0.1} inView className='w-full'>
         <div className='flex flex-col items-center gap-8 md:flex-row md:gap-10'>
-          {/* Ilustração livre sobre o grid, flutuando como a embalagem do hero */}
           <div className='w-3/5 max-w-[360px] flex-none md:w-2/5 md:self-center'>
             <Image
               src={CollabBro}
@@ -23,7 +22,6 @@ export default function CtaMonteSuaFabrica() {
             />
           </div>
 
-          {/* Placa técnica com cantoneiras accent */}
           <div className='relative flex w-full flex-1 flex-col justify-center gap-4 rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-8 transition-colors duration-300 hover:border-solid hover:border-accent hover:bg-slate-900/85 md:p-10'>
             <span
               aria-hidden

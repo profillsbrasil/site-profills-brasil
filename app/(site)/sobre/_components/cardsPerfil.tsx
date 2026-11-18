@@ -14,7 +14,6 @@ export default function CardsPerfil() {
       </div>
 
       <div className='flex w-full flex-col gap-4 md:flex-row md:gap-6'>
-        {/* Card 1 - Inovação e Tecnologia 4.0 */}
         <EntradaTopo ordem={1} className='w-full md:w-1/3'>
           <div className='group bg-background relative flex h-full w-full flex-col overflow-hidden border border-dashed border-black/40 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-6'>
             <div className='flex flex-col items-start gap-4'>
@@ -47,7 +46,6 @@ export default function CardsPerfil() {
           </div>
         </EntradaTopo>
 
-        {/* Card 2 - Qualidade e Certificações Internacionais */}
         <EntradaTopo ordem={2} className='w-full md:w-1/3'>
           <div className='group bg-background relative flex h-full w-full flex-col overflow-hidden border border-dashed border-black/40 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-6'>
             <div className='flex flex-col items-start gap-4'>
@@ -80,7 +78,6 @@ export default function CardsPerfil() {
           </div>
         </EntradaTopo>
 
-        {/* Card 3 - Experiência e Alcance Nacional */}
         <EntradaTopo ordem={3} className='w-full md:w-1/3'>
           <div className='group bg-background relative flex h-full w-full flex-col overflow-hidden border border-dashed border-black/40 p-4 shadow-xl shadow-black/10 transition-all duration-300 hover:shadow-2xl md:p-6'>
             <div className='flex flex-col items-start gap-4'>

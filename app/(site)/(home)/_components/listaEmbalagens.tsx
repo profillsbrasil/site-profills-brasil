@@ -109,7 +109,6 @@ export default function ListaEmbalagens() {
   return (
     <section className='relative z-10 px-4 py-10'>
       <div className='mx-auto max-w-6xl'>
-        {/* Header Section */}
         <div className='items-left mb-6 flex flex-col text-left md:mb-5'>
           <TextAnimate
             animation='blurInUp'
@@ -126,11 +125,9 @@ export default function ListaEmbalagens() {
           </p>
         </div>
 
-        {/* Benefits listaDeEmbalagens */}
         <AnimatedContainer delay={0.3}>
           <div className='mb-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5'>
             {listaDeEmbalagens.map((card, index) => (
-              // Moldura blueprint: 3D no quadro tracejado com cantoneiras accent
               <div
                 key={index}
                 className='group flex h-full w-full cursor-pointer flex-col'>

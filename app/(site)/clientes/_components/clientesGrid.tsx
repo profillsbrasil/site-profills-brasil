@@ -11,7 +11,6 @@ import SearchToggle from './searchToggle';
 
 const CHUNK_SIZE = 12;
 
-// Três linhas da grade de 3 colunas no desktop e quatro e meia de 2 no mobile (390 px)
 const LOGOS_NA_PRIMEIRA_DOBRA = 9;
 
 export default function ClientesGrid() {
@@ -30,8 +29,6 @@ export default function ClientesGrid() {
     );
   }, [query]);
 
-  // Query nova reinicia a paginação. Ajuste de estado durante o render em
-  // vez de effect: evita um render extra com a contagem antiga.
   const [queryAnterior, setQueryAnterior] = useState(query);
 
   if (query !== queryAnterior) {

@@ -20,13 +20,9 @@ export default function ProfillsHub() {
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-16'>
       <GridPattern />
 
-      {/* Hero Section */}
       <Hero />
-      {/* Global Expansion Section */}
       <ExpansaoGlobal />
-      {/* Supply Chain Section */}
       <CadeiaSuprimentos />
-      {/* Integrated Solutions Section */}
       <SolucoesIntegradas />
     </div>
   );

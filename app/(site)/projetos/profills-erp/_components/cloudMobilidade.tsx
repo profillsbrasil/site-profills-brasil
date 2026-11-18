@@ -5,7 +5,6 @@ export default function CloudMobilidade() {
     <section
       aria-labelledby='titulo-cloud'
       className='flex h-full w-full max-w-6xl flex-col items-center justify-center gap-8 py-8 md:gap-16 md:py-10'>
-      {/* Final Call to Action */}
       <AnimatedContainer className='w-full'>
         <div className='rounded-xs bg-slate-900 p-6 text-center text-white shadow-xl md:p-8'>
           <h3 className='decoration-accent mb-4 text-2xl font-bold underline underline-offset-4 md:text-3xl'>

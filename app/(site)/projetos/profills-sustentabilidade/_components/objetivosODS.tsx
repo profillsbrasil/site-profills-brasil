@@ -80,7 +80,6 @@ export default function ObjetivosODS() {
         </div>
       </BlurFade>
 
-      {/* ODS Grid - Simples e Limpo */}
       <BlurFade delay={0.2} inView>
         <div className='w-full'>
           <div className='grid grid-cols-3 justify-items-center gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4'>
@@ -97,7 +96,6 @@ export default function ObjetivosODS() {
         </div>
       </BlurFade>
 
-      {/* Estatísticas da Agenda 2030 */}
       <BlurFade delay={0.3} inView>
         <div className='w-full'>
           <div className='rounded-xs border border-indigo-200 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-8'>

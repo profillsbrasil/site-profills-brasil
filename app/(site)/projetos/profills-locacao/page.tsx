@@ -19,11 +19,8 @@ export default function ProfillsLocacao() {
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-16'>
       <GridPattern />
 
-      {/* Hero Section */}
       <Hero />
-      {/* Service Section */}
       <ServicoAssinatura />
-      {/* Benefits Section */}
       <BeneficiosModelo />
     </div>
   );

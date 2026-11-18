@@ -32,8 +32,6 @@ const HomeContent = () => {
       <div className='mx-auto flex h-full w-full flex-col items-center justify-center overflow-x-hidden'>
         <GridPattern />
         <Gt3000 />
-        {/* Faixas elevadas: um tom acima do navy base + separadores tracejados,
-            criando o ritmo claro↔escuro entre as seções */}
         <div className='w-full border-y border-dashed border-[rgba(148,178,235,0.22)] bg-[oklch(0.2380_0.0430_266)]'>
           <CtaAjudarEmpresa />
         </div>

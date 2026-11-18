@@ -27,9 +27,7 @@ export default function ExpansaoGlobal() {
         </div>
       </BlurFade>
 
-      {/* Map-like Layout */}
       <div className='grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12'>
-        {/* Brasil */}
         <AnimatedContainer>
           <div className='rounded-xs border border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>
@@ -90,7 +88,6 @@ export default function ExpansaoGlobal() {
           </div>
         </AnimatedContainer>
 
-        {/* Internacional */}
         <AnimatedContainer>
           <div className='h-full rounded-xs border border-[#2d62ef]/20 bg-gradient-to-br from-[#2d62ef]/10 to-blue-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>
@@ -165,7 +162,6 @@ export default function ExpansaoGlobal() {
         </AnimatedContainer>
       </div>
 
-      {/* Impact Stats */}
       <AnimatedContainer className='w-full'>
         <div className='mx-auto grid max-w-6xl grid-cols-2 gap-4 md:grid-cols-4 md:gap-6'>
           <div className='rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-sm'>

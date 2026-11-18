@@ -19,7 +19,6 @@ vi.mock('next/navigation', () => ({
   })
 }));
 
-// Padrão do repo: next/image não roda no jsdom.
 vi.mock('next/image', () => ({ default: 'img' }));
 
 vi.mock('../_components/fundo-blog', () => ({ FundoBlog: () => null }));

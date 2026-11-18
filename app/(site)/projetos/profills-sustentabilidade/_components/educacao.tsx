@@ -30,7 +30,6 @@ export default function Educacao() {
       </BlurFade>
 
       <div className='grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-10'>
-        {/* Nossa Filosofia */}
         <AnimatedContainer className='flex h-full w-full'>
           <div className='flex h-full w-full flex-col rounded-xs border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>
@@ -72,7 +71,6 @@ export default function Educacao() {
           </div>
         </AnimatedContainer>
 
-        {/* Profills School */}
         <AnimatedContainer className='flex h-full w-full'>
           <div className='h-full w-full rounded-xs border border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>
@@ -116,10 +114,8 @@ export default function Educacao() {
         </AnimatedContainer>
       </div>
 
-      {/* Público Alvo e Temas */}
       <AnimatedContainer className='w-full'>
         <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-8'>
-          {/* Público Alvo */}
           <div className='w-full rounded-xs border border-purple-200 bg-gradient-to-br from-purple-50 to-violet-100 p-6'>
             <div className='mb-6 flex items-center gap-3'>
               <Users className='h-6 w-6 text-purple-600' />
@@ -152,7 +148,6 @@ export default function Educacao() {
             </div>
           </div>
 
-          {/* Temas */}
           <div className='w-full rounded-xs border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-100 p-6'>
             <div className='mb-6 flex items-center gap-3'>
               <Globe className='h-6 w-6 text-amber-600' />
@@ -183,7 +178,6 @@ export default function Educacao() {
         </div>
       </AnimatedContainer>
 
-      {/* Impacto Educacional */}
       <AnimatedContainer className='w-full'>
         <div className='rounded-xs border border-indigo-200 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 p-8 text-center'>
           <h3 className='mb-4 text-2xl font-bold text-gray-800'>

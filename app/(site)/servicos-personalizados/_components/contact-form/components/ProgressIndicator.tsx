@@ -25,7 +25,6 @@ export function ProgressIndicator({
         />
       ))}
 
-      {/* Barra de progresso animada */}
       <m.div
         initial={{ width: '12px' }}
         animate={{

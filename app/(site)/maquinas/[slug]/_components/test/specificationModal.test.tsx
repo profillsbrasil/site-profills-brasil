@@ -9,7 +9,6 @@ vi.mock('@/lib/analytics/indicacao', () => ({
   registrarLeadIndicacao: vi.fn()
 }));
 
-/** Preenche e envia o formulário do modal. */
 async function enviarFormulario() {
   const user = userEvent.setup();
   render(

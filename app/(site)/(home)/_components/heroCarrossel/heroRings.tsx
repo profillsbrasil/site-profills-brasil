@@ -13,13 +13,10 @@ export function HeroRings({ estatico = false, pingKey = 0 }: HeroRingsProps) {
       aria-hidden='true'
       data-testid='hero-rings'
       className='absolute inset-0 grid place-items-center'>
-      {/* glow central */}
       <span className='absolute aspect-square h-[66%] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.16)_0%,transparent_65%)] blur-[8px]' />
-      {/* anéis estáticos */}
       <span className='absolute aspect-square h-[104%] rounded-full border border-[rgba(148,178,235,0.06)]' />
       <span className='absolute aspect-square h-[86%] rounded-full border border-[rgba(148,178,235,0.14)]' />
       <span className='absolute aspect-square h-[64%] rounded-full border border-[rgba(148,178,235,0.10)]' />
-      {/* anéis tracejados girando (ecoam as caixas tracejadas do site) */}
       <span
         className={cn(
           'absolute aspect-square h-[75%] rounded-full border border-dashed border-[rgba(96,148,246,0.35)]',

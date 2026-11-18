@@ -10,7 +10,6 @@ import * as m from 'motion/react-m';
 
 const EASE_ENTRADA = [0.19, 1, 0.22, 1] as const;
 
-/** Variants dinâmicas: `custom` vem do AnimatePresence (evita direção presa no último render) */
 const drift: Variants = {
   inicial: (direcao: number) => ({ opacity: 0, x: 26 * direcao, scale: 1.03 }),
   entrar: {
@@ -45,10 +44,7 @@ export function HeroSlideStage({
 }: HeroSlideStageProps) {
   const conteudo = (
     <>
-      {/* sombra elíptica no "chão" */}
       <span className='absolute bottom-[2%] left-1/2 h-7 w-[64%] -translate-x-1/2 bg-[radial-gradient(50%_100%_at_50%_50%,rgba(2,6,23,0.55),transparent_75%)]' />
-      {/* Máquina ABSOLUTA: a largura natural do PNG não participa do cálculo
-         do grid — sem isso a coluna de texto é esmagada (causa raiz mapeada no mockup) */}
       <Image
         src={slide.imgMaquina}
         alt={`Envasadora ${slide.nome}`}

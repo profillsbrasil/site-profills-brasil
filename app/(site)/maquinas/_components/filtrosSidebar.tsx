@@ -17,8 +17,6 @@ import { cn } from '@/lib/utils';
 
 import { Layers, Search, SlidersHorizontal, X } from 'lucide-react';
 
-/* Chip de filtro da Prancheta Industrial: tracejado em repouso,
-   sólido accent quando ativo (mesma gramática das setas do hero) */
 export function chipFiltro(ativo: boolean) {
   return cn(
     'z-11 rounded-xs border text-xs transition-colors md:text-sm',
@@ -53,8 +51,6 @@ function temFiltroAtivo({
   );
 }
 
-/* Campo de busca da placa: lupa accent, tracejado em repouso e sólido no
-   foco (mesma gramática dos chips), × para limpar quando há termo. */
 function CampoBusca({
   busca,
   onBusca
@@ -86,7 +82,6 @@ function CampoBusca({
   );
 }
 
-/* Contador vivo em Geist Mono: número em accent, rótulo apagado */
 function ContadorMaquinas({ total }: { total: number }) {
   return (
     <span className='font-mono text-xs tracking-wider text-white'>
@@ -96,11 +91,6 @@ function ContadorMaquinas({ total }: { total: number }) {
   );
 }
 
-/* As duas seções de filtro — compartilhadas entre a sidebar desktop
-   e a gaveta mobile para manter uma única fonte de comportamento.
-   `denso` aperta o passo vertical no desktop (ponteiro preciso) para o
-   painel inteiro caber no viewport sem scroll interno; a gaveta mobile
-   fica com os alvos de toque maiores. */
 function SecoesFiltro(props: FiltrosProps & { denso?: boolean }) {
   const {
     categoriaFiltro,
@@ -182,7 +172,6 @@ export function FiltrosSidebar(props: FiltrosProps) {
 
   return (
     <aside className='sticky top-[4.5rem] z-10 mt-8 ml-3 hidden w-80 shrink-0 self-start md:block'>
-      {/* Placa da busca: instrumento separado, acima do console de filtros */}
       <div className='relative mb-3 rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-3'>
         <span
           aria-hidden

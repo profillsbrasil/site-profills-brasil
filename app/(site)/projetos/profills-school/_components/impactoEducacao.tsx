@@ -13,7 +13,6 @@ export default function ImpactoEducacao() {
     <section className='w-full max-w-6xl py-10'>
       <AnimatedContainer>
         <div className='grid w-full gap-12 lg:grid-cols-2'>
-          {/* Left Content - Problem & Context */}
           <div className='flex flex-col justify-center space-y-6'>
             <h2 className='text-3xl font-bold text-gray-900'>
               O Cenário do{' '}
@@ -40,7 +39,6 @@ export default function ImpactoEducacao() {
               </p>
             </div>
 
-            {/* Statistics */}
             <div className='mt-8 grid grid-cols-2 gap-4'>
               <div className='rounded-xs bg-red-50 p-4 text-center'>
                 <Users className='mx-auto mb-2 h-8 w-8 text-red-600' />
@@ -59,7 +57,6 @@ export default function ImpactoEducacao() {
             </div>
           </div>
 
-          {/* Right Content - Educational Impact */}
           <div className='grid gap-4 sm:grid-cols-1'>
             <div className='rounded-xs border border-blue-500/30 bg-blue-50 p-6'>
               <div className='flex items-start space-x-4'>

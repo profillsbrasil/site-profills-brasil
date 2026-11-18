@@ -71,7 +71,6 @@ export default function SolucaoMarketplace() {
           </p>
         </div>
 
-        {/* Benefits Grid */}
         <div className='mb-12 grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3'>
           {solucoes.map((solucao, index) => {
             const IconComponent = solucao.icon;
@@ -93,7 +92,6 @@ export default function SolucaoMarketplace() {
           })}
         </div>
 
-        {/* Process Flow */}
         <div className='p-8'>
           <h3 className='mb-8 text-center text-xl font-bold text-gray-900 md:text-2xl'>
             Como Funciona o Marketplace
@@ -146,7 +144,6 @@ export default function SolucaoMarketplace() {
           </div>
         </div>
 
-        {/* Call to Action */}
         <div className='mt-12 rounded-xs bg-slate-900 p-8 text-center text-white'>
           <h3 className='decoration-accent mb-4 text-xl font-bold underline underline-offset-4 md:text-2xl'>
             Mais que Compra e Venda

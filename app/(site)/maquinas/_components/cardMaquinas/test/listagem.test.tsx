@@ -10,8 +10,6 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/maquinas'
 }));
 
-// Padrão sancionado do repo (ver relacionadas.test.tsx): next/image não roda
-// em jsdom, mock reduz para uma tag <img> simples.
 vi.mock('next/image', () => ({
   default: 'img'
 }));
