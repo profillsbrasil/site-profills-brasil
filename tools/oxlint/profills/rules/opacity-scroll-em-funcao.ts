@@ -50,7 +50,6 @@ export const opacityScrollEmFuncaoRule = defineRule({
       useTransform: new Set<string>()
     };
 
-    // Variáveis com o progresso do scroll e variáveis com o objeto de useScroll().
     const progresso = new Set<Variable>();
     const objetoScroll = new Set<Variable>();
     const transformsArray = new Set<Variable>();
