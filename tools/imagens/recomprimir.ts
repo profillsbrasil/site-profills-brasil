@@ -12,12 +12,18 @@ const LARGURAS_COMPARADAS = [1920, LARGURA_MAXIMA];
 const GANHO_MINIMO = 0.1;
 const REVISAR_ACIMA_DE_BYTES = 400 * 1024;
 
-// O mesmo pipeline do optimizeImage do Next 16 (node_modules/next/dist/server/image-optimizer.js) na qualidade padrão 75.
+const QUALIDADE_PADRAO = 75;
+
+// O mesmo pipeline do optimizeImage do Next 16.4 (node_modules/next/dist/server/image-optimizer/transform.js) na qualidade padrão.
 const DERIVADOS = [
-  { formato: 'webp', codificar: (i: Sharp) => i.webp({ quality: 75 }) },
+  {
+    formato: 'webp',
+    codificar: (i: Sharp) => i.webp({ quality: QUALIDADE_PADRAO })
+  },
   {
     formato: 'avif',
-    codificar: (i: Sharp) => i.avif({ quality: 55, effort: 3 })
+    codificar: (i: Sharp) =>
+      i.avif({ quality: Math.round(QUALIDADE_PADRAO * (50 / 80)), effort: 3 })
   }
 ];
 
