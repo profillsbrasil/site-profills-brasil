@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { ErroBlog, MOTIVO_SEM_SESSAO, motivosImagem } from '@/lib/blog/erro';
 import {
   type EntradaEditor,

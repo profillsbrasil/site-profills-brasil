@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { criarArmazemDisco } from '@/lib/armazem/armazem';
 import { abrirPglite } from '@/lib/banco/pglite';
 import type { Consulta } from '@/lib/banco/tipos';

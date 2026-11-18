@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { lerPublicado } from './leitura';
 import { repositorioBlog } from './repositorio';
 import { describe, expect, it, vi } from 'vitest';

@@ -1,4 +1,3 @@
-// @vitest-environment node
 import {
   ABAS_DO_CELULAR,
   abaAtual,

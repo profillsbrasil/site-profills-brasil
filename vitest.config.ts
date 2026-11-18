@@ -1,6 +1,9 @@
 import path from 'path';
 import { configDefaults, defineConfig } from 'vitest/config';
 
+const fora = [...configDefaults.exclude, '.claude/worktrees/**'];
+const testesNode = '**/*.node.test.ts';
+
 export default defineConfig({
   css: {
     postcss: {
@@ -19,10 +22,28 @@ export default defineConfig({
     }
   },
   test: {
-    environment: 'jsdom',
     // Os worktrees de agentes são cópias do repo em outra branch: os testes deles não são deste checkout.
-    exclude: [...configDefaults.exclude, '.claude/worktrees/**'],
+    exclude: fora,
     globals: true,
-    setupFiles: ['./vitest.setup.ts']
+    setupFiles: ['./vitest.setup.ts'],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'jsdom',
+          environment: 'jsdom',
+          exclude: [...fora, testesNode]
+        }
+      },
+      {
+        extends: true,
+        test: {
+          name: 'node',
+          environment: 'node',
+          include: [testesNode],
+          exclude: fora
+        }
+      }
+    ]
   }
 });

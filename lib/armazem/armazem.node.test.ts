@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { ErroConfiguracao } from '@/lib/utils/erro-configuracao';
 import {
   BucketAlreadyExists,

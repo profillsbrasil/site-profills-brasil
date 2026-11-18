@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { MOTIVO_SEM_SESSAO } from '@/lib/blog/erro';
 
 import { readFile, readdir } from 'node:fs/promises';

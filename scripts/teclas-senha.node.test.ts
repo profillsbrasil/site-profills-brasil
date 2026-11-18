@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { TAMANHO_MINIMO_SENHA } from '../lib/admin/senha.mjs';
 import { digitar, linhaDaSenha } from './teclas-senha.mjs';
 import { describe, expect, it } from 'vitest';

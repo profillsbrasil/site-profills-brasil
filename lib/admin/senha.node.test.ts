@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { conferirSenha, hashSenha, hashValido } from './senha.mjs';
 import { describe, expect, it } from 'vitest';
 

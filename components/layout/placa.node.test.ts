@@ -1,4 +1,3 @@
-// @vitest-environment node
 import {
   CLIQUE_IGNORA_MS,
   type EstadoPlaca,

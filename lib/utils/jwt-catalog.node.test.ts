@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { signCatalogToken, verifyCatalogToken } from './jwt-catalog';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 

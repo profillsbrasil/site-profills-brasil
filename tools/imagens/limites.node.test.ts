@@ -1,4 +1,3 @@
-// @vitest-environment node
 import {
   EXCECOES,
   LARGURA_MAXIMA,

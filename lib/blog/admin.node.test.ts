@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { abrirAdminBlog } from './admin';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
