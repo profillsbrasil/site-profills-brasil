@@ -33,7 +33,7 @@ export function getMaquinasRelacionadas(
   maquina: MaquinaCatalogo,
   todas: MaquinaCatalogo[],
   opcoes: { limite?: number; minimo?: number } = {}
-): MaquinaRelacionada[] {
+) {
   const { limite, minimo } = opcoes;
 
   const candidatas = todas.filter(
@@ -41,7 +41,7 @@ export function getMaquinasRelacionadas(
       m.slug !== maquina.slug && m.imagens !== undefined
   );
 
-  const ordenar = <T extends MaquinaCatalogo>(lista: T[]): T[] =>
+  const ordenar = <T extends MaquinaCatalogo>(lista: T[]) =>
     lista
       .map((m, i) => ({
         m,

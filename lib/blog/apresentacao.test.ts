@@ -17,23 +17,25 @@ const resumo = (
   assunto: ResumoPublicado['assunto'],
   publicadoEm: string,
   capa: string | null = null
-): ResumoPublicado => ({
-  slug,
-  assunto,
-  publicadoEm,
-  atualizadoEm: publicadoEm,
-  capa,
-  titulo: slug,
-  resumo: ''
-});
+) =>
+  ({
+    slug,
+    assunto,
+    publicadoEm,
+    atualizadoEm: publicadoEm,
+    capa,
+    titulo: slug,
+    resumo: ''
+  }) satisfies ResumoPublicado;
 
-const post = (linhas: Post['linhas']): Post => ({
-  assunto: 'maquina',
-  titulo: 'Título',
-  resumo: 'Resumo',
-  capa: null,
-  linhas
-});
+const post = (linhas: Post['linhas']) =>
+  ({
+    assunto: 'maquina',
+    titulo: 'Título',
+    resumo: 'Resumo',
+    capa: null,
+    linhas
+  }) satisfies Post;
 
 describe('dataCurta', () => {
   it('formata no fuso de Brasília', () => {
@@ -178,17 +180,15 @@ describe('tamanhoDoArquivo', () => {
 });
 
 describe('agruparPorAssunto', () => {
-  const resumoAdmin = (
-    slug: string,
-    assunto: ResumoAdmin['assunto']
-  ): ResumoAdmin => ({
-    slug,
-    versao: 1,
-    assunto,
-    titulo: slug,
-    estado: 'rascunho',
-    atualizadoEm: '2026-11-17T12:00:00.000Z'
-  });
+  const resumoAdmin = (slug: string, assunto: ResumoAdmin['assunto']) =>
+    ({
+      slug,
+      versao: 1,
+      assunto,
+      titulo: slug,
+      estado: 'rascunho',
+      atualizadoEm: '2026-11-17T12:00:00.000Z'
+    }) satisfies ResumoAdmin;
 
   it('devolve os seis assuntos na ordem do registry, inclusive os vazios', () => {
     const grupos = agruparPorAssunto([

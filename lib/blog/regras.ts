@@ -55,7 +55,7 @@ export function transicao(
   intencao: Intencao,
   agora: string,
   slug: string
-): PostGuardado {
+) {
   const base = {
     slug,
     versao: (atual?.versao ?? 0) + 1,
@@ -69,6 +69,14 @@ export function transicao(
     (intencao === 'salvar' && atual?.estado === 'publicado');
 
   return publicado
-    ? { ...base, estado: 'publicado', publicadoEm: atual?.publicadoEm ?? agora }
-    : { ...base, estado: 'rascunho', publicadoEm: null };
+    ? ({
+        ...base,
+        estado: 'publicado',
+        publicadoEm: atual?.publicadoEm ?? agora
+      } satisfies PostGuardado)
+    : ({
+        ...base,
+        estado: 'rascunho',
+        publicadoEm: null
+      } satisfies PostGuardado);
 }

@@ -11,13 +11,13 @@ const ESCAPES = new Map([
  * placeholders sem escapar nada, então quem traz valor de fora (o nome do
  * Vendedor, vindo do CRM) passa por aqui antes.
  */
-export const escaparHtml = (valor: string): string =>
+export const escaparHtml = (valor: string) =>
   valor.replace(/[&<>"']/g, (c) => ESCAPES.get(c) ?? c);
 
 export const renderTemplate = (
   template: string,
   data: Record<string, string | string[] | undefined>
-): string => {
+) => {
   let rendered = template;
 
   const eachRegex = /\{\{#each\s+(\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g;

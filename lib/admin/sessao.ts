@@ -27,7 +27,7 @@ export type ResultadoEntrada =
 
 type ConfigAdmin = { usuario: string; hash: string; chave: Uint8Array };
 
-function configAdmin(): ConfigAdmin | null {
+function configAdmin() {
   const usuario = process.env.ADMIN_USUARIO;
   const hash = process.env.ADMIN_SENHA_HASH;
   const segredo = process.env.ADMIN_SESSAO_SEGREDO;
@@ -47,7 +47,7 @@ function configAdmin(): ConfigAdmin | null {
     .update(hash)
     .digest();
 
-  return { usuario, hash, chave: new Uint8Array(chave) };
+  return { usuario, hash, chave: new Uint8Array(chave) } satisfies ConfigAdmin;
 }
 
 /**
@@ -62,7 +62,7 @@ export function atalhoDev() {
   );
 }
 
-export async function autorAtual(): Promise<Autor | null> {
+export async function autorAtual() {
   // WARNING: ler o cookie antes de tudo; sem env no next build, a página do admin vira estática com o redirect congelado.
   const token = (await cookies()).get(COOKIE_SESSAO)?.value;
 
@@ -93,9 +93,7 @@ export type Bloqueio = { ate: Date; acabouDeFechar: boolean };
  * A janela é fixa e começa na primeira tentativa depois da anterior expirar.
  * Devolve até quando o login fica fechado, ou null quando ainda pode tentar.
  */
-export async function contarTentativa(
-  consulta: Consulta
-): Promise<Bloqueio | null> {
+export async function contarTentativa(consulta: Consulta) {
   const { rows } = await consulta(
     `insert into admin_tentativas_login as t (chave, inicio, tentativas)
      values ('global', now(), 1)
@@ -126,10 +124,7 @@ function mesmoTexto(a: string, b: string) {
   return timingSafeEqual(resumo(a), resumo(b));
 }
 
-export async function entrar(
-  usuario: string,
-  senha: string
-): Promise<ResultadoEntrada> {
+export async function entrar(usuario: string, senha: string) {
   const config = configAdmin();
 
   if (!config) {
@@ -137,7 +132,7 @@ export async function entrar(
       'Login do admin sem ADMIN_USUARIO, ADMIN_SENHA_HASH ou ADMIN_SESSAO_SEGREDO válidos.'
     );
 
-    return { tipo: 'indisponivel' };
+    return { tipo: 'indisponivel' } satisfies ResultadoEntrada;
   }
 
   let bloqueio: Bloqueio | null;
@@ -147,7 +142,7 @@ export async function entrar(
   } catch (erro) {
     logger.error('O banco não respondeu ao contar a tentativa de login.', erro);
 
-    return { tipo: 'indisponivel' };
+    return { tipo: 'indisponivel' } satisfies ResultadoEntrada;
   }
 
   if (bloqueio) {
@@ -156,13 +151,13 @@ export async function entrar(
         `Login do admin bloqueado até ${bloqueio.ate.toISOString()}: mais de ${LIMITE_TENTATIVAS} tentativas em ${JANELA_MINUTOS} minutos.`
       );
 
-    return { tipo: 'bloqueado', ate: bloqueio.ate };
+    return { tipo: 'bloqueado', ate: bloqueio.ate } satisfies ResultadoEntrada;
   }
 
   const senhaConfere = await conferirSenha(senha, config.hash);
 
   if (!senhaConfere || !mesmoTexto(usuario, config.usuario))
-    return { tipo: 'recusado' };
+    return { tipo: 'recusado' } satisfies ResultadoEntrada;
 
   try {
     await zerarTentativas(consultar);
@@ -185,7 +180,7 @@ export async function entrar(
     maxAge: DURACAO_SEGUNDOS
   });
 
-  return { tipo: 'ok' };
+  return { tipo: 'ok' } satisfies ResultadoEntrada;
 }
 
 export async function sair() {

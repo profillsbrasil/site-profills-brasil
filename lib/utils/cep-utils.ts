@@ -15,9 +15,7 @@ export interface ViaCepResponse {
 /**
  * Busca endereço através do CEP usando a API do ViaCEP
  */
-export async function fetchAddressByCep(
-  cep: string
-): Promise<ViaCepResponse | null> {
+export async function fetchAddressByCep(cep: string) {
   const cleanCep = cep.replace(/\D/g, '');
 
   if (cleanCep.length !== 8) {
@@ -50,7 +48,7 @@ export async function fetchAddressByCep(
 /**
  * Formata CEP para o padrão brasileiro (00000-000)
  */
-export function formatCep(value: string): string {
+export function formatCep(value: string) {
   const digits = value.replace(/\D/g, '');
 
   return digits.replace(/(\d{5})(\d{0,3})/, (_, first, second) => {

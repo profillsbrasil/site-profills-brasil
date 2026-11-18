@@ -18,7 +18,7 @@ export interface CatalogTokenPayload {
 export async function signCatalogToken(
   payload: CatalogTokenPayload,
   exp: string = '7d'
-): Promise<string> {
+) {
   return new SignJWT({ email: payload.email, name: payload.name })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -30,7 +30,7 @@ export type VerifyResult =
   | { ok: true; payload: CatalogTokenPayload }
   | { ok: false; reason: 'expired' | 'invalid' };
 
-export async function verifyCatalogToken(token: string): Promise<VerifyResult> {
+export async function verifyCatalogToken(token: string) {
   try {
     const { payload } = await jwtVerify(token, getSecret(), {
       algorithms: ['HS256']
@@ -42,12 +42,12 @@ export async function verifyCatalogToken(token: string): Promise<VerifyResult> {
         email: String(payload.email),
         name: String(payload.name)
       }
-    };
+    } satisfies VerifyResult;
   } catch (err) {
     if (err instanceof errors.JWTExpired) {
-      return { ok: false, reason: 'expired' };
+      return { ok: false, reason: 'expired' } satisfies VerifyResult;
     }
 
-    return { ok: false, reason: 'invalid' };
+    return { ok: false, reason: 'invalid' } satisfies VerifyResult;
   }
 }

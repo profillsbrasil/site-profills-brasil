@@ -1,7 +1,6 @@
 import {
   type Assunto,
   type Bloco,
-  type EntradaEditor,
   type Intencao,
   type Linha,
   PROPORCAO_MAXIMA,
@@ -136,7 +135,7 @@ export const entradaEditorSchema = z
     versao: versaoSchema.nullable(),
     post: postSchema
   })
-  .transform((entrada, ctx): EntradaEditor => {
+  .transform((entrada, ctx) => {
     const { slug, versao, post } = entrada;
 
     if (slug === null && versao === null) return { slug, versao, post };

@@ -1,6 +1,6 @@
 const stripDigits = (raw: string) => raw.replace(/\D/g, '');
 
-function calcCpfDigit(digits: string, factor: number): number {
+function calcCpfDigit(digits: string, factor: number) {
   let sum = 0;
 
   for (let i = 0; i < digits.length; i++) {
@@ -12,7 +12,7 @@ function calcCpfDigit(digits: string, factor: number): number {
   return mod < 2 ? 0 : 11 - mod;
 }
 
-export function isValidCPF(raw: string): boolean {
+export function isValidCPF(raw: string) {
   const cpf = stripDigits(raw);
 
   if (cpf.length !== 11) return false;
@@ -27,7 +27,7 @@ export function isValidCPF(raw: string): boolean {
 const CNPJ_W1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 const CNPJ_W2 = [6, ...CNPJ_W1];
 
-function calcCnpjDigit(digits: string, weights: number[]): number {
+function calcCnpjDigit(digits: string, weights: number[]) {
   let sum = 0;
 
   for (let i = 0; i < digits.length; i++) {
@@ -39,7 +39,7 @@ function calcCnpjDigit(digits: string, weights: number[]): number {
   return mod < 2 ? 0 : 11 - mod;
 }
 
-export function isValidCNPJ(raw: string): boolean {
+export function isValidCNPJ(raw: string) {
   const cnpj = stripDigits(raw);
 
   if (cnpj.length !== 14) return false;
@@ -51,7 +51,7 @@ export function isValidCNPJ(raw: string): boolean {
   return cnpj.endsWith(`${d1}${d2}`);
 }
 
-export function validateDocument(raw: string): boolean {
+export function validateDocument(raw: string) {
   const digits = stripDigits(raw);
 
   if (digits.length === 11) return isValidCPF(digits);

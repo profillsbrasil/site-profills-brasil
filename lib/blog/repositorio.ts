@@ -187,7 +187,7 @@ export function criarRepositorioBlog({
   consulta: Consulta;
   armazem: Armazem;
   agora?: () => Date;
-}): RepositorioBlog {
+}) {
   async function ler(slug: string) {
     const { rows } = await consulta(
       `select ${COLUNAS} from blog_posts where slug = $1`,
@@ -282,7 +282,7 @@ export function criarRepositorioBlog({
     return caminhos;
   }
 
-  async function apagarImagensDaPasta(slug: string): Promise<ImagensApagadas> {
+  async function apagarImagensDaPasta(slug: string) {
     let objetos;
 
     try {
@@ -318,7 +318,7 @@ export function criarRepositorioBlog({
     return { apagadas: chaves.length - ficaram.size, falharam: ficaram.size };
   }
 
-  return {
+  const repositorio: RepositorioBlog = {
     ler,
 
     async apagarRascunho({ slug, versao }) {
@@ -362,7 +362,7 @@ export function criarRepositorioBlog({
       );
 
       return objetos
-        .map(({ caminho, tamanho, modificadoEm }): ImagemDoArmazem => {
+        .map(({ caminho, tamanho, modificadoEm }) => {
           const [, , slug = '', arquivo = ''] = caminho.split('/');
 
           return {
@@ -373,7 +373,7 @@ export function criarRepositorioBlog({
             slug,
             tituloDoPost: titulos.get(slug) ?? null,
             uso: usos.get(caminho) ?? 'semUso'
-          };
+          } satisfies ImagemDoArmazem;
         })
         .sort(
           (a, b) =>
@@ -494,6 +494,8 @@ export function criarRepositorioBlog({
       return guardado?.estado === 'publicado' ? guardado : null;
     }
   };
+
+  return repositorio;
 }
 
 /** Imagens no bucket pelas AWS_*; no bun dev sem elas, em .dados/armazem. */

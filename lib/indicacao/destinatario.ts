@@ -18,9 +18,7 @@ export type Destinatario = {
  * Decide para quem vai o Lead: o vendedor do cookie, revalidado no CRM, ou a
  * Caixa padrão (GMAIL_USER_RECEIVER) em qualquer outro caso.
  */
-export async function resolverDestinatario(
-  request: NextRequest
-): Promise<Destinatario> {
+export async function resolverDestinatario(request: NextRequest) {
   const padrao: Destinatario = {
     para: process.env.GMAIL_USER_RECEIVER!,
     vendedor: null

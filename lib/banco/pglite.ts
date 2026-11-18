@@ -14,7 +14,7 @@ export const PASTA_MIGRACOES = path.join(
  * Postgres em WASM, já migrado, para o bun dev e os testes. Sem pasta, fica só na memória.
  * Import dinâmico: o pacote é devDependency e nunca carrega em produção.
  */
-export async function abrirPglite(pasta?: string): Promise<Consulta> {
+export async function abrirPglite(pasta?: string) {
   const { PGlite } = await import('@electric-sql/pglite');
 
   if (pasta) await mkdir(path.dirname(pasta), { recursive: true });

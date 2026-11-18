@@ -202,7 +202,7 @@ export const listaClientes: Cliente[] = [
   }
 ];
 
-export function normalizeQuery(input: string): string {
+export function normalizeQuery(input: string) {
   return input
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')

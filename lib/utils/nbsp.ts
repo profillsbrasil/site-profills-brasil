@@ -6,6 +6,6 @@ const NBSP = '\u00a0';
  * por NBSP, tornando cada composto atômico — a quebra cai nos separadores
  * de lista ("; "), onde ela é natural.
  */
-export function compostosJuntos(valor: string): string {
+export function compostosJuntos(valor: string) {
   return valor.replaceAll(' + ', `${NBSP}+${NBSP}`);
 }
