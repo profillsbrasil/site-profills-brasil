@@ -1,5 +1,3 @@
-// Pre-deploy da Railway: aplica as migrações pendentes antes do next start subir.
-// JS puro rodado por node, sem bun nem build, porque roda na imagem de runtime.
 import { migrar } from '../lib/banco/migrar.mjs';
 import { fileURLToPath } from 'node:url';
 import pg from 'pg';
@@ -16,8 +14,6 @@ const cliente = new pg.Client({
   connectionTimeoutMillis: 10_000
 });
 
-// Em 16/11/2026 um pre-deploy ficou 5 min sem saída até a Railway abortar: cada etapa avisa que
-// começou, e um prazo total encerra o processo dizendo onde parou.
 const PRAZO_MS = 120_000;
 let etapa = 'conectar ao banco';
 

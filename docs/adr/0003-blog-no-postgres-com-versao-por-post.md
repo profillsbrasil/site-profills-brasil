@@ -30,4 +30,5 @@ O blog gravava cada post num JSON em `conteudo/blog/posts/`, e o admin só exist
 - O banco passa a ser a única cópia dos posts. O backup do Postgres da Railway precisa ser conferido antes de alguém escrever post de verdade.
 - Migração só aditiva: durante o pre-deploy, o código antigo ainda roda contra o esquema novo.
 - `'novo'` vive em `SLUGS_RESERVADOS` e no `check` do SQL; um teste insere cada slug reservado direto no banco e espera a recusa.
+- Em 16/11/2026 um pre-deploy ficou 5 minutos sem saída até a Railway abortar. Desde então `scripts/banco-migrar.mjs` escreve o começo de cada etapa e encerra em 120 s dizendo em qual etapa parou.
 - O PGlite exige `serverExternalPackages` no `next.config.ts`; empacotado pelo Turbopack, o `next dev` quebra em `Can't resolve 'ws'`.
