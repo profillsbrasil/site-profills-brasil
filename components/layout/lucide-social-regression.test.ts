@@ -10,7 +10,6 @@ vi.mock('next/image', () => ({
   default: 'img'
 }));
 
-// A navbar mobile marca a página atual pelo pathname.
 vi.mock('next/navigation', () => ({ usePathname: () => '/' }));
 
 class MockIntersectionObserver {

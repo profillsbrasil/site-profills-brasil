@@ -7,7 +7,6 @@ let cached: boolean | null = null;
 export function isWebGLAvailable(): boolean {
   if (cached !== null) return cached;
 
-  // SSR: assume suporte; a detecção real roda no client e não é memoizada aqui.
   if (typeof window === 'undefined') return true;
 
   try {
@@ -15,7 +14,6 @@ export function isWebGLAvailable(): boolean {
     const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
     cached = gl !== null;
   } catch {
-    // getContext pode lançar quando WebGL está bloqueado — isso significa indisponível.
     cached = false;
   }
 

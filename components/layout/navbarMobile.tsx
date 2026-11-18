@@ -37,7 +37,6 @@ import logoBranco from '@/public/logo-branco.png';
 
 import { ArrowRight, Factory, X } from 'lucide-react';
 
-// As cores são variáveis de .nav-celular (globals.css): navy em toda rota.
 const SUAVE =
   'transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
@@ -77,7 +76,6 @@ const FOLHAS = {
   menu: ABAS_DO_CELULAR[4]
 } as const satisfies Record<IdFolha, AbaComFolha>;
 
-/** A barra fica fora da folha modal: tocar nela troca a folha em vez de fechar. */
 function naBarra(evento: Event) {
   if (
     evento.target instanceof Element &&
@@ -302,7 +300,6 @@ function Cabecalho({ titulo }: { titulo: string }) {
   );
 }
 
-/** O único jeito de um link dentro da folha: fecha ao tocar, mesmo na página atual. */
 function LinkDaFolha({
   alvo,
   className,
@@ -381,7 +378,6 @@ function CorpoMaquinas({
 }) {
   const { folhas } = menu.painel;
   const [indice, setIndice] = useState(0);
-  // A última vitrine pintada: segue à mostra até a nova carregar e decodificar.
   const [pintada, setPintada] = useState<VitrineMenu | null>(null);
   const escolhida = folhas[indice];
 
@@ -523,7 +519,6 @@ function CorpoMenu({
   );
 }
 
-/** "Profills" é o prefixo comum dos projetos: fica apagado para o nome próprio aparecer. */
 function NomeDoProjeto({ rotulo }: { rotulo: string }) {
   const [prefixo, ...resto] = rotulo.split(' ');
 

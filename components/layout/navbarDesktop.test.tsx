@@ -149,7 +149,6 @@ describe('imagens dos painéis', () => {
 });
 
 describe('vitrine de Máquinas', () => {
-  // O jsdom não decodifica imagem: o stub resolve como o navegador depois do load.
   beforeEach(() => {
     HTMLImageElement.prototype.decode = () => Promise.resolve();
   });

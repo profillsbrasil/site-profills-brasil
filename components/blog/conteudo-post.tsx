@@ -31,7 +31,6 @@ function Vazio({ children }: { children: string }) {
   return <span className='text-[#b6c5e2] italic opacity-70'>{children}</span>;
 }
 
-/** Na prévia, o texto que falta; na página, nada. */
 const falta = ({ modo }: Contexto, rotulo: string) =>
   modo === 'previa' ? <Vazio>{rotulo}</Vazio> : null;
 
@@ -113,7 +112,6 @@ function BlocoPost({ bloco, ctx }: { bloco: Bloco; ctx: Contexto }) {
             {bloco.src ? (
               <Image
                 src={bloco.src}
-                // A legenda já está no figcaption da figure; repetir no alt faria o leitor de tela ouvir o texto duas vezes.
                 alt=''
                 fill
                 sizes={
@@ -121,7 +119,6 @@ function BlocoPost({ bloco, ctx }: { bloco: Bloco; ctx: Contexto }) {
                     ? '(min-width: 800px) 360px, 100vw'
                     : '(min-width: 800px) 720px, 100vw'
                 }
-                // A prévia mostra a imagem logo depois do envio, sem esperar o otimizador.
                 unoptimized={!publico}
                 className='object-cover'
               />
@@ -139,10 +136,7 @@ function BlocoPost({ bloco, ctx }: { bloco: Bloco; ctx: Contexto }) {
       return (
         <ul className='grid list-disc gap-2 pl-5 marker:text-accent'>
           {itens.length > 0 ? (
-            itens.map((t, i) => (
-              // Itens de texto livre podem se repetir; a posição desempata.
-              <li key={`${i}-${t}`}>{t}</li>
-            ))
+            itens.map((t, i) => <li key={`${i}-${t}`}>{t}</li>)
           ) : (
             <li>{falta(ctx, 'Lista vazia')}</li>
           )}
@@ -336,7 +330,6 @@ function BlocoPost({ bloco, ctx }: { bloco: Bloco; ctx: Contexto }) {
         />
       );
 
-      // O site só entrega arquivo pelo formulário de /download (catálogo com token); o bloco leva até lá.
       return publico ? (
         <Link
           href='/download'

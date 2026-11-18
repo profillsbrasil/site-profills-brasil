@@ -9,7 +9,6 @@ import React, {
 
 import { logger } from '@/lib/utils/logger';
 
-// Context para compartilhar configurações globais dos modelos 3D
 interface ModelViewer3DContextType {
   preloadModel: (src: string) => Promise<void>;
   isModelCached: (src: string) => boolean;
@@ -31,7 +30,6 @@ export function ModelViewer3DProvider({
   maxCacheSize = 5,
   preloadImportantModels = []
 }: ModelViewer3DProviderProps) {
-  // Cache global de modelos estável entre renders
   const modelCacheRef = React.useRef<Map<string, boolean>>(new Map());
 
   const preloadModel = useCallback(
@@ -39,13 +37,11 @@ export function ModelViewer3DProvider({
       if (modelCacheRef.current.get(src)) return;
 
       try {
-        // Pré-carrega o modelo sem renderizar
         const link = document.createElement('link');
         link.rel = 'prefetch';
         link.href = src;
         document.head.appendChild(link);
 
-        // Respeita capacidade máxima do cache
         if (modelCacheRef.current.size >= maxCacheSize) {
           const oldestKey = modelCacheRef.current.keys().next().value;
 
@@ -54,7 +50,6 @@ export function ModelViewer3DProvider({
 
         modelCacheRef.current.set(src, true);
 
-        // Remove o link após um tempo para não poluir o DOM
         setTimeout(() => {
           if (document.head.contains(link)) {
             document.head.removeChild(link);
@@ -79,7 +74,6 @@ export function ModelViewer3DProvider({
     }
   }, []);
 
-  // Pré-carrega modelos importantes quando o provider é montado
   React.useEffect(() => {
     preloadImportantModels.forEach((src) => {
       void preloadModel(src);
@@ -114,7 +108,6 @@ export function useModelViewer3D() {
   return context;
 }
 
-// Hook para observar performance dos modelos 3D
 export function useModelPerformanceMonitor() {
   const logPerformance = useCallback(
     (modelSrc: string, action: string, duration?: number) => {

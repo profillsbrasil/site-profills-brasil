@@ -6,7 +6,6 @@ import { describe, expect, it } from 'vitest';
 
 const SITE = path.join(process.cwd(), 'app/(site)');
 
-/** Pathname de cada page.tsx de app/(site): grupo "(x)" some, "[slug]" fica. */
 function rotasNoDisco(): string[] {
   return readdirSync(SITE, { recursive: true, encoding: 'utf8' })
     .filter((f) => path.basename(f) === 'page.tsx')

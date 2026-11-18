@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 
 import { ModelViewerElement } from '@google/model-viewer';
 
-// Declaração local dos tipos para model-viewer
 declare global {
   interface IntrinsicElements {
     'model-viewer': React.DetailedHTMLProps<
@@ -24,7 +23,7 @@ declare global {
        * Displays an image instead of the model, useful for showing the user something before a model is loaded and ready to render.
        * If you use a poster with transparency, you may also want to set --poster-color to transparent so that the background shows through.
        */
-      poster?: string; // Display an image before model finished loading
+      poster?: string;
       /**
        * An enumerable attribute describing under what conditions the model should be preloaded. The supported values are "auto", "lazy" and "eager". Auto is equivalent to lazy, which loads the model
        * when it is near the viewport for reveal="auto", and when interacted with for reveal="interaction". Eager loads the model immediately.
@@ -38,7 +37,7 @@ declare global {
        *
        * @example: https://modelviewer.dev/examples/loading#preload
        */
-      reveal?: 'auto' | 'interaction' | 'manual'; // Controls when the model should be revealed
+      reveal?: 'auto' | 'interaction' | 'manual';
       /**
        * This attribute makes the browser include credentials (cookies, authorization headers or TLS client certificates) in the request to fetch the 3D model. It's useful if the 3D model file is stored on another server that require authentication. By default the file will be fetch without credentials. Note that this has no effect if you are loading files locally or from the same domain.
        */
@@ -219,7 +218,6 @@ declare global {
        */
       powerPreference?: 'default' | 'high-performance' | 'low-power';
 
-      // React Props
       id?: string;
       style?: React.CSSProperties;
       ref?: React.RefObject<ModelViewerElement | undefined>;
@@ -243,7 +241,7 @@ declare global {
      * Displays an image instead of the model, useful for showing the user something before a model is loaded and ready to render.
      * If you use a poster with transparency, you may also want to set --poster-color to transparent so that the background shows through.
      */
-    poster?: string; // Display an image before model finished loading
+    poster?: string;
     /**
      * An enumerable attribute describing under what conditions the model should be preloaded. The supported values are "auto", "lazy" and "eager". Auto is equivalent to lazy, which loads the model
      * when it is near the viewport for reveal="auto", and when interacted with for reveal="interaction". Eager loads the model immediately.
@@ -257,7 +255,7 @@ declare global {
      *
      * @example: https://modelviewer.dev/examples/loading#preload
      */
-    reveal?: 'auto' | 'interaction' | 'manual'; // Controls when the model should be revealed
+    reveal?: 'auto' | 'interaction' | 'manual';
     /**
      * This attribute makes the browser include credentials (cookies, authorization headers or TLS client certificates) in the request to fetch the 3D model. It's useful if the 3D model file is stored on another server that require authentication. By default the file will be fetch without credentials. Note that this has no effect if you are loading files locally or from the same domain.
      */
@@ -438,7 +436,6 @@ declare global {
      */
     powerPreference?: 'default' | 'high-performance' | 'low-power';
 
-    // React Props
     id?: string;
     style?: React.CSSProperties;
     ref?: React.RefObject<ModelViewerElement | undefined>;
@@ -447,14 +444,12 @@ declare global {
 
 export function Embalagem3d() {
   useEffect(() => {
-    // Dinamicamente importa o model-viewer apenas no lado cliente
     const loadModelViewer = async () => {
       await import('@google/model-viewer');
     };
 
     void loadModelViewer();
 
-    // Remove a barra de progresso após o carregamento
     const style = document.createElement('style');
     style.textContent = `
       model-viewer::part(default-progress-bar) {

@@ -62,7 +62,6 @@ const venceu = (agora: number): EventoPlaca => ({
   agora
 });
 
-/** Máquinas aberta e o ponteiro descendo rumo à gaveta por cima de Projetos desde `agora`. */
 const retidaEmProjetos = (agora = 100): EventoPlaca[] => [
   entrou('maquinas', 0),
   moveu('projetos', agora, { rumo: true })
@@ -441,7 +440,6 @@ describe('placa: rumo à gaveta', () => {
     readonly y: number;
   }
 
-  /** O rumo de cada ponto, com um pointermove a cada 16 ms como no hook. */
   const rumos = (pontos: readonly Passo[]): boolean[] => {
     let rastro: ReturnType<typeof estenderRastro> = [];
 
@@ -452,7 +450,6 @@ describe('placa: rumo à gaveta', () => {
     });
   };
 
-  /** Reta em passos de `passo` px, com um ponto de tremor de lado a cada 3. */
   const pelaBarra = (de: Passo, ateX: number, deriva: number, passo = 3) => {
     const n = Math.ceil(Math.abs(ateX - de.x) / passo);
     const pontos: Passo[] = [de];
@@ -469,7 +466,6 @@ describe('placa: rumo à gaveta', () => {
     return pontos;
   };
 
-  /** Reta com partida suave e, a cada passo, um ponto de tremor em zigue-zague de 2 px de lado e 1 px de altura. */
   const aoConteudo = (de: Passo, ate: Passo, passos = 48) => {
     const pontos: Passo[] = [de];
 
@@ -486,7 +482,6 @@ describe('placa: rumo à gaveta', () => {
     return pontos;
   };
 
-  // Em 1280 px: Projetos de 437,7 a 539,1 e Serviços de 539,1 a 642,8, de y 26 a 62.
   const SERVICOS_X = 539.1;
 
   it('andar pela barra não é rumo ao entrar no vizinho, com deriva de até 6 px', () => {
@@ -507,13 +502,9 @@ describe('placa: rumo à gaveta', () => {
 
   it('a reta tremida do gatilho a um alvo do painel é rumo em todo ponto da faixa dos gatilhos', () => {
     const casos = [
-      // 1100 px, da borda esquerda de Projetos ao último cartão da primeira linha.
       { de: { x: 193.2, y: 44 }, ate: { x: 930.65, y: 150.2 }, base: 62 },
-      // 1280 px, do centro de Serviços ao segundo link, à esquerda.
       { de: { x: 590.95, y: 44 }, ate: { x: 233, y: 127 }, base: 62 },
-      // 1920 px com a placa compacta, do centro de Projetos ao último cartão: a reta mais deitada.
       { de: { x: 574.4, y: 32 }, ate: { x: 1404.75, y: 128.2 }, base: 50 },
-      // 1280 px, do canto de baixo de Máquinas, colado em Projetos, à vitrine.
       { de: { x: 435.7, y: 60 }, ate: { x: 1057, y: 229.5 }, base: 62 }
     ];
 

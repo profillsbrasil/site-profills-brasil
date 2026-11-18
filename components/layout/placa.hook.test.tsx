@@ -230,8 +230,6 @@ describe('usePlaca: zona do ponteiro', () => {
 
     expect(maquinas).toHaveAttribute('aria-expanded', 'true');
 
-    // A placa cresce sob o ponteiro parado: a ponte passa por cima do gatilho
-    // e sai, e o navegador despacha a fronteira sem pointermove.
     const parado = { ...MOUSE, clientX: 100, clientY: 44 };
 
     fireEvent.pointerOut(maquinas, { ...parado, relatedTarget: gaveta });

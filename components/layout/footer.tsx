@@ -155,7 +155,6 @@ export default function Footer() {
               delay={0.2 + index * 0.1}
               inView
               className='h-full'>
-              {/* Placa técnica (cores explícitas: o footer vive fora da .tema-navy) */}
               <div className='group relative h-full rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-4 transition-colors duration-300 hover:border-solid hover:border-accent hover:bg-slate-900/85 md:p-6'>
                 <span
                   aria-hidden

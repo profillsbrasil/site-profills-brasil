@@ -57,15 +57,12 @@ describe('useOptimized3DModel', () => {
         useOptimized3DModel({ src: '/timer.glb' })
       );
 
-      // SAFETY: o callback do hook só lê `isIntersecting` de cada entrada e
-      // não usa o observer; o jsdom não tem IntersectionObserverEntry.
       avisar(
         [{ isIntersecting: true } as IntersectionObserverEntry],
         {} as IntersectionObserver
       );
       const antes = vi.getTimerCount();
       unmount();
-      // O desmonte agenda só a limpeza do cache de 5 s; o timer de 100 ms sai.
       expect(vi.getTimerCount()).toBe(antes);
     } finally {
       vi.useRealTimers();
