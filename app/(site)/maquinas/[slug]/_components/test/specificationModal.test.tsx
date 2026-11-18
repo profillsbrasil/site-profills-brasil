@@ -1,5 +1,5 @@
 import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import SpecificationModal from '../specificationModal';
@@ -8,6 +8,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/lib/analytics/indicacao', () => ({
   registrarLeadIndicacao: vi.fn()
 }));
+
+async function abrirModal(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(
+    screen.getByRole('button', {
+      name: /Solicitar proposta técnica e comercial/i
+    })
+  );
+  await act(() => import('../specificationForm'));
+}
 
 async function enviarFormulario() {
   const user = userEvent.setup();
@@ -18,11 +27,7 @@ async function enviarFormulario() {
     />
   );
 
-  await user.click(
-    screen.getByRole('button', {
-      name: /Solicitar proposta técnica e comercial/i
-    })
-  );
+  await abrirModal(user);
 
   await user.type(
     await screen.findByLabelText(/Nome Completo/i),
@@ -61,6 +66,7 @@ describe('SpecificationModal', () => {
     expect(
       screen.getByRole('dialog').querySelector('[aria-busy="true"]')
     ).not.toBeNull();
+    await act(() => import('../specificationForm'));
     const nome = await screen.findByLabelText(/Nome Completo/i);
     await waitFor(() => {
       expect(nome).toHaveFocus();
@@ -83,11 +89,7 @@ describe('SpecificationModal', () => {
       />
     );
 
-    await user.click(
-      screen.getByRole('button', {
-        name: /Solicitar proposta técnica e comercial/i
-      })
-    );
+    await abrirModal(user);
 
     await user.type(
       await screen.findByLabelText(/Nome Completo/i),
@@ -147,7 +149,7 @@ describe('SpecificationModal', () => {
       name: /Solicitar proposta técnica e comercial/i
     });
 
-    await user.click(abrir);
+    await abrirModal(user);
     await user.type(
       await screen.findByLabelText(/Nome Completo/i),
       'Fulano Teste'
@@ -174,11 +176,7 @@ describe('SpecificationModal', () => {
       />
     );
 
-    await user.click(
-      screen.getByRole('button', {
-        name: /Solicitar proposta técnica e comercial/i
-      })
-    );
+    await abrirModal(user);
     await screen.findByLabelText(/Nome Completo/i);
     await user.click(
       screen.getByRole('button', { name: /Enviar solicitação/i })
