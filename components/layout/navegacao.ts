@@ -286,6 +286,7 @@ function pathnameDe(href: Rota) {
  * O destino, ou alguma folha do menu, corresponde à página atual? Compara só
  * o pathname e acende também as subpáginas: "/maquinas/<slug>" acende Máquinas.
  */
+// oxlint-disable-next-line landmines-types/no-explicit-return-types -- recursiva: sem a anotação o tsc dá TS7023 e TS7024
 export function ehAtual(alvo: Destino | NoMenu, pathname: string): boolean {
   if ('painel' in alvo) {
     return alvo.painel.folhas.some((f) => ehAtual(f, pathname));

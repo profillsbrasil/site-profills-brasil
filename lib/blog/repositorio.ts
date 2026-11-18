@@ -202,6 +202,7 @@ export function criarRepositorioBlog({
     intencao: Intencao,
     quando: string,
     tentativa = 1
+    // oxlint-disable-next-line landmines-types/no-explicit-return-types -- recursiva: sem a anotação o tsc dá TS7023
   ): Promise<PostGuardado> {
     if (tentativa > TENTATIVAS_SLUG) {
       throw new ErroBlog(
