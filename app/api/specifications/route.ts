@@ -11,9 +11,6 @@ export async function POST(request: NextRequest) {
     const validatedData = specificationFormSchema.parse(body);
     const destinatario = await resolverDestinatario(request);
 
-    /* Sem try/catch aqui: falha de envio precisa virar 500 para o visitante
-       ver o erro — engolir e responder sucesso perdia a solicitação em
-       silêncio. O catch externo loga e responde. */
     await sendSpecificationEmail(validatedData, destinatario);
 
     return NextResponse.json(
@@ -24,7 +21,6 @@ export async function POST(request: NextRequest) {
           id: Date.now(),
           timestamp: new Date().toISOString()
         },
-        /* Só o código: o client usa para o evento de analytics. */
         indicacao: destinatario.vendedor
           ? { codigo: destinatario.vendedor.referral_code }
           : null

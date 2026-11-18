@@ -23,7 +23,6 @@ export async function GET(
   const result = await verifyCatalogToken(token);
 
   if (!result.ok) {
-    // Location relativo: atrás de proxy, o request.url traz o host interno do servidor.
     return new Response(null, {
       status: 302,
       headers: { Location: `/download?error=${result.reason}` }
@@ -39,8 +38,6 @@ export async function GET(
   const stat = fs.statSync(PDF_PATH);
   const stream = fs.createReadStream(PDF_PATH);
 
-  // SAFETY: a rota roda no runtime nodejs, cujo Response aceita ReadStream
-  // (AsyncIterable de Buffer) como corpo; o BodyInit do DOM não declara isso.
   return new Response(stream as unknown as BodyInit, {
     status: 200,
     headers: {
