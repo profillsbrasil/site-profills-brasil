@@ -26,5 +26,5 @@ O blog já tinha banco (ADR 0003), admin com login (ADR 0004) e imagens no bucke
 ## Consequências
 
 - Cada visita a `/blog` e a `/blog/<slug>` faz uma consulta ao Postgres. Com tráfego alto, o próximo passo é cache com revalidação no gravar do admin.
-- Os sketches do fundo vivem em `lib/images/blog/` por import estático, decorativos (`aria-hidden`) e parados com `prefers-reduced-motion`.
+- Os sketches do fundo vivem em `lib/images/blog/` por import estático, decorativos (`aria-hidden`) e parados com `prefers-reduced-motion`. A listagem e a leitura usam desenhos diferentes (decisão do user em 15/11/2026). O tamanho é o do protótipo, com a opacidade um degrau acima (0,5 no lugar de 0,4), e a posição é em px, porque em % da página os sketches se empilhavam na página curta (16/11/2026).
 - O link "Blog" entrou no footer. A navbar continua sem ele até a decisão do user.
