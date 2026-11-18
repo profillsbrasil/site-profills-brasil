@@ -11,7 +11,6 @@ import {
 } from '@/lib/indicacao/cookie-server';
 import { logger } from '@/lib/utils/logger';
 
-/* Um aviso por processo: sem segredo toda requisição passaria por aqui. */
 let avisouSemSegredo = false;
 
 function avisarSemSegredo() {
@@ -22,8 +21,7 @@ function avisarSemSegredo() {
   );
 }
 
-/* Só rotas de página: API, assets do Next, arquivos com extensão, sitemap,
-   robots e a imagem OG ficam de fora. */
+/** Só rotas de página: API, assets do Next, arquivos com extensão, sitemap, robots e a imagem OG ficam de fora. */
 export const config = {
   matcher: [
     '/((?!api/|_next/|sitemap\\.xml$|robots\\.txt$|opengraph-image|.*\\..*).*)'
@@ -38,7 +36,6 @@ async function entrarPorLink(request: NextRequest): Promise<NextResponse> {
 
   if (!codigo) return res;
 
-  /* Sem segredo o cookie não pode ser assinado; a URL ainda fica limpa. */
   if (!temSegredoIndicacao()) {
     avisarSemSegredo();
 
@@ -63,7 +60,6 @@ async function renovarSePreciso(request: NextRequest): Promise<NextResponse> {
 
   if (!bruto) return NextResponse.next();
 
-  /* Sem segredo nada é verificável: manter o cookie, não apagá-lo. */
   if (!temSegredoIndicacao()) {
     avisarSemSegredo();
 
@@ -94,7 +90,6 @@ async function renovarSePreciso(request: NextRequest): Promise<NextResponse> {
     res.cookies.delete(INDICACAO_COOKIE);
   }
 
-  /* indisponivel: mantém o cookie como está e tenta de novo na próxima. */
   return res;
 }
 

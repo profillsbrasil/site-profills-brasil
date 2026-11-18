@@ -31,7 +31,7 @@ export function atributo(
   return null;
 }
 
-// `fill` e `fill={true}` ligam a prop; `fill={false}` não.
+/** `fill` e `fill={true}` ligam a prop; `fill={false}` não. */
 export function atributoLigado(
   node: ESTree.JSXOpeningElement,
   nome: string
@@ -48,7 +48,7 @@ export function atributoLigado(
   );
 }
 
-// Valor string literal do atributo: `x='a'`, `x={'a'}` ou `x={`a`}`.
+/** Valor string literal do atributo: `x='a'`, `x={'a'}` ou `x={`a`}`; null para qualquer outra forma. */
 export function valorLiteral(a: ESTree.JSXAttribute): string | null {
   const v = a.value;
 
@@ -68,7 +68,6 @@ export function valorLiteral(a: ESTree.JSXAttribute): string | null {
   return null;
 }
 
-// Nome local do import padrão de `fonte` neste arquivo.
 export function importPadrao(
   program: ESTree.Program,
   fonte: string

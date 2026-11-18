@@ -342,20 +342,6 @@
       "rules": { "landmines-style/no-comments": "off" }
     },
     {
-      // Comentários de prosa ainda pendentes em tools, scripts, types e na raiz; o PR que os tira apaga este bloco.
-      "files": [
-        "tools/**",
-        "scripts/**",
-        "types/**",
-        "vitest.setup.ts",
-        "vitest.config.ts",
-        "proxy.ts",
-        "proxy.node.test.ts",
-        "next.config.ts"
-      ],
-      "rules": { "landmines-style/no-comments": "off" }
-    },
-    {
       // Comentários de prosa ainda pendentes em components; o PR que os tira apaga este bloco.
       "files": ["components/**"],
       "rules": { "landmines-style/no-comments": "off" }

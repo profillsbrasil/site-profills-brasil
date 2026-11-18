@@ -1,4 +1,3 @@
-// Fora do script para o teste: o script tem efeito no topo (lê o terminal e sai).
 const CTRL_C = '\x03';
 const ESC = '\x1b';
 const APAGAR = new Set(['\x7f', '\b']);
@@ -21,25 +20,13 @@ export const letras = (texto) =>
 export const linhaDaSenha = (rotulo, senha) =>
   `\r\x1b[K${rotulo}${'*'.repeat(letras(senha).length)}`;
 
-/**
- * Ctrl-D, Tab e os outros controles C0 e C1 não são letra de senha.
- *
- * @param {string} tecla
- */
-function controle(tecla) {
+function ehControleC0OuC1(tecla) {
   const codigo = tecla.codePointAt(0) ?? 0;
 
   return codigo < 0x20 || (codigo >= 0x7f && codigo <= 0x9f);
 }
 
-/**
- * Índice do último caractere da sequência que começa no Esc em `inicio`: setas e teclas
- * de função mandam Esc [ parâmetros e uma letra final, ou Esc O e uma letra.
- *
- * @param {string[]} teclas
- * @param {number} inicio
- */
-function fimDaSequencia(teclas, inicio) {
+function fimDaSequenciaDeEsc(teclas, inicio) {
   if (teclas[inicio + 1] === 'O') return inicio + 2;
 
   if (teclas[inicio + 1] !== '[') return inicio;
@@ -60,20 +47,19 @@ function fimDaSequencia(teclas, inicio) {
  * @returns {{ senha: string; fim: 'enter' | 'cancelar' | null }}
  */
 export function digitar(senha, texto) {
-  // Por code point, e não por letra: o Esc e o [ da seta precisam sair separados.
-  const teclas = Array.from(texto);
+  const teclasPorCodePoint = Array.from(texto);
   let atual = senha;
 
-  for (let i = 0; i < teclas.length; i++) {
-    const tecla = teclas[i];
+  for (let i = 0; i < teclasPorCodePoint.length; i++) {
+    const tecla = teclasPorCodePoint[i];
 
     if (tecla === '\r' || tecla === '\n') return { senha: atual, fim: 'enter' };
 
     if (tecla === CTRL_C) return { senha: atual, fim: 'cancelar' };
 
     if (APAGAR.has(tecla)) atual = letras(atual).slice(0, -1).join('');
-    else if (tecla === ESC) i = fimDaSequencia(teclas, i);
-    else if (!controle(tecla)) atual += tecla;
+    else if (tecla === ESC) i = fimDaSequenciaDeEsc(teclasPorCodePoint, i);
+    else if (!ehControleC0OuC1(tecla)) atual += tecla;
   }
 
   return { senha: atual, fim: null };

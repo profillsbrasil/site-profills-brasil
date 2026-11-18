@@ -5,7 +5,6 @@ const PASSO = 4;
 const C1 = (0.01 * 255) ** 2;
 const C2 = (0.03 * 255) ** 2;
 
-// Pixel transparente pode guardar qualquer RGB sem mudar o que a tela mostra, então o RGB entra pré-multiplicado pelo alpha.
 function premultiplicar(
   { data, width }: ImagemCrua,
   largura: number,
@@ -28,7 +27,7 @@ function premultiplicar(
   return saida;
 }
 
-/** SSIM médio por canal (R, G, B pré-multiplicados e alpha), janela 8x8 uniforme com passo 4. */
+/** SSIM médio por canal (R, G, B pré-multiplicados e alpha), janela 8x8 uniforme com passo 4. O RGB entra pré-multiplicado porque pixel transparente pode guardar qualquer RGB sem mudar o que a tela mostra. */
 export function ssimPorCanal(
   a: ImagemCrua,
   b: ImagemCrua

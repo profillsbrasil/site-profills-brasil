@@ -4,7 +4,6 @@ import type { ESTree } from '@oxlint/plugins';
 import { ehTexto, importPadrao } from '../jsx.ts';
 import { ehModulo3d } from '../modulos3d.ts';
 
-// Fonte do primeiro `import('x')` dentro do loader de `dynamic`.
 function fonteDoImport(loader: ESTree.Node): string | null {
   if (
     loader.type !== 'ArrowFunctionExpression' &&
@@ -27,7 +26,6 @@ function fonteDoImport(loader: ESTree.Node): string | null {
     }
   }
 
-  // Desce por `import(x).then(...)` até o `import(x)`.
   while (
     atual?.type === 'CallExpression' &&
     atual.callee.type === 'MemberExpression'
@@ -42,10 +40,12 @@ function fonteDoImport(loader: ESTree.Node): string | null {
   return null;
 }
 
-function temSsrFalse(opcoes: ESTree.Node | undefined): boolean | null {
+function temSsrFalse(
+  opcoes: ESTree.Node | undefined
+): boolean | 'opcoes-fora-do-literal' {
   if (opcoes === undefined) return false;
 
-  if (opcoes.type !== 'ObjectExpression') return null;
+  if (opcoes.type !== 'ObjectExpression') return 'opcoes-fora-do-literal';
 
   return opcoes.properties.some(
     (p) =>
@@ -93,7 +93,6 @@ export const dynamic3dSemSsrRule = defineRule({
         if (fonte === null || !ehModulo3d(fonte, context.cwd, context.filename))
           return;
 
-        // Opções vindas de variável ficam de fora: a regra não as resolve.
         if (temSsrFalse(opcoes) === false) {
           context.report({ node, messageId: 'semSsrFalse', data: { fonte } });
         }

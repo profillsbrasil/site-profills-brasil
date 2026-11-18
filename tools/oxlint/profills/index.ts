@@ -8,7 +8,6 @@ import { semBancoDiretoRule } from './rules/sem-banco-direto.ts';
 import { semEagerFixoRule } from './rules/sem-eager-fixo.ts';
 import { videoCompletoRule } from './rules/video-completo.ts';
 
-// Regras de carregamento do site e a porta única do banco; cada uma barra um padrão medido.
 const profillsPlugin = eslintCompatPlugin({
   meta: { name: 'profills' },
   rules: {

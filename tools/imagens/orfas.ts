@@ -1,4 +1,3 @@
-// Uso: node tools/imagens/orfas.ts. Lista as imagens de lib/images que nenhum arquivo de app/, components/, lib/ ou public/ cita.
 import { readFile, readdir } from 'node:fs/promises';
 import { dirname, extname, join, normalize } from 'node:path';
 
@@ -19,7 +18,6 @@ const EXTENSOES_DE_CODIGO = new Set([
   '.webmanifest'
 ]);
 
-// Pega o conteúdo de aspas simples, duplas, crases e url(...) do CSS. Nome com espaço ou acento entra inteiro.
 const CITACAO = /'([^'\n]+)'|"([^"\n]+)"|`([^`]+)`|url\(\s*([^)'"\s]+)\s*\)/g;
 
 async function listarArquivos(pasta: string) {
@@ -45,8 +43,7 @@ function resolver(citacao: string, origem: string) {
   return indice === -1 ? undefined : normalize(citacao.slice(indice));
 }
 
-// Template com ${} vira padrão: `@/lib/images/catalogo2026/maquinas/${slug}.webp` cobre a pasta inteira daquele formato.
-function padraoDe(caminho: string) {
+function padraoDoTemplate(caminho: string) {
   const partes = caminho.split(/\$\{[^}]*\}/);
 
   if (partes.length === 1) return undefined;
@@ -56,6 +53,7 @@ function padraoDe(caminho: string) {
   return new RegExp(`^${partes.map(escapar).join('[^/]+')}$`);
 }
 
+/** Imagens de `lib/images` que nenhum arquivo de `app/`, `components/`, `lib/` ou `public/` cita; um template com `${}` cobre todas as imagens que casam com ele. */
 export async function listarOrfas() {
   const imagens = await listarArquivos(PASTA_DE_IMAGENS);
 
@@ -83,7 +81,7 @@ export async function listarOrfas() {
 
       if (!caminho?.startsWith(`${PASTA_DE_IMAGENS}/`)) continue;
 
-      const padrao = padraoDe(caminho);
+      const padrao = padraoDoTemplate(caminho);
 
       if (padrao) padroes.push(padrao);
       else citadas.add(caminho);

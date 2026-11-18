@@ -61,8 +61,6 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-/* Quem avalia o matcher é o Next; aqui só compilamos a string para provar
-   que o negative lookahead separa `/api/...` de uma rota que começa com api. */
 describe('config.matcher', () => {
   const re = new RegExp(`^${config.matcher[0]}$`);
 

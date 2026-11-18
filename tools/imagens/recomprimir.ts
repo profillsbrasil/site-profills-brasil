@@ -1,4 +1,3 @@
-// Uso: node tools/imagens/recomprimir.ts [--aplicar] [arquivo...]. Sem arquivo, revisa lib/images e public/images.
 import { LARGURA_MAXIMA, listarImagens } from './limites.ts';
 import { ssimPorCanal } from './ssim.ts';
 import { execFile } from 'node:child_process';
@@ -8,14 +7,12 @@ import sharp, { type Metadata, type Sharp } from 'sharp';
 const SSIM_MINIMO = 0.99;
 const LARGURAS_COMPARADAS = [1920, LARGURA_MAXIMA];
 
-// Ganho abaixo de 10% não paga um blob novo no histórico do Git.
 const GANHO_MINIMO = 0.1;
 const REVISAR_ACIMA_DE_BYTES = 400 * 1024;
 
 const QUALIDADE_PADRAO = 75;
 
-// O mesmo pipeline do optimizeImage do Next 16.4 (node_modules/next/dist/server/image-optimizer/transform.js) na qualidade padrão.
-const DERIVADOS = [
+const DERIVADOS_DO_NEXT = [
   {
     formato: 'webp',
     codificar: (i: Sharp) => i.webp({ quality: QUALIDADE_PADRAO })
@@ -32,7 +29,6 @@ type Candidato = {
   codificar: (original: Buffer) => Promise<Buffer>;
 };
 
-// Sem -progressive: o JPEG progressivo ganha 3% a mais e deixa a decodificação do sharp 10% mais lenta (cortador.jpg, 1.401 contra 1.274 ms).
 function jpegtran(original: Buffer) {
   return new Promise<Buffer>((resolve, reject) => {
     const processo = execFile(
@@ -49,9 +45,6 @@ function jpegtran(original: Buffer) {
   });
 }
 
-// Só entram candidatos que deixam os derivados do Next com SSIM >= 0,99. Medido e reprovado:
-// WebP lossless e PNG com paleta mudam o RGB dos pixels com alpha 0, que o AVIF e o WebP do Next levam para a borda visível;
-// JPEG recodificado, até q97 com 4:4:4, fica em SSIM 0,98 entre derivados.
 function candidatos(meta: Metadata): Candidato[] {
   if (meta.format === 'png') {
     const png = (largura?: number): Candidato => ({
@@ -64,7 +57,6 @@ function candidatos(meta: Metadata): Candidato[] {
           .toBuffer()
     });
 
-    // O recuo sem resize existe porque reduzir para 3840 muda o derivado de 1920 (resize duplo) e às vezes reprova o SSIM.
     return meta.width > LARGURA_MAXIMA
       ? [png(LARGURA_MAXIMA), png()]
       : [png(LARGURA_MAXIMA)];
@@ -81,7 +73,7 @@ async function derivados(original: Buffer) {
   const saida = [];
 
   for (const largura of LARGURAS_COMPARADAS) {
-    for (const { formato, codificar } of DERIVADOS) {
+    for (const { formato, codificar } of DERIVADOS_DO_NEXT) {
       const imagem = sharp(original)
         .rotate()
         .resize(largura, undefined, { withoutEnlargement: true });

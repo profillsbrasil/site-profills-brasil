@@ -5,14 +5,19 @@ import { ehTexto } from '../jsx.ts';
 import { relativoARaiz } from '../modulos3d.ts';
 import path from 'node:path';
 
-// Módulos que tocam o banco ou o disco direto; o app entra por lib/blog/admin.ts (escrita) ou lib/blog/leitura.ts (público).
-const INTERNOS = ['lib/banco/', 'lib/armazem/', 'lib/blog/repositorio'];
+const MODULOS_DE_BANCO_E_DISCO = [
+  'lib/banco/',
+  'lib/armazem/',
+  'lib/blog/repositorio'
+];
 
-// Pacotes que abrem conexão própria com o banco ou o bucket, contornando lib/banco e lib/armazem.
-const PACOTES = ['pg', '@electric-sql/pglite', '@aws-sdk/client-s3'];
+const PACOTES_DE_BANCO_E_BUCKET = [
+  'pg',
+  '@electric-sql/pglite',
+  '@aws-sdk/client-s3'
+];
 
-// Quem pode importá-los: o próprio domínio, o login do admin (limite de tentativas), os scripts de deploy e os testes.
-const DONOS = [
+const PASTAS_LIBERADAS = [
   'lib/banco/',
   'lib/armazem/',
   'lib/blog/',
@@ -20,8 +25,10 @@ const DONOS = [
   'scripts/'
 ];
 
-/** Caminho do módulo importado, relativo à raiz e sem extensão; null para pacote. */
-function destino(fonte: string, arquivo: string): string | null {
+function caminhoNoRepoSemExtensao(
+  fonte: string,
+  arquivo: string
+): string | null {
   let relativo: string;
 
   if (fonte.startsWith('@/')) relativo = path.posix.normalize(fonte.slice(2));
@@ -33,12 +40,15 @@ function destino(fonte: string, arquivo: string): string | null {
 }
 
 const ehInterno = (modulo: string) =>
-  INTERNOS.some((i) => (i.endsWith('/') ? modulo.startsWith(i) : modulo === i));
+  MODULOS_DE_BANCO_E_DISCO.some((i) =>
+    i.endsWith('/') ? modulo.startsWith(i) : modulo === i
+  );
 
 const ehPacoteDeBanco = (fonte: string) =>
-  PACOTES.some((p) => fonte === p || fonte.startsWith(`${p}/`));
+  PACOTES_DE_BANCO_E_BUCKET.some(
+    (p) => fonte === p || fonte.startsWith(`${p}/`)
+  );
 
-/** Texto fixo do import(): literal ou template sem expressão; null quando é calculado. */
 function textoFixo(fonte: ESTree.Expression): string | null {
   if (fonte.type === 'Literal' && ehTexto(fonte.value)) return fonte.value;
 
@@ -64,14 +74,14 @@ export const semBancoDiretoRule = defineRule({
     const arquivo = relativoARaiz(context.cwd, context.filename);
 
     if (
-      DONOS.some((d) => arquivo.startsWith(d)) ||
+      PASTAS_LIBERADAS.some((d) => arquivo.startsWith(d)) ||
       /\.test\.tsx?$/.test(arquivo)
     ) {
       return {};
     }
 
     function checar(node: ESTree.Node, fonte: string, soTipo: boolean) {
-      const modulo = destino(fonte, arquivo);
+      const modulo = caminhoNoRepoSemExtensao(fonte, arquivo);
 
       const proibido =
         modulo === null ? ehPacoteDeBanco(fonte) : ehInterno(modulo);
