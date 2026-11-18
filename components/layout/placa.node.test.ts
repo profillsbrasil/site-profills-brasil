@@ -1,6 +1,5 @@
 import {
   CLIQUE_IGNORA_MS,
-  type EstadoPlaca,
   type EventoPlaca,
   PARADO_MS,
   PLACA_INICIAL,
@@ -17,30 +16,28 @@ import { describe, expect, it } from 'vitest';
 
 const ORDEM = ['maquinas', 'projetos', 'servicos'] as const;
 
-const rodar = (...eventos: EventoPlaca[]): EstadoPlaca =>
+const rodar = (...eventos: EventoPlaca[]) =>
   eventos.reduce(reduzirPlaca, PLACA_INICIAL);
 
 type Menu = (typeof ORDEM)[number];
 
-const moveu = (
-  menu: Menu,
-  agora: number,
-  { real = true, rumo = false } = {}
-): EventoPlaca => ({
-  tipo: 'ponteiro-moveu',
-  menu,
-  agora,
-  real,
-  rumoAGaveta: rumo
-});
+const moveu = (menu: Menu, agora: number, { real = true, rumo = false } = {}) =>
+  ({
+    tipo: 'ponteiro-moveu',
+    menu,
+    agora,
+    real,
+    rumoAGaveta: rumo
+  }) satisfies EventoPlaca;
 
-const entrou = (menu: Menu, agora: number): EventoPlaca => ({
-  tipo: 'ponteiro-entrou',
-  menu,
-  agora,
-  real: true,
-  rumoAGaveta: false
-});
+const entrou = (menu: Menu, agora: number) =>
+  ({
+    tipo: 'ponteiro-entrou',
+    menu,
+    agora,
+    real: true,
+    rumoAGaveta: false
+  }) satisfies EventoPlaca;
 
 const FORA: EventoPlaca = {
   tipo: 'ponteiro-fora-de-gatilho',
@@ -57,15 +54,17 @@ const NA_GAVETA: EventoPlaca = {
 const SAIU: EventoPlaca = { tipo: 'ponteiro-saiu-da-zona' };
 const VOLTOU: EventoPlaca = { tipo: 'ponteiro-entrou-na-zona' };
 
-const venceu = (agora: number): EventoPlaca => ({
-  tipo: 'venceu-retida',
-  agora
-});
+const venceu = (agora: number) =>
+  ({
+    tipo: 'venceu-retida',
+    agora
+  }) satisfies EventoPlaca;
 
-const retidaEmProjetos = (agora = 100): EventoPlaca[] => [
-  entrou('maquinas', 0),
-  moveu('projetos', agora, { rumo: true })
-];
+const retidaEmProjetos = (agora = 100) =>
+  [
+    entrou('maquinas', 0),
+    moveu('projetos', agora, { rumo: true })
+  ] satisfies EventoPlaca[];
 
 describe('placa: abrir na hora', () => {
   it('o primeiro movimento real sobre o gatilho abre, sem timer', () => {
@@ -314,10 +313,11 @@ describe('placa: clique, teclado e fora', () => {
 });
 
 describe('placa: dispensar com o ponteiro em cima', () => {
-  const abertoNoGatilho = (): EventoPlaca[] => [
-    entrou('maquinas', 100),
-    moveu('maquinas', 100 + CLIQUE_IGNORA_MS + 50)
-  ];
+  const abertoNoGatilho = () =>
+    [
+      entrou('maquinas', 100),
+      moveu('maquinas', 100 + CLIQUE_IGNORA_MS + 50)
+    ] satisfies EventoPlaca[];
 
   const fecharPorClique: EventoPlaca = {
     tipo: 'clique',
@@ -325,11 +325,12 @@ describe('placa: dispensar com o ponteiro em cima', () => {
     agora: 100 + CLIQUE_IGNORA_MS + 100
   };
 
-  const tremer = (agora: number): EventoPlaca[] => [
-    moveu('maquinas', agora),
-    moveu('maquinas', agora + 16, { rumo: true }),
-    venceu(agora + 16 + PARADO_MS)
-  ];
+  const tremer = (agora: number) =>
+    [
+      moveu('maquinas', agora),
+      moveu('maquinas', agora + 16, { rumo: true }),
+      venceu(agora + 16 + PARADO_MS)
+    ] satisfies EventoPlaca[];
 
   it('fechar por clique e tremer não reabre', () => {
     const e = rodar(...abertoNoGatilho(), fecharPorClique, ...tremer(1000));
@@ -440,7 +441,7 @@ describe('placa: rumo à gaveta', () => {
     readonly y: number;
   }
 
-  const rumos = (pontos: readonly Passo[]): boolean[] => {
+  const rumos = (pontos: readonly Passo[]) => {
     let rastro: ReturnType<typeof estenderRastro> = [];
 
     return pontos.map((ponto, i) => {
@@ -631,10 +632,8 @@ describe('placa: histerese da compacta', () => {
 });
 
 describe('placa: outros itens da placa', () => {
-  const em = (
-    onde: 'gaveta' | 'fundo' | 'outro-item',
-    real = true
-  ): EventoPlaca => ({ tipo: 'ponteiro-fora-de-gatilho', onde, real });
+  const em = (onde: 'gaveta' | 'fundo' | 'outro-item', real = true) =>
+    ({ tipo: 'ponteiro-fora-de-gatilho', onde, real }) satisfies EventoPlaca;
 
   it('parar em outro item da placa fecha como sair da zona', () => {
     const saindo = rodar(entrou('maquinas', 0), em('outro-item'));

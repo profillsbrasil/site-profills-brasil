@@ -44,11 +44,11 @@ export function AnimatedGridPattern({
     Array<{ id: number; pos: [number, number] }>
   >([]);
 
-  const getPos = useCallback((): [number, number] => {
+  const getPos = useCallback(() => {
     return [
       Math.floor((Math.random() * dimensions.width) / width),
       Math.floor((Math.random() * dimensions.height) / height)
-    ];
+    ] satisfies [number, number];
   }, [dimensions.width, dimensions.height, width, height]);
 
   const generateSquares = useCallback(

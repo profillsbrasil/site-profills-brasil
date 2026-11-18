@@ -26,7 +26,7 @@ const vitrinesVazias: VitrinesDoMenu = {
 function destinosRenderizados(
   raiz: HTMLElement,
   mapa = new Map<string, string>()
-): Map<string, string> {
+) {
   for (const a of raiz.querySelectorAll<HTMLAnchorElement>('a[data-nav]')) {
     const id = a.dataset.nav ?? '';
     const href = a.getAttribute('href') ?? '';
@@ -37,7 +37,7 @@ function destinosRenderizados(
   return mapa;
 }
 
-function barraDoCelular(): HTMLElement {
+function barraDoCelular() {
   const barra = document.querySelector<HTMLElement>('[data-barra-abas]');
 
   expect(barra, 'barra de abas do celular').not.toBeNull();
@@ -45,7 +45,7 @@ function barraDoCelular(): HTMLElement {
   return barra ?? document.body;
 }
 
-async function percorrerMobile(): Promise<Map<string, string>> {
+async function percorrerMobile() {
   const u = userEvent.setup({ pointerEventsCheck: 0 });
   const mapa = destinosRenderizados(document.body);
   const barra = barraDoCelular();

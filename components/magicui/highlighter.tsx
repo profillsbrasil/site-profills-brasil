@@ -28,7 +28,7 @@ interface HighlighterProps {
   textColor?: string;
 }
 
-function resolveColor(color: string): string {
+function resolveColor(color: string) {
   if (typeof window === 'undefined') return color;
 
   if (color.startsWith('var(')) {

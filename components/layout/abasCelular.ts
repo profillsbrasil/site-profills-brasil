@@ -70,7 +70,7 @@ const ehMenuVitrine = (m: NoMenu): m is NoMenuVitrine =>
  * Menu é o complemento: menu sem vitrine e link que não virou aba caem nele,
  * então destino novo na árvore aparece no celular sem editar este arquivo.
  */
-export function abasDoCelular(arvore: Navegacao = NAVEGACAO): AbasDoCelular {
+export function abasDoCelular(arvore: Navegacao = NAVEGACAO) {
   const vitrines = arvore.menus.filter(ehMenuVitrine);
   const [maquinas] = vitrines;
 
@@ -84,7 +84,7 @@ export function abasDoCelular(arvore: Navegacao = NAVEGACAO): AbasDoCelular {
 
   if (!blog) throw new Error("A árvore não tem o link 'blog'.");
 
-  return [
+  const abas: AbasDoCelular = [
     {
       tipo: 'link',
       id: 'inicio',
@@ -131,12 +131,14 @@ export function abasDoCelular(arvore: Navegacao = NAVEGACAO): AbasDoCelular {
       }
     }
   ];
+
+  return abas;
 }
 
 /** Calculada no import: árvore inválida derruba o teste e o build, não o celular. */
 export const ABAS_DO_CELULAR = abasDoCelular();
 
-export function destinosDaAba(aba: Aba): readonly Destino[] {
+export function destinosDaAba(aba: Aba) {
   if (aba.tipo === 'link') return [aba.destino];
 
   const { conteudo } = aba;
@@ -148,21 +150,21 @@ export function destinosDaAba(aba: Aba): readonly Destino[] {
       return conteudo.menu.painel.folhas;
     case 'menu':
       return [
-        ...conteudo.menus.flatMap((m): readonly Destino[] => m.painel.folhas),
+        ...conteudo.menus.flatMap<Destino>((m) => m.painel.folhas),
         ...conteudo.pe
       ];
   }
 }
 
 /** Rota fora da árvore (/download) não marca aba nenhuma. */
-export function abaAtual(abas: AbasDoCelular, pathname: string): IdAba | null {
+export function abaAtual(abas: AbasDoCelular, pathname: string) {
   return (
     abas.find((aba) => destinosDaAba(aba).some((d) => ehAtual(d, pathname)))
       ?.id ?? null
   );
 }
 
-export function rotuloVer(chave: ChaveVitrine, total: number): string {
+export function rotuloVer(chave: ChaveVitrine, total: number) {
   if (chave === 'todas') return `Ver as ${total} máquinas`;
 
   return total === 1 ? 'Ver 1 máquina' : `Ver ${total} máquinas`;

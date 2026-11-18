@@ -21,22 +21,23 @@ export const TEMA_POR_ROTA = {
   '/sobre': 'claro'
 } as const satisfies Record<Rota, TemaDoTopo>;
 
-function entrada(pathname: string): readonly [string, TemaDoTopo] | undefined {
+function entrada(pathname: string) {
   return Object.entries(TEMA_POR_ROTA)
     .filter(([rota]) =>
       rota === '/'
         ? pathname === '/'
         : pathname === rota || pathname.startsWith(`${rota}/`)
     )
-    .sort(([a], [b]) => b.length - a.length)[0];
+    .sort(([a], [b]) => b.length - a.length)
+    .at(0);
 }
 
 /** A chave mais longa que cobre o pathname; "/" cobre só a home. */
-export function rotaClassificada(pathname: string): string | null {
+export function rotaClassificada(pathname: string) {
   return entrada(pathname)?.[0] ?? null;
 }
 
 /** O 404 de rota desconhecida redireciona para a home, que é navy. */
-export function temaDoTopo(pathname: string): TemaDoTopo {
+export function temaDoTopo(pathname: string) {
   return entrada(pathname)?.[1] ?? 'navy';
 }

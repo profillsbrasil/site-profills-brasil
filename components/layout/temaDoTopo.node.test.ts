@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 const SITE = path.join(process.cwd(), 'app/(site)');
 
-function rotasNoDisco(): string[] {
+function rotasNoDisco() {
   return readdirSync(SITE, { recursive: true, encoding: 'utf8' })
     .filter((f) => path.basename(f) === 'page.tsx')
     .map((f) => {

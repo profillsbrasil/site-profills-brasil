@@ -31,7 +31,7 @@ const IndicacaoContext = createContext<EstadoIndicacao>(SEM_INDICACAO);
 let ultimoToken: string | null = null;
 let ultimoEstado: EstadoIndicacao = SEM_INDICACAO;
 
-function lerEstado(): EstadoIndicacao {
+function lerEstado() {
   const cookie = document.cookie;
   const token = extrairTokenIndicacao(cookie);
 
@@ -69,6 +69,6 @@ export function IndicacaoProvider({ children }: { children: ReactNode }) {
 }
 
 /** Fora do Provider (grupo standalone) devolve sem-indicacao. */
-export function useIndicacao(): EstadoIndicacao {
+export function useIndicacao() {
   return useContext(IndicacaoContext);
 }

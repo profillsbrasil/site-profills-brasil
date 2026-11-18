@@ -18,7 +18,7 @@ export type ContatoComercial = {
  * Contato comercial a exibir: o do vendedor quando há Indicação, o padrão
  * caso contrário. Vendedor sem telefone usa o telefone padrão.
  */
-export function useContatoComercial(): ContatoComercial {
+export function useContatoComercial() {
   const estado = useIndicacao();
 
   let email: string = CONTATO_PADRAO.vendas.email;

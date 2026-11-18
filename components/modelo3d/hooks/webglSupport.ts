@@ -4,7 +4,7 @@ let cached: boolean | null = null;
  * Detecta suporte a WebGL criando um contexto descartável.
  * Resultado memoizado por sessão (no client).
  */
-export function isWebGLAvailable(): boolean {
+export function isWebGLAvailable() {
   if (cached !== null) return cached;
 
   if (typeof window === 'undefined') return true;
@@ -21,6 +21,6 @@ export function isWebGLAvailable(): boolean {
 }
 
 /** Apenas para testes: limpa o resultado memoizado. */
-export function resetWebGLCache(): void {
+export function resetWebGLCache() {
   cached = null;
 }

@@ -9,10 +9,11 @@ import {
 
 import { describe, expect, it } from 'vitest';
 
-const aberta = (folha: 'maquinas' | 'montar' | 'menu'): EstadoFolha => ({
-  fase: 'aberta',
-  folha
-});
+const aberta = (folha: 'maquinas' | 'montar' | 'menu') =>
+  ({
+    fase: 'aberta',
+    folha
+  }) satisfies EstadoFolha;
 
 describe('transição da folha', () => {
   it('tocar uma aba com tudo fechado abre a folha dela', () => {

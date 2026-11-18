@@ -181,7 +181,7 @@ export function GridPattern({
   );
 }
 
-export function genRandomPattern(length?: number): number[][] {
+export function genRandomPattern(length?: number) {
   length = length ?? 5;
 
   return Array.from({ length }, () => [
