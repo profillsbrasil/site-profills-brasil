@@ -57,10 +57,11 @@ const avancar = (minutos: number) => {
   agora = new Date(agora.getTime() + minutos * 60_000);
 };
 
-// O PGlite leva segundos para abrir com a suíte inteira rodando em paralelo.
+const PRAZO_PGLITE_SOB_CARGA_MS = 30_000;
+
 beforeAll(async () => {
   consulta = await abrirPglite();
-}, 30_000);
+}, PRAZO_PGLITE_SOB_CARGA_MS);
 
 beforeEach(async () => {
   await consulta('delete from blog_posts');
@@ -808,7 +809,6 @@ describe('imagens no admin', () => {
 describe('apagar rascunho', () => {
   const pngDe = (byte: number) => new Uint8Array([...png, byte]);
 
-  /** Rascunho com uma imagem na capa e outra num bloco, as duas na pasta dele. */
   async function rascunhoComImagens(
     repo: ReturnType<typeof criarRepositorioBlog>,
     titulo: string

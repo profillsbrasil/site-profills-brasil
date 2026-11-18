@@ -6,8 +6,6 @@ import { type ImagemGuardada, repositorioBlog } from './repositorio';
 import type { PostPublicado, ResumoPublicado } from './tipos';
 import 'server-only';
 
-// connection() antes de cada consulta: nenhuma página que lê o blog é pré-renderizada, e o build nunca abre o banco.
-
 export async function listarPublicados(): Promise<ResumoPublicado[]> {
   await connection();
 

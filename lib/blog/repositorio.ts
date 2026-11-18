@@ -65,7 +65,6 @@ export type ImagemGuardada = ObjetoGuardado & { tipo: string };
 const COLUNAS =
   'slug, versao, estado, criado_em, atualizado_em, publicado_em, conteudo';
 
-/** Até 5 tentativas quando outra gravação pega o mesmo slug entre a leitura e o insert. */
 const TENTATIVAS_SLUG = 5;
 
 const slugsLidos = z.array(z.object({ slug: z.string() }));
@@ -73,7 +72,6 @@ const slugsLidos = z.array(z.object({ slug: z.string() }));
 const iso = (valor: ValorSql) =>
   valor instanceof Date ? valor.toISOString() : valor;
 
-/** A linha do banco passa pelo mesmo schema do editor antes de virar PostGuardado. */
 function lerLinha(linha: Linha) {
   return postGuardadoSchema.safeParse({
     slug: linha.slug,
@@ -98,7 +96,6 @@ function exigirLinha(linha: Linha) {
   return lida.data;
 }
 
-/** Só os campos do cartão: a listagem pública não traz o texto (`linhas`) dos posts. */
 function lerResumo(linha: Linha) {
   return resumoPublicadoSchema.safeParse({
     slug: linha.slug,
@@ -111,7 +108,6 @@ function lerResumo(linha: Linha) {
   });
 }
 
-/** Linha fora do formato some com um aviso, sem derrubar a lista nem a página pública. */
 function lerLista<T>(
   linhas: Linha[],
   ler: (linha: Linha) => z.ZodSafeParseResult<T>
@@ -130,7 +126,6 @@ function lerLista<T>(
   });
 }
 
-/** O tipo vem dos bytes do arquivo, nunca do nome nem do MIME que o navegador mandou. */
 const ascii = (bytes: Uint8Array, inicio: number, fim: number) =>
   String.fromCharCode(...bytes.subarray(inicio, fim));
 
@@ -164,7 +159,6 @@ const tiposImagem: {
 
 const semExtensao = (nome: string) => nome.replace(/\.[^.]*$/, '');
 
-/** O hash do conteúdo entra no nome: a URL nunca muda de bytes e o cache pode ser immutable. */
 function nomearImagem(
   nomeEnviado: string,
   bytes: Uint8Array,
@@ -179,12 +173,10 @@ function nomearImagem(
   return `${base || 'imagem'}-${hash}.${extensao}`;
 }
 
-/** A chave no armazém é o caminho público sem a barra inicial. */
 const chaveImagem = (caminho: string) => caminho.slice(1);
 
 const PREFIXO_IMAGENS = 'blog/';
 
-/** Cada página do admin mostra o total; listar o bucket a cada carga custaria uma requisição por mil imagens. */
 const VALIDADE_CONTAGEM_MS = 30_000;
 
 export function criarRepositorioBlog({
@@ -251,7 +243,6 @@ export function criarRepositorioBlog({
       : inserirNovo(post, intencao, quando, tentativa + 1);
   }
 
-  /** Só as chaves com cara de imagem do blog; a rota pública não serviria as outras. */
   async function imagensGuardadas() {
     const objetos = await armazem.listar(PREFIXO_IMAGENS);
 
@@ -264,7 +255,6 @@ export function criarRepositorioBlog({
     });
   }
 
-  /** O envio acrescenta o caminho ao conjunto, então o total sobe sem listar de novo, e o reenvio não conta duas vezes. */
   let contagem: {
     caminhos: Promise<Set<string> | null>;
     ate: number;
@@ -292,7 +282,6 @@ export function criarRepositorioBlog({
     return caminhos;
   }
 
-  /** Só as chaves que nenhum post cita, pela mesma regra do "sem uso" da tela Imagens. */
   async function apagarImagensDaPasta(slug: string): Promise<ImagensApagadas> {
     let objetos;
 
@@ -344,7 +333,6 @@ export function criarRepositorioBlog({
         );
 
         if (!rows[0]) {
-          // Outra gravação entrou entre a leitura e o delete.
           const depois = await ler(slug);
 
           conferirApagamento(depois, atual.versao);
@@ -446,7 +434,6 @@ export function criarRepositorioBlog({
 
       if (rows[0]) return exigirLinha(rows[0]);
 
-      // Outra gravação entrou entre a leitura e o update.
       conferirVersao(await ler(atual.slug), atual.versao);
 
       throw new ErroBlog('O post mudou durante a gravação. Tente de novo.');

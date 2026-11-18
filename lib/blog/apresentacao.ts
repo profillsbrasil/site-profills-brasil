@@ -25,7 +25,6 @@ const MESES = [
   'dez'
 ];
 
-// Fuso fixo: servidor e navegador formatam igual, sem diferença na hidratação.
 const partesData = new Intl.DateTimeFormat('en-CA', {
   day: 'numeric',
   month: 'numeric',
@@ -33,7 +32,7 @@ const partesData = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'America/Sao_Paulo'
 });
 
-/** "10 nov 2026", no fuso de Brasília. */
+/** "10 nov 2026", no fuso de Brasília, igual no servidor e no navegador. */
 export function dataCurta(iso: string) {
   const partes = Object.fromEntries(
     partesData.formatToParts(new Date(iso)).map((p) => [p.type, p.value])
@@ -138,7 +137,6 @@ export function primeiraMaquina(post: Post) {
   return null;
 }
 
-// Aviso velho (o recesso do ano passado) não fica no topo da listagem.
 const DIAS_AVISO_FIXADO = 30;
 const DIA_MS = 24 * 60 * 60 * 1000;
 

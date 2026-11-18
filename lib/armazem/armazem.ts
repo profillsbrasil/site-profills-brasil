@@ -161,7 +161,7 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
     region: config.regiao,
     credentials: { accessKeyId: config.chave, secretAccessKey: config.segredo },
     forcePathStyle: config.estiloCaminho,
-    // Sem prazo, um bucket mudo prende o socket e a rota pública para de responder.
+    // WARNING: o SDK do S3 não tem prazo padrão; sem este, um bucket mudo prende o socket e a rota pública para.
     requestHandler: {
       connectionTimeout: 2_000,
       requestTimeout: 3_000,
@@ -171,8 +171,6 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
 
   return {
     async gravar(chave, bytes, tipo) {
-      // A consulta só evita regravar. Se ela falha, por chave ausente ou por
-      // permissão, o envio segue e o PUT acusa o erro de verdade.
       const guardada = await cliente
         .send(new HeadObjectCommand({ Bucket: config.bucket, Key: chave }))
         .then(
@@ -216,7 +214,6 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
     async listar(prefixo) {
       const prazo = AbortSignal.timeout(PRAZO_LOTE_MS);
 
-      // O S3 devolve no máximo 1.000 chaves por página, e cada página pede o token da anterior.
       const desde = async (continuacao?: string): Promise<ObjetoListado[]> => {
         const pagina = await cliente.send(
           new ListObjectsV2Command({
@@ -245,8 +242,6 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
       return desde();
     },
 
-    // Um DeleteObject por chave, e não o DeleteObjects em lote: o lote exige Content-MD5 ou checksum do
-    // corpo, que cada S3 compatível trata de um jeito, e um post tem poucas imagens.
     async apagar(chaves) {
       const prazo = AbortSignal.timeout(PRAZO_LOTE_MS);
 
@@ -278,7 +273,6 @@ export type AmbienteArmazem = Partial<
   Record<(typeof NOMES_S3)[number] | 'NODE_ENV', string>
 >;
 
-// A Railway entrega "virtual-host" (medido em 16/11/2026 em `railway bucket credentials --json`); caixa e separador não importam.
 const estiloUrl = z
   .string()
   .transform((estilo) => estilo.toLowerCase().replace(/[^a-z]/g, ''))
@@ -302,7 +296,6 @@ const ambienteS3 = z
     estiloCaminho: env.AWS_S3_URL_STYLE.startsWith('path')
   }));
 
-/** Cada chamada falha com o motivo: o upload o devolve ao editor e a rota pública responde 503. */
 function armazemIndisponivel(motivo: string): Armazem {
   const falhar = () => Promise.reject(new ErroConfiguracao(motivo));
 
