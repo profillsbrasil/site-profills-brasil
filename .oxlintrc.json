@@ -14,7 +14,17 @@
   ],
   "jsPlugins": [
     { "name": "profills", "specifier": "./tools/oxlint/profills/index.ts" },
-    { "name": "anti-slop", "specifier": "./tools/oxlint/anti-slop/index.ts" }
+    { "name": "anti-slop", "specifier": "./tools/oxlint/anti-slop/index.ts" },
+    {
+      "name": "landmines-testing",
+      "specifier": "@interfere/landmines/testing"
+    },
+    { "name": "landmines-style", "specifier": "@interfere/landmines/style" },
+    {
+      "name": "landmines-structure",
+      "specifier": "@interfere/landmines/structure"
+    },
+    { "name": "landmines-types", "specifier": "@interfere/landmines/types" }
   ],
   "categories": {
     "correctness": "error"
@@ -47,6 +57,7 @@
     ".roo/**",
     ".superpowers/**",
     ".windsurf/**",
+    // Vendorizado de dmmulroy/anti-slop: os comentários são do upstream e somem a cada atualização se editados aqui.
     "tools/oxlint/anti-slop/**"
   ],
   "rules": {
@@ -192,7 +203,6 @@
     "anti-slop/require-readable-spacing": "error",
     "anti-slop/no-known-value-widening": "error",
     "anti-slop/no-unknown-parameters": "error",
-    "anti-slop/require-safety-comment-for-type-assertion": "error",
     "anti-slop/no-conditional-empty-object-spread": "error",
     "anti-slop/no-array-filter-map": "error",
     "anti-slop/no-module-mocking": "error",
@@ -200,7 +210,44 @@
     "anti-slop/no-chained-type-assertions": "error",
     // typeof só dentro de type predicate nomeado: cookie-client.ts entra no JS
     // de toda página e valida o cookie sem trazer o zod.
-    "anti-slop/no-runtime-typeof": ["error", { "allowInTypeGuards": true }]
+    "anti-slop/no-runtime-typeof": ["error", { "allowInTypeGuards": true }],
+    // Pede um comentário SAFETY antes de cada asserção de tipo, e o
+    // landmines-style/no-comments proíbe esse comentário; fica o no-comments.
+    "anti-slop/require-safety-comment-for-type-assertion": "off",
+
+    // Plugin @interfere/landmines: testes que não mentem, sem comentário de prosa.
+    "landmines-testing/strict-msw": "error",
+    "landmines-testing/no-unsignaled-poll": "error",
+    "landmines-structure/colocated-tests": "error",
+    "landmines-structure/package-exports": "error",
+    "landmines-structure/test-file-names": "error",
+    "landmines-style/no-comments": "error",
+    // Esperas de relógio real que o teste não consegue adiantar: a data de
+    // gravação do disco e do bucket, e um rm que não deveria ter começado,
+    // sem evento para esperar.
+    "landmines-testing/no-fixed-sleep": [
+      "error",
+      { "allow": { "lib/armazem/armazem.node.test.ts": 2 } }
+    ],
+    // Trabalho real acima dos 5 s padrão: o timeout de rede do próprio
+    // armazém S3 (4), um PGlite novo por teste do migrador, dez hashes scrypt
+    // no limite de tentativas e o import do admin inteiro.
+    "landmines-testing/no-flake-masking": [
+      "error",
+      {
+        "allow": {
+          "lib/armazem/armazem.node.test.ts": 4,
+          "lib/banco/migrar.node.test.ts": 1,
+          "lib/admin/sessao.node.test.ts": 1,
+          "app/(standalone)/admin/guarda.node.test.ts": 1
+        }
+      }
+    ],
+    // 262 ocorrências em 55 arquivos; trocar mock por implementação real
+    // exige injeção de dependência no código de produção.
+    "landmines-testing/no-test-doubles": "off",
+    // As 179 anotações de retorno saem no PR seguinte.
+    "landmines-types/no-explicit-return-types": "off"
   },
   "overrides": [
     {
@@ -272,7 +319,7 @@
       // motion e módulos próprios (envio de e-mail, CRM, analytics, 3D) que o
       // código de produção importa direto. Tirá-los exige injeção de dependência
       // em produção; logger e server-only já saíram (spyOn e alias no vitest).
-      "files": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**"],
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
       "rules": {
         "anti-slop/no-module-mocking": "off"
       }
@@ -288,6 +335,46 @@
       "rules": {
         "anti-slop/no-chained-type-assertions": "off"
       }
+    },
+    {
+      // Comentários de prosa ainda pendentes em lib; o PR que os tira apaga este bloco.
+      "files": ["lib/**"],
+      "rules": { "landmines-style/no-comments": "off" }
+    },
+    {
+      // Comentários de prosa ainda pendentes em tools, scripts, types e na raiz; o PR que os tira apaga este bloco.
+      "files": [
+        "tools/**",
+        "scripts/**",
+        "types/**",
+        "vitest.setup.ts",
+        "vitest.config.ts",
+        "proxy.ts",
+        "proxy.node.test.ts",
+        "next.config.ts"
+      ],
+      "rules": { "landmines-style/no-comments": "off" }
+    },
+    {
+      // Comentários de prosa ainda pendentes em components; o PR que os tira apaga este bloco.
+      "files": ["components/**"],
+      "rules": { "landmines-style/no-comments": "off" }
+    },
+    {
+      // Comentários de prosa ainda pendentes em app/(site); o PR que os tira apaga este bloco.
+      "files": ["app/(site)/**"],
+      "rules": { "landmines-style/no-comments": "off" }
+    },
+    {
+      // Comentários de prosa ainda pendentes no resto de app; o PR que os tira apaga este bloco.
+      "files": [
+        "app/(standalone)/**",
+        "app/api/**",
+        "app/test/**",
+        "app/*.ts",
+        "app/*.tsx"
+      ],
+      "rules": { "landmines-style/no-comments": "off" }
     }
   ]
 }
