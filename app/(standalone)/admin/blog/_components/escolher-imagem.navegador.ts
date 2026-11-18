@@ -75,12 +75,7 @@ socket.addEventListener('message', (evento) => {
 });
 
 type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | Json[]
-  | { [chave: string]: Json };
+  string | number | boolean | null | Json[] | { [chave: string]: Json };
 
 type ParametrosCdp = { [chave: string]: Json };
 

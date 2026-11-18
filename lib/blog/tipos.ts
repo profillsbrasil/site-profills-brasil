@@ -112,8 +112,7 @@ export type PostPublicado = Extract<PostGuardado, { estado: 'publicado' }>;
 
 /** O que o editor manda ao gravar: post novo sem slug e sem versão, post gravado com os dois. */
 export type EntradaEditor = { post: Post } & (
-  | { slug: null; versao: null }
-  | { slug: string; versao: number }
+  { slug: null; versao: null } | { slug: string; versao: number }
 );
 
 /** O que a tela manda para apagar: o slug e a versão que ela leu. */

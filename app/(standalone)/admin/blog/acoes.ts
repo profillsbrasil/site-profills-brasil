@@ -20,12 +20,10 @@ import {
 import { z } from 'zod';
 
 export type ResultadoApagar =
-  | { ok: true; imagens: ImagensApagadas }
-  | { ok: false; erro: string };
+  { ok: true; imagens: ImagensApagadas } | { ok: false; erro: string };
 
 export type ResultadoGravacao =
-  | { ok: true; guardado: PostGuardado }
-  | { ok: false; erro: string };
+  { ok: true; guardado: PostGuardado } | { ok: false; erro: string };
 
 /**
  * Salvar, publicar e despublicar numa gravação só. O tipo da entrada é o que o

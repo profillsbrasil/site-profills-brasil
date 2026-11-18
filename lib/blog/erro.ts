@@ -15,8 +15,7 @@ export const motivosImagem = {
 };
 
 export type Tentativa<T> =
-  | { ok: true; valor: T }
-  | { ok: false; motivo: string; doAutor: boolean };
+  { ok: true; valor: T } | { ok: false; motivo: string; doAutor: boolean };
 
 /** Roda a gravação e troca a exceção por um motivo que o editor mostra. */
 export async function comMotivo<T>(
