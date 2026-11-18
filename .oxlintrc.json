@@ -337,11 +337,6 @@
       }
     },
     {
-      // Comentários de prosa ainda pendentes em lib; o PR que os tira apaga este bloco.
-      "files": ["lib/**"],
-      "rules": { "landmines-style/no-comments": "off" }
-    },
-    {
       // Comentários de prosa ainda pendentes em components; o PR que os tira apaga este bloco.
       "files": ["components/**"],
       "rules": { "landmines-style/no-comments": "off" }
