@@ -6,18 +6,15 @@ export function ehTexto(valor: unknown): valor is string {
   return typeof valor === 'string';
 }
 
-export function nomeDoElemento(node: ESTree.JSXOpeningElement): string | null {
+export function nomeDoElemento(node: ESTree.JSXOpeningElement) {
   return node.name.type === 'JSXIdentifier' ? node.name.name : null;
 }
 
-export function temSpread(node: ESTree.JSXOpeningElement): boolean {
+export function temSpread(node: ESTree.JSXOpeningElement) {
   return node.attributes.some((a: Atributo) => a.type === 'JSXSpreadAttribute');
 }
 
-export function atributo(
-  node: ESTree.JSXOpeningElement,
-  nome: string
-): ESTree.JSXAttribute | null {
+export function atributo(node: ESTree.JSXOpeningElement, nome: string) {
   for (const a of node.attributes) {
     if (
       a.type === 'JSXAttribute' &&
@@ -32,10 +29,7 @@ export function atributo(
 }
 
 /** `fill` e `fill={true}` ligam a prop; `fill={false}` não. */
-export function atributoLigado(
-  node: ESTree.JSXOpeningElement,
-  nome: string
-): boolean {
+export function atributoLigado(node: ESTree.JSXOpeningElement, nome: string) {
   const a = atributo(node, nome);
 
   if (a === null) return false;
@@ -49,7 +43,7 @@ export function atributoLigado(
 }
 
 /** Valor string literal do atributo: `x='a'`, `x={'a'}` ou `x={`a`}`; null para qualquer outra forma. */
-export function valorLiteral(a: ESTree.JSXAttribute): string | null {
+export function valorLiteral(a: ESTree.JSXAttribute) {
   const v = a.value;
 
   if (v === null) return null;
@@ -68,10 +62,7 @@ export function valorLiteral(a: ESTree.JSXAttribute): string | null {
   return null;
 }
 
-export function importPadrao(
-  program: ESTree.Program,
-  fonte: string
-): string | null {
+export function importPadrao(program: ESTree.Program, fonte: string) {
   for (const s of program.body) {
     if (s.type !== 'ImportDeclaration' || s.source.value !== fonte) continue;
 

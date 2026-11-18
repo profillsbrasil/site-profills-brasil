@@ -4,7 +4,7 @@ import type { ESTree } from '@oxlint/plugins';
 import { ehTexto, importPadrao } from '../jsx.ts';
 import { ehModulo3d } from '../modulos3d.ts';
 
-function fonteDoImport(loader: ESTree.Node): string | null {
+function fonteDoImport(loader: ESTree.Node) {
   if (
     loader.type !== 'ArrowFunctionExpression' &&
     loader.type !== 'FunctionExpression'
@@ -40,9 +40,7 @@ function fonteDoImport(loader: ESTree.Node): string | null {
   return null;
 }
 
-function temSsrFalse(
-  opcoes: ESTree.Node | undefined
-): boolean | 'opcoes-fora-do-literal' {
+function temSsrFalse(opcoes: ESTree.Node | undefined) {
   if (opcoes === undefined) return false;
 
   if (opcoes.type !== 'ObjectExpression') return 'opcoes-fora-do-literal';

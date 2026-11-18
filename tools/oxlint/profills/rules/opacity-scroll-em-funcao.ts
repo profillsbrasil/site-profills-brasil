@@ -7,10 +7,7 @@ const FONTES_MOTION = new Set([
   'framer-motion'
 ]);
 
-function resolver(
-  sourceCode: SourceCode,
-  id: ESTree.Node & { name: string }
-): Variable | null {
+function resolver(sourceCode: SourceCode, id: ESTree.Node & { name: string }) {
   let scope: Scope | null = sourceCode.getScope(id);
 
   while (scope !== null) {
@@ -23,7 +20,7 @@ function resolver(
   return null;
 }
 
-function ehChave(p: { key: ESTree.Node }, nome: string): boolean {
+function ehChave(p: { key: ESTree.Node }, nome: string) {
   return (
     (p.key.type === 'Identifier' && p.key.name === nome) ||
     (p.key.type === 'Literal' && p.key.value === nome)
@@ -66,17 +63,14 @@ export const opacityScrollEmFuncaoRule = defineRule({
       );
     }
 
-    function apontaPara(
-      n: ESTree.Node | undefined,
-      variaveis: Set<Variable>
-    ): boolean {
+    function apontaPara(n: ESTree.Node | undefined, variaveis: Set<Variable>) {
       if (n?.type !== 'Identifier') return false;
       const v = resolver(sourceCode, n);
 
       return v !== null && variaveis.has(v);
     }
 
-    function ehProgresso(arg: ESTree.Node | undefined): boolean {
+    function ehProgresso(arg: ESTree.Node | undefined) {
       if (arg?.type === 'MemberExpression') {
         return apontaPara(arg.object, objetoScroll);
       }
@@ -84,7 +78,7 @@ export const opacityScrollEmFuncaoRule = defineRule({
       return apontaPara(arg, progresso);
     }
 
-    function ehTransformArray(n: ESTree.Node | null | undefined): boolean {
+    function ehTransformArray(n: ESTree.Node | null | undefined) {
       if (!ehChamadaDe(n, 'useTransform') || n?.type !== 'CallExpression')
         return false;
 

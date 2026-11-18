@@ -45,17 +45,18 @@ function jpegtran(original: Buffer) {
   });
 }
 
-function candidatos(meta: Metadata): Candidato[] {
+function candidatos(meta: Metadata) {
   if (meta.format === 'png') {
-    const png = (largura?: number): Candidato => ({
-      nome: largura ? 'png' : 'png-largura-original',
-      codificar: (original) =>
-        sharp(original)
-          .rotate()
-          .resize(largura, undefined, { withoutEnlargement: true })
-          .png({ compressionLevel: 9, adaptiveFiltering: true })
-          .toBuffer()
-    });
+    const png = (largura?: number) =>
+      ({
+        nome: largura ? 'png' : 'png-largura-original',
+        codificar: (original) =>
+          sharp(original)
+            .rotate()
+            .resize(largura, undefined, { withoutEnlargement: true })
+            .png({ compressionLevel: 9, adaptiveFiltering: true })
+            .toBuffer()
+      }) satisfies Candidato;
 
     return meta.width > LARGURA_MAXIMA
       ? [png(LARGURA_MAXIMA), png()]
