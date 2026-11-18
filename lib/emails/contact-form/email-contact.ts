@@ -10,7 +10,6 @@ import { logger } from '@/lib/utils/logger';
 
 import { template as contactTemplate } from './email-template';
 
-// Função para formatar o material, serviço e acabamento como arrays
 const formatProjectDetails = (data: ContactFormData) => {
   const materialLabels = new Map([
     ['aco-inox', 'Aço Inox'],
@@ -36,7 +35,6 @@ const formatProjectDetails = (data: ContactFormData) => {
   };
 };
 
-// Template HTML para o e-mail usando arquivos externos
 export const createContactEmailTemplate = (
   data: ContactFormData,
   indicadoPor = ''
@@ -47,10 +45,8 @@ export const createContactEmailTemplate = (
 
   const siteUrl = SITE_URL;
 
-  // Formata os detalhes do projeto
   const projectDetails = formatProjectDetails(data);
 
-  // Formata o endereço completo
   const enderecoCompleto = [
     data.street,
     data.number,
@@ -63,7 +59,6 @@ export const createContactEmailTemplate = (
     .filter(Boolean)
     .join(', ');
 
-  // Dados para o template
   const templateData = {
     subject: 'Solicitação de Orçamento - Serviços Personalizados',
     preheader: `Nova solicitação de orçamento de ${data.email}`,
@@ -84,16 +79,13 @@ export const createContactEmailTemplate = (
     service: projectDetails.service,
     finish: projectDetails.finish,
     details: data.details,
-    // URLs absolutas já prontas
     logoUrl: `${siteUrl}/logo-branco.png`,
     siteUrl: siteUrl
   };
 
-  // Renderiza o template
   return renderTemplate(contactTemplate, templateData);
 };
 
-// Função para enviar e-mail
 export const sendContactEmail = async (
   data: ContactFormData,
   destinatario: Destinatario
@@ -114,7 +106,6 @@ export const sendContactEmail = async (
     to: destinatario.para,
     subject: `Orçamento - ${projectDetails.material[0]} (${projectDetails.service[0]}) - ${data.email}`,
     html: createContactEmailTemplate(data, escaparHtml(indicadoPor)),
-    // Versão em texto plano como fallback
     text: `
 Nova Solicitação de Orçamento - Profills
 ${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}

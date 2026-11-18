@@ -1,9 +1,7 @@
 import { z } from 'zod';
 
-// Texto aparado; ausente ou fora de texto vira ''
 const textoAparado = z.string().trim().catch('');
 
-// Helper: string opcional; "   " vira undefined
 const optionalTrimmed = textoAparado
   .transform((v) => (v === '' ? undefined : v))
   .pipe(z.string().optional());
