@@ -28,10 +28,7 @@ function premultiplicar(
 }
 
 /** SSIM médio por canal (R, G, B pré-multiplicados e alpha), janela 8x8 uniforme com passo 4. O RGB entra pré-multiplicado porque pixel transparente pode guardar qualquer RGB sem mudar o que a tela mostra. */
-export function ssimPorCanal(
-  a: ImagemCrua,
-  b: ImagemCrua
-): [number, number, number, number] {
+export function ssimPorCanal(a: ImagemCrua, b: ImagemCrua) {
   const largura = Math.min(a.width, b.width);
   const altura = Math.min(a.height, b.height);
   const pa = premultiplicar(a, largura, altura);
@@ -79,5 +76,10 @@ export function ssimPorCanal(
 
   const [vermelho, verde, azul, alpha] = soma.map((s) => s / janelas);
 
-  return [vermelho, verde, azul, alpha];
+  return [vermelho, verde, azul, alpha] satisfies [
+    number,
+    number,
+    number,
+    number
+  ];
 }

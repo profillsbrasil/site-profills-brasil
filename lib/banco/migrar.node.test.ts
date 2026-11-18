@@ -8,13 +8,15 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-async function bancoVazio(): Promise<Consulta> {
+async function bancoVazio() {
   const banco = await PGlite.create();
 
-  return async (sql, valores) =>
+  const consulta: Consulta = async (sql, valores) =>
     valores
       ? banco.query(sql, valores)
       : ((await banco.exec(sql)).at(-1) ?? { rows: [] });
+
+  return consulta;
 }
 
 const retrato = async (consulta: Consulta) => ({

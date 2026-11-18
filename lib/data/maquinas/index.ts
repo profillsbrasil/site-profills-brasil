@@ -77,6 +77,6 @@ export const maquinasCatalogo: MaquinaCatalogo[] = [
   automacaoIndustrialRoboticaIntegrada
 ];
 
-export function getMaquinaBySlug(slug: string): MaquinaCatalogo | undefined {
+export function getMaquinaBySlug(slug: string) {
   return maquinasCatalogo.find((m) => m.slug === slug);
 }

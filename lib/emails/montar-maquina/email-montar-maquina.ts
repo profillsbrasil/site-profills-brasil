@@ -20,7 +20,7 @@ export const createTransporter = () => {
 const renderTemplate = (
   template: string,
   data: Record<string, string | string[] | undefined>
-): string => {
+) => {
   let rendered = template;
 
   const eachRegex = /\{\{#each\s+(\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g;

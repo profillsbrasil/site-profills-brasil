@@ -65,7 +65,7 @@ export function useContactForm() {
     }
   };
 
-  const validateStep = async (step: number): Promise<boolean> => {
+  const validateStep = async (step: number) => {
     const values = form.getValues();
     let fieldsToValidate: (keyof ContactFormData)[] = [];
 
@@ -128,16 +128,20 @@ export function useContactForm() {
     }
   };
 
-  const getFieldsForStep = (step: number): (keyof ContactFormData)[] => {
+  const getFieldsForStep = (step: number) => {
     switch (step) {
       case 1:
-        return ['email', 'phone', 'cep'];
+        return ['email', 'phone', 'cep'] satisfies (keyof ContactFormData)[];
       case 2:
-        return ['number', 'city', 'state'];
+        return ['number', 'city', 'state'] satisfies (keyof ContactFormData)[];
       case 3:
-        return ['material', 'service', 'finish'];
+        return [
+          'material',
+          'service',
+          'finish'
+        ] satisfies (keyof ContactFormData)[];
       default:
-        return [];
+        return [] satisfies (keyof ContactFormData)[];
     }
   };
 

@@ -53,8 +53,10 @@ export function mesmoPost(a: Post, b: Post) {
 const limitarProporcao = (valor: number) =>
   Math.min(PROPORCAO_MAXIMA, Math.max(PROPORCAO_MINIMA, Math.round(valor)));
 
-const juntar = (bloco: Bloco, vizinho: Bloco, lado: Lado): Linha['colunas'] =>
-  lado === 'esquerda' ? [bloco, vizinho] : [vizinho, bloco];
+const juntar = (bloco: Bloco, vizinho: Bloco, lado: Lado) =>
+  (lado === 'esquerda'
+    ? [bloco, vizinho]
+    : [vizinho, bloco]) satisfies Linha['colunas'];
 
 const inserirEm = (linhas: Linha[], posicao: number, nova: Linha) => {
   const limite = Math.min(Math.max(posicao, 0), linhas.length);
@@ -62,7 +64,7 @@ const inserirEm = (linhas: Linha[], posicao: number, nova: Linha) => {
   return [...linhas.slice(0, limite), nova, ...linhas.slice(limite)];
 };
 
-export function editorReducer(post: Post, acao: AcaoEditor): Post {
+export function editorReducer(post: Post, acao: AcaoEditor) {
   switch (acao.tipo) {
     case 'inserirBloco': {
       const { destino } = acao;
@@ -77,7 +79,7 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
         return {
           ...post,
           linhas: inserirEm(post.linhas, destino.posicao, nova)
-        };
+        } satisfies Post;
       }
 
       return {
@@ -91,7 +93,7 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
               }
             : l
         )
-      };
+      } satisfies Post;
     }
 
     case 'moverLinha': {
@@ -102,7 +104,10 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
       const resto = post.linhas.filter((l) => l.id !== acao.linhaId);
       const posicao = acao.posicao > origem ? acao.posicao - 1 : acao.posicao;
 
-      return { ...post, linhas: inserirEm(resto, posicao, movida) };
+      return {
+        ...post,
+        linhas: inserirEm(resto, posicao, movida)
+      } satisfies Post;
     }
 
     case 'porLadoALado': {
@@ -126,13 +131,13 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
         linhas: post.linhas
           .filter((l) => l !== fonte)
           .map((l) => (l === alvo ? { ...l, colunas, proporcao: 50 } : l))
-      };
+      } satisfies Post;
     }
 
     case 'separarColunas': {
       return {
         ...post,
-        linhas: post.linhas.flatMap((l): Linha[] =>
+        linhas: post.linhas.flatMap<Linha>((l) =>
           l.id === acao.linhaId && l.colunas.length === 2
             ? [
                 { ...l, colunas: [l.colunas[0]], proporcao: 50 },
@@ -140,7 +145,7 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
               ]
             : [l]
         )
-      };
+      } satisfies Post;
     }
 
     case 'redimensionar': {
@@ -151,13 +156,13 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
             ? { ...l, proporcao: limitarProporcao(acao.proporcao) }
             : l
         )
-      };
+      } satisfies Post;
     }
 
     case 'removerBloco': {
       return {
         ...post,
-        linhas: post.linhas.flatMap((l): Linha[] => {
+        linhas: post.linhas.flatMap<Linha>((l) => {
           const resto = l.colunas.filter((b) => b.id !== acao.blocoId);
 
           if (resto.length === l.colunas.length) return [l];
@@ -166,7 +171,7 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
 
           return [{ ...l, colunas: [resto[0]], proporcao: 50 }];
         })
-      };
+      } satisfies Post;
     }
 
     case 'editarBloco': {
@@ -181,11 +186,11 @@ export function editorReducer(post: Post, acao: AcaoEditor): Post {
               ? [trocar(l.colunas[0])]
               : [trocar(l.colunas[0]), trocar(l.colunas[1])]
         }))
-      };
+      } satisfies Post;
     }
 
     case 'editarDados': {
-      return { ...post, ...acao.dados };
+      return { ...post, ...acao.dados } satisfies Post;
     }
   }
 }

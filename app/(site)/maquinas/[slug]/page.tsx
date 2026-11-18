@@ -28,13 +28,16 @@ export function generateStaticParams() {
   return maquinasCatalogo.map((m) => ({ slug: m.slug }));
 }
 
-export async function generateMetadata({
-  params
-}: MaquinaPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: MaquinaPageProps) {
   const { slug } = await params;
   const maquina = getMaquinaBySlug(slug);
 
-  if (!maquina) return {};
+  if (!maquina) {
+    const vazia: Metadata = {};
+
+    return vazia;
+  }
+
   const url = `/maquinas/${maquina.slug}`;
   const tituloComMarca = `${maquina.seo.titulo} | ${SITE_NAME}`;
 
@@ -48,7 +51,7 @@ export async function generateMetadata({
       }
     : { url: OG_IMAGE, width: 1200, height: 630, alt: maquina.nomeCompleto };
 
-  return {
+  const metadata: Metadata = {
     title: maquina.seo.titulo,
     description: maquina.seo.descricao,
     alternates: { canonical: url },
@@ -68,6 +71,8 @@ export async function generateMetadata({
       images: [imagem.url]
     }
   };
+
+  return metadata;
 }
 
 export default async function MaquinaPage({ params }: MaquinaPageProps) {

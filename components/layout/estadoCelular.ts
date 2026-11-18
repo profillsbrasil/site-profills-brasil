@@ -46,25 +46,38 @@ export const FOLHA_INICIAL: EstadoFolha = {
   focoNaAba: false
 };
 
-export function transicaoFolha(
-  estado: EstadoFolha,
-  evento: EventoFolha
-): EstadoFolha {
+export function transicaoFolha(estado: EstadoFolha, evento: EventoFolha) {
   switch (evento.tipo) {
-    case 'tocou-aba':
+    case 'tocou-aba': {
       if (estado.fase === 'aberta' && estado.folha === evento.folha) {
-        return { fase: 'fechada', folha: estado.folha, focoNaAba: true };
+        return {
+          fase: 'fechada',
+          folha: estado.folha,
+          focoNaAba: true
+        } satisfies EstadoFolha;
       }
 
-      return { fase: 'aberta', folha: evento.folha };
+      const aberta: EstadoFolha = { fase: 'aberta', folha: evento.folha };
+
+      return aberta;
+    }
+
     case 'dispensou':
       if (estado.fase === 'fechada') return estado;
 
-      return { fase: 'fechada', folha: estado.folha, focoNaAba: true };
+      return {
+        fase: 'fechada',
+        folha: estado.folha,
+        focoNaAba: true
+      } satisfies EstadoFolha;
     case 'navegou':
     case 'saiu-do-celular':
       if (estado.fase === 'aberta') {
-        return { fase: 'fechada', folha: estado.folha, focoNaAba: false };
+        return {
+          fase: 'fechada',
+          folha: estado.folha,
+          focoNaAba: false
+        } satisfies EstadoFolha;
       }
 
       return estado.focoNaAba ? { ...estado, focoNaAba: false } : estado;
@@ -99,7 +112,7 @@ export function passoDaFaixa(
   estado: EstadoFaixa,
   y: number,
   fase: EstadoFolha['fase']
-): EstadoFaixa {
+) {
   if (fase === 'aberta') return estado;
 
   if (y < TOPO_FAIXA_PX) {
@@ -137,7 +150,7 @@ export interface NavCelular {
   readonly aoDevolverFoco: (evento: Event) => void;
 }
 
-export function useNavCelular(): NavCelular {
+export function useNavCelular() {
   const [folha, despachar] = useReducer(transicaoFolha, FOLHA_INICIAL);
   const [faixaRecolhida, setFaixaRecolhida] = useState(false);
   const atual = useRef(folha);
@@ -224,7 +237,7 @@ export function useNavCelular(): NavCelular {
     }
   }, []);
 
-  return {
+  const nav: NavCelular = {
     folha,
     faixaRecolhida,
     tocarAba,
@@ -233,4 +246,6 @@ export function useNavCelular(): NavCelular {
     refAba,
     aoDevolverFoco
   };
+
+  return nav;
 }

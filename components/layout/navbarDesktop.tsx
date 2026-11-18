@@ -377,7 +377,7 @@ export default function NavbarDesktop({
 
   if (aberto && !abertos.has(aberto)) setAbertos(new Set([...abertos, aberto]));
 
-  const preparo = (menu: IdMenu): Preparo => {
+  const preparo = (menu: IdMenu) => {
     if (abertos.has(menu)) return 'todas';
 
     return apontada ? 'primeira' : 'nada';

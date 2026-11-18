@@ -21,7 +21,7 @@ export const createTransporter = () => {
 const renderTemplate = (
   template: string,
   data: Record<string, string | undefined>
-): string => {
+) => {
   let rendered = template;
 
   const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;

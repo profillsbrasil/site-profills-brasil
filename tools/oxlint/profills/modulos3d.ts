@@ -8,25 +8,21 @@ export const DOMINIO_3D = [
   'components/magicui/globe.tsx'
 ];
 
-export function ehPacote3d(fonte: string): boolean {
+export function ehPacote3d(fonte: string) {
   return PACOTES_3D.some((p) => fonte === p || fonte.startsWith(`${p}/`));
 }
 
-export function relativoARaiz(cwd: string, arquivo: string): string {
+export function relativoARaiz(cwd: string, arquivo: string) {
   return path.relative(cwd, arquivo).split(path.sep).join('/');
 }
 
-export function noDominio3d(relativo: string): boolean {
+export function noDominio3d(relativo: string) {
   return DOMINIO_3D.some((d) =>
     d.endsWith('/') ? relativo.startsWith(d) : relativo === d
   );
 }
 
-export function ehModulo3d(
-  fonte: string,
-  cwd: string,
-  arquivo: string
-): boolean {
+export function ehModulo3d(fonte: string, cwd: string, arquivo: string) {
   if (ehPacote3d(fonte)) return true;
   let relativo: string;
 

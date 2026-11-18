@@ -175,7 +175,7 @@ async function soltar(alvo: Alvo, arquivo: string) {
 async function esperar(
   condicao: () => Promise<boolean>,
   limite = Date.now() + 30_000
-): Promise<boolean> {
+) {
   if (await condicao()) return true;
 
   if (Date.now() >= limite) return false;
@@ -202,7 +202,7 @@ type Resultado = Caso & {
   caminho: string | null;
 };
 
-async function rodar(caso: Caso): Promise<Resultado> {
+async function rodar(caso: Caso) {
   const arquivo = join(pastaImagens, caso.arquivo);
   const antes = await lerEstado(caso.alvo);
 
@@ -267,10 +267,7 @@ async function rodar(caso: Caso): Promise<Resultado> {
   return resultado;
 }
 
-async function rodarEmOrdem(
-  pendentes: Caso[],
-  feitos: Resultado[] = []
-): Promise<Resultado[]> {
+async function rodarEmOrdem(pendentes: Caso[], feitos: Resultado[] = []) {
   const [caso, ...resto] = pendentes;
 
   if (!caso) return feitos;

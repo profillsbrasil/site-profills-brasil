@@ -6,11 +6,12 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/image', () => ({ default: 'img' }));
 
-const linha = (...colunas: [Bloco] | [Bloco, Bloco]): Linha => ({
-  id: colunas.map((c) => c.id).join('+'),
-  colunas,
-  proporcao: 62
-});
+const linha = (...colunas: [Bloco] | [Bloco, Bloco]) =>
+  ({
+    id: colunas.map((c) => c.id).join('+'),
+    colunas,
+    proporcao: 62
+  }) satisfies Linha;
 
 const renderizar = (linhas: Linha[], modo: ModoConteudo = 'publico') =>
   render(

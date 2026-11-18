@@ -22,7 +22,7 @@ function segredo() {
  * Há segredo configurado? Sem ele o proxy não grava nem apaga cookie: uma
  * assinatura ilegível por falta de chave não é um cookie adulterado.
  */
-export function temSegredoIndicacao(): boolean {
+export function temSegredoIndicacao() {
   return Boolean(process.env.INDICACAO_COOKIE_SECRET);
 }
 
@@ -39,7 +39,7 @@ export function opcoesCookieIndicacao() {
 export async function assinarIndicacao(
   vendedor: VendedorIndicacao,
   agora: Date = new Date()
-): Promise<string> {
+) {
   const payload: IndicacaoPayload = {
     codigo: vendedor.referral_code,
     nome: vendedor.nome,
@@ -64,9 +64,7 @@ const payloadSchema = z.object({
 }) satisfies z.ZodType<IndicacaoPayload>;
 
 /** Verifica assinatura e validade; qualquer problema vira null. */
-export async function lerIndicacao(
-  token: string | undefined
-): Promise<IndicacaoPayload | null> {
+export async function lerIndicacao(token: string | undefined) {
   if (!token) return null;
 
   try {
@@ -85,7 +83,7 @@ export async function lerIndicacao(
 export function precisaRenovar(
   payload: IndicacaoPayload,
   agora: Date = new Date()
-): boolean {
+) {
   const consultado = Date.parse(payload.consultadoEm);
 
   if (Number.isNaN(consultado)) return true;

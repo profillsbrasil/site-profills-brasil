@@ -43,7 +43,7 @@ const featuredMachines = featuredSlugs.map((slug) => {
   return m;
 });
 
-function subtituloDe(maquina: MaquinaCatalogo): string {
+function subtituloDe(maquina: MaquinaCatalogo) {
   const [, subtitulo] = maquina.nomeCompleto.split(' - ');
 
   return subtitulo ?? maquina.categoria;

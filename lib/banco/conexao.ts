@@ -7,7 +7,7 @@ import path from 'node:path';
 import pg from 'pg';
 import 'server-only';
 
-function abrir(): Promise<Consulta> {
+function abrir() {
   const url = process.env.DATABASE_URL;
 
   if (url) {
@@ -24,7 +24,9 @@ function abrir(): Promise<Consulta> {
       logger.error('Conexão ociosa do banco caiu', erro)
     );
 
-    return Promise.resolve((sql, valores) => pool.query(sql, valores));
+    const consulta: Consulta = (sql, valores) => pool.query(sql, valores);
+
+    return Promise.resolve(consulta);
   }
 
   if (process.env.NODE_ENV === 'development') {

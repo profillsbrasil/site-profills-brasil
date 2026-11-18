@@ -36,7 +36,7 @@ const POINT_COLOR = () => ACCENT;
 let cachedCountries: CountryFeature[] | null = null;
 let pendingCountries: Promise<CountryFeature[]> | null = null;
 
-function loadCountries(): Promise<CountryFeature[]> {
+function loadCountries() {
   if (cachedCountries) return Promise.resolve(cachedCountries);
 
   if (pendingCountries) return pendingCountries;

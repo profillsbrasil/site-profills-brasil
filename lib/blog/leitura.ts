@@ -2,19 +2,16 @@ import { connection } from 'next/server';
 
 import { slugSchema } from '@/lib/schemas/post-blog';
 
-import { type ImagemGuardada, repositorioBlog } from './repositorio';
-import type { PostPublicado, ResumoPublicado } from './tipos';
+import { repositorioBlog } from './repositorio';
 import 'server-only';
 
-export async function listarPublicados(): Promise<ResumoPublicado[]> {
+export async function listarPublicados() {
   await connection();
 
   return repositorioBlog.listarPublicados();
 }
 
-export async function lerPublicado(
-  slug: string
-): Promise<PostPublicado | null> {
+export async function lerPublicado(slug: string) {
   await connection();
 
   const valido = slugSchema.safeParse(slug);
@@ -23,9 +20,7 @@ export async function lerPublicado(
 }
 
 /** Lê do armazém sem consultar o banco: a imagem de rascunho também responde, pelo caminho com hash. */
-export async function lerImagem(
-  caminho: string
-): Promise<ImagemGuardada | null> {
+export async function lerImagem(caminho: string) {
   await connection();
 
   return repositorioBlog.lerImagem(caminho);

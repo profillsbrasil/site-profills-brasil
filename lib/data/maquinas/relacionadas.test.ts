@@ -3,7 +3,7 @@ import { getMaquinasRelacionadas } from './relacionadas';
 import type { MaquinaCatalogo } from './types';
 import { describe, expect, it } from 'vitest';
 
-function fixture(overrides: Partial<MaquinaCatalogo>): MaquinaCatalogo {
+function fixture(overrides: Partial<MaquinaCatalogo>) {
   return { ...piloto, ...overrides };
 }
 

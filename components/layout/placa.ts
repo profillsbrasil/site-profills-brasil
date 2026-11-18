@@ -110,38 +110,43 @@ export const PLACA_INICIAL: EstadoPlaca = {
   dispensado: null
 };
 
-export function menuVisivel(estado: EstadoPlaca): IdMenu | null {
+export function menuVisivel(estado: EstadoPlaca) {
   return estado.fase === 'aberta' || estado.fase === 'fechando'
     ? estado.menu
     : null;
 }
 
-function abrir(estado: EstadoPlaca, menu: IdMenu, agora: number): EstadoPlaca {
+function abrir(estado: EstadoPlaca, menu: IdMenu, agora: number) {
   if (estado.fase !== 'aberta' && estado.fase !== 'fechando') {
-    return {
+    const primeira: EstadoPlaca = {
       fase: 'aberta',
       menu,
       anterior: null,
       abertaEm: agora,
       retida: null
     };
+
+    return primeira;
   }
 
-  return estado.menu === menu
-    ? {
-        fase: 'aberta',
-        menu,
-        anterior: estado.anterior,
-        abertaEm: estado.abertaEm,
-        retida: null
-      }
-    : {
-        fase: 'aberta',
-        menu,
-        anterior: estado.menu,
-        abertaEm: agora,
-        retida: null
-      };
+  const aberta: EstadoPlaca =
+    estado.menu === menu
+      ? {
+          fase: 'aberta',
+          menu,
+          anterior: estado.anterior,
+          abertaEm: estado.abertaEm,
+          retida: null
+        }
+      : {
+          fase: 'aberta',
+          menu,
+          anterior: estado.menu,
+          abertaEm: agora,
+          retida: null
+        };
+
+  return aberta;
 }
 
 /**
@@ -149,10 +154,7 @@ function abrir(estado: EstadoPlaca, menu: IdMenu, agora: number): EstadoPlaca {
  * venceu-retida só age numa troca retida parada há PARADO_MS e venceu-fecha
  * só em fechando.
  */
-export function reduzirPlaca(
-  estado: EstadoPlaca,
-  evento: EventoPlaca
-): EstadoPlaca {
+export function reduzirPlaca(estado: EstadoPlaca, evento: EventoPlaca) {
   switch (evento.tipo) {
     case 'ponteiro-entrou':
     case 'ponteiro-moveu': {
@@ -177,13 +179,13 @@ export function reduzirPlaca(
       }
 
       return evento.rumoAGaveta
-        ? {
+        ? ({
             fase: 'aberta',
             menu: estado.menu,
             anterior: estado.anterior,
             abertaEm: estado.abertaEm,
             retida: { menu: evento.menu, desde: evento.agora }
-          }
+          } satisfies EstadoPlaca)
         : abrir(estado, evento.menu, evento.agora);
     }
 
@@ -196,7 +198,7 @@ export function reduzirPlaca(
 
       if (estado.fase === 'fechando') {
         return evento.onde === 'gaveta'
-          ? { ...estado, fase: 'aberta', retida: null }
+          ? ({ ...estado, fase: 'aberta', retida: null } satisfies EstadoPlaca)
           : estado;
       }
 
@@ -208,14 +210,16 @@ export function reduzirPlaca(
           menu: estado.menu,
           anterior: estado.anterior,
           abertaEm: estado.abertaEm
-        };
+        } satisfies EstadoPlaca;
       }
 
-      return estado.retida === null ? estado : { ...estado, retida: null };
+      return estado.retida === null
+        ? estado
+        : ({ ...estado, retida: null } satisfies EstadoPlaca);
 
     case 'ponteiro-entrou-na-zona':
       return estado.fase === 'fechando'
-        ? { ...estado, fase: 'aberta', retida: null }
+        ? ({ ...estado, fase: 'aberta', retida: null } satisfies EstadoPlaca)
         : estado;
 
     case 'ponteiro-saiu-da-zona':
@@ -224,12 +228,12 @@ export function reduzirPlaca(
       }
 
       return estado.fase === 'aberta'
-        ? {
+        ? ({
             fase: 'fechando',
             menu: estado.menu,
             anterior: estado.anterior,
             abertaEm: estado.abertaEm
-          }
+          } satisfies EstadoPlaca)
         : estado;
 
     case 'clique': {
@@ -244,7 +248,7 @@ export function reduzirPlaca(
           fase: 'fechada',
           devolverFocoA: null,
           dispensado: evento.menu
-        };
+        } satisfies EstadoPlaca;
       }
 
       return abrir(estado, evento.menu, evento.agora);
@@ -258,7 +262,11 @@ export function reduzirPlaca(
 
       return visivel === null
         ? estado
-        : { fase: 'fechada', devolverFocoA: visivel, dispensado: visivel };
+        : ({
+            fase: 'fechada',
+            devolverFocoA: visivel,
+            dispensado: visivel
+          } satisfies EstadoPlaca);
     }
 
     case 'fora':
@@ -302,18 +310,23 @@ export const RUMO_VIRADA_PX = 3;
 export function estenderRastro(
   rastro: readonly PontoNoTempo[],
   ponto: PontoNoTempo
-): readonly PontoNoTempo[] {
+) {
   const ultimo = rastro.at(-1);
 
-  if (!ultimo) return [ponto];
+  const parado = ultimo !== undefined && ponto.t - ultimo.t >= PARADO_MS;
 
-  if (ponto.t - ultimo.t >= PARADO_MS) return [ultimo, ponto];
+  const inicio = parado
+    ? rastro.length - 1
+    : rastro.findLastIndex(
+        (p) => Math.hypot(ponto.x - p.x, ponto.y - p.y) >= RUMO_RECUO_PX
+      );
 
-  const inicio = rastro.findLastIndex(
-    (p) => Math.hypot(ponto.x - p.x, ponto.y - p.y) >= RUMO_RECUO_PX
-  );
+  const estendido: readonly PontoNoTempo[] = [
+    ...rastro.slice(Math.max(inicio, 0)),
+    ponto
+  ];
 
-  return [...rastro.slice(Math.max(inicio, 0)), ponto];
+  return estendido;
 }
 
 /**
@@ -322,7 +335,7 @@ export function estenderRastro(
  * para baixo é medido do ponto mais alto. Sem caminho para medir, vale como
  * rumo, e a troca espera o ponteiro parar.
  */
-export function rumoAGaveta(rastro: readonly Ponto[]): boolean {
+export function rumoAGaveta(rastro: readonly Ponto[]) {
   const atual = rastro.at(-1);
   const inicio = rastro[0];
 
@@ -341,23 +354,16 @@ export function rumoAGaveta(rastro: readonly Ponto[]): boolean {
   );
 }
 
-export function ehMovimentoReal(
-  ultimo: Ponto | null,
-  x: number,
-  y: number
-): boolean {
+export function ehMovimentoReal(ultimo: Ponto | null, x: number, y: number) {
   return ultimo === null || ultimo.x !== x || ultimo.y !== y;
 }
 
-export function proximaCompacta(atual: boolean, scrollY: number): boolean {
+export function proximaCompacta(atual: boolean, scrollY: number) {
   return scrollY > (atual ? SAI_COMPACTA_PX : ENTRA_COMPACTA_PX);
 }
 
 /** -1, 0 ou 1: o lado de onde o conteúdo novo entra na gaveta. */
-export function sentidoDaTroca(
-  estado: EstadoPlaca,
-  ordem: readonly IdMenu[]
-): -1 | 0 | 1 {
+export function sentidoDaTroca(estado: EstadoPlaca, ordem: readonly IdMenu[]) {
   if (estado.fase !== 'aberta' && estado.fase !== 'fechando') return 0;
 
   if (estado.anterior === null) return 0;
@@ -404,7 +410,7 @@ function ondeNaZona(alvo: Element, gaveta: HTMLElement | null) {
   return alvo.closest('a, button') ? 'outro-item' : 'fundo';
 }
 
-function linksDoPainel(menu: IdMenu): HTMLAnchorElement[] {
+function linksDoPainel(menu: IdMenu) {
   return [
     ...(document
       .getElementById(idPainel(menu))
@@ -416,7 +422,7 @@ function linksDoPainel(menu: IdMenu): HTMLAnchorElement[] {
  * Liga o reducer ao relógio (um timer por fase com prazo) e ao documento
  * (Esc, clique e foco fora, troca de rota). Toque não tem hover: só o clique.
  */
-export function usePlaca(ordem: readonly IdMenu[]): Placa {
+export function usePlaca(ordem: readonly IdMenu[]) {
   const [estado, despachar] = useReducer(reduzirPlaca, PLACA_INICIAL);
   const [naZona, setNaZona] = useState(false);
   const raiz = useRef<HTMLDivElement | null>(null);
@@ -638,7 +644,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     return () => el.removeEventListener('keydown', aoTeclar);
   }, [aberto]);
 
-  return {
+  const placa: Placa = {
     aberto,
     naZona,
     sentido: sentidoDaTroca(estado, ordem),
@@ -648,6 +654,8 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     gatilho,
     gaveta
   };
+
+  return placa;
 }
 
 /**

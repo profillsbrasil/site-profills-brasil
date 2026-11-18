@@ -104,8 +104,8 @@ export interface Navegacao {
   readonly monte: readonly [NoMonte, NoMonte];
 }
 
-const hrefCategoria = (c: CategoriaCatalogo): Rota =>
-  `/maquinas?categoria=${encodeURIComponent(c)}`;
+const hrefCategoria = (c: CategoriaCatalogo) =>
+  `/maquinas?categoria=${encodeURIComponent(c)}` satisfies Rota;
 
 export const NAVEGACAO = {
   marca: { id: 'inicio', rotulo: 'Início', href: '/', icone: Home },
@@ -267,10 +267,10 @@ export const NAVEGACAO = {
 } as const satisfies Navegacao;
 
 /** Todo destino clicável, por id: o gabarito do teste de paridade. O gatilho de menu não é destino. */
-export function destinos(arvore: Navegacao = NAVEGACAO): Map<string, Rota> {
+export function destinos(arvore: Navegacao = NAVEGACAO) {
   const todos: Destino[] = [
     arvore.marca,
-    ...arvore.menus.flatMap((m): readonly Destino[] => m.painel.folhas),
+    ...arvore.menus.flatMap<Destino>((m) => m.painel.folhas),
     ...arvore.links,
     ...arvore.monte
   ];
@@ -278,7 +278,7 @@ export function destinos(arvore: Navegacao = NAVEGACAO): Map<string, Rota> {
   return new Map(todos.map((d) => [d.id, d.href]));
 }
 
-function pathnameDe(href: Rota): string {
+function pathnameDe(href: Rota) {
   return href.split('?')[0] ?? href;
 }
 
@@ -286,6 +286,7 @@ function pathnameDe(href: Rota): string {
  * O destino, ou alguma folha do menu, corresponde à página atual? Compara só
  * o pathname e acende também as subpáginas: "/maquinas/<slug>" acende Máquinas.
  */
+// oxlint-disable-next-line landmines-types/no-explicit-return-types -- recursiva: sem a anotação o tsc dá TS7023 e TS7024
 export function ehAtual(alvo: Destino | NoMenu, pathname: string): boolean {
   if ('painel' in alvo) {
     return alvo.painel.folhas.some((f) => ehAtual(f, pathname));

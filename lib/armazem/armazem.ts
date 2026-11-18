@@ -44,7 +44,7 @@ const SUFIXO_TEMPORARIO = '.tmp';
 export const PRAZO_LOTE_MS = 5_000;
 
 /** Armazém numa pasta do disco. A chave nunca sai da pasta. */
-export function criarArmazemDisco(raiz: string): Armazem {
+export function criarArmazemDisco(raiz: string) {
   const pasta = path.resolve(raiz);
 
   const caminho = (chave: string) => {
@@ -57,7 +57,7 @@ export function criarArmazemDisco(raiz: string): Armazem {
     return alvo;
   };
 
-  return {
+  const armazem: Armazem = {
     async gravar(chave, bytes) {
       const alvo = caminho(chave);
 
@@ -144,6 +144,8 @@ export function criarArmazemDisco(raiz: string): Armazem {
       return chaves.filter((_, i) => resultados[i]?.status === 'rejected');
     }
   };
+
+  return armazem;
 }
 
 export type ConfigS3 = {
@@ -155,7 +157,7 @@ export type ConfigS3 = {
   estiloCaminho: boolean;
 };
 
-export function criarArmazemS3(config: ConfigS3): Armazem {
+export function criarArmazemS3(config: ConfigS3) {
   const cliente = new S3Client({
     endpoint: config.endpoint,
     region: config.regiao,
@@ -169,7 +171,7 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
     }
   });
 
-  return {
+  const armazem: Armazem = {
     async gravar(chave, bytes, tipo) {
       const guardada = await cliente
         .send(new HeadObjectCommand({ Bucket: config.bucket, Key: chave }))
@@ -214,7 +216,7 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
     async listar(prefixo) {
       const prazo = AbortSignal.timeout(PRAZO_LOTE_MS);
 
-      const desde = async (continuacao?: string): Promise<ObjetoListado[]> => {
+      const desde = async (continuacao?: string) => {
         const pagina = await cliente.send(
           new ListObjectsV2Command({
             Bucket: config.bucket,
@@ -234,9 +236,12 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
           }
         );
 
-        return pagina.IsTruncated && pagina.NextContinuationToken
-          ? [...objetos, ...(await desde(pagina.NextContinuationToken))]
-          : objetos;
+        const todos: ObjetoListado[] =
+          pagina.IsTruncated && pagina.NextContinuationToken
+            ? [...objetos, ...(await desde(pagina.NextContinuationToken))]
+            : objetos;
+
+        return todos;
       };
 
       return desde();
@@ -257,6 +262,8 @@ export function criarArmazemS3(config: ConfigS3): Armazem {
       return chaves.filter((_, i) => resultados[i]?.status === 'rejected');
     }
   };
+
+  return armazem;
 }
 
 const NOMES_S3 = [
@@ -287,19 +294,29 @@ const ambienteS3 = z
     AWS_DEFAULT_REGION: z.string(),
     AWS_S3_URL_STYLE: estiloUrl.default('virtualhost')
   })
-  .transform((env): ConfigS3 => ({
-    endpoint: env.AWS_ENDPOINT_URL,
-    regiao: env.AWS_DEFAULT_REGION,
-    bucket: env.AWS_S3_BUCKET_NAME,
-    chave: env.AWS_ACCESS_KEY_ID,
-    segredo: env.AWS_SECRET_ACCESS_KEY,
-    estiloCaminho: env.AWS_S3_URL_STYLE.startsWith('path')
-  }));
+  .transform(
+    (env) =>
+      ({
+        endpoint: env.AWS_ENDPOINT_URL,
+        regiao: env.AWS_DEFAULT_REGION,
+        bucket: env.AWS_S3_BUCKET_NAME,
+        chave: env.AWS_ACCESS_KEY_ID,
+        segredo: env.AWS_SECRET_ACCESS_KEY,
+        estiloCaminho: env.AWS_S3_URL_STYLE.startsWith('path')
+      }) satisfies ConfigS3
+  );
 
-function armazemIndisponivel(motivo: string): Armazem {
+function armazemIndisponivel(motivo: string) {
   const falhar = () => Promise.reject(new ErroConfiguracao(motivo));
 
-  return { gravar: falhar, ler: falhar, listar: falhar, apagar: falhar };
+  const armazem: Armazem = {
+    gravar: falhar,
+    ler: falhar,
+    listar: falhar,
+    apagar: falhar
+  };
+
+  return armazem;
 }
 
 export type LeituraS3 =
@@ -308,33 +325,33 @@ export type LeituraS3 =
   | { estado: 'pronto'; config: ConfigS3 };
 
 /** Variável vazia conta como ausente; o motivo cita só nomes, nunca valores. */
-export function lerConfigS3(env: AmbienteArmazem): LeituraS3 {
+export function lerConfigS3(env: AmbienteArmazem) {
   const definidas = Object.fromEntries(
     NOMES_S3.flatMap((nome) => (env[nome] ? [[nome, env[nome]]] : []))
   );
 
-  if (Object.keys(definidas).length === 0) return { estado: 'ausente' };
+  if (Object.keys(definidas).length === 0)
+    return { estado: 'ausente' } satisfies LeituraS3;
 
   const lido = ambienteS3.safeParse(definidas);
 
-  if (lido.success) return { estado: 'pronto', config: lido.data };
+  if (lido.success) {
+    return { estado: 'pronto', config: lido.data } satisfies LeituraS3;
+  }
 
   const nomes = [...new Set(lido.error.issues.map((i) => i.path.join('.')))];
 
   return {
     estado: 'invalido',
     motivo: `Armazém de imagens mal configurado: confira ${nomes.join(', ')}.`
-  };
+  } satisfies LeituraS3;
 }
 
 /**
  * Com as AWS_*, o bucket S3. Sem nenhuma, só o bun dev cai no disco em
  * raizDisco; fora dele, o armazém falha em vez de gravar onde o deploy apaga.
  */
-export function escolherArmazem(
-  env: AmbienteArmazem,
-  raizDisco: string
-): Armazem {
+export function escolherArmazem(env: AmbienteArmazem, raizDisco: string) {
   const lido = lerConfigS3(env);
 
   if (lido.estado === 'pronto') return criarArmazemS3(lido.config);

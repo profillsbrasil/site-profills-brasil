@@ -12,10 +12,7 @@ export type EstadoEntrada = { erro: string } | null;
 const texto = (valor: FormDataEntryValue | null) =>
   valor instanceof File ? '' : (valor ?? '');
 
-export async function entrarNoAdmin(
-  _anterior: EstadoEntrada,
-  dados: FormData
-): Promise<EstadoEntrada> {
+export async function entrarNoAdmin(_anterior: EstadoEntrada, dados: FormData) {
   const resultado = await entrar(
     texto(dados.get('usuario')).trim(),
     texto(dados.get('senha'))

@@ -39,11 +39,12 @@ vi.mock('next/image', () => ({
   )
 }));
 
-const foto = (nome: string): StaticImageData => ({
-  src: `/vitrine-${nome}.webp`,
-  width: 10,
-  height: 10
-});
+const foto = (nome: string) =>
+  ({
+    src: `/vitrine-${nome}.webp`,
+    width: 10,
+    height: 10
+  }) satisfies StaticImageData;
 
 const vazia = { vitrine: null, total: 0 };
 

@@ -24,19 +24,20 @@ import {
   vi
 } from 'vitest';
 
-const post = (titulo: string): Post => ({
-  assunto: 'nota',
-  titulo,
-  resumo: 'Resumo',
-  capa: null,
-  linhas: [
-    {
-      id: 'l1',
-      colunas: [{ id: 'b1', tipo: 'paragrafo', texto: 'Texto' }],
-      proporcao: 50
-    }
-  ]
-});
+const post = (titulo: string) =>
+  ({
+    assunto: 'nota',
+    titulo,
+    resumo: 'Resumo',
+    capa: null,
+    linhas: [
+      {
+        id: 'l1',
+        colunas: [{ id: 'b1', tipo: 'paragrafo', texto: 'Texto' }],
+        proporcao: 50
+      }
+    ]
+  }) satisfies Post;
 
 const png = new Uint8Array([
   0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0

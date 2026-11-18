@@ -28,7 +28,7 @@ export const config = {
   ]
 };
 
-async function entrarPorLink(request: NextRequest): Promise<NextResponse> {
+async function entrarPorLink(request: NextRequest) {
   const limpa = request.nextUrl.clone();
   const codigo = normalizarCodigo(limpa.searchParams.get('ref'));
   limpa.searchParams.delete('ref');
@@ -55,7 +55,7 @@ async function entrarPorLink(request: NextRequest): Promise<NextResponse> {
   return res;
 }
 
-async function renovarSePreciso(request: NextRequest): Promise<NextResponse> {
+async function renovarSePreciso(request: NextRequest) {
   const bruto = request.cookies.get(INDICACAO_COOKIE)?.value;
 
   if (!bruto) return NextResponse.next();

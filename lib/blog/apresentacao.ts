@@ -1,6 +1,5 @@
 import {
   type Assunto,
-  type AssuntoComPosts,
   type Bloco,
   type Post,
   type ResumoAdmin,
@@ -42,7 +41,7 @@ export function dataCurta(iso: string) {
 }
 
 /** Cada assunto do registry, na ordem dele, com os posts que o usam; assunto sem post vem com a lista vazia. */
-export function agruparPorAssunto(posts: ResumoAdmin[]): AssuntoComPosts[] {
+export function agruparPorAssunto(posts: ResumoAdmin[]) {
   return Object.keys(assuntos)
     .filter(ehAssunto)
     .map((assunto) => ({
@@ -89,7 +88,7 @@ export function tamanhoDoArquivo(bytes: number) {
 
 const PALAVRAS_POR_MINUTO = 200;
 
-function textosDoBloco(bloco: Bloco): string[] {
+function textosDoBloco(bloco: Bloco) {
   switch (bloco.tipo) {
     case 'titulo':
     case 'paragrafo':
@@ -155,7 +154,7 @@ export function montarListagem(
   publicados: ResumoPublicado[],
   filtro: Assunto | null,
   agora: Date
-): Listagem {
+) {
   const fixado =
     publicados.find(
       (p) =>

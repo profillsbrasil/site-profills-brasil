@@ -20,7 +20,7 @@ export type VitrinesDoMenu = Record<
   { vitrine: VitrineMenu | null; total: number }
 >;
 
-function vitrineDe(maquinas: typeof maquinasCatalogo): VitrineMenu | null {
+function vitrineDe(maquinas: typeof maquinasCatalogo) {
   const maquina = maquinas.find((m) => m.imagens);
 
   if (!maquina?.imagens) return null;
@@ -37,7 +37,7 @@ function vitrineDe(maquinas: typeof maquinasCatalogo): VitrineMenu | null {
  * Roda no servidor, no layout do grupo (site): a navbar recebe só este
  * registro, sem o catálogo completo no bundle de toda rota.
  */
-export function montarVitrinesDoMenu(): VitrinesDoMenu {
+export function montarVitrinesDoMenu() {
   const vitrines = {
     todas: {
       vitrine: vitrineDe(maquinasCatalogo),

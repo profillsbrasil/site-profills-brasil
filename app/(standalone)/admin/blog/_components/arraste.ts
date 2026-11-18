@@ -46,7 +46,7 @@ export function acharDestino(
   x: number,
   y: number,
   carga: Carga
-): Destino | null {
+) {
   const caixa = lista.getBoundingClientRect();
 
   const fora =
@@ -73,11 +73,13 @@ export function acharDestino(
 
     const zona = Math.min(ZONA_LATERAL_MAXIMA, r.width * 0.25);
 
-    if (x <= r.left + zona)
-      return { tipo: 'lado', linhaId: id, lado: 'esquerda' };
+    if (x <= r.left + zona) {
+      return { tipo: 'lado', linhaId: id, lado: 'esquerda' } satisfies Destino;
+    }
 
-    if (x >= r.right - zona)
-      return { tipo: 'lado', linhaId: id, lado: 'direita' };
+    if (x >= r.right - zona) {
+      return { tipo: 'lado', linhaId: id, lado: 'direita' } satisfies Destino;
+    }
   }
 
   const posicao = linhas.filter((linha) => {
@@ -91,7 +93,7 @@ export function acharDestino(
   if (origem >= 0 && (posicao === origem || posicao === origem + 1))
     return null;
 
-  return { tipo: 'linha', posicao };
+  return { tipo: 'linha', posicao } satisfies Destino;
 }
 
 const aoLadoDoPonteiro = (ponteiro: number, tamanho: number, tela: number) =>
@@ -126,7 +128,7 @@ export function posicaoDaFicha(
   ficha: Tamanho,
   alvo: AlvoLateral | null,
   tela: Tamanho
-): Ponto {
+) {
   return {
     x: dentroDaTela(
       xDaFicha(ponteiro, ficha.largura, alvo, tela.largura),

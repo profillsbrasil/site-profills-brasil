@@ -48,7 +48,7 @@ export function limparCacheReferral() {
 }
 
 /** Só para teste: quantas entradas o cache guarda agora. */
-export function tamanhoCacheReferral(): number {
+export function tamanhoCacheReferral() {
   return cache.size;
 }
 
@@ -60,10 +60,10 @@ export { normalizarCodigo };
  */
 export async function buscarVendedorPorCodigo(
   valor: string | null | undefined
-): Promise<ResultadoBusca> {
+) {
   const codigo = normalizarCodigo(valor);
 
-  if (!codigo) return { tipo: 'nao-encontrado' };
+  if (!codigo) return { tipo: 'nao-encontrado' } satisfies ResultadoBusca;
 
   const agora = Date.now();
   const guardado = cache.get(codigo);
@@ -76,7 +76,7 @@ export async function buscarVendedorPorCodigo(
   if (!base || !chave) {
     logger.warn('[crm-referral] CRM_BASE_URL ou CRM_EXTERNAL_API_KEY ausente');
 
-    return { tipo: 'indisponivel' };
+    return { tipo: 'indisponivel' } satisfies ResultadoBusca;
   }
 
   try {
@@ -102,7 +102,7 @@ export async function buscarVendedorPorCodigo(
         `[crm-referral] CRM respondeu ${resp.status} para ${codigo}`
       );
 
-      return { tipo: 'indisponivel' };
+      return { tipo: 'indisponivel' } satisfies ResultadoBusca;
     }
 
     const validado = RespostaCrm.safeParse(await resp.json());
@@ -110,7 +110,7 @@ export async function buscarVendedorPorCodigo(
     if (!validado.success) {
       logger.error(`[crm-referral] resposta inválida do CRM para ${codigo}`);
 
-      return { tipo: 'indisponivel' };
+      return { tipo: 'indisponivel' } satisfies ResultadoBusca;
     }
 
     const vendedor: VendedorIndicacao = validado.data;
@@ -121,11 +121,11 @@ export async function buscarVendedorPorCodigo(
   } catch (erro) {
     logger.error('[crm-referral] falha ao consultar o CRM', erro);
 
-    return { tipo: 'indisponivel' };
+    return { tipo: 'indisponivel' } satisfies ResultadoBusca;
   }
 }
 
-export function formatarTelefoneBR(digitos: string | null): string {
+export function formatarTelefoneBR(digitos: string | null) {
   if (!digitos) return '';
 
   if (digitos.length === 11) {
@@ -139,6 +139,6 @@ export function formatarTelefoneBR(digitos: string | null): string {
   return digitos;
 }
 
-export function linkWhatsApp(digitos: string | null): string | null {
+export function linkWhatsApp(digitos: string | null) {
   return digitos ? `https://wa.me/55${digitos}` : null;
 }

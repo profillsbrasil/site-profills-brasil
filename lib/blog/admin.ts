@@ -18,6 +18,8 @@ export type AdminBlog = Pick<
  * A única porta de escrita do blog. null sem sessão do admin: a página manda
  * para o login, a action devolve o motivo e o editor mantém o texto.
  */
-export async function abrirAdminBlog(): Promise<AdminBlog | null> {
-  return (await autorAtual()) ? repositorioBlog : null;
+export async function abrirAdminBlog() {
+  const admin: AdminBlog | null = (await autorAtual()) ? repositorioBlog : null;
+
+  return admin;
 }

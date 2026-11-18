@@ -25,10 +25,7 @@ const PASTAS_LIBERADAS = [
   'scripts/'
 ];
 
-function caminhoNoRepoSemExtensao(
-  fonte: string,
-  arquivo: string
-): string | null {
+function caminhoNoRepoSemExtensao(fonte: string, arquivo: string) {
   let relativo: string;
 
   if (fonte.startsWith('@/')) relativo = path.posix.normalize(fonte.slice(2));
@@ -49,7 +46,7 @@ const ehPacoteDeBanco = (fonte: string) =>
     (p) => fonte === p || fonte.startsWith(`${p}/`)
   );
 
-function textoFixo(fonte: ESTree.Expression): string | null {
+function textoFixo(fonte: ESTree.Expression) {
   if (fonte.type === 'Literal' && ehTexto(fonte.value)) return fonte.value;
 
   if (fonte.type === 'TemplateLiteral' && fonte.expressions.length === 0)

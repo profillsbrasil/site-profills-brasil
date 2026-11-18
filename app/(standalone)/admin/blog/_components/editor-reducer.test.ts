@@ -3,28 +3,31 @@ import type { Bloco, Linha, Post } from '@/lib/blog/tipos';
 import { editorReducer } from './editor-reducer';
 import { describe, expect, it } from 'vitest';
 
-const paragrafo = (id: string): Bloco => ({
-  id,
-  tipo: 'paragrafo',
-  texto: id
-});
+const paragrafo = (id: string) =>
+  ({
+    id,
+    tipo: 'paragrafo',
+    texto: id
+  }) satisfies Bloco;
 
-const linha = (id: string, ...ids: [string] | [string, string]): Linha => ({
-  id,
-  colunas:
-    ids.length === 1
-      ? [paragrafo(ids[0])]
-      : [paragrafo(ids[0]), paragrafo(ids[1])],
-  proporcao: 50
-});
+const linha = (id: string, ...ids: [string] | [string, string]) =>
+  ({
+    id,
+    colunas:
+      ids.length === 1
+        ? [paragrafo(ids[0])]
+        : [paragrafo(ids[0]), paragrafo(ids[1])],
+    proporcao: 50
+  }) satisfies Linha;
 
-const postCom = (...linhas: Linha[]): Post => ({
-  assunto: 'maquina',
-  titulo: '',
-  resumo: '',
-  capa: null,
-  linhas
-});
+const postCom = (...linhas: Linha[]) =>
+  ({
+    assunto: 'maquina',
+    titulo: '',
+    resumo: '',
+    capa: null,
+    linhas
+  }) satisfies Post;
 
 const blocosPorLinha = (post: Post) =>
   post.linhas.map((l) => l.colunas.map((b) => b.id));

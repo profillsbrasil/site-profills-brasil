@@ -246,8 +246,7 @@
     // 262 ocorrências em 55 arquivos; trocar mock por implementação real
     // exige injeção de dependência no código de produção.
     "landmines-testing/no-test-doubles": "off",
-    // As 179 anotações de retorno saem no PR seguinte.
-    "landmines-types/no-explicit-return-types": "off"
+    "landmines-types/no-explicit-return-types": "error"
   },
   "overrides": [
     {

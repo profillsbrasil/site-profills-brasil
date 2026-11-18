@@ -23,10 +23,10 @@ export function metadataDaPagina({
   titulo: string;
   descricao: string;
   path: string;
-}): Metadata {
+}) {
   const tituloComMarca = `${titulo} | ${SITE_NAME}`;
 
-  return {
+  const metadata: Metadata = {
     title: titulo,
     description: descricao,
     alternates: { canonical: path },
@@ -46,4 +46,6 @@ export function metadataDaPagina({
       images: [CARD_SOCIAL.url]
     }
   };
+
+  return metadata;
 }

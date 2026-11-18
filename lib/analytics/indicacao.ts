@@ -14,7 +14,7 @@ const INTERVALO_MS = 250;
 const ESPERA_MAXIMA_MS = 10_000;
 const TENTATIVAS = ESPERA_MAXIMA_MS / INTERVALO_MS;
 
-function rodouSemLancar(acao: () => void): boolean {
+function rodouSemLancar(acao: () => void) {
   try {
     acao();
 
@@ -84,7 +84,7 @@ export function registrarLeadIndicacao(
 }
 
 /** Devolve true na primeira chamada por sessão do navegador para este código. */
-export function marcarChegadaNaSessao(codigo: string): boolean {
+export function marcarChegadaNaSessao(codigo: string) {
   const chave = `indicacao_registrada:${codigo}`;
 
   try {

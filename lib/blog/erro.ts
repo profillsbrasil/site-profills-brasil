@@ -18,18 +18,24 @@ export type Tentativa<T> =
   { ok: true; valor: T } | { ok: false; motivo: string; doAutor: boolean };
 
 /** Roda a gravação e troca a exceção por um motivo que o editor mostra. */
-export async function comMotivo<T>(
-  operacao: () => Promise<T>
-): Promise<Tentativa<T>> {
+export async function comMotivo<T>(operacao: () => Promise<T>) {
   try {
-    return { ok: true, valor: await operacao() };
+    return { ok: true, valor: await operacao() } satisfies Tentativa<T>;
   } catch (erro) {
     if (erro instanceof ErroBlog) {
-      return { ok: false, motivo: erro.message, doAutor: true };
+      return {
+        ok: false,
+        motivo: erro.message,
+        doAutor: true
+      } satisfies Tentativa<T>;
     }
 
     if (erro instanceof ErroConfiguracao) {
-      return { ok: false, motivo: erro.message, doAutor: false };
+      return {
+        ok: false,
+        motivo: erro.message,
+        doAutor: false
+      } satisfies Tentativa<T>;
     }
 
     const motivo =
@@ -37,6 +43,6 @@ export async function comMotivo<T>(
         ? `Não foi possível gravar (${String(erro.code)}).`
         : 'Erro inesperado ao gravar. Veja o log do servidor.';
 
-    return { ok: false, motivo, doAutor: false };
+    return { ok: false, motivo, doAutor: false } satisfies Tentativa<T>;
   }
 }
