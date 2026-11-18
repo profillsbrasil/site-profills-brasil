@@ -118,30 +118,35 @@ export function menuVisivel(estado: EstadoPlaca) {
 
 function abrir(estado: EstadoPlaca, menu: IdMenu, agora: number) {
   if (estado.fase !== 'aberta' && estado.fase !== 'fechando') {
-    return {
+    const primeira: EstadoPlaca = {
       fase: 'aberta',
       menu,
       anterior: null,
       abertaEm: agora,
       retida: null
-    } satisfies EstadoPlaca;
+    };
+
+    return primeira;
   }
 
-  return estado.menu === menu
-    ? ({
-        fase: 'aberta',
-        menu,
-        anterior: estado.anterior,
-        abertaEm: estado.abertaEm,
-        retida: null
-      } satisfies EstadoPlaca)
-    : ({
-        fase: 'aberta',
-        menu,
-        anterior: estado.menu,
-        abertaEm: agora,
-        retida: null
-      } satisfies EstadoPlaca);
+  const aberta: EstadoPlaca =
+    estado.menu === menu
+      ? {
+          fase: 'aberta',
+          menu,
+          anterior: estado.anterior,
+          abertaEm: estado.abertaEm,
+          retida: null
+        }
+      : {
+          fase: 'aberta',
+          menu,
+          anterior: estado.menu,
+          abertaEm: agora,
+          retida: null
+        };
+
+  return aberta;
 }
 
 /**
@@ -308,15 +313,20 @@ export function estenderRastro(
 ) {
   const ultimo = rastro.at(-1);
 
-  if (!ultimo) return [ponto];
+  const parado = ultimo !== undefined && ponto.t - ultimo.t >= PARADO_MS;
 
-  if (ponto.t - ultimo.t >= PARADO_MS) return [ultimo, ponto];
+  const inicio = parado
+    ? rastro.length - 1
+    : rastro.findLastIndex(
+        (p) => Math.hypot(ponto.x - p.x, ponto.y - p.y) >= RUMO_RECUO_PX
+      );
 
-  const inicio = rastro.findLastIndex(
-    (p) => Math.hypot(ponto.x - p.x, ponto.y - p.y) >= RUMO_RECUO_PX
-  );
+  const estendido: readonly PontoNoTempo[] = [
+    ...rastro.slice(Math.max(inicio, 0)),
+    ponto
+  ];
 
-  return [...rastro.slice(Math.max(inicio, 0)), ponto];
+  return estendido;
 }
 
 /**

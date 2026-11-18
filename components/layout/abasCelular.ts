@@ -139,7 +139,11 @@ export function abasDoCelular(arvore: Navegacao = NAVEGACAO) {
 export const ABAS_DO_CELULAR = abasDoCelular();
 
 export function destinosDaAba(aba: Aba) {
-  if (aba.tipo === 'link') return [aba.destino];
+  if (aba.tipo === 'link') {
+    const doLink: readonly Destino[] = [aba.destino];
+
+    return doLink;
+  }
 
   const { conteudo } = aba;
 
@@ -148,11 +152,14 @@ export function destinosDaAba(aba: Aba) {
       return conteudo.monte;
     case 'maquinas':
       return conteudo.menu.painel.folhas;
-    case 'menu':
-      return [
+    case 'menu': {
+      const doMenu: readonly Destino[] = [
         ...conteudo.menus.flatMap<Destino>((m) => m.painel.folhas),
         ...conteudo.pe
       ];
+
+      return doMenu;
+    }
   }
 }
 

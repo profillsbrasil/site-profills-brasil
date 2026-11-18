@@ -48,7 +48,7 @@ export const FOLHA_INICIAL: EstadoFolha = {
 
 export function transicaoFolha(estado: EstadoFolha, evento: EventoFolha) {
   switch (evento.tipo) {
-    case 'tocou-aba':
+    case 'tocou-aba': {
       if (estado.fase === 'aberta' && estado.folha === evento.folha) {
         return {
           fase: 'fechada',
@@ -57,7 +57,11 @@ export function transicaoFolha(estado: EstadoFolha, evento: EventoFolha) {
         } satisfies EstadoFolha;
       }
 
-      return { fase: 'aberta', folha: evento.folha } satisfies EstadoFolha;
+      const aberta: EstadoFolha = { fase: 'aberta', folha: evento.folha };
+
+      return aberta;
+    }
+
     case 'dispensou':
       if (estado.fase === 'fechada') return estado;
 

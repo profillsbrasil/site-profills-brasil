@@ -22,7 +22,9 @@ export const TEMA_POR_ROTA = {
 } as const satisfies Record<Rota, TemaDoTopo>;
 
 function entrada(pathname: string) {
-  return Object.entries(TEMA_POR_ROTA)
+  const achada: readonly [string, TemaDoTopo] | undefined = Object.entries(
+    TEMA_POR_ROTA
+  )
     .filter(([rota]) =>
       rota === '/'
         ? pathname === '/'
@@ -30,6 +32,8 @@ function entrada(pathname: string) {
     )
     .sort(([a], [b]) => b.length - a.length)
     .at(0);
+
+  return achada;
 }
 
 /** A chave mais longa que cobre o pathname; "/" cobre só a home. */

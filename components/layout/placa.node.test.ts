@@ -21,23 +21,33 @@ const rodar = (...eventos: EventoPlaca[]) =>
 
 type Menu = (typeof ORDEM)[number];
 
-const moveu = (menu: Menu, agora: number, { real = true, rumo = false } = {}) =>
-  ({
+const moveu = (
+  menu: Menu,
+  agora: number,
+  { real = true, rumo = false } = {}
+) => {
+  const evento: EventoPlaca = {
     tipo: 'ponteiro-moveu',
     menu,
     agora,
     real,
     rumoAGaveta: rumo
-  }) satisfies EventoPlaca;
+  };
 
-const entrou = (menu: Menu, agora: number) =>
-  ({
+  return evento;
+};
+
+const entrou = (menu: Menu, agora: number) => {
+  const evento: EventoPlaca = {
     tipo: 'ponteiro-entrou',
     menu,
     agora,
     real: true,
     rumoAGaveta: false
-  }) satisfies EventoPlaca;
+  };
+
+  return evento;
+};
 
 const FORA: EventoPlaca = {
   tipo: 'ponteiro-fora-de-gatilho',
@@ -54,11 +64,11 @@ const NA_GAVETA: EventoPlaca = {
 const SAIU: EventoPlaca = { tipo: 'ponteiro-saiu-da-zona' };
 const VOLTOU: EventoPlaca = { tipo: 'ponteiro-entrou-na-zona' };
 
-const venceu = (agora: number) =>
-  ({
-    tipo: 'venceu-retida',
-    agora
-  }) satisfies EventoPlaca;
+const venceu = (agora: number) => {
+  const evento: EventoPlaca = { tipo: 'venceu-retida', agora };
+
+  return evento;
+};
 
 const retidaEmProjetos = (agora = 100) =>
   [
