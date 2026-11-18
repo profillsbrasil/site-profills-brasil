@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.16",
+    "@interfere/landmines": "0.1.0",
     "@oxlint/plugins": "1.94.0",
     "@tailwindcss/postcss": "^4.3.5",
     "@testing-library/dom": "^10.4.2",

@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { logger } from '@/lib/utils/logger';
 
 import {

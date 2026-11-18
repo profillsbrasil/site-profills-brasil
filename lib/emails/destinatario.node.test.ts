@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { sendLeadNotification } from '@/lib/emails/catalog-request/email-catalog';
 import { sendContactEmail } from '@/lib/emails/contact-form/email-contact';
 import { sendMontarMaquinaEmail } from '@/lib/emails/montar-maquina/email-montar-maquina';

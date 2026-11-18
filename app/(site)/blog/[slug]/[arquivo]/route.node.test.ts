@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { lerImagem } from '@/lib/blog/leitura';
 
 import { GET, HEAD } from './route';

@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { criarArmazemDisco } from '@/lib/armazem/armazem';
 import { abrirPglite } from '@/lib/banco/pglite';
 import type { Consulta } from '@/lib/banco/tipos';
@@ -12,10 +11,9 @@ import { MOTIVO_APAGAR_PUBLICADO, SLUGS_RESERVADOS } from './regras';
 import { criarRepositorioBlog } from './repositorio';
 import type { Post, PostGuardado } from './tipos';
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, rm, utimes } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { setTimeout as esperar } from 'node:timers/promises';
 import {
   afterEach,
   beforeAll,
@@ -416,15 +414,21 @@ describe('repositório de posts no Postgres', () => {
   });
 });
 
-describe('posts que as migrações gravam', { timeout: 30_000 }, () => {
-  const abrirSemente = async () =>
+describe('posts que as migrações gravam', () => {
+  let consultaSemente: Consulta;
+
+  beforeAll(async () => {
+    consultaSemente = await abrirPglite();
+  }, 30_000);
+
+  const abrirSemente = () =>
     criarRepositorioBlog({
-      consulta: await abrirPglite(),
+      consulta: consultaSemente,
       armazem: criarArmazemDisco(raiz)
     });
 
   it('entram os 3 de exemplo como rascunho, no formato atual', async () => {
-    const semente = await abrirSemente();
+    const semente = abrirSemente();
     const lista = await semente.listar();
     const exemplos = lista.filter((p) => p.slug.startsWith('exemplo-'));
 
@@ -441,7 +445,7 @@ describe('posts que as migrações gravam', { timeout: 30_000 }, () => {
   });
 
   it('os 8 do LinkedIn saem publicados, e só eles aparecem na leitura pública', async () => {
-    const semente = await abrirSemente();
+    const semente = abrirSemente();
     const publicados = await semente.listarPublicados();
 
     expect(publicados).toHaveLength(8);
@@ -456,7 +460,7 @@ describe('posts que as migrações gravam', { timeout: 30_000 }, () => {
   });
 
   it('os posts do LinkedIn apontam imagens do próprio slug, com o hash que o upload grava', async () => {
-    const semente = await abrirSemente();
+    const semente = abrirSemente();
     const lista = await semente.listar();
 
     const doLinkedin = lista.filter((p) => !p.slug.startsWith('exemplo-'));
@@ -752,14 +756,19 @@ describe('imagens no admin', () => {
       new File([pngCom(1)], 'a.png')
     );
 
-    await esperar(20);
-
     const segunda = await repo.enviarImagem(
       slug,
       new File([pngCom(2)], 'b.png')
     );
 
-    await esperar(20);
+    const envelhecer = (caminho: string, minutos: number) => {
+      const quando = new Date(Date.now() - minutos * 60_000);
+
+      return utimes(path.join(raiz, caminho.slice(1)), quando, quando);
+    };
+
+    await envelhecer(primeira, 2);
+    await envelhecer(segunda, 1);
     await repo.enviarImagem(slug, new File([pngCom(1)], 'a.png'));
 
     expect((await repo.listarImagens()).map((i) => i.caminho)).toEqual([

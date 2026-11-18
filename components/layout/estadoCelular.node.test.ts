@@ -1,4 +1,3 @@
-// @vitest-environment node
 import {
   type EstadoFaixa,
   type EstadoFolha,

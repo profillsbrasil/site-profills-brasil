@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { abrirPglite } from '@/lib/banco/pglite';
 import type { Consulta } from '@/lib/banco/tipos';
 import { logger } from '@/lib/utils/logger';

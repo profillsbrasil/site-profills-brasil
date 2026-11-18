@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { NextRequest } from 'next/server';
 
 import { buscarVendedorPorCodigo } from '@/lib/crm/referral';

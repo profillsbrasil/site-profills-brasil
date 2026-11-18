@@ -1,4 +1,3 @@
-// @vitest-environment node
 import {
   INDICACAO_COOKIE,
   INDICACAO_MAX_AGE,

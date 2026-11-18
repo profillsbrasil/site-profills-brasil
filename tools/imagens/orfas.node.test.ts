@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { listarOrfas } from './orfas.ts';
 import { describe, expect, it } from 'vitest';
 
