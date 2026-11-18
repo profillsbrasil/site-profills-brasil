@@ -1,10 +1,10 @@
-/* Formato do código de vendedor, compartilhado entre servidor (CRM) e cliente
-   (analytics). Fica aqui, sem `server-only`, porque `lib/crm/referral.ts` é
-   server-only e o bundle do browser não pode importar de lá. */
-
 /** Mesmo formato que o CRM aceita; validar antes evita rede/eventos para lixo. */
 export const FORMATO_CODIGO = /^[A-Z0-9-]{3,20}$/;
 
+/**
+ * Código em maiúsculas, ou null fora do formato do CRM. Este arquivo não é
+ * server-only: o cliente importa daqui, e não de `lib/crm/referral.ts`.
+ */
 export function normalizarCodigo(
   valor: string | null | undefined
 ): string | null {

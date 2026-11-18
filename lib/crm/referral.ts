@@ -13,11 +13,8 @@ export type ResultadoBusca =
 const CACHE_MS = 5 * 60 * 1000;
 const TIMEOUT_MS = 4000;
 
-/** Teto de entradas do cache; o processo é longo e o código vem de fora. */
 const CACHE_MAX = 500;
 
-/* Chaves fora do contrato são descartadas (`strip` é o padrão do zod): o que
-   não está aqui nunca chega ao cookie nem ao e-mail. */
 const RespostaCrm = z.object({
   nome: z.string().min(1),
   email: z.email(),
@@ -29,13 +26,8 @@ type Cacheado =
   | { tipo: 'encontrado'; vendedor: VendedorIndicacao }
   | { tipo: 'nao-encontrado' };
 
-/* Cache em memória por bundle: o proxy e os route handlers são instâncias
-   separadas, então cada um mantém o seu Map (e o `next: { revalidate }` do
-   fetch abaixo só vale nos route handlers). O CRM roda num pool pequeno de
-   conexões e não tem rate limit; este Map é o que segura a repetição. */
 const cache = new Map<string, { ate: number; resultado: Cacheado }>();
 
-/** Insere respeitando o teto: o Map mantém ordem, então sai a mais antiga. */
 function guardar(
   codigo: string,
   entrada: { ate: number; resultado: Cacheado }
@@ -60,8 +52,6 @@ export function tamanhoCacheReferral(): number {
   return cache.size;
 }
 
-/* Reexportado para não quebrar quem já importava daqui; a regra mora em
-   `lib/indicacao/codigo.ts`, que o cliente também pode importar. */
 export { normalizarCodigo };
 
 /**

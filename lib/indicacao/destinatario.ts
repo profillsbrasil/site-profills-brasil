@@ -36,8 +36,6 @@ export async function resolverDestinatario(
 
   if (busca.tipo !== 'encontrado') return padrao;
 
-  /* Guarda barata contra cabeçalho injetado no `to`: o helper do CRM já
-     valida o formato, e aqui nada além de um e-mail vira destinatário. */
   if (!z.email().safeParse(busca.vendedor.email).success) return padrao;
 
   return { para: busca.vendedor.email, vendedor: busca.vendedor };
