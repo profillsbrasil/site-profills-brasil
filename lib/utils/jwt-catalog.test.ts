@@ -1,10 +1,14 @@
 // @vitest-environment node
 import { signCatalogToken, verifyCatalogToken } from './jwt-catalog';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 beforeAll(() => {
   process.env.CATALOG_TOKEN_SECRET =
     'test-secret-with-enough-bytes-for-hmac-256-algorithm';
+});
+
+afterEach(() => {
+  vi.useRealTimers();
 });
 
 describe('jwt-catalog', () => {
@@ -22,10 +26,9 @@ describe('jwt-catalog', () => {
   });
 
   it('retorna reason="expired" para token vencido', async () => {
-    const token = await signCatalogToken({ email: 'a@b.com', name: 'X' }, '0s');
-    await new Promise((r) => {
-      setTimeout(r, 50);
-    });
+    vi.useFakeTimers({ toFake: ['Date'] });
+    const token = await signCatalogToken({ email: 'a@b.com', name: 'X' }, '1h');
+    vi.setSystemTime(Date.now() + 2 * 60 * 60 * 1000);
     const result = await verifyCatalogToken(token);
     expect(result).toEqual({ ok: false, reason: 'expired' });
   });
