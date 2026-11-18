@@ -1,10 +1,10 @@
 import { readdir } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
-// Maior largura de deviceSizes no Next 16 (node_modules/next/dist/shared/lib/image-config.js); o next.config.ts não muda a lista.
+/** Maior largura de `deviceSizes` no Next 16 (`node_modules/next/dist/shared/lib/image-config.js`); o `next.config.ts` não muda a lista. */
 export const LARGURA_MAXIMA = 3840;
 
-// pouch-render-maximo.png (4,35 MiB depois de recomprimido) é o maior original que o site usa; a folga até 5 MiB não cabe outro igual.
+/** Teto por imagem: `pouch-render-maximo.png` (4,35 MiB depois de recomprimido) é o maior original que o site usa, e a folga até 5 MiB não cabe outro igual. */
 export const TETO_BYTES = 5 * 1024 * 1024;
 
 export const EXCECOES = {
