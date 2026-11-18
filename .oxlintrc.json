@@ -335,11 +335,6 @@
       "rules": {
         "anti-slop/no-chained-type-assertions": "off"
       }
-    },
-    {
-      // Comentários de prosa ainda pendentes no resto de app; o PR que os tira apaga este bloco.
-      "files": ["app/(standalone)/**", "app/api/**", "app/test/**", "app/*.ts"],
-      "rules": { "landmines-style/no-comments": "off" }
     }
   ]
 }
