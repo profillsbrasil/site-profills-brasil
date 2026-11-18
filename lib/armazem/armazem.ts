@@ -66,9 +66,11 @@ export function criarArmazemDisco(raiz: string): Armazem {
 
         return;
       } catch (erro) {
-        if (
-          !(erro instanceof Error && 'code' in erro && erro.code === 'ENOENT')
-        ) {
+        if (!(
+          erro instanceof Error &&
+          'code' in erro &&
+          erro.code === 'ENOENT'
+        )) {
           throw erro;
         }
       }
@@ -291,16 +293,14 @@ const ambienteS3 = z
     AWS_DEFAULT_REGION: z.string(),
     AWS_S3_URL_STYLE: estiloUrl.default('virtualhost')
   })
-  .transform(
-    (env): ConfigS3 => ({
-      endpoint: env.AWS_ENDPOINT_URL,
-      regiao: env.AWS_DEFAULT_REGION,
-      bucket: env.AWS_S3_BUCKET_NAME,
-      chave: env.AWS_ACCESS_KEY_ID,
-      segredo: env.AWS_SECRET_ACCESS_KEY,
-      estiloCaminho: env.AWS_S3_URL_STYLE.startsWith('path')
-    })
-  );
+  .transform((env): ConfigS3 => ({
+    endpoint: env.AWS_ENDPOINT_URL,
+    regiao: env.AWS_DEFAULT_REGION,
+    bucket: env.AWS_S3_BUCKET_NAME,
+    chave: env.AWS_ACCESS_KEY_ID,
+    segredo: env.AWS_SECRET_ACCESS_KEY,
+    estiloCaminho: env.AWS_S3_URL_STYLE.startsWith('path')
+  }));
 
 /** Cada chamada falha com o motivo: o upload o devolve ao editor e a rota pública responde 503. */
 function armazemIndisponivel(motivo: string): Armazem {

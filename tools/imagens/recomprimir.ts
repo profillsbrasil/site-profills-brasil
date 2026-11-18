@@ -3,7 +3,7 @@ import { LARGURA_MAXIMA, listarImagens } from './limites.ts';
 import { ssimPorCanal } from './ssim.ts';
 import { execFile } from 'node:child_process';
 import { readFile, stat, writeFile } from 'node:fs/promises';
-import sharp from 'sharp';
+import sharp, { type Metadata, type Sharp } from 'sharp';
 
 const SSIM_MINIMO = 0.99;
 const LARGURAS_COMPARADAS = [1920, LARGURA_MAXIMA];
@@ -12,12 +12,18 @@ const LARGURAS_COMPARADAS = [1920, LARGURA_MAXIMA];
 const GANHO_MINIMO = 0.1;
 const REVISAR_ACIMA_DE_BYTES = 400 * 1024;
 
-// O mesmo pipeline do optimizeImage do Next 16 (node_modules/next/dist/server/image-optimizer.js) na qualidade padrão 75.
+const QUALIDADE_PADRAO = 75;
+
+// O mesmo pipeline do optimizeImage do Next 16.4 (node_modules/next/dist/server/image-optimizer/transform.js) na qualidade padrão.
 const DERIVADOS = [
-  { formato: 'webp', codificar: (i: sharp.Sharp) => i.webp({ quality: 75 }) },
+  {
+    formato: 'webp',
+    codificar: (i: Sharp) => i.webp({ quality: QUALIDADE_PADRAO })
+  },
   {
     formato: 'avif',
-    codificar: (i: sharp.Sharp) => i.avif({ quality: 55, effort: 3 })
+    codificar: (i: Sharp) =>
+      i.avif({ quality: Math.round(QUALIDADE_PADRAO * (50 / 80)), effort: 3 })
   }
 ];
 
@@ -46,7 +52,7 @@ function jpegtran(original: Buffer) {
 // Só entram candidatos que deixam os derivados do Next com SSIM >= 0,99. Medido e reprovado:
 // WebP lossless e PNG com paleta mudam o RGB dos pixels com alpha 0, que o AVIF e o WebP do Next levam para a borda visível;
 // JPEG recodificado, até q97 com 4:4:4, fica em SSIM 0,98 entre derivados.
-function candidatos(meta: sharp.Metadata): Candidato[] {
+function candidatos(meta: Metadata): Candidato[] {
   if (meta.format === 'png') {
     const png = (largura?: number): Candidato => ({
       nome: largura ? 'png' : 'png-largura-original',

@@ -7,10 +7,9 @@ export const LARGURA_MAXIMA = 3840;
 // pouch-render-maximo.png (4,35 MiB depois de recomprimido) é o maior original que o site usa; a folga até 5 MiB não cabe outro igual.
 export const TETO_BYTES = 5 * 1024 * 1024;
 
-// Medido com tools/imagens/recomprimir.ts em 16/11/2026. A entrada sai quando o arquivo for reduzido ou apagado.
 export const EXCECOES = {
   'lib/images/logoClientes/petruz.png':
-    'reduzir para 3840 px deixa o derivado de 1920 com SSIM 0,9889',
+    'reduzir para 3840 px deixa o derivado de 1920 com SSIM 0,9894',
   'lib/images/logoClientes/verduranet.png':
     'reduzir para 3840 px dá 532 KiB contra 202 KiB na largura original',
   'lib/images/novasImagens/maquinasEmbalagens/maquinas/TP85.png':

@@ -25,12 +25,7 @@ const vendedor = {
 };
 
 type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | Json[]
-  | { [chave: string]: Json };
+  string | number | boolean | null | Json[] | { [chave: string]: Json };
 
 function mockFetch(status: number, body: Json) {
   return vi.fn().mockResolvedValue({

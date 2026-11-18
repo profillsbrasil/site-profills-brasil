@@ -53,8 +53,7 @@ const postVazio: Post = {
 
 /** Para onde o editor sai depois da pergunta "Sair sem salvar?". */
 type Saida =
-  | { para: 'link'; href: string }
-  | { para: 'historico'; chave: string };
+  { para: 'link'; href: string } | { para: 'historico'; chave: string };
 
 type Fase =
   | { fase: 'parado' }

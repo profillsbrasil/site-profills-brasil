@@ -84,6 +84,15 @@ const barra = () =>
 const aba = (rotulo: string) =>
   within(barra()).getByRole('button', { name: rotulo, hidden: true });
 
+// O jsdom não roda animação CSS: o animationend da saída, que no navegador desmonta a folha, sai à mão.
+const terminarAnimacao = (folha: HTMLElement) =>
+  fireEvent(
+    folha,
+    Object.assign(new Event('animationend', { bubbles: true }), {
+      animationName: getComputedStyle(folha).animationName
+    })
+  );
+
 const fotosDeConteudo = () =>
   [...document.body.querySelectorAll<HTMLElement>('[data-imagem]')].filter(
     (img) => !img.getAttribute('alt')?.startsWith('Profills')
@@ -167,7 +176,9 @@ describe('navbar do celular', () => {
 
     render(<NavbarMobile vitrines={vitrines} />);
     await u.click(aba('Menu'));
+    const folha = screen.getByRole('dialog');
     await u.click(aba('Menu'));
+    terminarAnimacao(folha);
 
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(aba('Menu')).toHaveAttribute('aria-expanded', 'false');
@@ -178,10 +189,12 @@ describe('navbar do celular', () => {
 
     render(<NavbarMobile vitrines={vitrines} />);
     await u.click(aba('Menu'));
+    const folha = screen.getByRole('dialog');
     await u.keyboard('{Escape}');
+    terminarAnimacao(folha);
 
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(aba('Menu')).toHaveFocus();
+    await waitFor(() => expect(aba('Menu')).toHaveFocus());
   });
 
   it('tocar uma categoria troca a vitrine e o "Ver N máquinas"', async () => {

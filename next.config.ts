@@ -3,6 +3,8 @@ import type { NextConfig } from 'next';
 import { buildMaquinaRedirects } from './lib/data/maquinas/redirects';
 
 const nextConfig: NextConfig = {
+  // As instruções para agentes vivem no CLAUDE.md; sem isto o next dev grava um AGENTS.md na raiz.
+  agentRules: false,
   compress: true,
   experimental: {
     serverActions: {
