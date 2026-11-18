@@ -27,12 +27,18 @@ export type EstadoFolha =
 
 export type EventoFolha =
   | { readonly tipo: 'tocou-aba'; readonly folha: IdFolha }
-  /** Esc, véu, arraste, Fechar ou link da folha: tudo chega pelo onOpenChange(false) do vaul. */
-  | { readonly tipo: 'dispensou' }
-  /** O pathname mudou por fora, como no voltar do navegador: fecha sem roubar o foco. */
-  | { readonly tipo: 'navegou' }
-  /** A largura passou do lg (tablet girado): a folha some por lg:hidden e o modal não pode ficar. */
-  | { readonly tipo: 'saiu-do-celular' };
+  | {
+      /** Esc, véu, arraste, Fechar ou link da folha: tudo chega pelo onOpenChange(false) do vaul. */
+      readonly tipo: 'dispensou';
+    }
+  | {
+      /** O pathname mudou por fora, como no voltar do navegador: fecha sem roubar o foco. */
+      readonly tipo: 'navegou';
+    }
+  | {
+      /** A largura passou do lg (tablet girado): a folha some por lg:hidden e o modal não pode ficar. */
+      readonly tipo: 'saiu-do-celular';
+    };
 
 export const FOLHA_INICIAL: EstadoFolha = {
   fase: 'fechada',

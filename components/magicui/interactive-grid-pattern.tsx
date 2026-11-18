@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 interface InteractiveGridPatternProps extends React.SVGProps<SVGSVGElement> {
   width?: number;
   height?: number;
-  squares?: [number, number]; // [horizontal, vertical]
+  squares?: [horizontal: number, vertical: number];
   className?: string;
   squaresClassName?: string;
 }

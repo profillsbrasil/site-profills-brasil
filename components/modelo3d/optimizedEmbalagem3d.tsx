@@ -39,7 +39,7 @@ export function OptimizedEmbalagem3d({
   const montado = shouldRender && isLoaded && webglSupported !== false;
   const [modeloPronto, setModeloPronto] = useState(false);
 
-  // O React não liga onLoad/onError em custom element (load e error não borbulham)
+  // WARNING: o React não liga onLoad/onError em custom element; load e error não borbulham.
   useEffect(() => {
     const el = modelViewerRef.current;
 
@@ -77,7 +77,7 @@ export function OptimizedEmbalagem3d({
             max-camera-orbit='auto auto 200%'
             disable-pan={true}
             disable-zoom={true}
-            auto-rotate={autoRotate && isVisible} // Só roda animação se estiver visível
+            auto-rotate={autoRotate && isVisible}
             auto-rotate-delay='500'
             environment-image='neutral'
             shadow-intensity='1'
@@ -91,8 +91,8 @@ export function OptimizedEmbalagem3d({
               minHeight: '250px',
               backgroundColor: 'transparent',
               '--poster-color': 'transparent',
-              opacity: isVisible ? 1 : 0.3, // Reduz opacidade quando não visível
-              pointerEvents: isVisible ? 'auto' : 'none' // Desabilita interação quando não visível
+              opacity: isVisible ? 1 : 0.3,
+              pointerEvents: isVisible ? 'auto' : 'none'
             }}
             className={`transition-all duration-300 ${
               isVisible ? 'hover:scale-[1.02]' : ''

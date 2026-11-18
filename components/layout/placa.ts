@@ -202,7 +202,6 @@ export function reduzirPlaca(
 
       if (estado.fase !== 'aberta') return estado;
 
-      // Outro item da placa é outro destino: a gaveta fecha como na saída da zona.
       if (evento.onde === 'outro-item') {
         return {
           fase: 'fechando',
@@ -435,8 +434,6 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
     let rastro: readonly PontoNoTempo[] = [];
     let sob: IdMenu | null = null;
 
-    // No documento, e não na zona, para saber onde o ponteiro parou também
-    // fora dela: a zona que cresce sob um ponteiro parado não é movimento.
     const aoMover = (e: globalThis.PointerEvent) => {
       if (e.pointerType === 'touch') return;
 
@@ -509,8 +506,7 @@ export function usePlaca(ordem: readonly IdMenu[]): Placa {
 
   useEffect(() => {
     if (estado.fase === 'aberta' && estado.retida) {
-      // O evento leva o prazo, não a hora do disparo: o setTimeout trunca o
-      // atraso fracionário e pode disparar uma fração de ms antes dele.
+      // WARNING: o setTimeout trunca atraso fracionário e dispara antes; o evento leva o prazo.
       const prazo = estado.retida.desde + PARADO_MS;
 
       const t = setTimeout(

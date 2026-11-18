@@ -23,10 +23,13 @@ interface PixelImageProps {
   grid?: PredefinedGridKey;
   customGrid?: Grid;
   grayscaleAnimation?: boolean;
-  pixelFadeInDuration?: number; // ms
-  maxAnimationDelay?: number; // ms
-  colorRevealDelay?: number; // ms
-  className?: string; // << permite controlar o tamanho externamente
+  /** Em ms. */
+  pixelFadeInDuration?: number;
+  /** Em ms. */
+  maxAnimationDelay?: number;
+  /** Em ms. */
+  colorRevealDelay?: number;
+  className?: string;
 }
 
 export const PixelImage = ({
@@ -59,8 +62,7 @@ export const PixelImage = ({
   }, [customGrid, grid]);
 
   useEffect(() => {
-    // Dispara a animação de entrada só depois do mount (evita flash no SSR)
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a entrada só começa depois do mount, sem flash no SSR
     setIsVisible(true);
     const t = setTimeout(() => setShowColor(true), colorRevealDelay);
 
@@ -81,8 +83,7 @@ export const PixelImage = ({
         ${col * (100 / cols)}% ${(row + 1) * (100 / rows)}%
       )`;
 
-      // Delay aleatório por peça é intencional; memo fixa o sorteio por grid
-      // eslint-disable-next-line react-hooks/purity
+      // eslint-disable-next-line react-hooks/purity -- sorteio por peça de propósito, fixado pelo useMemo por grid
       const delay = Math.random() * maxAnimationDelay;
 
       return { clipPath, delay };
@@ -90,12 +91,7 @@ export const PixelImage = ({
   }, [rows, cols, maxAnimationDelay]);
 
   return (
-    <div
-      className={cn(
-        // tamanhos padrão (override com className)
-        'relative select-none h-96 w-96',
-        className
-      )}>
+    <div className={cn('relative select-none h-96 w-96', className)}>
       {pieces.map((piece, index) => (
         <div
           key={index}
