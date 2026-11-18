@@ -18,7 +18,6 @@ export async function GET(
   const { slug, arquivo } = await params;
   const caminho = `/blog/${slug}/${arquivo}`;
 
-  // Sem o hash no nome, a imagem não veio do upload: responde 404 sem ir ao bucket.
   if (
     !PADRAO_CAMINHO_IMAGEM.test(caminho) ||
     !SUFIXO_HASH_IMAGEM.test(caminho)
@@ -45,11 +44,10 @@ export async function GET(
     'Content-Type': imagem.tipo,
     'Content-Length': String(imagem.tamanho),
     'X-Content-Type-Options': 'nosniff',
-    // O nome carrega o hash do conteúdo: a mesma URL nunca muda de bytes.
     'Cache-Control': 'public, max-age=31536000, immutable'
   };
 
-  // O HEAD do Next responde sem ler o corpo; o stream aberto prenderia o socket do bucket.
+  // WARNING: o HEAD do Next não lê o corpo; o stream aberto prenderia o socket do bucket.
   if (request.method === 'HEAD') {
     await imagem.corpo.cancel();
 

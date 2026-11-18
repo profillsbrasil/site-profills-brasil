@@ -22,7 +22,7 @@ import { toast } from 'sonner';
 export interface SpecificationFormProps {
   maquinaSlug: string;
   maquinaNome: string;
-  // O Dialog desmonta o formulário ao fechar; o rascunho guarda o que foi digitado.
+  /** Guarda o que foi digitado, porque o Dialog desmonta o formulário ao fechar. */
   rascunho: RefObject<Partial<SpecificationFormData>>;
   onFechar: () => void;
 }
@@ -52,7 +52,6 @@ export default function SpecificationForm({
     }
   });
 
-  // O formulário pode montar depois do Dialog abrir; o foco vai para o primeiro campo.
   useEffect(() => {
     setFocus('nome');
   }, [setFocus]);

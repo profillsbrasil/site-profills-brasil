@@ -38,8 +38,7 @@ export async function generateMetadata({
   const url = `/maquinas/${maquina.slug}`;
   const tituloComMarca = `${maquina.seo.titulo} | ${SITE_NAME}`;
 
-  // Máquina de engenharia não tem foto; sem este fallback a página sairia sem
-  // og:image, porque declarar openGraph aqui substitui o objeto herdado do root.
+  // WARNING: declarar openGraph aqui substitui o do root; sem imagem própria, a página sai sem og:image.
   const imagem = maquina.imagens
     ? {
         url: maquina.imagens.maquina.src,
@@ -145,8 +144,6 @@ export default async function MaquinaPage({ params }: MaquinaPageProps) {
           )}
           <Conversao maquina={maquina} />
         </div>
-        {/* Fora do container: o carrossel de relacionadas corre de borda a
-            borda da página; o cabeçalho interno realinha com o max-w-7xl */}
         {maquina.tipoPagina === 'padrao' && <Relacionadas maquina={maquina} />}
       </div>
     </div>

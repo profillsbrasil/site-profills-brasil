@@ -18,14 +18,11 @@ import { m, useReducedMotion, useScroll, useTransform } from 'motion/react';
 
 export type TelaBlog = 'listagem' | 'leitura';
 
-// A listagem e a leitura usam desenhos diferentes (decisão do user, 15/11/2026).
 const desenhos: Record<TelaBlog, StaticImageData[]> = {
   listagem: [sketchGable, sketchCaixas, sketchFlowpack, sketchRotativa],
   leitura: [sketchPouch, sketchSaches, sketchVertical]
 };
 
-// Tamanho do protótipo aprovado; a opacidade sobe um degrau (0,4 para 0,5), pedido do user.
-// A posição é em px, não em % da página: em % os sketches se empilhavam na página curta (16/11/2026).
 const layout: Record<TelaBlog, { margem: number; classe: string }> = {
   listagem: {
     margem: -9,
@@ -66,11 +63,12 @@ function Desenho({
   );
 }
 
+const DESENHOS_SEM_ALTURA_MEDIDA = 1;
+
 /** Sketches blueprint nas margens, só ambientação: nunca capa de post. */
 export function FundoBlog({ tela }: { tela: TelaBlog }) {
   const caixa = useRef<HTMLDivElement>(null);
-  // Um só até medir: o servidor não sabe a altura da página.
-  const [quantos, setQuantos] = useState(1);
+  const [quantos, setQuantos] = useState(DESENHOS_SEM_ALTURA_MEDIDA);
 
   useEffect(() => {
     const elemento = caixa.current;

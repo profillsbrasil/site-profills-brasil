@@ -23,13 +23,11 @@ const bloco = {
   entrar: { y: '0%', transition: { duration: 0.52, ease: EASE_ENTRADA } }
 };
 
-/* Máscara do Reveal: o bloco sobe de dentro de um recorte overflow-hidden */
 function Mascara({
   children,
   estatico = false
 }: {
   children: ReactNode;
-  /** Reduced motion: sem m.span nem variants */
   estatico?: boolean;
 }) {
   if (estatico) {
@@ -85,12 +83,10 @@ export function HeroSlideCopy({
       <Titulo
         className={cn(
           'mt-4 font-extrabold tracking-tight text-white',
-          // Linhas longas: fonte fluida pela largura da coluna (container query) — nunca clipa
           slide.tituloCompacto
             ? 'text-[clamp(1.5rem,7cqi,2.8rem)]'
             : 'text-[clamp(1.9rem,3.9vw,3.5rem)]',
-          // Depois do font-size: o tailwind-merge trata text-[...] como conflito de
-          // line-height e descartaria um leading declarado antes dele
+          // WARNING: o tailwind-merge descarta um leading-* declarado antes de text-[...].
           'leading-[1.06]'
         )}>
         <Mascara estatico={estatico}>

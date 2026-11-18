@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 
 import { logger } from '@/lib/utils/logger';
 
-// Toca só enquanto está na tela; fora dela, pausa e não consome banda.
 export function VideoServicos() {
   const ref = useRef<HTMLVideoElement>(null);
 
@@ -15,10 +14,10 @@ export function VideoServicos() {
 
     const tocar = () =>
       video.play().catch((cause: unknown) => {
-        // pause() antes do play() terminar rejeita com AbortError; é esperado.
-        if (cause instanceof DOMException && cause.name === 'AbortError') {
-          return;
-        }
+        const interrompidoPeloPause =
+          cause instanceof DOMException && cause.name === 'AbortError';
+
+        if (interrompidoPeloPause) return;
 
         logger.warn('Vídeo de serviços não iniciou:', cause);
       });
