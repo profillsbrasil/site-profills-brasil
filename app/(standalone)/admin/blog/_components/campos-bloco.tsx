@@ -60,7 +60,6 @@ function CamposLista({ bloco, mudar }: PropsCampos<'lista'>) {
     <ul className='grid gap-2'>
       {bloco.itens.map((texto, indice) => (
         <li
-          // A lista é texto livre sem id por item; a posição é a identidade do campo.
           key={indice}
           className='grid grid-cols-[1rem_minmax(0,1fr)_auto] items-center gap-2'>
           <span
@@ -162,7 +161,6 @@ function CamposTabela({ bloco, mudar }: PropsCampos<'tabela'>) {
         {bloco.linhas.map((linha, y) =>
           Array.from({ length: colunas }, (_, x) => (
             <input
-              // Célula de grade sem id própria; linha e coluna são a identidade.
               key={`${y}-${x}`}
               aria-label={`Linha ${y + 1}, coluna ${x + 1}`}
               value={linha[x] ?? ''}

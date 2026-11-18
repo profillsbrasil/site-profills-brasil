@@ -19,7 +19,6 @@ const admin = vi.hoisted(() => ({
   contarImagens: vi.fn()
 }));
 
-// Sessão falsa: a action e a rota passam pela abrirAdminBlog de verdade, que pergunta à sessão.
 const sessao = vi.hoisted(() => ({ autorAtual: vi.fn() }));
 
 const cache = vi.hoisted(() => ({ refresh: vi.fn() }));
@@ -249,7 +248,6 @@ describe('gravação do admin do blog', () => {
   });
 
   it('recusa slug sem versão e intenção desconhecida', async () => {
-    // A action recebe o que chegou pela rede; o JSON.parse faz o papel do cliente que foge do tipo.
     const semVersao = JSON.parse(
       JSON.stringify({ slug: 'catalogo-novo', versao: null, post })
     );

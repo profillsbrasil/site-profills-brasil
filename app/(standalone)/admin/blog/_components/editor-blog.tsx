@@ -51,9 +51,10 @@ const postVazio: Post = {
   linhas: []
 };
 
-/** Para onde o editor sai depois da pergunta "Sair sem salvar?". */
 type Saida =
   { para: 'link'; href: string } | { para: 'historico'; chave: string };
+
+const ignorarTravessiaCancelada = () => undefined;
 
 type Fase =
   | { fase: 'parado' }
@@ -176,8 +177,6 @@ export function EditorPostNovo({ totais }: { totais: TotaisLateral }) {
     );
   }
 
-  // O setCriado sai antes do replaceState do editor, e o roteador do Next só
-  // muda o usePathname numa transição: a URL nova nunca chega aqui antes dele.
   return (
     <EditorBlog
       key={visita}
@@ -219,10 +218,6 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
     return () => window.removeEventListener('beforeunload', segurar);
   }, [sujo]);
 
-  // O voltar e o avançar do navegador trocam de rota no client e não disparam
-  // o beforeunload. O navigate da Navigation API chega antes do popstate que o
-  // roteador do Next escuta: com mudança pendente, o editor cancela a
-  // travessia, que então não mexe no histórico, e abre a pergunta.
   const sujoAgora = useRef(sujo);
   const saindo = useRef(false);
 
@@ -255,11 +250,6 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
     return () => navigation.removeEventListener('navigate', aoTravessar);
   }, []);
 
-  // "Salvar e sair" pelo voltar ou pelo avançar: o roteador do Next só pode
-  // ter uma coisa em voo sobre o histórico. A transição termina quando ele
-  // assenta a gravação; só então a travessia sai, e a rota de destino só é
-  // atualizada com a travessia terminada. Com a gravação ainda em voo, o
-  // roteador escreve a URL do editor em cima da entrada de destino.
   useEffect(() => {
     const chave = chaveGravada.current;
 
@@ -267,12 +257,9 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
 
     chaveGravada.current = null;
 
-    window.navigation.traverseTo(chave).finished?.then(
-      () => router.refresh(),
-      // A travessia cancelada (nova mudança pendente, que pergunta de novo)
-      // não chega a um destino para atualizar.
-      () => undefined
-    );
+    window.navigation
+      .traverseTo(chave)
+      .finished?.then(() => router.refresh(), ignorarTravessiaCancelada);
   }, [gravandoParaSair, router]);
 
   const gravar = async (acao: Intencao, atualizarRota = inicial !== null) => {
@@ -386,8 +373,7 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
       return;
     }
 
-    // Depois de um avançar cancelado, o Chrome ignora o history.go(1); o
-    // traverseTo pela chave da entrada chega ao destino nos dois sentidos.
+    // WARNING: depois de um avançar cancelado, o Chrome ignora o history.go(1); só o traverseTo chega.
     saindo.current = true;
     window.navigation.traverseTo(destino.chave);
   };

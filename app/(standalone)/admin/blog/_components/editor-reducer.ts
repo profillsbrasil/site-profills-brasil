@@ -29,9 +29,6 @@ export type AcaoEditor =
   | { tipo: 'editarBloco'; bloco: Bloco }
   | { tipo: 'editarDados'; dados: Partial<DadosPost> };
 
-// Um bloco que o reducer não trocou mantém a referência, então só o bloco
-// editado passa pelo JSON. Os dois lados nascem do mesmo spread, com as
-// chaves na mesma ordem.
 const mesmoConteudo = <T>(a: T, b: T) =>
   a === b || JSON.stringify(a) === JSON.stringify(b);
 

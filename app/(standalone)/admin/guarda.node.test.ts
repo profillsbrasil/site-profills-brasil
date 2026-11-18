@@ -9,10 +9,8 @@ const PASTA = path.join(process.cwd(), 'app', '(standalone)', 'admin');
 
 const ORIGEM = 'https://www.profills.com';
 
-// O login é a única entrada sem sessão: entrar cria a sessão, e sair só apaga o cookie.
 const SEM_SESSAO = ['entrar/'];
 
-// Cada export novo do login precisa entrar aqui, e o teste confere que ele não toca no blog.
 const EXPORTS_SEM_SESSAO = new Map([
   ['entrar/acoes.ts', ['entrarNoAdmin', 'sairDoAdmin']],
   ['entrar/page.tsx', ['default']]
@@ -22,7 +20,6 @@ const ENTRADA_POR_NOME = /(^|\/)(page|route)\.tsx?$/;
 
 const toques = vi.hoisted((): string[] => []);
 
-// O redirect do Next lança; aqui ele lança com o destino para o teste conferir.
 const { Desviou } = vi.hoisted(() => ({
   Desviou: class extends Error {
     constructor(readonly destino: string) {
@@ -37,7 +34,6 @@ vi.mock('@/lib/admin/sessao', () => ({
   sair: async () => undefined
 }));
 
-// Qualquer leitura do repositório ou consulta ao banco fica registrada e falha.
 vi.mock('@/lib/blog/repositorio', () => ({
   repositorioBlog: new Proxy(
     {},
@@ -72,7 +68,6 @@ async function arquivosDoAdmin() {
   return nomes.map((nome) => nome.split(path.sep).join('/'));
 }
 
-/** Página, route handler e todo arquivo com 'use server', de topo ou inline. */
 async function entradasDoAdmin() {
   const entradas: string[] = [];
 
@@ -97,7 +92,6 @@ type Saida = Response | object | null | undefined;
 
 type Exportado = (...args: (Request | Props)[]) => Saida | Promise<Saida>;
 
-// O import dinâmico não tem tipo: o schema separa as funções do resto dos exports.
 const exportadoSchema = z.custom<Exportado>(
   (valor) => valor instanceof Function
 );
@@ -114,7 +108,6 @@ const pedido = () =>
     body: new FormData()
   });
 
-/** As funções exportadas pelo arquivo, como o Next as enxerga. */
 async function exportsDe(nome: string) {
   const modulo: object = await import(
     /* @vite-ignore */ path.join(PASTA, nome)
@@ -131,7 +124,6 @@ async function exportsDe(nome: string) {
   return lista;
 }
 
-/** Chama o export como o Next chamaria e diz se ele recusou: 401, motivo de sessão ou desvio ao login. */
 async function recusou(nome: string, funcao: Exportado) {
   const ehRota = /(^|\/)route\.tsx?$/.test(nome);
   const ehPagina = /(^|\/)page\.tsx?$/.test(nome);
@@ -199,7 +191,6 @@ describe('guarda do admin', () => {
         expect(toques, `${nome} ${exportado}`).toEqual([]);
       }
     }
-    // Importa o admin inteiro: com a suíte em paralelo leva de 4 a 5 s, e 1,4 s sozinho.
   }, 30_000);
 
   it('o login só exporta o que a lista conhece e não toca no blog', async () => {

@@ -36,7 +36,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        /* Só o código: o client usa para o evento de analytics. */
         indicacao: destinatario.vendedor
           ? { codigo: destinatario.vendedor.referral_code }
           : null

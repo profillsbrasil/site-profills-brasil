@@ -39,7 +39,6 @@ const inicial: PostGuardado = {
   }
 };
 
-// Espaçamento de 6 ou 10 px, em classe da escala (1.5 e 2.5) ou em valor arbitrário.
 const foraDaGrade =
   /^(?:.+:)?-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(?:1\.5|2\.5|\[(?:6|10)px\])$/;
 

@@ -31,7 +31,6 @@ const inicial: PostGuardado = {
   }
 };
 
-// O jsdom não tem a Navigation API; o voltar chega como o navigate de travessia.
 function apertarVoltar() {
   const travessia = Object.assign(new Event('navigate', { cancelable: true }), {
     navigationType: 'traverse',

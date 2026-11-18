@@ -15,12 +15,6 @@ import { POST as postMonteFabrica } from '../monte-fabrica/route';
 import { POST as postSpecifications } from '../specifications/route';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-/* Falha de envio de e-mail NÃO pode virar "sucesso" para o visitante:
-   antes, 4 rotas engoliam o erro do sendMail num try/catch interno e
-   respondiam 200/success:true com a solicitação perdida. O contrato agora:
-   envio ok → 200; envio falhou → 500 com success:false (o client mostra
-   o toast de erro e o visitante tenta de novo). */
-
 vi.mock('@/lib/emails/monte-fabrica/email-monte-fabrica', () => ({
   sendMonteFabricaEmail: vi.fn()
 }));

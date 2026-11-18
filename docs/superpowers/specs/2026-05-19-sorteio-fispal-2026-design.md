@@ -102,7 +102,7 @@ Mover para dentro de `app/(site)/` as pastas de rota atuais:
 No topo de `page.tsx`, constantes a serem preenchidas quando os dados
 chegarem:
 
-- `WHATSAPP_NUMERO` — número no formato internacional (ex.: `5519999999999`).
+- `WHATSAPP_NUMERO` — número no formato internacional (ex.: `5519999999999`). Em produção é o número do bot de WhatsApp do monorepo `sistema-coleta-de-lead`.
 - `WHATSAPP_MENSAGEM` — texto pré-preenchido da conversa.
 - Bloco/área de regras — marcado com `TODO`, pronto para o conteúdo do folder.
 
