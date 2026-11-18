@@ -1,10 +1,9 @@
-/**
- * Fonte única dos dados de identidade usados em metadata, JSON-LD e e-mails.
- * O host canônico é www.profills.com. O apex profills.com responde 308 para ele;
- * profills.com.br é domínio legado e não serve o site por HTTPS.
- */
 import { CONTATO_PADRAO } from '@/lib/data/contatos';
 
+/**
+ * Origem canônica, sem barra final: www.profills.com. O apex profills.com
+ * responde 308 para ela; profills.com.br é legado e não serve HTTPS.
+ */
 export const SITE_URL = (
   process.env.SITE_URL || 'https://www.profills.com'
 ).replace(/\/$/, '');

@@ -1,15 +1,10 @@
 /**
- * Utilitários para máscaras de input compatíveis com React 19
- */
-
-/**
  * Aplica máscara de telefone brasileiro
  */
 export function applyPhoneMask(value: string): string {
   const digits = value.replace(/\D/g, '');
 
   if (digits.length <= 10) {
-    // Formato: (11) 1234-5678
     return digits.replace(
       /(\d{2})(\d{0,4})(\d{0,4})/,
       (_, ddd, first, second) => {
@@ -29,7 +24,6 @@ export function applyPhoneMask(value: string): string {
       }
     );
   } else {
-    // Formato: (11) 91234-5678
     return digits.replace(
       /(\d{2})(\d{0,5})(\d{0,4})/,
       (_, ddd, first, second) => {

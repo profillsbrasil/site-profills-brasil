@@ -114,7 +114,6 @@ describe('metadataDaPagina', () => {
   });
 
   it('repõe o que a declaração de openGraph derruba do layout', () => {
-    // Declarar openGraph num filho substitui o objeto inteiro herdado do root.
     expect(meta.openGraph?.siteName).toBe('Profills Brasil');
     expect(meta.openGraph).toHaveProperty('locale', 'pt_BR');
     expect(meta.openGraph?.images).toHaveLength(1);
