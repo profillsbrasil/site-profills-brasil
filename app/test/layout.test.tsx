@@ -2,7 +2,6 @@ import { render } from '@testing-library/react';
 
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-// next/font precisa do compilador do Next; no jsdom vira stub
 vi.mock('next/font/google', () => ({
   Geist: () => ({ variable: 'font-geist-sans' }),
   Geist_Mono: () => ({ variable: 'font-geist-mono' })
@@ -16,7 +15,6 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/'
 }));
 
-// Toaster (sonner) lê matchMedia, ausente no jsdom
 vi.stubGlobal('matchMedia', () => ({
   matches: false,
   media: '',
@@ -38,10 +36,6 @@ afterEach(() => {
 });
 
 describe('RootLayout', () => {
-  // O servidor sempre emite o <noscript> dentro do <body> (React move filhos
-  // de <html> para lá), mas a árvore React no cliente diz html > noscript e
-  // o React avisa "cannot be a child of <html>" e sinaliza hydration error.
-  // O aviso de aninhamento também sai num render de cliente puro.
   it('não gera aviso de aninhamento inválido para os scripts de tracking', async () => {
     const erros: string[] = [];
     vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
@@ -55,12 +49,11 @@ describe('RootLayout', () => {
       </RootLayout>
     );
 
-    // O único aviso aceitável é o do próprio container do RTL (<div> não
-    // pode conter <html>); qualquer outro é um elemento do layout no lugar
-    // errado.
+    const avisoDoContainerDoRtl = '<html> div';
+
     const aninhamento = erros
       .filter((e) => e.includes('cannot be a child'))
-      .filter((e) => !e.includes('<html> div'));
+      .filter((e) => !e.includes(avisoDoContainerDoRtl));
 
     expect(aninhamento).toEqual([]);
   });

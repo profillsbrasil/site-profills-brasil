@@ -52,7 +52,6 @@ const rotasEstaticas: Rota[] = [
   }
 ];
 
-/** Banco fora não derruba o sitemap: as páginas fixas e as máquinas saem do mesmo jeito. */
 async function postsDoBlog(): Promise<MetadataRoute.Sitemap> {
   try {
     const posts = await listarPublicados();
@@ -64,7 +63,6 @@ async function postsDoBlog(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6
     }));
   } catch (erro) {
-    // O connection() da leitura sinaliza ao build que a rota é dinâmica; esse sinal não pode ser engolido.
     unstable_rethrow(erro);
     logger.error('Banco do blog fora ao montar o sitemap', erro);
 

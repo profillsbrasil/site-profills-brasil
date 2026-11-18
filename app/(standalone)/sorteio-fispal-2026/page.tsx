@@ -27,7 +27,6 @@ import {
   Trophy
 } from 'lucide-react';
 
-// Bot WhatsApp em produção no monorepo sistema-coleta-de-lead.
 const WHATSAPP_NUMERO = '5541998954229';
 const WHATSAPP_MENSAGEM = 'sorteio';
 
@@ -133,7 +132,6 @@ const regras = [
 export default function SorteioFispal2026() {
   return (
     <div className='relative min-h-screen w-full text-secondary-foreground'>
-      {/* Hero — banner full-bleed */}
       <section className='relative isolate flex min-h-[92vh] w-full flex-col overflow-hidden'>
         <Image
           src='/sorteio-fispal-2026/banner.png'
@@ -148,7 +146,6 @@ export default function SorteioFispal2026() {
           className='absolute inset-0 -z-10 bg-gradient-to-b from-secondary/30 via-secondary/45 to-secondary'
         />
 
-        {/* Logo no topo */}
         <div className='relative z-10 mx-auto w-full max-w-6xl px-4 pt-6 md:px-6 md:pt-10'>
           <Link
             href='/'
@@ -164,7 +161,6 @@ export default function SorteioFispal2026() {
           </Link>
         </div>
 
-        {/* Conteúdo do hero ancorado embaixo */}
         <div className='relative z-10 mx-auto mt-auto w-full max-w-6xl px-4 pb-16 md:px-6 md:pb-24'>
           <EntradaTopo>
             <div className='inline-flex items-center gap-2 rounded-xs border border-accent/40 bg-secondary/85 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg backdrop-blur-sm'>
@@ -219,11 +215,9 @@ export default function SorteioFispal2026() {
         </div>
       </section>
 
-      {/* Wrapper único pra evitar seams entre seções (cada GridPattern resetava o padrão) */}
       <div className='relative overflow-hidden bg-secondary'>
         <GridPattern className='[mask-image:linear-gradient(to_bottom,transparent_0,black_80px,black_100%)]' />
 
-        {/* Como participar */}
         <section className='relative px-4 py-16 md:py-24'>
           <div className='relative mx-auto max-w-6xl'>
             <BlurFade delay={0.1} inView>
@@ -301,7 +295,6 @@ export default function SorteioFispal2026() {
           </div>
         </section>
 
-        {/* Regras essenciais */}
         <section className='relative px-4 py-16 md:py-24'>
           <div className='relative mx-auto max-w-6xl'>
             <BlurFade delay={0.1} inView>
@@ -345,7 +338,6 @@ export default function SorteioFispal2026() {
           </div>
         </section>
 
-        {/* FAQ */}
         <section className='relative px-4 py-16 md:py-24'>
           <div className='relative mx-auto max-w-4xl'>
             <BlurFade delay={0.1} inView>
@@ -382,7 +374,6 @@ export default function SorteioFispal2026() {
           </div>
         </section>
 
-        {/* Footer minimal */}
         <footer className='relative border-t border-secondary-foreground/10'>
           <div className='relative mx-auto flex max-w-6xl items-center justify-center gap-4 px-4 py-6 text-xs text-secondary-foreground/60 md:justify-start md:px-6 md:py-8 md:text-sm'>
             <Image
