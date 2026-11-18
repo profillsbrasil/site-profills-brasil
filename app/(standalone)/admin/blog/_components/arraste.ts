@@ -94,7 +94,6 @@ export function acharDestino(
   return { tipo: 'linha', posicao };
 }
 
-/** Depois do ponteiro quando cabe; senão antes dele. */
 const aoLadoDoPonteiro = (ponteiro: number, tamanho: number, tela: number) =>
   ponteiro + FOLGA_DO_PONTEIRO + tamanho <= tela
     ? ponteiro + FOLGA_DO_PONTEIRO

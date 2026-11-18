@@ -21,6 +21,8 @@ type Props = {
   onEscolher: (src: string) => void;
 };
 
+const anuncioFeitoPeloEditorEmPtBr = () => null;
+
 const motivoRecusa = ([recusa]: FileRejection[]) =>
   recusa?.reasons.includes('file-too-large')
     ? motivosImagem.tamanho
@@ -52,8 +54,7 @@ export function EscolherImagem({
       accept={IMAGEM_TIPOS_ACEITOS.join(',')}
       maxSize={IMAGEM_LIMITE_BYTES}
       disabled={enviando}
-      // O editor anuncia o envio e a recusa em pt-BR; o padrão do SDK falaria em inglês.
-      announcement={() => null}
+      announcement={anuncioFeitoPeloEditorEmPtBr}
       onValueChange={(arquivos) => void escolher(arquivos)}
       onReject={(recusas) => recusar(motivoRecusa(recusas))}>
       <FileInputDropzone className='group/zona relative'>

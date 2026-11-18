@@ -1,4 +1,3 @@
-// Foco de teclado igual ao hover, sem anel: os componentes do shadcn trazem ring no focus-visible.
 export const classeCampo =
   'rounded-xs border-[#dfe2e8] bg-white shadow-none transition-colors hover:border-[#8a90a0] focus-visible:border-[#3b80f6] focus-visible:ring-0 motion-reduce:transition-none';
 
@@ -8,7 +7,6 @@ export const classeBotaoCheio =
 export const classeBotaoContorno =
   'rounded-xs border-[#dfe2e8] bg-white text-[#1b1c1f] shadow-none hover:border-[#8a90a0] hover:bg-[#f7f8fa] focus-visible:border-[#8a90a0] focus-visible:bg-[#f7f8fa] focus-visible:ring-0 motion-reduce:transition-none';
 
-// O Button sm do components/ui traz gap-1.5 e has-[>svg]:px-2.5 (6 e 10 px); o admin segue a grade de 4 px sem mudar o site.
 export const classeBotaoPequeno = 'gap-2 has-[>svg]:px-2';
 
 export const classeIcone =

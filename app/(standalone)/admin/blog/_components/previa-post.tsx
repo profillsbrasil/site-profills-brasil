@@ -45,8 +45,7 @@ export function PreviaPost({
           </div>
         </div>
         {post.capa ? (
-          // O caminho público serve o original; a prévia não passa pelo otimizador.
-          // oxlint-disable-next-line nextjs/no-img-element
+          // oxlint-disable-next-line nextjs/no-img-element -- a prévia mostra o original, sem o otimizador
           <img
             src={post.capa}
             alt=''

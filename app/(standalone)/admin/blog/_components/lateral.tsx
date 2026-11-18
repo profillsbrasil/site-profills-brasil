@@ -42,10 +42,8 @@ type ItemLateral = {
 
 const TOTAL_ASSUNTOS = Object.keys(assuntos).length;
 
-/** `reaberta` é a lateral que o user abriu de novo: só nela os rótulos entram em fade. */
 type EstadoLateral = 'aberta' | 'recolhida' | 'reaberta';
 
-// O padding de 11 px centra o ícone de 18 px nos 40 px da lateral recolhida, então ele não muda de x.
 const classeItem =
   'flex items-center gap-2 rounded-xs px-[11px] py-2 text-sm whitespace-nowrap text-[#b6c5e2]';
 

@@ -22,7 +22,6 @@ const selos: Record<UsoImagem, { rotulo: string; classe: string }> = {
   semUso: { rotulo: 'Sem uso', classe: 'bg-[#fbeee0] text-[#9a4f12]' }
 };
 
-/** null quando o armazém não respondeu: a tela mostra o aviso e a lateral fica sem número. */
 async function imagensOuAviso(admin: AdminBlog) {
   try {
     return await admin.listarImagens();

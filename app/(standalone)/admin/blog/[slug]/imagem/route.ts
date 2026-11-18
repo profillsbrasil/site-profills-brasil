@@ -5,11 +5,6 @@ import { MOTIVO_SEM_SESSAO, comMotivo, motivosImagem } from '@/lib/blog/erro';
 import { IMAGEM_LIMITE_BYTES } from '@/lib/blog/tipos';
 import { slugSchema } from '@/lib/schemas/post-blog';
 
-/**
- * O cookie sameSite strict ainda sai de crm.profills.com, que é o mesmo site: o Origin precisa ter o
- * host de SITE_URL. No next dev vale também a própria página local, porque o .env costuma trazer o
- * SITE_URL de produção; sem SITE_URL, só o next dev aceita.
- */
 function origemDoSite(request: Request) {
   const emDev = process.env.NODE_ENV === 'development';
   const site = process.env.SITE_URL;
@@ -27,10 +22,10 @@ function origemDoSite(request: Request) {
   );
 }
 
-// Folga para as fronteiras e os cabeçalhos do multipart em volta da imagem.
-const CORPO_LIMITE_BYTES = IMAGEM_LIMITE_BYTES + 64 * 1024;
+const FOLGA_DO_MULTIPART_BYTES = 64 * 1024;
+const CORPO_LIMITE_BYTES = IMAGEM_LIMITE_BYTES + FOLGA_DO_MULTIPART_BYTES;
 
-// Route handler e não Server Action: a Server Action limita o corpo a 1 MB, e a imagem vai até 5 MB.
+// WARNING: a Server Action limita o corpo a 1 MB e a imagem vai até 5 MB; o envio fica em route handler.
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
@@ -57,7 +52,6 @@ export async function POST(
     );
   }
 
-  // Sem Content-Length, o limite vale depois do formData(), no repositório.
   if (Number(request.headers.get('content-length')) > CORPO_LIMITE_BYTES) {
     return NextResponse.json({ erro: motivosImagem.tamanho }, { status: 413 });
   }
@@ -75,7 +69,6 @@ export async function POST(
     admin.enviarImagem(slug.data, arquivo)
   );
 
-  // O total volta junto para a lateral do editor subir sem recarregar a página.
   return tentativa.ok
     ? NextResponse.json({
         caminho: tentativa.valor,

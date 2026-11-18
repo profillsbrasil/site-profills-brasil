@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 
 import { classeBotaoCheio } from './blog/_components/estilos';
 
-// A página do admin só lança quando o banco não responde: a sessão não depende dele, o resto sim.
 export default function ErroAdmin({
   unstable_retry
 }: {

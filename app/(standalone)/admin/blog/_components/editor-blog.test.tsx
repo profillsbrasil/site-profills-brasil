@@ -75,9 +75,6 @@ const inicial: PostGuardado = {
   }
 };
 
-// O jsdom não tem a Navigation API. O falso segue o contrato do navegador: o
-// navigate sai antes da travessia e, cancelado, a travessia não acontece; o
-// traverseTo devolve a promessa finished, cumprida com a travessia terminada.
 const navegacao = Object.assign(new EventTarget(), {
   traverseTo: vi.fn((_chave: string) => {
     window.history.back();

@@ -1,12 +1,3 @@
-/**
- * Teste no browser do envio de imagem por arraste (issue #54). Solta arquivos reais do disco na capa e
- * num bloco de imagem pelo CDP (Input.dispatchDragEvent), como o sistema operacional faria.
- *
- * Uso, com o editor de um post aberto numa aba do Chrome:
- *   bun escolher-imagem.navegador.ts <url do CDP> <pasta das imagens> <pasta da saída>
- * A pasta das imagens traz capa.png, foto.jpg, foto.webp, foto.avif, limite.png (até 5 MB),
- * grande.png (acima de 5 MB), anima.gif e nota.txt.
- */
 import { motivosImagem } from '../../../../../lib/blog/erro';
 import { mkdirSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -49,7 +40,7 @@ const [urlCdp, pastaImagens, pastaSaida] = process.argv.slice(2);
 
 if (!urlCdp || !pastaImagens || !pastaSaida) {
   throw new Error(
-    'Uso: bun escolher-imagem.navegador.ts <cdp> <imagens> <saida>'
+    `Uso, com o editor de um post aberto no Chrome: bun escolher-imagem.navegador.ts <cdp> <imagens> <saida>. A pasta de imagens traz ${casos.map((caso) => caso.arquivo).join(', ')}.`
   );
 }
 
@@ -96,7 +87,6 @@ async function cdp<T>(
   if (resposta.error)
     throw new Error(`${method}: ${JSON.stringify(resposta.error)}`);
 
-  // SAFETY: o CDP responde em result o formato que o método pedido documenta.
   return resposta.result as T;
 }
 

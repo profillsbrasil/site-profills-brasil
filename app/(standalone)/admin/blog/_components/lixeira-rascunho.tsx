@@ -159,7 +159,7 @@ export function LixeiraRascunho({
         }}>
         <DialogContent
           showCloseButton={false}
-          // Sem DialogTrigger o Radix não sabe a quem devolver o foco. Depois de apagar a linha some, e o foco vai para o aviso.
+          // WARNING: sem DialogTrigger, o Radix não sabe a quem devolver o foco ao fechar.
           onCloseAutoFocus={(evento) => {
             evento.preventDefault();
             (apagou.current ? aviso : lixeira).current?.focus();

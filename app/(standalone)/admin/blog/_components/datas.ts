@@ -1,4 +1,3 @@
-// Fuso fixo: servidor e navegador formatam igual, sem diferença na hidratação.
 const fuso = 'America/Sao_Paulo';
 
 const formatoHora = new Intl.DateTimeFormat('pt-BR', {
