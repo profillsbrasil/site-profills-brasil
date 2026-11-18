@@ -17,14 +17,12 @@ export const createTransporter = () => {
   });
 };
 
-// Template engine melhorado para processar {{#if}} e {{#each}}
 const renderTemplate = (
   template: string,
   data: Record<string, string | string[] | undefined>
 ): string => {
   let rendered = template;
 
-  // Processa loops {{#each array}} ... {{/each}} PRIMEIRO
   const eachRegex = /\{\{#each\s+(\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g;
   rendered = rendered.replace(eachRegex, (match, arrayName, content) => {
     const array = data[arrayName];
@@ -38,12 +36,10 @@ const renderTemplate = (
     return '';
   });
 
-  // Processa condicionais {{#if variavel}} ... {{/if}} DEPOIS
   const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
   rendered = rendered.replace(ifRegex, (match, condition, content) => {
     const value = data[condition];
 
-    // Mostra o conteúdo se a variável existe, não está vazia e não é undefined
     if (Array.isArray(value)) {
       return value.length > 0 ? content : '';
     }
@@ -53,7 +49,6 @@ const renderTemplate = (
       : '';
   });
 
-  // Substitui variáveis simples {{variavel}} POR ÚLTIMO
   Object.keys(data).forEach((key) => {
     const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
     const value = data[key];
@@ -65,7 +60,6 @@ const renderTemplate = (
     }
   });
 
-  // Remove qualquer condicional que não foi processado (fallback)
   rendered = rendered.replace(/\{\{#each\s+\w+\}\}/g, '');
   rendered = rendered.replace(/\{\{\/each\}\}/g, '');
   rendered = rendered.replace(/\{\{#if\s+\w+\}\}/g, '');
@@ -75,7 +69,6 @@ const renderTemplate = (
   return rendered;
 };
 
-// Template HTML para o e-mail usando arquivos externos
 export const createMonteFabricaEmailTemplate = (
   data: MonteFabricaFormData,
   indicadoPor = ''
@@ -84,13 +77,10 @@ export const createMonteFabricaEmailTemplate = (
     timeZone: 'America/Sao_Paulo'
   });
 
-  // Lê o template HTML (CSS já está inline)
   const htmlTemplate = htmlEmailTemplate;
 
-  // URL base do site (sempre com protocolo)
   const siteUrl = SITE_URL;
 
-  // Dados para o template
   const templateData = {
     subject: 'Solicitação de Projeto - Monte sua Fábrica',
     preheader: `Nova solicitação para montagem de fábrica de ${data.empresa}`,
@@ -102,16 +92,13 @@ export const createMonteFabricaEmailTemplate = (
     telefone: data.telefone,
     empresa: data.empresa,
     mensagem: data.mensagem,
-    // URLs absolutas já prontas
     logoUrl: `${siteUrl}/logo-branco.png`,
     siteUrl: siteUrl
   };
 
-  // Renderiza o template
   return renderTemplate(htmlTemplate, templateData);
 };
 
-// Função para enviar e-mail
 export const sendMonteFabricaEmail = async (
   data: MonteFabricaFormData,
   destinatario: Destinatario
@@ -130,7 +117,6 @@ export const sendMonteFabricaEmail = async (
     to: destinatario.para,
     subject: `Monte sua Fábrica - ${data.empresa} - ${data.email}`,
     html: createMonteFabricaEmailTemplate(data, escaparHtml(indicadoPor)),
-    // Versão em texto plano como fallback
     text: `
 Nova Solicitação - Monte sua Fábrica - Profills
 ${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}

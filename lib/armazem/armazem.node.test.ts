@@ -33,6 +33,8 @@ const bytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 1, 2, 3, 4]);
 const lerTudo = async (corpo: ReadableStream<Uint8Array>) =>
   new Uint8Array(await new Response(corpo).arrayBuffer());
 
+const FOLGA_PARA_RM_ATRASADO_MS = 50;
+
 const chaveNova = () => `blog/teste-${randomUUID()}/foto-0123456789.png`;
 
 let raiz: string;
@@ -157,7 +159,6 @@ function contrato(nome: string, abrir: () => Promise<Armazem>, pular = false) {
 
 contrato('disco', () => Promise.resolve(criarArmazemDisco(raiz)));
 
-// TESTE_S3_* aponta para um MinIO descartável; sem elas, o contrato do S3 fica de fora.
 const s3 = {
   AWS_ENDPOINT_URL: process.env.TESTE_S3_ENDPOINT,
   AWS_ACCESS_KEY_ID: process.env.TESTE_S3_CHAVE,
@@ -240,8 +241,7 @@ describe('armazém em disco', () => {
     await expect(armazem.apagar([chave, '../fora.png'])).rejects.toThrow(
       'fora do armazém'
     );
-    // Dá tempo a um rm que tenha saído antes da recusa; sem ele, a leitura não veria a falta.
-    await esperar(50);
+    await esperar(FOLGA_PARA_RM_ATRASADO_MS);
     expect(await armazem.ler(chave)).not.toBeNull();
   });
 
@@ -258,7 +258,6 @@ describe('armazém em disco', () => {
   });
 });
 
-/** Servidor HTTP local no lugar do bucket; devolve a porta e o fechamento. */
 async function bucketLocal(responder: RequestListener) {
   const servidor = createServer(responder);
 
@@ -283,7 +282,6 @@ type PedidoS3 = {
   continuacao?: string | null;
 };
 
-/** Páginas pequenas obrigam o cliente a seguir o NextContinuationToken. */
 const CHAVES_POR_PAGINA = 2;
 
 const fechamentos: (() => void)[] = [];
@@ -292,7 +290,6 @@ afterAll(() => {
   for (const fechar of fechamentos) fechar();
 });
 
-/** Bucket em memória que responde como o S3: 404 NoSuchKey e 403 AccessDenied em XML. */
 async function bucketFalso() {
   const objetos = new Map<string, { corpo: Buffer; quando: Date }>();
   const pedidos: PedidoS3[] = [];
@@ -379,13 +376,12 @@ async function bucketFalso() {
       .end(guardado.corpo);
   };
 
-  /** `onde` é o bucket: `<bucket>.host/` em virtual-host, `host/<bucket>` em path. */
   const listar = (
-    onde: string,
+    bucket: string,
     busca: URLSearchParams,
     resposta: ServerResponse
   ) => {
-    const base = onde.endsWith('/') ? onde : `${onde}/`;
+    const base = bucket.endsWith('/') ? bucket : `${bucket}/`;
     const prefixo = busca.get('prefix') ?? '';
     const inicio = Number(busca.get('continuation-token') ?? 0);
 

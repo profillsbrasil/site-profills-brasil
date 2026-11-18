@@ -79,7 +79,7 @@ página estática (SSG) + IndicacaoProvider (client, lê o cookie na hidrataçã
 
 O helper da issue #28 seção 4.1, com estes ajustes: `import 'server-only'` (adicionar a dependência), `logger` em vez de `console`, nunca loga a chave, e exporta `normalizarCodigo`, `buscarVendedorPorCodigo`, `formatarTelefoneBR`, `linkWhatsApp`. `fetch` com `cache: 'force-cache'`, `next: { revalidate: 300 }`, `AbortSignal.timeout(4000)`. Qualquer status diferente de 200 devolve `null`.
 
-Nota: o `proxy.ts` roda fora do ciclo de página; se o Data Cache do `fetch` não se aplicar ali, o cache passa a ser um `Map` em memória por instância com TTL de 5 min dentro do helper. O plano de implementação verifica isso com um teste manual antes de decidir.
+Nota: o `proxy.ts` roda fora do ciclo de página; se o Data Cache do `fetch` não se aplicar ali, o cache passa a ser um `Map` em memória por instância com TTL de 5 min dentro do helper. O plano de implementação verifica isso com um teste manual antes de decidir. Na implementação, o `Map` vive por bundle, porque o proxy e os route handlers são instâncias separadas e o `next: { revalidate }` só vale nos route handlers. O CRM roda num pool pequeno de conexões e não tem rate limit, então o `Map`, com teto de 500 entradas porque o código vem de fora, é o que segura a repetição.
 
 ### 4.4 Fonte única de contatos: `lib/data/contatos.ts`
 

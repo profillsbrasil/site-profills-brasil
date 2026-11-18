@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// Schema para validação de CEP via API
 const cepSchema = z
   .string()
   .min(1, 'CEP é obrigatório')
@@ -9,7 +8,6 @@ const cepSchema = z
     (cep) => {
       const cleanCep = cep.replace(/\D/g, '');
 
-      // Verifica se não é um CEP inválido (todos os dígitos iguais)
       const invalidCeps = [
         '00000000',
         '11111111',
@@ -28,7 +26,6 @@ const cepSchema = z
     { message: 'CEP inválido' }
   );
 
-// Schema para telefone brasileiro
 const phoneSchema = z
   .string()
   .min(1, 'Telefone é obrigatório')
@@ -37,14 +34,11 @@ const phoneSchema = z
     'Telefone deve ter o formato (00) 00000-0000'
   );
 
-// Schema principal do formulário
 export const contactFormSchema = z.object({
-  // Etapa 1: Dados básicos
   email: z.string().min(1, 'E-mail é obrigatório').email('E-mail inválido'),
   phone: phoneSchema,
   cep: cepSchema,
 
-  // Etapa 2: Endereço (preenchidos automaticamente pelo CEP)
   street: z.string().optional(),
   number: z.string().min(1, 'Número é obrigatório'),
   complement: z.string().optional(),
@@ -52,7 +46,6 @@ export const contactFormSchema = z.object({
   city: z.string().min(1, 'Cidade é obrigatória'),
   state: z.string().min(1, 'Estado é obrigatório'),
 
-  // Etapa 3: Detalhes do projeto
   material: z.string().min(1, 'Material é obrigatório'),
   service: z.string().min(1, 'Serviço é obrigatório'),
   finish: z.string().min(1, 'Acabamento é obrigatório'),
@@ -61,7 +54,6 @@ export const contactFormSchema = z.object({
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
 
-// Schemas parciais para validação por etapas
 export const step1Schema = contactFormSchema.pick({
   email: true,
   phone: true,

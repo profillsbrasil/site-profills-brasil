@@ -39,7 +39,6 @@ export const maquinaRedirects: { legacyId: number; slug: string }[] = [
   { legacyId: 33, slug: 'envasadora-frascos-tubulares' }
 ];
 
-/** id 18 (Doypack) saiu do catálogo 2026 — decisão 4 do spec. */
 const REDIRECT_REMOVIDAS = [
   { source: '/maquinas/18', destination: '/maquinas' }
 ];

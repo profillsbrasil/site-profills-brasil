@@ -27,7 +27,6 @@ export type ResultadoEntrada =
 
 type ConfigAdmin = { usuario: string; hash: string; chave: Uint8Array };
 
-/** null quando falta ou sobra algo na env: o login fica fechado, nunca aberto. */
 function configAdmin(): ConfigAdmin | null {
   const usuario = process.env.ADMIN_USUARIO;
   const hash = process.env.ADMIN_SENHA_HASH;
@@ -42,7 +41,6 @@ function configAdmin(): ConfigAdmin | null {
   )
     return null;
 
-  // A chave do JWT mistura o hash: trocar a senha derruba todas as sessões abertas.
   const chave = createHash('sha256')
     .update(segredo)
     .update('\0')
@@ -65,7 +63,7 @@ export function atalhoDev() {
 }
 
 export async function autorAtual(): Promise<Autor | null> {
-  // O cookie vem antes de tudo: sem ele, uma página do admin sem env no build vira HTML estático com o redirect congelado.
+  // WARNING: ler o cookie antes de tudo; sem env no next build, a página do admin vira estática com o redirect congelado.
   const token = (await cookies()).get(COOKIE_SESSAO)?.value;
 
   if (atalhoDev()) return { usuario: 'dev' };
@@ -153,7 +151,6 @@ export async function entrar(
   }
 
   if (bloqueio) {
-    // error e não warn: o logger de produção só escreve error sem LOG_LEVEL.
     if (bloqueio.acabouDeFechar)
       logger.error(
         `Login do admin bloqueado até ${bloqueio.ate.toISOString()}: mais de ${LIMITE_TENTATIVAS} tentativas em ${JANELA_MINUTOS} minutos.`
@@ -162,7 +159,6 @@ export async function entrar(
     return { tipo: 'bloqueado', ate: bloqueio.ate };
   }
 
-  // O scrypt roda mesmo com o usuário errado: o tempo da resposta não conta qual dos dois errou.
   const senhaConfere = await conferirSenha(senha, config.hash);
 
   if (!senhaConfere || !mesmoTexto(usuario, config.usuario))

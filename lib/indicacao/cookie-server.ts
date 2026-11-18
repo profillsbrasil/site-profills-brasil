@@ -32,7 +32,6 @@ export function opcoesCookieIndicacao() {
     maxAge: INDICACAO_MAX_AGE,
     sameSite: 'lax' as const,
     secure: process.env.NODE_ENV !== 'development',
-    /* O browser lê o payload para trocar os contatos; nada nele é segredo. */
     httpOnly: false as const
   };
 }

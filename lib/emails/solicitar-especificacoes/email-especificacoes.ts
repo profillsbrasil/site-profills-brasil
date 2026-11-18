@@ -18,39 +18,32 @@ export const createTransporter = () => {
   });
 };
 
-// Template engine simples para substituir placeholders
 const renderTemplate = (
   template: string,
   data: Record<string, string | undefined>
 ): string => {
   let rendered = template;
 
-  // Processa condicionais {{#if variavel}} ... {{/if}} PRIMEIRO
   const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
   rendered = rendered.replace(ifRegex, (match, condition, content) => {
     const value = data[condition];
 
-    // Mostra o conteúdo se a variável existe, não está vazia e não é undefined
-    // Trata string "0" como válida (importante para IDs que podem ser 0)
     return value !== undefined && value !== null && value.trim() !== ''
       ? content
       : '';
   });
 
-  // Substitui variáveis simples {{variavel}} DEPOIS
   Object.keys(data).forEach((key) => {
     const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
     rendered = rendered.replace(regex, data[key] || '');
   });
 
-  // Remove qualquer condicional que não foi processado (fallback)
   rendered = rendered.replace(/\{\{#if\s+\w+\}\}/g, '');
   rendered = rendered.replace(/\{\{\/if\}\}/g, '');
 
   return rendered;
 };
 
-// Template HTML para o e-mail usando arquivos externos
 export const createEmailTemplate = (
   data: SpecificationFormData,
   indicadoPor = ''
@@ -59,20 +52,16 @@ export const createEmailTemplate = (
     timeZone: 'America/Sao_Paulo'
   });
 
-  // Lê o template HTML e CSS
   let htmlTemplate = htmlEmailTemplate;
   const cssStyles = cssEmailStyles;
 
-  // Substitui o CSS inline (necessário para emails)
   htmlTemplate = htmlTemplate.replace(
     '<link rel="stylesheet" href="email-styles.css">',
     `<style>${cssStyles}</style>`
   );
 
-  // URL base do site (sempre com protocolo)
   const siteUrl = SITE_URL;
 
-  // Dados para o template
   const templateData = {
     subject: `Especificações da ${data.maquinaNome}`,
     preheader: `Nova solicitação de especificações para ${data.maquinaNome}`,
@@ -86,17 +75,14 @@ export const createEmailTemplate = (
     maquinaNome: data.maquinaNome,
     maquinaSlug: data.maquinaSlug,
     observacoes: data.observacoes,
-    // URLs absolutas já prontas
     logoUrl: `${siteUrl}/logo-branco.png`,
     urlMaquina: `${siteUrl}/maquinas/${data.maquinaSlug}`,
     siteUrl: siteUrl
   };
 
-  // Renderiza o template
   return renderTemplate(htmlTemplate, templateData);
 };
 
-// Função para enviar e-mail
 export const sendSpecificationEmail = async (
   data: SpecificationFormData,
   destinatario: Destinatario
@@ -115,7 +101,6 @@ export const sendSpecificationEmail = async (
     to: destinatario.para,
     subject: `Especificações da ${data.maquinaNome} - ${data.nome}`,
     html: createEmailTemplate(data, escaparHtml(indicadoPor)),
-    // Versão em texto plano como fallback
     text: `
 Nova Solicitação de Especificações - Profills
 ${indicadoPor ? `\nIndicado por: ${indicadoPor}\n` : ''}

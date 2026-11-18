@@ -168,7 +168,6 @@ describe('login do admin', () => {
     leuCookies.vezes = 0;
 
     expect(await autorAtual()).toBeNull();
-    // Ler o cookie é o que torna a página do admin dinâmica no next build, que roda sem essas envs.
     expect(leuCookies.vezes).toBe(1);
     expect(await entrar('dono', SENHA)).toEqual({ tipo: 'indisponivel' });
   });

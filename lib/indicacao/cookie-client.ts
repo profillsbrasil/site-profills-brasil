@@ -36,7 +36,6 @@ export function lerCookieIndicacaoDoBrowser(
   if (partes.length !== 3) return null;
 
   try {
-    // Um payload null lança TypeError dentro do predicate e cai no catch.
     const dados = JSON.parse(base64UrlParaTexto(partes[1]));
 
     if (!ehPayloadIndicacao(dados)) return null;

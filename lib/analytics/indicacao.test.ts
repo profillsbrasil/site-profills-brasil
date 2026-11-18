@@ -177,7 +177,7 @@ describe('espera GA e Pixel ficarem prontos', () => {
     expect(() => registrarChegadaIndicacao('MARIA-10')).not.toThrow();
 
     vi.advanceTimersByTime(9500);
-    expect(vi.getTimerCount()).toBe(2); // GA e Pixel pollam em paralelo
+    expect(vi.getTimerCount()).toBe(2);
 
     vi.advanceTimersByTime(500);
 

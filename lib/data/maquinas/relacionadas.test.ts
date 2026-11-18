@@ -3,7 +3,6 @@ import { getMaquinasRelacionadas } from './relacionadas';
 import type { MaquinaCatalogo } from './types';
 import { describe, expect, it } from 'vitest';
 
-// Fixture mínima: só os campos que o algoritmo lê importam para o teste.
 function fixture(overrides: Partial<MaquinaCatalogo>): MaquinaCatalogo {
   return { ...piloto, ...overrides };
 }
@@ -18,13 +17,13 @@ describe('getMaquinasRelacionadas', () => {
     const duasEmbalagens = fixture({
       slug: 'duas-embalagens',
       embalagensCompativeis: ['Pouch', 'Sachê'],
-      capacidadeMaxima: 500 // longe da referência, mas 2 embalagens em comum
+      capacidadeMaxima: 500
     });
 
     const umaEmbalagem = fixture({
       slug: 'uma-embalagem',
       embalagensCompativeis: ['Pouch'],
-      capacidadeMaxima: 5400 // capacidade idêntica, mas só 1 embalagem em comum
+      capacidadeMaxima: 5400
     });
 
     const outraCategComEmbalagem = fixture({

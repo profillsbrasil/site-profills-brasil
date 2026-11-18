@@ -32,8 +32,9 @@ const retrato = async (consulta: Consulta) => ({
   ).rows
 });
 
-// Cada teste abre um PGlite, que leva segundos com a suíte inteira rodando em paralelo.
-describe('migrador do banco', { timeout: 30_000 }, () => {
+const PRAZO_PGLITE_SOB_CARGA_MS = 30_000;
+
+describe('migrador do banco', { timeout: PRAZO_PGLITE_SOB_CARGA_MS }, () => {
   it('aplica todas as migrações na primeira vez e nada na segunda', async () => {
     const consulta = await bancoVazio();
 

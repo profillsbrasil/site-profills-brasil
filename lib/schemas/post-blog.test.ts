@@ -40,7 +40,6 @@ const guardado: PostGuardado = {
   post
 };
 
-/** Bloco como chega do cliente, antes do schema: qualquer tipo e qualquer campo. */
 type BlocoCru = { id: string; tipo: string; [campo: string]: string | null };
 
 const comBloco = (bloco: BlocoCru) => ({

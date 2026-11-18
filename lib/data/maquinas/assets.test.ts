@@ -2,8 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-// Tabela mestra: .superpowers/sdd/2026-08-13-pagina-maquina-fases1-2-assets-dados/tabelas.md
-// Slugs #34 e #35 (linha de produção completa / automação) não têm foto — fora desta lista.
 const SLUGS_COM_FOTO = [
   'envasadora-stand-up-pouch-speed',
   'envasadora-stand-up-pouch-pre-formado-com-tampa',

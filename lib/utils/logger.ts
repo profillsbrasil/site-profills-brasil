@@ -12,8 +12,6 @@ const levelPriority: Record<LogLevel, number> = {
   debug: 4
 };
 
-/* LOG_LEVEL fora da lista não tem prioridade: nenhuma comparação passa e
-   nada é logado. */
 function readConfiguredPriority() {
   const fromEnv = process.env.LOG_LEVEL;
 

@@ -5,7 +5,6 @@ import {
 import type { IndicacaoPayload } from './tipos';
 import { describe, expect, it } from 'vitest';
 
-// Parcial: um dos casos grava payload sem os campos obrigatórios.
 function jwtFalso(payload: Partial<IndicacaoPayload>) {
   const b64 = (s: string) => Buffer.from(s, 'utf8').toString('base64url');
 
