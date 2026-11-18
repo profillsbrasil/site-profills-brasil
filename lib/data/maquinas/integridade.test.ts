@@ -44,10 +44,6 @@ describe('integridade do registry de máquinas', () => {
   });
 
   it('toda máquina com legacyId tem redirect no mapa', () => {
-    // Nesta fase o mapa de redirects (32 entradas) já cobre todos os ids
-    // 1–33 (exceto 18), mas o registry ainda só tem o piloto (id 16) — a
-    // checagem redirect→registry (destino existe no registry) só faz
-    // sentido a partir da Task 4 e vive no it.todo abaixo.
     for (const m of maquinasCatalogo) {
       if (m.legacyId === undefined) continue;
       expect(
@@ -72,7 +68,6 @@ describe('integridade do registry de máquinas', () => {
       ).toBeDefined();
     }
 
-    // id 18 (Doypack removida) não tem entrada — vai direto para /maquinas no next.config
     expect(maquinaRedirects.some((r) => r.legacyId === 18)).toBe(false);
   });
 

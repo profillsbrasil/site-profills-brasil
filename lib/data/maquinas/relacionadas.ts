@@ -8,7 +8,6 @@ function intersecao(a: string[], b: string[]) {
   return a.filter((x) => b.includes(x)).length;
 }
 
-/** Comparação pairwise de capacidade: sem informação (algum lado ausente) → 0 (neutro). */
 function cmpCapacidade(
   referencia: number | undefined,
   a: number | undefined,
@@ -57,7 +56,7 @@ export function getMaquinasRelacionadas(
             a.m.capacidadeMaxima,
             b.m.capacidadeMaxima
           ) ||
-          a.i - b.i // estabilidade explícita: sem info, preserva ordem do registry
+          a.i - b.i
       )
       .map((x) => x.m);
 
