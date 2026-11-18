@@ -51,7 +51,6 @@ export function AnimatedGridPattern({
     ];
   }, [dimensions.width, dimensions.height, width, height]);
 
-  // Adjust the generateSquares function to return objects with an id, x, and y
   const generateSquares = useCallback(
     (count: number) => {
       return Array.from({ length: count }, (_, i) => ({
@@ -62,7 +61,6 @@ export function AnimatedGridPattern({
     [getPos]
   );
 
-  // Function to update a single square's position
   const updateSquarePosition = (id: number) => {
     setSquares((currentSquares) =>
       currentSquares.map((sq) =>
@@ -76,16 +74,13 @@ export function AnimatedGridPattern({
     );
   };
 
-  // Update squares to animate in
   useEffect(() => {
     if (dimensions.width && dimensions.height) {
-      // Depende das dimensões medidas pelo ResizeObserver (sistema externo)
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setSquares(generateSquares(numSquares));
     }
   }, [dimensions, numSquares, generateSquares]);
 
-  // Resize observer to update container dimensions
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {

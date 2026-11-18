@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { Moldura } from './moldura';
 import { Play } from 'lucide-react';
 
-// O botão sai do DOM no clique; sem isso, o foco do teclado cairia no body.
 const focarAoMontar = (iframe: HTMLIFrameElement | null) => iframe?.focus();
 
 /** O iframe do YouTube só entra no clique: a página não baixa o player de quem não assiste. */

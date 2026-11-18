@@ -122,7 +122,6 @@ export function Globe({
     globeRef.current.controls().autoRotate = !reduzirMovimento;
   }, [ready, reduzirMovimento]);
 
-  // Fora da tela ou com a aba oculta, o laço de render para (giro incluso)
   useEffect(() => {
     const globo = globeRef.current;
     const el = containerRef.current;

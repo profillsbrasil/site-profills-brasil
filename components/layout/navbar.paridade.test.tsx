@@ -45,7 +45,6 @@ function barraDoCelular(): HTMLElement {
   return barra ?? document.body;
 }
 
-/** O mobile só monta a folha aberta: abre cada uma e toca cada categoria de Máquinas. */
 async function percorrerMobile(): Promise<Map<string, string>> {
   const u = userEvent.setup({ pointerEventsCheck: 0 });
   const mapa = destinosRenderizados(document.body);

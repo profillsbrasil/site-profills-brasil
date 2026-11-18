@@ -34,7 +34,6 @@ export function AnimatedContainer({
   }
 
   if (trigger === 'mount') {
-    // Garante que aparece sempre, mesmo em tabs/modais/carrosséis
     return (
       <m.div
         initial={{ opacity: 0, y: 20 }}
@@ -46,7 +45,6 @@ export function AnimatedContainer({
     );
   }
 
-  // Modo padrão: anima ao entrar na viewport (sem margin negativa)
   return (
     <m.div
       initial={{ opacity: 0, y: 20 }}

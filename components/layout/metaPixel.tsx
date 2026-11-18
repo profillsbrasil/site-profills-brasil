@@ -5,8 +5,6 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 
-/* O tipo de `window.fbq` vive em types/fbq.d.ts — lib/analytics também usa. */
-
 type MetaPixelProps = { pixelId: string };
 
 /**

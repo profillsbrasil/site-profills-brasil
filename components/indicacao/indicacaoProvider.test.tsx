@@ -9,8 +9,6 @@ import { hydrateRoot } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-/* Só o disparo é mockado: `marcarChegadaNaSessao` roda de verdade para o
-   teste exercitar o sessionStorage do jsdom. */
 vi.mock('@/lib/analytics/indicacao', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/analytics/indicacao')>()),
   registrarChegadaIndicacao: vi.fn()
@@ -70,7 +68,6 @@ async function hidratar() {
   };
 }
 
-/* Flag que o React lê para aceitar act() fora do Testing Library. */
 declare global {
   var IS_REACT_ACT_ENVIRONMENT: boolean | undefined;
 }

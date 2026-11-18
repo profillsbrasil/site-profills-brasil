@@ -63,7 +63,6 @@ export function Highlighter({
     margin: '-10%'
   });
 
-  // Wait for element to be in view before showing animation if isView is enabled
   const shouldShow = isView ? isInView : true;
 
   useEffect(() => {

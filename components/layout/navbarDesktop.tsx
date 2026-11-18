@@ -33,7 +33,6 @@ import { ArrowUpRight, ChevronDown } from 'lucide-react';
 const ORDEM_MENUS = NAVEGACAO.menus.map((m) => m.id);
 const SAIDA = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
-// As cores da placa são variáveis de .placa-navbar (globals.css), trocadas pelo data-tema.
 const TRACEJADO = 'border-(--placa-tracejado)';
 const TRACEJADO_SUTIL = 'border-(--placa-tracejado-sutil)';
 const CARD = 'bg-(--placa-card)';
@@ -44,8 +43,6 @@ const ITEM =
 const LINHA_DO_PAINEL =
   'flex h-11 items-center gap-3 rounded-xs border border-dashed border-transparent px-3 text-sm leading-[1.2] font-medium text-(--placa-texto) outline-none hover:border-solid hover:border-accent hover:bg-(--placa-recuo) focus-visible:border-solid focus-visible:border-accent focus-visible:bg-(--placa-recuo) transition-[background-color,border-color,color] duration-[140ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
 
-// O pé do traço é o pé da placa: o botão (h-9) fica centrado na linha de
-// 62 px, ou 46 na compacta, e o bottom conta da borda de padding dele.
 const TRACO =
   'pointer-events-none absolute -inset-x-px -bottom-[15px] h-0.5 origin-left bg-accent opacity-0 group-aria-expanded/item:opacity-100 group-data-[compacta]/placa:-bottom-[7px] motion-safe:[transition:opacity_220ms_cubic-bezier(0.22,1,0.36,1),bottom_340ms_cubic-bezier(0.22,1,0.36,1)] motion-safe:group-data-[aberta]/placa:[transition:bottom_340ms_cubic-bezier(0.22,1,0.36,1)]';
 
@@ -69,7 +66,6 @@ function Cantos() {
 function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
   const pathname = usePathname();
 
-  // O li é a área de hit: os padding dos vizinhos dividem o vão ao meio.
   return (
     <li {...placa.alvo(menu.id)} className='px-0.5 first:pl-0'>
       <button
@@ -90,11 +86,6 @@ function Gatilho({ menu, placa }: { menu: NoMenu; placa: Placa }) {
 
 const SOB_PROJETO = 'sob-projeto';
 
-/**
- * Quanto de um painel com foto já está no DOM. Nada no carregamento da
- * página; a primeira foto quando o ponteiro chega à navbar, para a primeira
- * abertura não mostrar a caixa vazia; as outras quando o menu abre.
- */
 type Preparo = 'nada' | 'primeira' | 'todas';
 
 function PainelVitrine({
@@ -113,7 +104,6 @@ function PainelVitrine({
   const alvo = vitrines[foco].vitrine;
   const chave = alvo?.slug ?? SOB_PROJETO;
 
-  // A vitrine nova só toma o lugar da anterior depois de decodificada.
   if (
     preparo !== 'nada' &&
     chave !== mostrada &&
@@ -137,7 +127,6 @@ function PainelVitrine({
         atuais.has(slug) ? atuais : new Set([...atuais, slug])
       );
 
-    // Imagem que não decodifica entra assim mesmo, para a vitrine não ficar presa na anterior.
     void img.decode().then(pronta, pronta);
   };
 
@@ -337,7 +326,6 @@ function deslizar(el: HTMLElement | null, de: number) {
   );
 }
 
-/** O traço do gatilho novo sai de onde estava o do anterior; sem anterior, acende. */
 function animarTraco(de: IdMenu | null, para: IdMenu) {
   const destino = document.getElementById(idGatilho(para));
   const traco = destino?.querySelector<HTMLElement>('[data-traco]');
@@ -383,7 +371,6 @@ export default function NavbarDesktop({
   const anterior = useRef<IdMenu | null>(null);
   const [apontada, setApontada] = useState(false);
   const [abertos, setAbertos] = useState<ReadonlySet<IdMenu>>(new Set());
-  // Ao fechar, o último painel fica no lugar enquanto o recorte fecha.
   const [exibido, setExibido] = useState<IdMenu | null>(null);
 
   if (naZona && !apontada) setApontada(true);
@@ -525,7 +512,6 @@ export default function NavbarDesktop({
             </div>
           </div>
         </nav>
-        {/* A ponte cobre só o vão entre a placa e a gaveta (8 px, 6 na compacta) e anda com as duas: nunca fica sobre um gatilho. */}
         <div
           ref={gaveta}
           className="pointer-events-none invisible absolute inset-x-0 top-0 translate-y-[84px] [transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s_linear_220ms] before:absolute before:inset-x-0 before:bottom-full before:h-2 before:transition-[height] before:duration-[340ms] before:ease-[cubic-bezier(0.22,1,0.36,1)] before:content-[''] group-data-[compacta]/placa:before:h-1.5 motion-reduce:before:transition-none group-data-[aberta]/placa:pointer-events-auto group-data-[aberta]/placa:visible group-data-[aberta]/placa:[transition:translate_340ms_cubic-bezier(0.22,1,0.36,1),visibility_0s] group-data-[compacta]/placa:translate-y-[62px] motion-reduce:transition-none">

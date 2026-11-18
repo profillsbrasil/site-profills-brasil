@@ -38,7 +38,6 @@ vi.mock('next/navigation', () => ({
 
 const ESCONDE = /opacity:\s*0(?![.\d])|blur\(|translateY\(112%\)/i;
 
-/** Estilos inline do HTML do servidor que deixam o conteúdo invisível até o JS hidratar */
 function estilosQueEscondem(ui: ReactElement, escopo?: string) {
   const raiz = document.createElement('div');
   raiz.innerHTML = renderToString(ui);

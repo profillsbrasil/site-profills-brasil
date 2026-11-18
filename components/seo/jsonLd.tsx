@@ -7,6 +7,8 @@ type Json =
   | readonly Json[]
   | { readonly [chave: string]: Json | undefined };
 
+const semFimDeScript = (json: string) => json.replace(/</g, String.raw`\u003c`);
+
 /**
  * Injeta um bloco JSON-LD no HTML. Server component — o dado já sai renderizado,
  * sem custo de hidratação.
@@ -19,10 +21,8 @@ export function JsonLd({
   return (
     <script
       type='application/ld+json'
-      // O objeto sai do servidor, mas o título e o resumo de post vêm do admin do blog:
-      // o escape de < impede que um </script> no texto feche a tag.
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(data).replace(/</g, String.raw`\u003c`)
+        __html: semFimDeScript(JSON.stringify(data))
       }}
     />
   );

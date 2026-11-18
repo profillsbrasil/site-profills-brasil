@@ -12,8 +12,6 @@ vi.mock('@/components/ui/blur-fade', () => ({
 
 vi.mock('./gridPatternBg', () => ({ GridPattern: () => null }));
 
-// next/image exige width/height quando o import estático vira string no jsdom;
-// mesmo mock usado nos testes de listagem/relacionadas.
 vi.mock('next/image', () => ({ default: 'img' }));
 
 function jwtFalso(payload: IndicacaoPayload) {
@@ -100,7 +98,6 @@ describe('Footer', () => {
     })}; path=/`;
     renderFooter();
 
-    // O label vive num <span> dentro do <a>: o href está no ancestral.
     expect(
       screen.getByText('maria@profills.com.br').closest('a')
     ).toHaveAttribute('href', 'mailto:maria@profills.com.br');

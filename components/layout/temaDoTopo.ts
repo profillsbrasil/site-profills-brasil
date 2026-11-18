@@ -17,7 +17,6 @@ export const TEMA_POR_ROTA = {
   '/montar-fabrica': 'navy',
   '/montar-maquina': 'navy',
   '/projetos': 'claro',
-  // Topo misto: 40 px brancos e o vídeo escuro embaixo, onde fica a maior parte da placa.
   '/servicos-personalizados': 'navy',
   '/sobre': 'claro'
 } as const satisfies Record<Rota, TemaDoTopo>;

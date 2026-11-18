@@ -77,14 +77,12 @@ const vitrines: VitrinesDoMenu = {
 
 const usuario = () => userEvent.setup({ pointerEventsCheck: 0 });
 
-// Com a folha aberta o Radix esconde a barra do leitor de tela (hideOthers), mas ela segue tocável.
 const barra = () =>
   screen.getByRole('navigation', { name: 'Principal', hidden: true });
 
 const aba = (rotulo: string) =>
   within(barra()).getByRole('button', { name: rotulo, hidden: true });
 
-// O jsdom não roda animação CSS: o animationend da saída, que no navegador desmonta a folha, sai à mão.
 const terminarAnimacao = (folha: HTMLElement) =>
   fireEvent(
     folha,

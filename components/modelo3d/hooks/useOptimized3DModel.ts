@@ -5,9 +5,9 @@ import { ModelViewerElement } from '@google/model-viewer';
 
 import { isWebGLAvailable } from './webglSupport';
 
-// Cache global para modelos 3D já carregados
 const modelCache = new Map<string, boolean>();
 const modelViewerInstances = new Map<string, number>();
+const ESPERA_PARA_LIMPAR_CACHE_MS = 5000;
 
 interface UseOptimized3DModelOptions {
   eager?: boolean;
@@ -30,14 +30,11 @@ export function useOptimized3DModel({
   const [hasBeenLoaded, setHasBeenLoaded] = useState(false);
   const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
 
-  // Detecta suporte a WebGL uma vez no client.
   useEffect(() => {
-    // Só dá para sondar o WebGL no client, depois do mount
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- só dá para sondar o WebGL no client, depois do mount
     setWebglSupported(isWebGLAvailable());
   }, []);
 
-  // Incrementa contador de instâncias
   useEffect(() => {
     const count = modelViewerInstances.get(src) || 0;
     modelViewerInstances.set(src, count + 1);
@@ -47,19 +44,17 @@ export function useOptimized3DModel({
 
       if (currentCount <= 1) {
         modelViewerInstances.delete(src);
-        // Remove do cache se não há mais instâncias
         setTimeout(() => {
           if (!modelViewerInstances.has(src)) {
             modelCache.delete(src);
           }
-        }, 5000); // Aguarda 5s antes de limpar o cache
+        }, ESPERA_PARA_LIMPAR_CACHE_MS);
       } else {
         modelViewerInstances.set(src, currentCount - 1);
       }
     };
   }, [src]);
 
-  // Intersection Observer para lazy loading inteligente
   useEffect(() => {
     const observedElement = containerRef.current;
 
@@ -68,9 +63,7 @@ export function useOptimized3DModel({
       : false;
 
     if (eager && isLayoutVisible) {
-      // Lê getClientRects() do DOM (sistema externo) para ignorar a árvore
-      // invisível do hero mobile/desktop
-      /* eslint-disable react-hooks/set-state-in-effect */
+      /* eslint-disable react-hooks/set-state-in-effect -- getClientRects() do DOM ignora a árvore invisível do hero mobile/desktop */
       setIsVisible(true);
 
       if (!hasBeenLoaded) {
@@ -87,15 +80,12 @@ export function useOptimized3DModel({
           if (entry.isIntersecting) {
             setIsVisible(true);
 
-            // Só renderiza na primeira vez ou se nunca foi carregado
             if (!hasBeenLoaded) {
               clearTimeout(renderTimeout);
               renderTimeout = setTimeout(() => setShouldRender(true), 100);
             }
           } else {
             setIsVisible(false);
-            // Uma vez carregado, não desmonta mais o model-viewer
-            // Apenas deixa invisível via CSS
           }
         });
       },
@@ -117,7 +107,6 @@ export function useOptimized3DModel({
     };
   }, [eager, threshold, rootMargin, hasBeenLoaded]);
 
-  // Carrega model-viewer dinamicamente apenas quando necessário
   useEffect(() => {
     if (!shouldRender || isLoaded || webglSupported !== true) return;
 
@@ -138,11 +127,9 @@ export function useOptimized3DModel({
     void loadModelViewer();
   }, [shouldRender, isLoaded, webglSupported]);
 
-  // Cleanup de estilos compartilhado
   useEffect(() => {
     if (!isLoaded) return;
 
-    // Só adiciona os estilos uma vez
     const styleId = 'model-viewer-optimized-styles';
     let style = document.getElementById(styleId);
 
@@ -180,7 +167,6 @@ export function useOptimized3DModel({
     }
 
     return () => {
-      // Só remove os estilos se não há mais instâncias
       const totalInstances = Array.from(modelViewerInstances.values()).reduce(
         (sum, count) => sum + count,
         0
@@ -196,7 +182,6 @@ export function useOptimized3DModel({
     };
   }, [isLoaded]);
 
-  // Limpa recursos do model-viewer quando não está mais visível
   const handleModelLoad = useCallback(() => {
     if (modelViewerRef.current) {
       modelCache.set(src, true);
@@ -216,7 +201,7 @@ export function useOptimized3DModel({
     modelViewerRef,
     isVisible,
     isLoaded,
-    shouldRender: shouldRender || hasBeenLoaded, // Sempre renderiza se já foi carregado uma vez
+    shouldRender: shouldRender || hasBeenLoaded,
     hasBeenLoaded,
     webglSupported,
     handleModelLoad,

@@ -4,7 +4,6 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { ConteudoPost, type ModoConteudo } from './conteudo-post';
 import { describe, expect, it, vi } from 'vitest';
 
-// Padrão do repo: next/image não roda no jsdom.
 vi.mock('next/image', () => ({ default: 'img' }));
 
 const linha = (...colunas: [Bloco] | [Bloco, Bloco]): Linha => ({
