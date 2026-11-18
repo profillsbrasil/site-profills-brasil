@@ -17,7 +17,6 @@ export const PASTA_MIGRACOES = path.join(
 export async function abrirPglite(pasta?: string): Promise<Consulta> {
   const { PGlite } = await import('@electric-sql/pglite');
 
-  // O PGlite cria a pasta do banco, mas não as pastas acima dela.
   if (pasta) await mkdir(path.dirname(pasta), { recursive: true });
 
   const banco = await PGlite.create(pasta);

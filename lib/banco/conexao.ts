@@ -19,7 +19,7 @@ function abrir(): Promise<Consulta> {
       statement_timeout: 10_000
     });
 
-    // Sem este handler, uma conexão ociosa que cai derruba o processo do next start.
+    // WARNING: o pg.Pool emite 'error' quando uma conexão ociosa cai; sem ouvinte, o next start morre.
     pool.on('error', (erro) =>
       logger.error('Conexão ociosa do banco caiu', erro)
     );
@@ -38,18 +38,17 @@ function abrir(): Promise<Consulta> {
   );
 }
 
-// No globalThis porque o HMR do next dev reavalia o módulo e abriria outro pool.
-const global: typeof globalThis & { bancoProfills?: Promise<Consulta> } =
-  globalThis;
+const sobreviveAoHmr: typeof globalThis & {
+  bancoProfills?: Promise<Consulta>;
+} = globalThis;
 
-/** Uma abertura que falhou não fica guardada: a próxima consulta tenta de novo. */
 async function conexao() {
-  global.bancoProfills ??= abrir();
+  sobreviveAoHmr.bancoProfills ??= abrir();
 
   try {
-    return await global.bancoProfills;
+    return await sobreviveAoHmr.bancoProfills;
   } catch (erro) {
-    global.bancoProfills = undefined;
+    sobreviveAoHmr.bancoProfills = undefined;
 
     throw erro;
   }
