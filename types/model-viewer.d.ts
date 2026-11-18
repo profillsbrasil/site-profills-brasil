@@ -1,64 +1,59 @@
-// types/model-viewer.d.ts
 import type React from 'react';
 
 declare global {
   interface ModelViewerElement extends HTMLElement {
-    // Props/propriedades como propriedades JS (algumas chaveiam atributos)
     src?: string;
-    iosSrc?: string; // iOS Quick Look (.usdz)
+    iosSrc?: string;
     alt?: string;
     poster?: string;
     loading?: 'lazy' | 'eager';
     reveal?: 'auto' | 'interaction' | 'manual';
 
     ar?: boolean;
-    arModes?: string; // space-separated, ex: "webxr scene-viewer quick-look"
+    arModes?: string;
     arScale?: 'auto' | 'fixed';
     arPlacement?: 'floor' | 'wall';
     disableAr?: boolean;
 
     cameraControls?: boolean;
-    cameraOrbit?: string; // ex: "40deg 75deg 105%"
-    minCameraOrbit?: string; // ex: "auto auto 50%"
-    maxCameraOrbit?: string; // ex: "auto auto 200%"
-    cameraTarget?: string; // ex: "0m 0m 0m" | "auto"
-    fieldOfView?: string; // ex: "45deg"
+    cameraOrbit?: string;
+    minCameraOrbit?: string;
+    maxCameraOrbit?: string;
+    cameraTarget?: string;
+    fieldOfView?: string;
     minFieldOfView?: string;
     maxFieldOfView?: string;
-    interpolationDecay?: number | string; // amortecimento ao parar interação
+    interpolationDecay?: number | string;
 
     autoRotate?: boolean;
-    autoRotateDelay?: number | string; // ms
-    rotationPerSecond?: string; // ex: "30deg"
+    autoRotateDelay?: number | string;
+    rotationPerSecond?: string;
 
     disableZoom?: boolean;
     disablePan?: boolean;
 
-    environmentImage?: string; // "neutral" ou URL de HDR/EXR/etc
-    skyboxImage?: string; // imagem 360
+    environmentImage?: string;
+    skyboxImage?: string;
     exposure?: number | string;
     shadowIntensity?: number | string;
     shadowSoftness?: number | string;
-    toneMapping?: string; // ex: "neutral", "aces", "reinhard", "linsrgb"
+    toneMapping?: string;
 
     interactionPrompt?: 'auto' | 'none' | 'when-focused';
     interactionPromptStyle?: 'basic' | 'wiggle';
 
-    // Animação/variantes
-    animationName?: string; // nome da animação GLTF
-    animationCrossfadeDuration?: number | string; // ms
+    animationName?: string;
+    animationCrossfadeDuration?: number | string;
     autoplay?: boolean;
-    variantName?: string; // material variant
-    orientation?: string; // ex: "0deg 0deg 0deg"
-    scale?: string; // ex: "1 1 1"
+    variantName?: string;
+    orientation?: string;
+    scale?: string;
 
-    // Métodos úteis (subset mais usados)
     play: () => void;
     pause: () => void;
     showPoster: () => void;
     dismissPoster: () => void;
 
-    // Eventos (como propriedades)
     onLoad?: (ev: Event) => void;
     onError?: (ev: Event) => void;
     onModelVisibility?: (ev: Event) => void;
@@ -74,7 +69,6 @@ declare global {
   >;
 
   interface ModelViewerAttributes extends MVBaseProps {
-    // Atributos refletidos (versão JSX/React das props acima)
     src?: string;
     'ios-src'?: string;
     alt?: string;
@@ -122,7 +116,6 @@ declare global {
     orientation?: string;
     scale?: string;
 
-    // Eventos (versão React onX)
     onLoad?: (ev: Event) => void;
     onError?: (ev: Event) => void;
     onModelVisibility?: (ev: Event) => void;
