@@ -52,15 +52,16 @@ const gt: PostPublicado = {
   }
 };
 
-const resumoDe = (p: PostPublicado): ResumoPublicado => ({
-  slug: p.slug,
-  publicadoEm: p.publicadoEm,
-  atualizadoEm: p.atualizadoEm,
-  titulo: p.post.titulo,
-  resumo: p.post.resumo,
-  assunto: p.post.assunto,
-  capa: p.post.capa
-});
+const resumoDe = (p: PostPublicado) =>
+  ({
+    slug: p.slug,
+    publicadoEm: p.publicadoEm,
+    atualizadoEm: p.atualizadoEm,
+    titulo: p.post.titulo,
+    resumo: p.post.resumo,
+    assunto: p.post.assunto,
+    capa: p.post.capa
+  }) satisfies ResumoPublicado;
 
 const feira: ResumoPublicado = {
   slug: 'profills-na-feira',

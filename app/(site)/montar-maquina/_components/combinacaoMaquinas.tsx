@@ -39,7 +39,7 @@ export interface MachineRecommendation {
 export function getBestMachineRecommendation(
   selectedPackaging: string,
   selectedProductType: string
-): MachineRecommendation | null {
+) {
   const embalagemAlvo = packagingTypeMapping.get(selectedPackaging);
   const categoriaAlvo = productTypeMapping.get(selectedProductType);
 
@@ -74,10 +74,7 @@ export function getBestMachineRecommendation(
   return { machine: melhor };
 }
 
-function pontuarProduto(
-  maquina: MaquinaCatalogo,
-  categoria: CategoriaProduto
-): number {
+function pontuarProduto(maquina: MaquinaCatalogo, categoria: CategoriaProduto) {
   return maquina.aplicacoes.categorias.includes(categoria) ? 1 : 0;
 }
 

@@ -23,13 +23,16 @@ interface PostPageProps {
 
 const lerPost = cache(lerPublicado);
 
-export async function generateMetadata({
-  params
-}: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PostPageProps) {
   const { slug } = await params;
   const guardado = await lerPost(slug);
 
-  if (!guardado) return {};
+  if (!guardado) {
+    const vazia: Metadata = {};
+
+    return vazia;
+  }
+
   const { post } = guardado;
   const url = `/blog/${guardado.slug}`;
   const tituloComMarca = `${post.titulo} | ${SITE_NAME}`;
@@ -38,7 +41,7 @@ export async function generateMetadata({
     ? { url: post.capa, alt: post.titulo }
     : { url: OG_IMAGE, width: 1200, height: 630, alt: post.titulo };
 
-  return {
+  const metadata: Metadata = {
     title: post.titulo,
     description: post.resumo,
     alternates: { canonical: url },
@@ -61,6 +64,8 @@ export async function generateMetadata({
       images: [imagem.url]
     }
   };
+
+  return metadata;
 }
 
 export default async function PostPage({ params }: PostPageProps) {

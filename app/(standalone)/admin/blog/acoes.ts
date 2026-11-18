@@ -40,10 +40,12 @@ export async function gravarPost(
   entrada: EntradaEditor,
   intencao: Intencao,
   atualizarRota = true
-): Promise<ResultadoGravacao> {
+) {
   const admin = await abrirAdminBlog();
 
-  if (!admin) return { ok: false, erro: MOTIVO_SEM_SESSAO };
+  if (!admin) {
+    return { ok: false, erro: MOTIVO_SEM_SESSAO } satisfies ResultadoGravacao;
+  }
 
   const lida = entradaEditorSchema.safeParse(entrada);
 
@@ -53,21 +55,26 @@ export async function gravarPost(
     return {
       ok: false,
       erro: `Dados do post inválidos em ${problema.path.join('.') || 'post'}: ${problema.message}.`
-    };
+    } satisfies ResultadoGravacao;
   }
 
   const qual = intencaoSchema.safeParse(intencao);
 
   if (!qual.success)
-    return { ok: false, erro: 'Ação de gravação desconhecida.' };
+    return {
+      ok: false,
+      erro: 'Ação de gravação desconhecida.'
+    } satisfies ResultadoGravacao;
 
   const tentativa = await comMotivo(() => admin.gravar(lida.data, qual.data));
 
-  if (!tentativa.ok) return { ok: false, erro: tentativa.motivo };
+  if (!tentativa.ok) {
+    return { ok: false, erro: tentativa.motivo } satisfies ResultadoGravacao;
+  }
 
   if (atualizarRota) refresh();
 
-  return { ok: true, guardado: tentativa.valor };
+  return { ok: true, guardado: tentativa.valor } satisfies ResultadoGravacao;
 }
 
 const pedidoApagarSchema = z.object({
@@ -87,20 +94,29 @@ const pedidoApagarSchema = z.object({
 export async function apagarRascunho(
   pedido: PedidoApagar,
   atualizarRota = true
-): Promise<ResultadoApagar> {
+) {
   const admin = await abrirAdminBlog();
 
-  if (!admin) return { ok: false, erro: MOTIVO_SEM_SESSAO };
+  if (!admin) {
+    return { ok: false, erro: MOTIVO_SEM_SESSAO } satisfies ResultadoApagar;
+  }
 
   const lido = pedidoApagarSchema.safeParse(pedido);
 
-  if (!lido.success) return { ok: false, erro: 'Pedido de apagar inválido.' };
+  if (!lido.success) {
+    return {
+      ok: false,
+      erro: 'Pedido de apagar inválido.'
+    } satisfies ResultadoApagar;
+  }
 
   const tentativa = await comMotivo(() => admin.apagarRascunho(lido.data));
 
-  if (!tentativa.ok) return { ok: false, erro: tentativa.motivo };
+  if (!tentativa.ok) {
+    return { ok: false, erro: tentativa.motivo } satisfies ResultadoApagar;
+  }
 
   if (atualizarRota) refresh();
 
-  return { ok: true, imagens: tentativa.valor };
+  return { ok: true, imagens: tentativa.valor } satisfies ResultadoApagar;
 }

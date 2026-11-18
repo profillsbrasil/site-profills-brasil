@@ -18,7 +18,7 @@ const EXPORTS_SEM_SESSAO = new Map([
 
 const ENTRADA_POR_NOME = /(^|\/)(page|route)\.tsx?$/;
 
-const toques = vi.hoisted((): string[] => []);
+const toques = vi.hoisted<string[]>(() => []);
 
 const { Desviou } = vi.hoisted(() => ({
   Desviou: class extends Error {

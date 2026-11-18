@@ -14,7 +14,7 @@ interface MaquinaCardProps {
 
 const CARDS_NA_PRIMEIRA_DOBRA = 6;
 
-function subtituloDe(maquina: MaquinaCatalogo): string {
+function subtituloDe(maquina: MaquinaCatalogo) {
   const [, subtitulo] = maquina.nomeCompleto.split(' - ');
 
   return subtitulo ?? maquina.categoria;

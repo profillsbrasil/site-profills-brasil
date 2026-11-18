@@ -52,28 +52,32 @@ const rotasEstaticas: Rota[] = [
   }
 ];
 
-async function postsDoBlog(): Promise<MetadataRoute.Sitemap> {
+async function postsDoBlog() {
   try {
     const posts = await listarPublicados();
 
-    return posts.map((post) => ({
+    const entradas: MetadataRoute.Sitemap = posts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
       lastModified: new Date(post.atualizadoEm),
       changeFrequency: 'monthly',
       priority: 0.6
     }));
+
+    return entradas;
   } catch (erro) {
     unstable_rethrow(erro);
     logger.error('Banco do blog fora ao montar o sitemap', erro);
 
-    return [];
+    const vazio: MetadataRoute.Sitemap = [];
+
+    return vazio;
   }
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap() {
   const lastModified = new Date();
 
-  return [
+  const mapa: MetadataRoute.Sitemap = [
     ...rotasEstaticas.map((rota) => ({
       url: `${SITE_URL}${rota.path}`,
       lastModified,
@@ -88,4 +92,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     ...(await postsDoBlog())
   ];
+
+  return mapa;
 }
