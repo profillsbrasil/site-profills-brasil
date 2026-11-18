@@ -3,16 +3,14 @@ import type { NextConfig } from 'next';
 import { buildMaquinaRedirects } from './lib/data/maquinas/redirects';
 
 const nextConfig: NextConfig = {
-  // As instruções para agentes vivem no CLAUDE.md; sem isto o next dev grava um AGENTS.md na raiz.
   agentRules: false,
   compress: true,
   experimental: {
     serverActions: {
-      // Atrás do proxy da Railway o Host chega interno; a action aceita o Origin dos dois domínios do site.
       allowedOrigins: ['www.profills.com', 'profills.com']
     }
   },
-  // O PGlite do bun dev carrega WASM e módulos opcionais em runtime; empacotado pelo Turbopack, quebra.
+  // WARNING: empacotado pelo Turbopack, o PGlite quebra o next dev em Can't resolve 'ws'.
   serverExternalPackages: ['@electric-sql/pglite'],
   images: {
     formats: ['image/avif', 'image/webp']
