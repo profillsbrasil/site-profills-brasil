@@ -107,7 +107,7 @@ Antes de redesenhar qualquer coisa, procurar spec/plan existente sobre o tema �
 - `PRODUCT.md` — design, voz da marca, paleta, anti-referências. Ler antes de qualquer decisão visual.
 - `components/modelo3d/DocModelos3d.md` — como adicionar/otimizar modelos 3D e configurar câmera.
 - `skills-lock.json` — skills de repo instaladas (magic-ui, shadcn, ui-sdk, unslop, vercel-react-best-practices).
-- UI SDK (`@ui-sdk/react` e `@ui-sdk/core`, da `vercel-labs/ui`) está em beta (0.1.0-beta.3): a API sai da skill `ui-sdk`, de `node_modules/@ui-sdk/react/docs/llms.txt` e dos `.d.ts` do pacote instalado, nunca de memória. O `@layer ui-sdk;` no topo do `globals.css` deixa as classes do site vencerem o CSS que ela injeta.
+- UI SDK (`@ui-sdk/react` e `@ui-sdk/core`, da `vercel-labs/ui`) está em beta (0.1.0-beta.10): a API sai da skill `ui-sdk`, de `node_modules/@ui-sdk/react/docs/llms.txt` e dos `.d.ts` do pacote instalado, nunca de memória. O `@layer ui-sdk;` no topo do `globals.css` deixa as classes do site vencerem o CSS que ela injeta.
 - `.env.example` — as env vars dos forms, downloads, Indicação e banco (`GMAIL_*`, `SITE_URL`, `CATALOG_TOKEN_SECRET`, `CRM_BASE_URL`, `CRM_EXTERNAL_API_KEY`, `INDICACAO_COOKIE_SECRET`, `DATABASE_URL`, `ADMIN_*`); copiar para `.env` local. Sem `DATABASE_URL`, o `bun dev` usa o PGlite.
 - `GLOSSARY.md` — glossário do domínio (Indicação, Vendedor, Contato comercial…); usar esses termos em código e docs.
 
