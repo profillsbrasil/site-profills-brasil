@@ -38,7 +38,6 @@ export default function BeneficiosGestao() {
         </div>
       </BlurFade>
 
-      {/* Benefits Grid */}
       <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3'>
         <AnimatedContainer>
           <div className='group relative overflow-hidden rounded-xs border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl'>

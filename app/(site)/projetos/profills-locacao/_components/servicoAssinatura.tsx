@@ -7,7 +7,6 @@ export default function ServicoAssinatura() {
     <section className='w-full max-w-6xl py-10'>
       <AnimatedContainer>
         <div className='grid w-full gap-8 md:grid-cols-2'>
-          {/* Left Content */}
           <div className='flex flex-col justify-center space-y-6'>
             <h2 className='text-2xl font-bold text-gray-900 md:text-3xl'>
               Sua Empresa com um{' '}
@@ -31,7 +30,6 @@ export default function ServicoAssinatura() {
             </p>
           </div>
 
-          {/* Right Content - Benefits Grid */}
           <div className='grid gap-4 sm:grid-cols-2'>
             <div className='group rounded-xs border border-gray-200 bg-white p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl'>
               <Factory className='mb-4 h-12 w-12 text-[#2d62ef] transition-all duration-300 group-hover:scale-110' />

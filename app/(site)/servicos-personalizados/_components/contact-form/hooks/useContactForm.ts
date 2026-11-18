@@ -40,7 +40,6 @@ export function useContactForm() {
     }
   });
 
-  // Função para buscar CEP
   const handleCepComplete = async (cep: string) => {
     if (cep.replace(/\D/g, '').length === 8) {
       setIsLoadingCep(true);
@@ -54,7 +53,6 @@ export function useContactForm() {
           form.setValue('city', data.localidade);
           form.setValue('state', data.uf);
 
-          // Limpa erro de CEP se existir
           form.clearErrors('cep');
         }
       } catch (error) {
@@ -67,7 +65,6 @@ export function useContactForm() {
     }
   };
 
-  // Validação por etapa
   const validateStep = async (step: number): Promise<boolean> => {
     const values = form.getValues();
     let fieldsToValidate: (keyof ContactFormData)[] = [];
@@ -92,10 +89,8 @@ export function useContactForm() {
           return false;
       }
 
-      // Valida o schema
       schema.parse(values);
 
-      // Limpa erros dos campos da etapa atual
       fieldsToValidate.forEach((field) => {
         form.clearErrors(field);
       });
@@ -103,9 +98,7 @@ export function useContactForm() {
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // Define os erros específicos da etapa
         error.issues.forEach((issue) => {
-          // O schema da etapa só tem os campos de fieldsToValidate.
           const fieldName = fieldsToValidate.find(
             (campo) => campo === issue.path[0]
           );
@@ -122,14 +115,12 @@ export function useContactForm() {
     }
   };
 
-  // Navegação entre etapas
   const nextStep = async () => {
     const isValid = await validateStep(currentStep);
 
     if (isValid && currentStep < 3) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Força a revalidação dos campos para mostrar erros
       const fieldsToTrigger = getFieldsForStep(currentStep);
       fieldsToTrigger.forEach((field) => {
         void form.trigger(field);
@@ -137,7 +128,6 @@ export function useContactForm() {
     }
   };
 
-  // Função auxiliar para obter campos de cada etapa
   const getFieldsForStep = (step: number): (keyof ContactFormData)[] => {
     switch (step) {
       case 1:
@@ -157,7 +147,6 @@ export function useContactForm() {
     }
   };
 
-  // Envio do formulário
   const onSubmit = async (data: ContactFormData) => {
     try {
       logger.info('Enviando dados do formulário:', data);
@@ -180,20 +169,17 @@ export function useContactForm() {
 
       registrarLeadIndicacao('contato', result?.indicacao?.codigo ?? null);
 
-      // Feedback visual de sucesso
       toast.success('Solicitação enviada com sucesso!', {
         description:
           'Entraremos em contato em breve para elaborar seu orçamento personalizado.',
         duration: 5000
       });
 
-      // Reset do formulário após sucesso
       form.reset();
       setCurrentStep(1);
     } catch (error) {
       logger.error('❌ Erro ao enviar solicitação:', error);
 
-      // Feedback visual de erro
       toast.error('Erro ao enviar solicitação', {
         description:
           error instanceof Error

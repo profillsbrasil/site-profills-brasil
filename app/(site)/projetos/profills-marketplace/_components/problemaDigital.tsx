@@ -14,7 +14,6 @@ export default function ProblemaDigital() {
     <section className='h-full w-full max-w-6xl pt-16 pb-10'>
       <AnimatedContainer>
         <div className='grid h-full w-full gap-8 md:grid-cols-2 md:gap-12'>
-          {/* Left Content - Problem Description */}
           <div className='flex h-full flex-col justify-center space-y-6'>
             <h2 className='text-2xl font-bold text-gray-900 md:text-3xl'>
               O Desafio das{' '}
@@ -43,7 +42,6 @@ export default function ProblemaDigital() {
               </p>
             </div>
 
-            {/* Statistics */}
             <div className='mt-8 grid grid-cols-2 gap-4'>
               <div className='rounded-xs bg-red-50 p-4 text-center'>
                 <BarChart3 className='mx-auto mb-2 h-8 w-8 text-red-600' />
@@ -62,7 +60,6 @@ export default function ProblemaDigital() {
             </div>
           </div>
 
-          {/* Right Content - Problem Points */}
           <div className='grid gap-4 sm:grid-cols-1'>
             <div className='rounded-xs border border-red-500/30 bg-red-50 p-6'>
               <div className='flex items-start space-x-4'>

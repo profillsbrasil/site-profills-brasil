@@ -21,7 +21,6 @@ interface PostPageProps {
   params: Promise<{ slug: string }>;
 }
 
-// generateMetadata e a página leem o mesmo post: uma consulta por requisição.
 const lerPost = cache(lerPublicado);
 
 export async function generateMetadata({
@@ -69,7 +68,6 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const guardado = await lerPost(slug);
 
-  // Slug que não existe dá 404 sem listar os outros posts.
   if (!guardado) notFound();
   const publicados = await listarPublicados();
   const { post } = guardado;

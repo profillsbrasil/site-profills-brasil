@@ -92,9 +92,7 @@ export default function FormularioMontarFabrica() {
     <div className='relative min-h-screen w-full bg-slate-900'>
       <GridPattern />
 
-      {/* Container principal */}
       <div className='relative z-10 flex min-h-screen flex-col'>
-        {/* Título principal - Responsivo */}
         <div className='absolute top-20 z-10 flex w-full justify-center px-4 md:top-28'>
           <h1 className='text-center'>
             <Highlighter
@@ -106,9 +104,7 @@ export default function FormularioMontarFabrica() {
           </h1>
         </div>
 
-        {/* Primeira seção - Layout responsivo */}
         <div className='flex w-full flex-col items-center justify-center px-4 pt-28 md:flex-row md:pt-20'>
-          {/* Imagem - Mobile primeiro */}
           <div className='mb-6 h-full w-full md:mb-0 md:w-2/3'>
             <Image
               src={imgFabricaCompleta}
@@ -119,7 +115,6 @@ export default function FormularioMontarFabrica() {
             />
           </div>
 
-          {/* Texto explicativo - Mobile primeiro */}
           <div className='z-20 h-full w-full md:w-1/3 md:pr-10'>
             <EntradaTopo
               ordem={1}
@@ -152,11 +147,9 @@ export default function FormularioMontarFabrica() {
             </EntradaTopo>
           </div>
         </div>
-        {/* Segunda seção - Formulário e informações */}
         <div className='flex flex-1 items-center justify-center px-4 py-8 md:px-8 md:py-16'>
           <div className='relative mx-auto w-full max-w-7xl'>
             <div className='flex flex-col gap-6 md:flex-row md:gap-12'>
-              {/* Coluna do formulário */}
               <EntradaTopo ordem={2} className='w-full md:w-1/2'>
                 <div className='border-border/20 flex h-full flex-col justify-between rounded-xs border border-dashed bg-slate-900/80 p-4 shadow-xl backdrop-blur md:p-6'>
                   <form
@@ -252,15 +245,11 @@ export default function FormularioMontarFabrica() {
                               type='tel'
                               inputMode='numeric'
                               className={cn(
-                                // base
                                 'h-10 w-full rounded-xs border px-3 text-sm text-white md:h-11 md:text-base',
                                 'placeholder:text-muted-foreground bg-slate-900/80',
                                 'border-border/20',
-                                // foco (ordem correta + ring com largura)
                                 'focus:ring-accent/80 focus:!border-accent/80 focus:ring-0 focus:outline-none',
-                                // acessibilidade (opcional, combina bem com shadcn)
                                 'focus-visible:ring-accent/80 focus-visible:ring-0',
-                                // erro
                                 errors.telefone
                                   ? 'border-red-500 focus:!border-red-500 focus:ring-red-500/30'
                                   : ''
@@ -314,7 +303,6 @@ export default function FormularioMontarFabrica() {
                 </div>
               </EntradaTopo>
 
-              {/* Coluna de informações */}
               <EntradaTopo
                 ordem={3}
                 className='w-full space-y-4 md:w-1/2 md:space-y-6'>

@@ -9,8 +9,6 @@ vi.mock('next/navigation', () => ({
   })
 }));
 
-// embla-carousel (Relacionadas) lê matchMedia e ResizeObserver, ausentes no
-// jsdom — mesmo stub de cardsGridMaquinas.test.tsx.
 vi.stubGlobal('matchMedia', () => ({
   matches: false,
   media: '',
@@ -30,11 +28,6 @@ class ResizeObserverStub {
 
 vi.stubGlobal('ResizeObserver', ResizeObserverStub);
 
-// Injeta uma máquina de engenharia fake (fixture só deste teste, spread do
-// piloto) para exercitar o branch tipoPagina='engenharia' sem depender de
-// dados reais do catálogo — categoria/embalagens divergem do piloto de
-// propósito, para que a máquina fake não apareça como "relacionada" dela
-// mesma nem faça o piloto aparecer no grid de Relacionadas.
 vi.mock('@/lib/data/maquinas', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/data/maquinas')>();
 
@@ -62,14 +55,10 @@ vi.mock('@/lib/data/maquinas', async (importOriginal) => {
   };
 });
 
-// Padrão sancionado do repo (ver heroDossie.test.tsx, fichaTecnica.test.tsx etc.):
-// next/image não roda em jsdom, mock reduz para uma tag <img> simples.
 vi.mock('next/image', () => ({
   default: 'img'
 }));
 
-// Mesmo padrão da Task 9 (embalagemBloco.test.tsx): substitui o componente
-// 3D dinâmico por um placeholder síncrono, evitando o import real do model-viewer.
 vi.mock('next/dynamic', () => ({
   default: () =>
     function Modelo3dMock() {
@@ -116,13 +105,12 @@ describe('página de máquina', () => {
       (el) => el.id || el.tagName.toLowerCase()
     );
 
-    // nav (sub-nav) → hero (section sem id) → visao-geral → aplicacoes → embalagem → ficha-tecnica → contato
     expect(ids).toContain('visao-geral');
     expect(ids).toContain('aplicacoes');
     expect(ids).toContain('embalagem');
     expect(ids).toContain('ficha-tecnica');
     expect(ids).toContain('contato');
-    expect(container.querySelector('#video')).toBeNull(); // piloto sem vídeo
+    expect(container.querySelector('#video')).toBeNull();
   });
 
   it('página de engenharia renderiza escopo, omite ficha técnica e não exibe imagem de máquina', async () => {

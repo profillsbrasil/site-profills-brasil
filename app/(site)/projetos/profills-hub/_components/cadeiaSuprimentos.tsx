@@ -38,7 +38,6 @@ export default function CadeiaSuprimentos() {
         </div>
       </BlurFade>
 
-      {/* Supply Chain Flow */}
       <AnimatedContainer className='w-full'>
         <div className='px-4 pb-5 md:px-10'>
           <div className='flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0'>
@@ -90,7 +89,6 @@ export default function CadeiaSuprimentos() {
         </div>
       </AnimatedContainer>
 
-      {/* Value Proposition */}
       <div className='grid w-full grid-cols-1 gap-8 md:grid-cols-2'>
         <AnimatedContainer>
           <div className='h-full rounded-xs border border-gray-100 bg-white p-8 shadow-lg backdrop-blur-sm'>
@@ -156,7 +154,6 @@ export default function CadeiaSuprimentos() {
         </AnimatedContainer>
       </div>
 
-      {/* Product Promise */}
       <AnimatedContainer className='w-full'>
         <div className='rounded-xs bg-slate-900 p-8 text-center text-white shadow-xl'>
           <h3 className='mb-4 text-2xl font-bold'>Nossa Promessa Global</h3>

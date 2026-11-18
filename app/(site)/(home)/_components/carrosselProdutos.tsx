@@ -74,7 +74,6 @@ const produtos = [
 export default function carrosselProdutos() {
   return (
     <>
-      {/* Grid mobile 2x2 */}
       <div className='z-10 mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-5 md:hidden'>
         <div className='flex flex-col gap-2'>
           <TextAnimate
@@ -110,7 +109,6 @@ export default function carrosselProdutos() {
         </Link>
       </div>
 
-      {/* Carousel desktop */}
       <div className='z-10 mx-auto hidden h-1/2 w-full max-w-6xl flex-col justify-center gap-5 px-4 py-5 md:flex'>
         <div className='flex flex-col gap-2'>
           <TextAnimate

@@ -38,7 +38,6 @@ export default function SolucaoERP() {
         </div>
       </BlurFade>
 
-      {/* Dashboard Mockup */}
       <AnimatedContainer className='w-full'>
         <div className='rounded-xs border border-gray-700 bg-gradient-to-br from-gray-900 to-gray-800 p-8 shadow-2xl'>
           <div className='mb-6 flex items-center gap-4'>
@@ -53,7 +52,6 @@ export default function SolucaoERP() {
           </div>
 
           <div className='grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6'>
-            {/* Left Column */}
             <div className='space-y-4'>
               <div className='rounded-xs border border-gray-700 bg-gray-800 p-4'>
                 <div className='mb-3 flex items-center gap-3'>
@@ -84,7 +82,6 @@ export default function SolucaoERP() {
               </div>
             </div>
 
-            {/* Center Column */}
             <div className='space-y-4'>
               <div className='rounded-xs border border-gray-700 bg-gray-800 p-4'>
                 <div className='mb-3 flex items-center gap-3'>
@@ -123,7 +120,6 @@ export default function SolucaoERP() {
               </div>
             </div>
 
-            {/* Right Column */}
             <div className='space-y-4'>
               <div className='rounded-xs border border-gray-700 bg-gray-800 p-4'>
                 <div className='mb-3 flex items-center gap-3'>
@@ -171,7 +167,6 @@ export default function SolucaoERP() {
         </div>
       </AnimatedContainer>
 
-      {/* Core Benefits */}
       <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-8'>
         <AnimatedContainer>
           <div className='h-full rounded-xs border border-gray-100 bg-white p-6 shadow-lg backdrop-blur-xs'>

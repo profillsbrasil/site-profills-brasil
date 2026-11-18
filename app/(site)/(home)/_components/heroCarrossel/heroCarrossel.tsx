@@ -29,7 +29,6 @@ export default function HeroCarrossel() {
     setPingKey((k) => k + 1);
   }, []);
 
-  // Autoplay: reinicia a cada troca (manual ou automática); desligado em reduced motion
   useEffect(() => {
     if (reduzirMovimento) return;
     const timer = setTimeout(() => trocar(1), AUTOPLAY_MS);
@@ -43,15 +42,12 @@ export default function HeroCarrossel() {
 
   return (
     <section className='relative flex min-h-[min(100vh,880px)] items-center overflow-hidden bg-secondary pt-16'>
-      {/* fundo: gradiente radial navy + grid pattern mascarado */}
       <div className='absolute inset-0 bg-[radial-gradient(120%_90%_at_78%_40%,#1b2a4d_0%,#0f172a_46%,#0a1122_100%)]' />
       <div className='absolute inset-0 [mask-image:radial-gradient(85%_85%_at_60%_45%,black_30%,transparent_100%)]'>
         <GridPattern />
       </div>
 
       <div className='relative z-10 mx-auto grid w-[min(1280px,94vw)] grid-cols-1 items-center gap-2 pt-4 pb-24 min-[900px]:grid-cols-2 min-[900px]:pb-16'>
-        {/* Coluna de texto — @container: fonte dos títulos compactos escala pela largura real da coluna.
-            initial={false}: o primeiro slide nasce no estado final no HTML; só as trocas animam */}
         <EntradaTopo className='@container'>
           {estatico ? (
             <HeroSlideCopy slide={slide} primeiro={atual === 0} estatico />
@@ -66,7 +62,6 @@ export default function HeroCarrossel() {
           )}
         </EntradaTopo>
 
-        {/* Palco: anéis fixos, máquina troca */}
         <EntradaTopo
           ordem={2}
           className='relative mt-6 h-[min(48vh,460px)] min-[900px]:mt-0 min-[900px]:max-[1180px]:h-[min(70vh,640px)] min-[900px]:h-[min(76vh,700px)] min-[900px]:translate-x-[6%]'>
@@ -91,7 +86,6 @@ export default function HeroCarrossel() {
         </EntradaTopo>
       </div>
 
-      {/* Navegação do carrossel */}
       <div className='absolute bottom-6 left-1/2 z-20 flex w-[min(1280px,94vw)] -translate-x-1/2 items-center justify-between min-[900px]:bottom-10'>
         <div className='flex items-center gap-4'>
           <span className='font-mono text-xs text-[#b6c5e2]'>

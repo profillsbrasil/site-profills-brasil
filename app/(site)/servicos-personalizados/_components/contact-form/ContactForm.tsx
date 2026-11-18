@@ -33,10 +33,8 @@ export default function ContactForm() {
 
   const handleContinue = async () => {
     if (currentStep === 3) {
-      // Última etapa - enviar formulário
       await handleSubmit(onSubmit)();
     } else {
-      // Próxima etapa - validação será feita no nextStep
       await nextStep();
     }
   };
@@ -65,7 +63,6 @@ export default function ContactForm() {
     <div
       id='entre-em-contato'
       className='flex w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-0'>
-      {/* Imagem lateral */}
       <div className='flex h-48 w-full items-center justify-center md:h-full md:min-h-[65vh] md:w-1/2'>
         <div className='flex h-full w-full'>
           <Image
@@ -76,25 +73,20 @@ export default function ContactForm() {
         </div>
       </div>
 
-      {/* Formulário */}
       <div className='flex h-full w-full items-center justify-center p-4 md:min-h-[65vh] md:w-1/2 md:p-0'>
         <div className='mx-auto flex h-fit w-full max-w-md flex-col items-center justify-center gap-6 rounded-xs md:gap-10'>
-          {/* Indicador de progresso */}
           <div className='relative'>
             <ProgressIndicator currentStep={currentStep} />
           </div>
 
-          {/* Etapas do formulário */}
           <div className='w-full'>{getCurrentStepComponent()}</div>
 
-          {/* Botões de navegação */}
           <div className='w-full'>
             <m.div
               className='flex items-center gap-3'
               animate={{
                 justifyContent: currentStep === 1 ? 'center' : 'space-between'
               }}>
-              {/* Botão Voltar */}
               {currentStep > 1 && (
                 <m.div
                   initial={{ opacity: 0, width: 0, scale: 0.8 }}
@@ -118,7 +110,6 @@ export default function ContactForm() {
                 </m.div>
               )}
 
-              {/* Botão Continuar/Finalizar */}
               <Button
                 type='button'
                 onClick={handleContinue}

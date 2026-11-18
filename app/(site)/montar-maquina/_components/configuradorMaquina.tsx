@@ -14,13 +14,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { registrarLeadIndicacao } from '@/lib/analytics/indicacao';
-// Importar imagens das embalagens
 import embalagemEspeciais from '@/lib/images/embalagensPequenas/especiais.png';
 import embalagemFardo from '@/lib/images/embalagensPequenas/fardo.png';
 import embalagemFrasco from '@/lib/images/embalagensPequenas/frasco.png';
 import embalagemGabletop from '@/lib/images/embalagensPequenas/gabletop.png';
 import embalagemGarrafa from '@/lib/images/embalagensPequenas/garrafa.png';
-// Importar imagens dos tipos de produto
 import produtoGranular from '@/lib/images/embalagensPequenas/granular.png';
 import produtoLiquido from '@/lib/images/embalagensPequenas/liquido-fino.png';
 import produtoPastoso from '@/lib/images/embalagensPequenas/liquido-medio.png';
@@ -72,7 +70,6 @@ export default function ConfiguradorMaquina() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Recomendação é derivada das seleções: memo em vez de estado + effect
   const recommendation = useMemo(
     () =>
       selectedPackaging && selectedProductType
@@ -142,15 +139,12 @@ export default function ConfiguradorMaquina() {
       setIsSubmitting(false);
     }
   };
-  // TODO: Tornar Funcional o envio do formulário
-  // TODO: Melhorar o Botão de Solicitar Orçamento Personalizado
 
   return (
     <div className='relative min-h-screen w-full bg-slate-900 pt-12'>
       <GridPattern />
 
       <div className='relative z-10 mx-auto max-w-6xl px-4 py-6 md:pt-12'>
-        {/* Header */}
         <div className='text-center'>
           <Highlighter
             action='underline'
@@ -167,11 +161,9 @@ export default function ConfiguradorMaquina() {
           </p>
         </EntradaTopo>
 
-        {/* Selection Sections */}
         <EntradaTopo
           ordem={1}
           className='mb-8 grid gap-6 md:mb-12 md:grid-cols-2 md:gap-8'>
-          {/* Packaging Selection */}
           <div>
             <div className='mb-4 rounded-t-lg bg-gradient-to-r from-blue-600 to-blue-700 py-3 text-center text-white shadow-lg md:mb-6 md:py-4'>
               <h2 className='text-sm font-semibold md:text-lg'>
@@ -212,7 +204,6 @@ export default function ConfiguradorMaquina() {
             </div>
           </div>
 
-          {/* Product Type Selection */}
           <div>
             <div className='mb-4 rounded-t-lg bg-gradient-to-r from-purple-600 to-purple-700 py-3 text-center text-white shadow-lg md:mb-6 md:py-4'>
               <h2 className='text-sm font-semibold md:text-lg'>
@@ -261,11 +252,9 @@ export default function ConfiguradorMaquina() {
           </div>
         </EntradaTopo>
 
-        {/* Product Details / Contact Form */}
         <EntradaTopo ordem={2} className='mb-8 md:mb-12'>
           <div className='flex h-full w-full flex-col'>
             {!selectedPackaging || !selectedProductType ? (
-              // Estado inicial - convite para seleção
               <>
                 <h3 className='mb-4 text-lg font-bold text-white md:mb-6 md:text-xl'>
                   Descubra a Máquina Ideal para o seu negócio
@@ -286,7 +275,6 @@ export default function ConfiguradorMaquina() {
                 </div>
               </>
             ) : (
-              // Estados com seleção completa
               <>
                 <h3 className='mb-4 text-lg font-bold text-white md:mb-6 md:text-xl'>
                   {recommendation
@@ -295,7 +283,6 @@ export default function ConfiguradorMaquina() {
                 </h3>
 
                 {recommendation ? (
-                  // Mostrar detalhes da máquina recomendada
                   <div className='flex h-full w-full flex-col items-center justify-center gap-4 md:flex-row md:gap-6'>
                     <div className='border-border/20 relative flex h-48 w-full items-center justify-center rounded-xs border border-dashed bg-slate-900/80 py-4 shadow-xl backdrop-blur md:h-96 md:w-1/3'>
                       {recommendation.machine.imagens?.maquina ? (
@@ -356,7 +343,6 @@ export default function ConfiguradorMaquina() {
                     </div>
                   </div>
                 ) : (
-                  // Mostrar formulário de contato quando não há máquina compatível
                   <div className='flex h-full w-full flex-col items-start justify-center gap-4 md:flex-row md:gap-6'>
                     <div className='border-border/20 relative flex h-32 w-full items-center justify-center rounded-xs border border-dashed bg-slate-900/80 py-4 shadow-xl backdrop-blur md:h-96 md:w-1/3'>
                       <div className='flex flex-col items-center justify-center text-center text-slate-400'>
@@ -466,13 +452,10 @@ export default function ConfiguradorMaquina() {
                                 type='tel'
                                 inputMode='numeric'
                                 className={cn(
-                                  // base
                                   'focus:ring-accent/50 h-10 w-full rounded-xs border border-slate-600 !bg-slate-800 px-3 text-sm text-white md:h-11 md:text-base',
                                   'bg-slate-900/80 placeholder:text-slate-400',
                                   'border-border/20',
-                                  // foco (ordem correta + ring com largura)
                                   'focus:ring-accent/80 focus:!border-accent/80 focus:ring-0 focus:outline-none',
-                                  // acessibilidade (opcional, combina bem com shadcn)
                                   'focus-visible:ring-accent/80 focus-visible:ring-0'
                                 )}
                               />

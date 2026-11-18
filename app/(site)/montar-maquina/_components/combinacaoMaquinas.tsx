@@ -4,7 +4,6 @@ import {
   maquinasCatalogo
 } from '@/lib/data/maquinas';
 
-// Mapeamento dos tipos de embalagem da UI para o vocabulário de `embalagensCompativeis`
 const packagingTypeMapping = new Map([
   ['cartonada', 'Cartonada'],
   ['pouch', 'Pouch'],
@@ -16,7 +15,6 @@ const packagingTypeMapping = new Map([
   ['pote', 'Pote']
 ]);
 
-// Mapeamento dos tipos de produto da UI para `aplicacoes.categorias`
 const productTypeMapping = new Map<string, CategoriaProduto>([
   ['liquidos', 'liquidos'],
   ['viscoso', 'pastosos'],
@@ -83,7 +81,7 @@ function pontuarProduto(
   return maquina.aplicacoes.categorias.includes(categoria) ? 1 : 0;
 }
 
-// Dados do formulário de contato quando não há máquina compatível
+/** Dados do formulário de contato quando não há máquina compatível. */
 export interface ContactFormData {
   nome: string;
   email: string;

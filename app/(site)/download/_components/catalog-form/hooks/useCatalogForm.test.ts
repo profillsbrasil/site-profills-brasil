@@ -9,9 +9,6 @@ import { useCatalogForm } from './useCatalogForm';
 import { toast } from 'sonner';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-/* Espião em cima da função REAL: as asserções de argumento continuam valendo e
-   o caso "analytics falha" exercita o engolir-erro de verdade, sem depender de
-   try/catch nos 5 call sites. */
 vi.mock('@/lib/analytics/indicacao', async (importOriginal) => {
   const real =
     await importOriginal<typeof import('@/lib/analytics/indicacao')>();
@@ -45,10 +42,6 @@ beforeEach(() => {
   vi.mocked(registrarLeadIndicacao).mockClear();
   vi.mocked(sendGAEvent).mockReset();
   vi.mocked(toast.error).mockClear();
-  /* registrarLeadIndicacao chama a implementação real, que só dispara na
-     hora se GA, dataLayer e Pixel já estiverem "prontos"; os três stubs
-     deixam a primeira tentativa síncrona, sem sobrar timer pendente (do GA
-     ou do Meta) entre os testes. */
   window.gtag = vi.fn();
   window.dataLayer = [];
   window.fbq = vi.fn();

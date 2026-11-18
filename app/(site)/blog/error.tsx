@@ -9,7 +9,6 @@ import {
   classeWrap
 } from './_components/pagina-blog';
 
-// A listagem e a leitura só lançam quando o banco do blog não responde.
 export default function ErroBlog({
   unstable_retry
 }: {

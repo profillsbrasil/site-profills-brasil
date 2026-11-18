@@ -21,19 +21,14 @@ export default function ProfillsSustentabilidade() {
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 pt-16'>
       <GridPattern />
 
-      {/* Hero Section */}
       <Hero />
 
-      {/* Alimentação Section */}
       <Alimentacao />
 
-      {/* Educação Section */}
       <Educacao />
 
-      {/* Desenvolvimento e Futuro Section */}
       <DesenvolvimentoFuturo />
 
-      {/* Objetivos do Desenvolvimento Sustentável Section */}
       <ObjetivosODS />
     </div>
   );

@@ -11,7 +11,6 @@ export default function ServicosPersonalizados() {
   return (
     <div className='flex w-full items-center justify-center px-4 pt-12 pb-16 md:pt-16'>
       <div className='flex h-full w-full max-w-6xl flex-col gap-5 md:flex-row md:gap-5'>
-        {/* Moldura blueprint na foto: quadro tracejado + cantoneiras accent */}
         <div className='relative flex h-64 w-full rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] md:h-auto md:w-1/2'>
           <span
             aria-hidden
@@ -51,8 +50,8 @@ export default function ServicosPersonalizados() {
                 .
               </p>
               <p>
-                Somamos experiência em metalurgia e projeto próprio para entregar
-                peças sob medida e projetos especiais.
+                Somamos experiência em metalurgia e projeto próprio para
+                entregar peças sob medida e projetos especiais.
               </p>
             </div>
           </div>

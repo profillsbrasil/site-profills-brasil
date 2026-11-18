@@ -29,7 +29,6 @@ export default function DesenvolvimentoFuturo() {
         </div>
       </BlurFade>
 
-      {/* Pilares do Desenvolviment */}
       <AnimatedContainer className='w-full'>
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6'>
           <div className='rounded-xs border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-100 p-6 text-center'>
@@ -81,7 +80,6 @@ export default function DesenvolvimentoFuturo() {
       </AnimatedContainer>
 
       <div className='grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12'>
-        {/* Grandes Corporações e Pequenos Produtores */}
         <AnimatedContainer>
           <div className='rounded-xs border border-indigo-200 bg-gradient-to-br from-indigo-50 to-blue-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>
@@ -134,7 +132,6 @@ export default function DesenvolvimentoFuturo() {
           </div>
         </AnimatedContainer>
 
-        {/* Expansão Internacional Sustentável */}
         <AnimatedContainer>
           <div className='rounded-xs border border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>

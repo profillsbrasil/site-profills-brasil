@@ -29,7 +29,6 @@ export default function Alimentacao() {
       </BlurFade>
 
       <div className='grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:gap-12'>
-        {/* Problema */}
         <AnimatedContainer>
           <div className='rounded-xs border border-red-200 bg-gradient-to-br from-red-50 to-pink-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>
@@ -75,7 +74,6 @@ export default function Alimentacao() {
           </div>
         </AnimatedContainer>
 
-        {/* Solução */}
         <AnimatedContainer>
           <div className='h-full rounded-xs border border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-100 p-8'>
             <div className='mb-6 flex items-center gap-4'>
@@ -118,7 +116,6 @@ export default function Alimentacao() {
         </AnimatedContainer>
       </div>
 
-      {/* Impacto */}
       <AnimatedContainer className='w-full'>
         <div className='rounded-xs border border-green-200 bg-gradient-to-br from-green-50 to-emerald-100 p-8'>
           <div className='mb-8 text-center'>

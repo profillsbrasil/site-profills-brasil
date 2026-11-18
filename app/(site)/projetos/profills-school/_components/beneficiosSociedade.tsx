@@ -57,7 +57,6 @@ export default function BeneficiosSociedade() {
           </p>
         </div>
 
-        {/* Benefits Grid */}
         <div className='mb-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
           {beneficios.map((beneficio, index) => {
             const IconComponent = beneficio.icon;
@@ -79,7 +78,6 @@ export default function BeneficiosSociedade() {
           })}
         </div>
 
-        {/* Vision Section */}
         <div className='mb-8 rounded-xs bg-gradient-to-br from-indigo-50 to-blue-100 p-8'>
           <div className='grid gap-8 lg:grid-cols-2'>
             <div className='flex flex-col justify-center'>
@@ -160,7 +158,6 @@ export default function BeneficiosSociedade() {
           </div>
         </div>
 
-        {/* Einstein Quote */}
         <div className='rounded-xs bg-slate-900 p-8 text-center text-white'>
           <div className='bg-accent mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full text-slate-900'>
             <Star className='h-8 w-8' />

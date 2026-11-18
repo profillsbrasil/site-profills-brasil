@@ -13,13 +13,10 @@ import { cn } from '@/lib/utils';
 import CardMaquina from './cardMaquinas/cardMaquina';
 import { FiltrosMobile, FiltrosSidebar, chipFiltro } from './filtrosSidebar';
 
-/* Busca sem cerimônia: ignora acento e caixa (NFD separa os diacríticos,
-   a faixa U+0300–U+036F os remove) */
 function normalizar(texto: string) {
   return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 }
 
-/* Filtro vindo da URL ou do estado é texto livre; a lista é de literais. */
 function contem(lista: readonly string[], valor: string) {
   return lista.includes(valor);
 }
@@ -31,7 +28,6 @@ export default function CatalogoMaquinas() {
   const [embalagemFiltro, setEmbalagemFiltro] = useState<string>('Todas');
   const [busca, setBusca] = useState<string>('');
 
-  // Função para atualizar a URL com os filtros
   const updateUrl = (categoria: string, embalagem: string, q: string) => {
     const params = new URLSearchParams();
 
@@ -53,10 +49,7 @@ export default function CatalogoMaquinas() {
     router.replace(newUrl, { scroll: false });
   };
 
-  // Lê os filtros da URL uma vez, depois da hidratação. Não usa
-  // useSearchParams de propósito: o hook aborta o prerender estático e o HTML
-  // de /maquinas saía sem os cards (issue #30). A URL só muda por
-  // router.replace daqui mesmo, então uma leitura no mount basta.
+  // WARNING: useSearchParams aborta o prerender estático e /maquinas sai sem os cards (issue #30).
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const categoriaFromUrl = searchParams.get('categoria');
@@ -76,14 +69,10 @@ export default function CatalogoMaquinas() {
     }
   }, []);
 
-  // Digitação atualiza a listagem na hora; a URL só depois de uma pausa,
-  // para o replace do router não rodar a cada tecla. Pula o mount: ali o
-  // closure ainda tem o estado inicial ('Todas') e o replace apagava o
-  // filtro que veio da URL.
-  const montou = useRef(false);
+  const aindaSemFiltrosDaUrl = useRef(true);
   useEffect(() => {
-    if (!montou.current) {
-      montou.current = true;
+    if (aindaSemFiltrosDaUrl.current) {
+      aindaSemFiltrosDaUrl.current = false;
 
       return;
     }
@@ -96,11 +85,9 @@ export default function CatalogoMaquinas() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [busca]);
 
-  // Estado para controlar se os filtros foram aplicados da URL
   const [filtersApplied, setFiltersApplied] = useState(false);
 
   useEffect(() => {
-    // Marca que os filtros foram aplicados após a primeira leitura da URL
     const timer = setTimeout(() => {
       setFiltersApplied(true);
     }, 100);
@@ -129,7 +116,6 @@ export default function CatalogoMaquinas() {
     });
   }, [categoriaFiltro, embalagemFiltro, termoBusca]);
 
-  // Tipos de embalagem dinâmicos com base nas máquinas filtradas por categoria
   const tiposVisiveis = useMemo(() => {
     if (categoriaFiltro === 'Todas') return tiposEmbalagem;
     const set = new Set<string>();
@@ -140,14 +126,9 @@ export default function CatalogoMaquinas() {
     });
     const lista = Array.from(set);
 
-    // Mantém ordem base de tiposEmbalagem para UX consistente
     return tiposEmbalagem.filter((t) => lista.includes(t));
   }, [categoriaFiltro]);
 
-  // Contagem por categoria = o que o clique produz: interseção com a
-  // embalagem ativa e a busca; se a embalagem for totalmente incompatível
-  // com a categoria, o clique a reseta (aplicarCategoria) — a busca nunca
-  // reseta, então sempre entra na conta
   const contagemPorCategoria = useMemo(() => {
     const passaEmbalagem = (m: (typeof maquinasCatalogo)[number]) =>
       embalagemFiltro === 'Todas' ||
@@ -184,8 +165,6 @@ export default function CatalogoMaquinas() {
     return contagem;
   }, [embalagemFiltro, termoBusca]);
 
-  // Trocar de categoria descarta embalagem incompatível com a nova categoria
-  // (antes ela ficava ativa e invisível, zerando a listagem sem explicação)
   const aplicarCategoria = (categoria: string) => {
     const tiposDaCategoria =
       categoria === 'Todas'
@@ -242,7 +221,6 @@ export default function CatalogoMaquinas() {
 
         {maquinasFiltradas.length === 0 ? (
           <div className='z-10 mt-8 mr-2 grid min-h-screen w-full grid-cols-12 grid-rows-12 rounded-xs px-4 md:px-0'>
-            {/* Empty state em placa técnica */}
             <div className='relative col-span-12 col-start-1 row-span-1 row-start-1 flex w-full max-w-md flex-col items-center justify-center gap-3 place-self-center rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-4 md:col-span-4 md:col-start-5 md:row-span-2 md:row-start-2 md:p-6'>
               <span
                 aria-hidden

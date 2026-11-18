@@ -8,14 +8,12 @@ import type { MaquinaCatalogo } from '@/lib/data/maquinas';
 
 interface MaquinaCardProps {
   maquina: MaquinaCatalogo;
-  index: number; // Para delay escalonado
-  filtersApplied?: boolean; // Indica se os filtros foram aplicados da URL
+  index: number;
+  filtersApplied?: boolean;
 }
 
-// Duas linhas da grade de 3 colunas cobrem a primeira dobra no desktop e no mobile.
 const CARDS_NA_PRIMEIRA_DOBRA = 6;
 
-// Subtítulo do card: parte após ' - ' de nomeCompleto; sem separador, cai na categoria
 function subtituloDe(maquina: MaquinaCatalogo): string {
   const [, subtitulo] = maquina.nomeCompleto.split(' - ');
 
@@ -27,13 +25,9 @@ export default function MaquinaCard({
   index,
   filtersApplied = false
 }: MaquinaCardProps) {
-  // Padronização: todos os cards com mesmas dimensões externas
-  // e mesma proporção de conteúdo/rodapé para evitar desalinhamentos
-
   const [imgLoaded, setImgLoaded] = useState(false);
   const [pkgLoaded, setPkgLoaded] = useState(false);
 
-  // Delay escalonado para animação suave (máximo 0.3s para melhor performance)
   const animationDelay = Math.min(index * 0.03, 0.3);
   const naPrimeiraDobra = index < CARDS_NA_PRIMEIRA_DOBRA;
   const loading = naPrimeiraDobra ? 'eager' : 'lazy';
@@ -41,7 +35,6 @@ export default function MaquinaCard({
 
   const conteudo = (
     <>
-      {/* Moldura blueprint: mídia no quadro tracejado com cantoneiras accent */}
       <div
         className={`relative h-[86%] w-full rounded-t-xs border border-dashed border-[rgba(148,178,235,0.3)] px-2 transition-colors duration-300 group-hover:border-[rgba(148,178,235,0.55)]`}>
         <span
@@ -80,8 +73,6 @@ export default function MaquinaCard({
             />
           </>
         ) : (
-          // Máquinas de engenharia não têm foto de catálogo: miolo sólido com
-          // rótulo técnico (o nome já aparece no rodapé do card).
           <div className='flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xs bg-slate-900/60'>
             <span className='text-accent font-mono text-2xl'>+</span>
             <span className='text-muted-foreground/70 px-4 text-center font-mono text-[11px] tracking-[0.2em] uppercase'>
@@ -104,7 +95,6 @@ export default function MaquinaCard({
     </>
   );
 
-  // Filtro aplicado remonta os cards: aí a entrada de montagem continua
   if (naPrimeiraDobra && !filtersApplied) {
     return (
       <EntradaTopo ordem={index} className={classeCard}>
@@ -116,9 +106,9 @@ export default function MaquinaCard({
   return (
     <AnimatedContainer
       delay={animationDelay}
-      trigger={filtersApplied ? 'mount' : 'inView'} // Usa "mount" quando filtros aplicados da URL
-      once={!filtersApplied} // Permite reanimação quando filtros mudam
-      amount={0.1} // Dispara quando 10% do elemento está visível
+      trigger={filtersApplied ? 'mount' : 'inView'}
+      once={!filtersApplied}
+      amount={0.1}
       className={classeCard}>
       {conteudo}
     </AnimatedContainer>

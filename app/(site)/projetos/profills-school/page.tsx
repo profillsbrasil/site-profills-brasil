@@ -20,13 +20,9 @@ export default function ProfillsSchool() {
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 py-16'>
       <GridPattern />
 
-      {/* Hero Section */}
       <Hero />
-      {/* Education Impact Section */}
       <ImpactoEducacao />
-      {/* Teaching Methodologies Section */}
       <MetodologiasEnsino />
-      {/* Social Benefits Section */}
       <BeneficiosSociedade />
     </div>
   );

@@ -31,10 +31,7 @@ export default function TecnologiaFavor() {
         </div>
       </BlurFade>
 
-      {/* Process Flow */}
       <div className='relative w-full'>
-        {/* Connection Line */}
-
         <div className='relative z-10 grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-8'>
           <AnimatedContainer>
             <div className='group text-center'>
@@ -100,7 +97,6 @@ export default function TecnologiaFavor() {
         </div>
       </div>
 
-      {/* Resource Showcase */}
       <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-3 md:gap-8'>
         <AnimatedContainer>
           <div className='rounded-xs border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-8 shadow-lg backdrop-blur-xs transition-all duration-300 hover:shadow-xl'>
@@ -197,7 +193,6 @@ export default function TecnologiaFavor() {
         </AnimatedContainer>
       </div>
 
-      {/* Final Statement */}
       <AnimatedContainer>
         <div className='max-w-6xl rounded-xs bg-slate-900 p-8 text-center text-white shadow-lg'>
           <h3 className='decoration-accent mb-4 text-2xl font-bold underline underline-offset-4'>

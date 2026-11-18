@@ -62,7 +62,6 @@ export default function Hero() {
           </div>
         </EntradaTopo>
 
-        {/* Features Cards */}
         <EntradaTopo ordem={2} className='w-full'>
           <div className='grid w-full grid-cols-2 gap-3 md:grid-cols-4 md:gap-5'>
             <div className='group flex items-center gap-3 rounded-xs border border-gray-200 bg-white/80 p-4 shadow-xl backdrop-blur-md hover:shadow-md'>

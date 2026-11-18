@@ -81,7 +81,6 @@ export default function CtaAjudarEmpresa() {
   return (
     <section className='relative z-10 px-4 py-16 md:py-24'>
       <div className='mx-auto max-w-6xl'>
-        {/* Header Section */}
         <div className='mb-10 flex flex-col items-center text-center md:mb-14'>
           <h2 className='mb-4 flex flex-col gap-1 text-2xl leading-tight font-bold md:flex-row md:gap-2 md:text-3xl'>
             <TextAnimate
@@ -106,7 +105,6 @@ export default function CtaAjudarEmpresa() {
           </p>
         </div>
 
-        {/* Benefits Cards */}
         <div className='mb-12 grid grid-cols-1 gap-5 md:mb-16 md:grid-cols-3'>
           {cards.map((card, index) => (
             <BlurFade
@@ -114,7 +112,6 @@ export default function CtaAjudarEmpresa() {
               delay={0.1 + index * 0.1}
               inView
               className='h-full'>
-              {/* Placa técnica: linguagem do hero (borda tracejada → sólida accent no hover) */}
               <div className='relative flex h-full flex-col rounded-xs border border-dashed border-[rgba(148,178,235,0.3)] bg-slate-900/60 p-6 transition-colors duration-300 hover:border-solid hover:border-accent hover:bg-slate-900/85'>
                 <span
                   aria-hidden
@@ -149,13 +146,11 @@ export default function CtaAjudarEmpresa() {
               <div
                 key={fornecedor.alt}
                 className='group relative flex h-16 w-full items-center justify-center rounded-xs border border-dashed border-[rgba(148,178,235,0.25)] bg-card p-3 transition-colors duration-300 hover:border-accent/60 md:h-20 md:w-1/6'>
-                {/* "Hover automático": a vez deste chip no ciclo de 8s */}
                 <span
                   aria-hidden
                   style={{ animationDelay: `${i * 2}s` }}
                   className='pointer-events-none absolute -inset-px rounded-xs border border-accent opacity-0 motion-reduce:hidden animate-[marca-borda-ativa_18s_linear_infinite]'
                 />
-                {/* brightness-0 + invert: logos monocromáticas brancas sobre o navy */}
                 <Image
                   src={fornecedor.logo}
                   alt={fornecedor.alt}

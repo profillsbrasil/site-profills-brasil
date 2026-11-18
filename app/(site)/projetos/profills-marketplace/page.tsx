@@ -19,11 +19,8 @@ export default function ProfillsMarketplace() {
     <div className='relative flex min-h-screen w-full flex-col items-center justify-center px-4 pt-16'>
       <GridPattern />
 
-      {/* Hero Section */}
       <Hero />
-      {/* Problem Section */}
       <ProblemaDigital />
-      {/* Solution Section */}
       <SolucaoMarketplace />
     </div>
   );

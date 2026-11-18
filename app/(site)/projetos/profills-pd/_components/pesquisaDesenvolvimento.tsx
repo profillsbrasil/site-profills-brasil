@@ -27,7 +27,6 @@ export default function PesquisaDesenvolvimento() {
         </div>
       </BlurFade>
 
-      {/* Main Content Grid */}
       <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-8'>
         <AnimatedContainer>
           <div className='h-full rounded-xs border border-gray-100 bg-white p-8 shadow-lg backdrop-blur-xs'>
@@ -87,7 +86,6 @@ export default function PesquisaDesenvolvimento() {
         </AnimatedContainer>
       </div>
 
-      {/* Bottom Cards */}
       <div className='grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:gap-6'>
         <AnimatedContainer>
           <div className='rounded-xs border border-gray-100 bg-white p-6 text-center shadow-md backdrop-blur-xs transition-all duration-300 hover:shadow-lg'>

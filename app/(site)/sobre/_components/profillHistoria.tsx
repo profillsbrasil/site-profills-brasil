@@ -20,7 +20,6 @@ const Globe = dynamic(
 
 export default function ProfillHistoria() {
   const visualRef = useRef<HTMLDivElement>(null);
-  // O módulo do globo (three + react-globe.gl) só baixa quando o bloco entra na tela
   const naTela = useInView(visualRef, { once: true });
   const [globoPronto, setGloboPronto] = useState(false);
 
@@ -28,7 +27,6 @@ export default function ProfillHistoria() {
     <section
       aria-labelledby='titulo-historia'
       className='flex h-full w-full max-w-7xl flex-col items-center justify-center gap-5 pt-4 pb-2 md:flex-row md:gap-5 md:pt-0 md:pb-10'>
-      {/* Visual: globo + marca. O bloco reserva o espaço do globo desde o HTML */}
       <div
         ref={visualRef}
         className='relative flex h-80 w-full select-none md:aspect-square md:h-auto md:w-1/2'>
@@ -51,7 +49,6 @@ export default function ProfillHistoria() {
         </h1>
       </div>
 
-      {/* Texto */}
       <div className='flex w-full flex-col items-center gap-4 md:w-1/2 md:gap-5'>
         <Highlighter
           action='underline'

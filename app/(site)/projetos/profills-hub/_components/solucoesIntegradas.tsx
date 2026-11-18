@@ -38,7 +38,6 @@ export default function SolucoesIntegradas() {
         </div>
       </BlurFade>
 
-      {/* Three Pillars */}
       <div className='grid w-full grid-cols-1 gap-6 md:grid-cols-3 md:gap-8'>
         <AnimatedContainer>
           <div className='h-full rounded-xs border border-gray-100 bg-white p-8 text-center shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl'>
@@ -154,7 +153,6 @@ export default function SolucoesIntegradas() {
         </AnimatedContainer>
       </div>
 
-      {/* Connected Solutions */}
       <AnimatedContainer className='w-full'>
         <div className='relative overflow-hidden rounded-xs bg-slate-900 p-6 text-white md:p-10'>
           <GridPattern />
@@ -171,7 +169,6 @@ export default function SolucoesIntegradas() {
               <span className='text-accent font-bold'>Máquinas Profills</span>.
             </p>
 
-            {/* Integration Icons */}
             <div className='mt-8 flex w-full flex-wrap items-center justify-center gap-5 md:gap-10'>
               <div className='text-center'>
                 <div className='mx-auto mb-2 w-fit rounded-full bg-slate-700 p-3'>

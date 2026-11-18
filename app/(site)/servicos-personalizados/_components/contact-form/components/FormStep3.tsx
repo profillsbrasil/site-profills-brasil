@@ -52,7 +52,6 @@ export function FormStep3({ control, errors }: FormStep3Props) {
       </div>
 
       <div className='space-y-4'>
-        {/* Material */}
         <div className='space-y-2'>
           <Label htmlFor='material'>Material *</Label>
           <Controller
@@ -84,7 +83,6 @@ export function FormStep3({ control, errors }: FormStep3Props) {
           )}
         </div>
 
-        {/* Serviço */}
         <div className='space-y-2'>
           <Label htmlFor='service'>Serviços *</Label>
           <Controller
@@ -114,7 +112,6 @@ export function FormStep3({ control, errors }: FormStep3Props) {
           )}
         </div>
 
-        {/* Acabamento */}
         <div className='space-y-2'>
           <Label htmlFor='finish'>Acabamento *</Label>
           <Controller
@@ -144,7 +141,6 @@ export function FormStep3({ control, errors }: FormStep3Props) {
           )}
         </div>
 
-        {/* Detalhes */}
         <div className='w-full space-y-2 md:min-w-[450px]'>
           <Label htmlFor='details'>Detalhes Adicionais</Label>
           <Controller

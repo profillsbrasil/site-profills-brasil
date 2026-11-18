@@ -15,14 +15,15 @@ interface FormStep2Props {
   errors: FieldErrors<ContactFormData>;
 }
 
+const ESPERA_ANIMACAO_ENTRADA_MS = 300;
+
 export function FormStep2({ control, errors }: FormStep2Props) {
   const numberInputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-focus no campo número quando o componente é montado
   useEffect(() => {
     const timer = setTimeout(() => {
       numberInputRef.current?.focus();
-    }, 300); // Pequeno delay para garantir que a animação termine
+    }, ESPERA_ANIMACAO_ENTRADA_MS);
 
     return () => clearTimeout(timer);
   }, []);
@@ -41,7 +42,6 @@ export function FormStep2({ control, errors }: FormStep2Props) {
       </div>
 
       <div className='z-10 w-full space-y-4 md:min-w-[450px]'>
-        {/* Rua */}
         <div className='z-10 space-y-2'>
           <Label htmlFor='street'>Rua/Logradouro</Label>
           <Controller
@@ -59,7 +59,6 @@ export function FormStep2({ control, errors }: FormStep2Props) {
           />
         </div>
 
-        {/* Número e Complemento */}
         <div className='grid grid-cols-2 gap-4'>
           <div className='space-y-2'>
             <Label htmlFor='number'>Número *</Label>
@@ -104,7 +103,6 @@ export function FormStep2({ control, errors }: FormStep2Props) {
           </div>
         </div>
 
-        {/* Bairro */}
         <div className='space-y-2'>
           <Label htmlFor='neighborhood'>Bairro</Label>
           <Controller
@@ -122,7 +120,6 @@ export function FormStep2({ control, errors }: FormStep2Props) {
           />
         </div>
 
-        {/* Cidade e Estado */}
         <div className='grid grid-cols-2 gap-4'>
           <div className='space-y-2'>
             <Label htmlFor='city'>Cidade *</Label>

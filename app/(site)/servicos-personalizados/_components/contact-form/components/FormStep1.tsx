@@ -36,7 +36,6 @@ export function FormStep1({
       </div>
 
       <div className='w-full space-y-4 md:min-w-[450px]'>
-        {/* E-mail */}
         <div className='space-y-2'>
           <Label htmlFor='email'>E-mail *</Label>
           <Controller
@@ -62,7 +61,6 @@ export function FormStep1({
           )}
         </div>
 
-        {/* Telefone */}
         <div className='space-y-2'>
           <Label htmlFor='phone'>Telefone *</Label>
           <Controller
@@ -93,7 +91,6 @@ export function FormStep1({
           )}
         </div>
 
-        {/* CEP */}
         <div className='space-y-2'>
           <Label htmlFor='cep'>CEP *</Label>
           <div className='relative'>
