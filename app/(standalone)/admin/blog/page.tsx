@@ -2,7 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import { autorAtual } from '@/lib/admin/sessao';
 import { abrirAdminBlog } from '@/lib/blog/admin';
+import {
+  filtrosPosts,
+  lerFiltroPosts,
+  totaisDosPosts
+} from '@/lib/blog/apresentacao';
 import { assuntos } from '@/lib/blog/tipos';
 
 import { enderecoDeEntrada } from '../entrar/volta';
@@ -13,39 +19,50 @@ import {
   LixeiraRascunho
 } from './_components/lixeira-rascunho';
 
+type Busca = { searchParams: Promise<{ estado?: string | string[] }> };
+
 export const metadata: Metadata = { title: 'Posts' };
 
 const colunas =
   'grid grid-cols-[minmax(0,1fr)_8rem_11rem_6.5rem_2rem] items-center gap-4 px-4';
 
-export default async function PostsPage() {
+export default async function PostsPage({ searchParams }: Busca) {
   const admin = await abrirAdminBlog();
 
   if (!admin) redirect(enderecoDeEntrada('/admin/blog'));
 
-  const [posts, imagens] = await Promise.all([
+  const [{ estado }, todos, imagens, autor] = await Promise.all([
+    searchParams,
     admin.listar(),
-    admin.contarImagens()
+    admin.contarImagens(),
+    autorAtual()
   ]);
+
+  const filtro = lerFiltroPosts(estado);
+  const { titulo, inclui, vazio } = filtrosPosts[filtro];
+  const posts = todos.filter(inclui);
 
   return (
     <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
-      <Lateral atual='posts' totais={{ posts: posts.length, imagens }} />
+      <Lateral
+        atual={filtro}
+        totais={{ ...totaisDosPosts(todos), imagens }}
+        usuario={autor?.usuario ?? null}
+      />
 
       <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-admin-chao text-admin-texto'>
         <AvisosDeApagar
           cabecalho={
             <header className='flex min-h-14 items-center gap-3 border-b border-admin-borda bg-white px-5 py-3'>
-              <h1 className='text-lg font-semibold'>Posts</h1>
+              <h1 className='text-lg font-semibold'>{titulo}</h1>
             </header>
           }>
           <div className='min-h-0 flex-1 overflow-y-auto p-5'>
             {posts.length === 0 ? (
               <div className='grid justify-items-center gap-3 rounded-xs border border-dashed border-[#8a90a0] bg-white p-10 text-center'>
-                <h2 className='text-base font-semibold'>Nenhum post ainda</h2>
+                <h2 className='text-base font-semibold'>{vazio.titulo}</h2>
                 <p className='max-w-sm text-xs text-admin-apagado'>
-                  Clique em Novo post para escrever o primeiro. Ele fica
-                  guardado como rascunho até você publicar.
+                  {vazio.texto}
                 </p>
               </div>
             ) : (

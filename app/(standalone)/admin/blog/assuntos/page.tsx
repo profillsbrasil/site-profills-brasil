@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import { autorAtual } from '@/lib/admin/sessao';
 import { abrirAdminBlog } from '@/lib/blog/admin';
-import { agruparPorAssunto } from '@/lib/blog/apresentacao';
+import { agruparPorAssunto, totaisDosPosts } from '@/lib/blog/apresentacao';
 import { type Assunto, assuntos, ehAssunto } from '@/lib/blog/tipos';
 
 import { enderecoDeEntrada } from '../../entrar/volta';
@@ -35,10 +36,11 @@ export default async function AssuntosPage({
 
   if (!admin) redirect(enderecoDeEntrada('/admin/blog/assuntos'));
 
-  const [{ assunto: pedido }, posts, imagens] = await Promise.all([
+  const [{ assunto: pedido }, posts, imagens, autor] = await Promise.all([
     searchParams,
     admin.listar(),
-    admin.contarImagens()
+    admin.contarImagens(),
+    autorAtual()
   ]);
 
   const escolhido: Assunto = ehAssunto(pedido) ? pedido : 'maquina';
@@ -49,7 +51,11 @@ export default async function AssuntosPage({
 
   return (
     <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
-      <Lateral atual='assuntos' totais={{ posts: posts.length, imagens }} />
+      <Lateral
+        atual='assuntos'
+        totais={{ ...totaisDosPosts(posts), imagens }}
+        usuario={autor?.usuario ?? null}
+      />
 
       <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-admin-chao text-admin-texto'>
         <header className='flex min-h-14 items-center gap-3 border-b border-admin-borda bg-white px-5 py-3'>

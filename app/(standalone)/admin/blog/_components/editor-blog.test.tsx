@@ -48,6 +48,10 @@ vi.mock('next/navigation', async () => {
   };
 });
 
+vi.mock('@/lib/admin/sessao', () => ({
+  autorAtual: async () => ({ usuario: 'profills' })
+}));
+
 vi.mock('@/lib/blog/admin', () => ({
   abrirAdminBlog: async () => ({
     listar: async () => [],
@@ -57,7 +61,7 @@ vi.mock('@/lib/blog/admin', () => ({
 
 vi.mock('next/image', () => ({ default: () => null }));
 
-const totais = { posts: 1, imagens: 0 };
+const totais = { posts: 1, publicados: 0, rascunhos: 1, imagens: 0 };
 
 const inicial: PostGuardado = {
   slug: 'recesso',
@@ -98,7 +102,7 @@ function abrirEditor() {
   window.history.replaceState(null, '', '/admin/blog');
   window.history.pushState(null, '', '/admin/blog/recesso');
 
-  render(<EditorBlog inicial={inicial} totais={totais} />);
+  render(<EditorBlog inicial={inicial} totais={totais} usuario='profills' />);
 
   return window.history.length;
 }
@@ -306,7 +310,7 @@ describe('voltar do navegador no editor', () => {
     const entradas = abrirEditor();
     await editarTitulo();
 
-    await userEvent.click(screen.getByRole('link', { name: /^Posts/ }));
+    await userEvent.click(screen.getByRole('link', { name: /^Todos/ }));
     await userEvent.click(
       await screen.findByRole('button', { name: 'Sair sem salvar' })
     );
@@ -318,7 +322,7 @@ describe('voltar do navegador no editor', () => {
   it('o post novo grava sem pedir a atualização da rota', async () => {
     gravarComSucesso();
     window.history.replaceState(null, '', '/admin/blog/novo');
-    render(<EditorBlog inicial={null} totais={totais} />);
+    render(<EditorBlog inicial={null} totais={totais} usuario='profills' />);
     await editarTitulo();
 
     await userEvent.click(

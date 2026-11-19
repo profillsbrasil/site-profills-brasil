@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
+import { autorAtual } from '@/lib/admin/sessao';
 import { type AdminBlog, abrirAdminBlog } from '@/lib/blog/admin';
-import { tamanhoDoArquivo } from '@/lib/blog/apresentacao';
+import { tamanhoDoArquivo, totaisDosPosts } from '@/lib/blog/apresentacao';
 import type { UsoImagem } from '@/lib/blog/tipos';
 import { logger } from '@/lib/utils/logger';
 
@@ -40,16 +41,21 @@ export default async function ImagensPage() {
 
   if (!admin) redirect(enderecoDeEntrada('/admin/blog/imagens'));
 
-  const [posts, imagens] = await Promise.all([
+  const [posts, imagens, autor] = await Promise.all([
     admin.listar(),
-    imagensOuAviso(admin)
+    imagensOuAviso(admin),
+    autorAtual()
   ]);
 
   return (
     <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
       <Lateral
         atual='imagens'
-        totais={{ posts: posts.length, imagens: imagens?.length ?? null }}
+        totais={{
+          ...totaisDosPosts(posts),
+          imagens: imagens?.length ?? null
+        }}
+        usuario={autor?.usuario ?? null}
       />
 
       <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-admin-chao text-admin-texto'>

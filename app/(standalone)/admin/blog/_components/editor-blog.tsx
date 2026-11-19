@@ -121,10 +121,29 @@ function Vao({ ativo }: { ativo: boolean }) {
   );
 }
 
+function somarGravacao(
+  totais: TotaisLateral,
+  inicial: PostGuardado | null,
+  gravacao: PostGuardado | null
+) {
+  const conta = (post: PostGuardado | null, estado: PostGuardado['estado']) =>
+    post?.estado === estado ? 1 : 0;
+
+  const mudou = (estado: PostGuardado['estado']) =>
+    conta(gravacao, estado) - conta(inicial, estado);
+
+  return {
+    posts: totais.posts + (gravacao ? 1 : 0) - (inicial ? 1 : 0),
+    publicados: totais.publicados + mudou('publicado'),
+    rascunhos: totais.rascunhos + mudou('rascunho')
+  };
+}
+
 type Props = {
   /** null no post novo, que ganha slug na primeira gravação. */
   inicial: PostGuardado | null;
   totais: TotaisLateral;
+  usuario: string | null;
   /** Avisa a página de /novo, antes da troca, que a URL passa a ser a do post criado aqui. */
   aoTrocarEndereco?: (endereco: string) => void;
 };
@@ -142,7 +161,13 @@ const ENDERECO_NOVO = '/admin/blog/novo';
  * que o editor montado não criou, a página troca a rota pela do post, na mesma
  * entrada do histórico.
  */
-export function EditorPostNovo({ totais }: { totais: TotaisLateral }) {
+export function EditorPostNovo({
+  totais,
+  usuario
+}: {
+  totais: TotaisLateral;
+  usuario: string | null;
+}) {
   const router = useRouter();
   const endereco = usePathname();
   const [visto, setVisto] = useState(endereco);
@@ -171,7 +196,7 @@ export function EditorPostNovo({ totais }: { totais: TotaisLateral }) {
   if (trocando) {
     return (
       <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
-        <Lateral atual='editor' totais={totais} />
+        <Lateral atual='editor' totais={totais} usuario={usuario} />
         <div aria-busy='true' className='my-2 mr-2 rounded-xs bg-admin-chao' />
       </div>
     );
@@ -182,12 +207,18 @@ export function EditorPostNovo({ totais }: { totais: TotaisLateral }) {
       key={visita}
       inicial={null}
       totais={totais}
+      usuario={usuario}
       aoTrocarEndereco={setCriado}
     />
   );
 }
 
-export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
+export function EditorBlog({
+  inicial,
+  totais,
+  usuario,
+  aoTrocarEndereco
+}: Props) {
   const router = useRouter();
 
   const [post, dispatch] = useReducer(
@@ -441,9 +472,10 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
         <Lateral
           atual={inicial ? 'editor' : 'novo'}
           totais={{
-            posts: totais.posts + (!inicial && gravacao ? 1 : 0),
+            ...somarGravacao(totais, inicial, gravacao),
             imagens: totalImagens
           }}
+          usuario={usuario}
           aoNavegar={aoNavegar}
         />
 

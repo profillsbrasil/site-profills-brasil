@@ -47,7 +47,13 @@ const classesForaDaGrade = (elemento: HTMLElement) =>
 
 describe('grade de 4 px do admin', () => {
   it('os botões pequenos e as abas não têm espaçamento de 6 ou 10 px', () => {
-    render(<EditorBlog inicial={inicial} totais={{ posts: 1, imagens: 0 }} />);
+    render(
+      <EditorBlog
+        inicial={inicial}
+        totais={{ posts: 1, publicados: 0, rascunhos: 1, imagens: 0 }}
+        usuario='profills'
+      />
+    );
 
     const elementos = [
       screen.getByRole('button', { name: 'Salvar rascunho' }),
