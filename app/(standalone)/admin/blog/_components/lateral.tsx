@@ -45,12 +45,12 @@ const TOTAL_ASSUNTOS = Object.keys(assuntos).length;
 type EstadoLateral = 'aberta' | 'recolhida' | 'reaberta';
 
 const classeItem =
-  'flex items-center gap-2 rounded-xs px-[11px] py-2 text-sm whitespace-nowrap text-[#b6c5e2]';
+  'flex items-center gap-2 rounded-xs px-[11px] py-2 text-sm whitespace-nowrap text-admin-lateral-texto';
 
 const classeFade =
   'motion-safe:animate-in motion-safe:fade-in motion-safe:duration-160 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:delay-30 motion-safe:fill-mode-both';
 
-const classeLink = `${classeItem} transition-colors outline-none hover:bg-[rgba(148,178,235,0.12)] hover:text-white focus-visible:bg-[rgba(148,178,235,0.12)] focus-visible:text-white motion-reduce:transition-none aria-[current=page]:bg-[rgba(148,178,235,0.18)] aria-[current=page]:text-white`;
+const classeLink = `${classeItem} transition-colors outline-none hover:bg-admin-lateral-hover hover:text-white focus-visible:bg-admin-lateral-hover focus-visible:text-white motion-reduce:transition-none aria-[current=page]:bg-admin-lateral-ativo aria-[current=page]:text-white`;
 
 export function Lateral({ atual, totais, aoNavegar }: Props) {
   const [estado, setEstado] = useState<EstadoLateral>('aberta');
@@ -107,7 +107,7 @@ export function Lateral({ atual, totais, aoNavegar }: Props) {
               atual === 'recolhida' ? 'reaberta' : 'recolhida'
             )
           }
-          className='grid size-8 shrink-0 place-items-center rounded-xs text-[#b6c5e2] transition-colors outline-none hover:bg-[rgba(148,178,235,0.12)] hover:text-white focus-visible:bg-[rgba(148,178,235,0.12)] focus-visible:text-white motion-reduce:transition-none'>
+          className='grid size-8 shrink-0 place-items-center rounded-xs text-admin-lateral-texto transition-colors outline-none hover:bg-admin-lateral-hover hover:text-white focus-visible:bg-admin-lateral-hover focus-visible:text-white motion-reduce:transition-none'>
           <IconeRecolher aria-hidden='true' className='size-[18px]' />
         </button>
       </div>
@@ -118,7 +118,7 @@ export function Lateral({ atual, totais, aoNavegar }: Props) {
         aria-current={atual === 'novo' ? 'page' : undefined}
         title='Novo post'
         onClick={(e) => aoNavegar?.(e, '/admin/blog/novo')}
-        className={`mb-2 flex items-center justify-center gap-2 rounded-xs bg-white py-2 text-sm font-medium text-[#0f172b] transition-colors outline-none hover:bg-[#e2e8f4] focus-visible:bg-[#e2e8f4] motion-reduce:transition-none ${recolhida ? 'px-0' : 'px-3'}`}>
+        className={`mb-2 flex items-center justify-center gap-2 rounded-xs bg-white py-2 text-sm font-medium text-admin-lateral transition-colors outline-none hover:bg-[#e2e8f4] focus-visible:bg-[#e2e8f4] motion-reduce:transition-none ${recolhida ? 'px-0' : 'px-3'}`}>
         <Plus aria-hidden='true' className='size-[18px]' />
         {recolhida ? null : <span className={fade}>Novo post</span>}
       </Link>
@@ -138,7 +138,7 @@ export function Lateral({ atual, totais, aoNavegar }: Props) {
               <span className={fade}>{nome}</span>
               {total === null ? null : (
                 <span
-                  className={`ml-auto font-mono text-xs text-[#b6c5e2] ${fade}`}>
+                  className={`ml-auto font-mono text-xs text-admin-lateral-texto ${fade}`}>
                   {total}
                 </span>
               )}

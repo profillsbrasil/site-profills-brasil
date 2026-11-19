@@ -154,7 +154,7 @@ function CamposTabela({ bloco, mudar }: PropsCampos<'tabela'>) {
   return (
     <div className='grid gap-2'>
       <div
-        className='grid overflow-x-auto rounded-xs border border-[#dfe2e8]'
+        className='grid overflow-x-auto rounded-xs border border-admin-borda'
         style={{
           gridTemplateColumns: `repeat(${colunas}, minmax(5.5rem, 1fr))`
         }}>
@@ -165,7 +165,7 @@ function CamposTabela({ bloco, mudar }: PropsCampos<'tabela'>) {
               aria-label={`Linha ${y + 1}, coluna ${x + 1}`}
               value={linha[x] ?? ''}
               onChange={(e) => trocar(y, x, e.target.value)}
-              className={`min-w-0 border-r border-b border-[#eceef2] h-9 px-3 text-sm outline-none transition-colors hover:bg-[#f7f8fa] focus-visible:bg-[#e8f0fe] motion-reduce:transition-none ${y === 0 ? 'bg-[#f3f4f6] font-medium' : 'bg-white'}`}
+              className={`min-w-0 border-r border-b border-admin-borda-sutil h-9 px-3 text-sm outline-none transition-colors hover:bg-admin-cabecalho focus-visible:bg-[#e8f0fe] motion-reduce:transition-none ${y === 0 ? 'bg-admin-chao font-medium' : 'bg-white'}`}
             />
           ))
         )}
@@ -269,7 +269,7 @@ export function CamposBloco({
       return <CamposLista bloco={bloco} mudar={mudar} />;
     case 'citacao':
       return (
-        <div className='grid gap-2 border-l-2 border-[#dfe2e8] pl-3'>
+        <div className='grid gap-2 border-l-2 border-admin-borda pl-3'>
           <CampoTexto
             rotulo='O que a pessoa disse'
             linhas={2}

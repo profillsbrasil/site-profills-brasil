@@ -18,7 +18,10 @@ const colunas =
 
 const selos: Record<UsoImagem, { rotulo: string; classe: string }> = {
   capa: { rotulo: 'Capa', classe: 'bg-[#e3f3ea] text-[#1f7a4d]' },
-  texto: { rotulo: 'No texto', classe: 'bg-[#eceef2] text-[#5a6172]' },
+  texto: {
+    rotulo: 'No texto',
+    classe: 'bg-admin-borda-sutil text-admin-apagado'
+  },
   semUso: { rotulo: 'Sem uso', classe: 'bg-[#fbeee0] text-[#9a4f12]' }
 };
 
@@ -43,14 +46,14 @@ export default async function ImagensPage() {
   ]);
 
   return (
-    <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
+    <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
       <Lateral
         atual='imagens'
         totais={{ posts: posts.length, imagens: imagens?.length ?? null }}
       />
 
-      <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-[#f3f4f6] text-[#1b1c1f]'>
-        <header className='flex min-h-14 items-center gap-3 border-b border-[#dfe2e8] bg-white px-5 py-3'>
+      <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-admin-chao text-admin-texto'>
+        <header className='flex min-h-14 items-center gap-3 border-b border-admin-borda bg-white px-5 py-3'>
           <h1 className='text-lg font-semibold'>Imagens</h1>
         </header>
 
@@ -60,7 +63,7 @@ export default async function ImagensPage() {
               <h2 className='text-base font-semibold'>
                 O armazém de imagens não respondeu
               </h2>
-              <p className='max-w-sm text-xs text-[#5a6172]'>
+              <p className='max-w-sm text-xs text-admin-apagado'>
                 A lista não carregou agora. Os posts e o editor continuam
                 abertos; recarregue esta página em alguns minutos.
               </p>
@@ -68,16 +71,16 @@ export default async function ImagensPage() {
           ) : imagens.length === 0 ? (
             <div className='grid justify-items-center gap-3 rounded-xs border border-dashed border-[#8a90a0] bg-white p-10 text-center'>
               <h2 className='text-base font-semibold'>Nenhuma imagem ainda</h2>
-              <p className='max-w-sm text-xs text-[#5a6172]'>
+              <p className='max-w-sm text-xs text-admin-apagado'>
                 As imagens aparecem aqui quando você envia uma capa ou um bloco
                 de imagem no editor de um post.
               </p>
             </div>
           ) : (
-            <div className='overflow-hidden rounded-xs border border-[#dfe2e8] bg-white'>
+            <div className='overflow-hidden rounded-xs border border-admin-borda bg-white'>
               <div
                 aria-hidden='true'
-                className={`${colunas} border-b border-[#dfe2e8] bg-[#f7f8fa] py-2 text-xs font-medium text-[#5a6172]`}>
+                className={`${colunas} border-b border-admin-borda bg-admin-cabecalho py-2 text-xs font-medium text-admin-apagado`}>
                 <span />
                 <span>Arquivo</span>
                 <span>Post</span>
@@ -98,12 +101,12 @@ export default async function ImagensPage() {
                   }) => (
                     <li
                       key={caminho}
-                      className='border-b border-[#eceef2] last:border-b-0'>
+                      className='border-b border-admin-borda-sutil last:border-b-0'>
                       <a
                         href={caminho}
                         target='_blank'
                         rel='noreferrer'
-                        className={`${colunas} py-2 transition-colors outline-none hover:bg-[#f7f8fa] focus-visible:bg-[#f7f8fa] motion-reduce:transition-none`}>
+                        className={`${colunas} py-2 transition-colors outline-none hover:bg-admin-cabecalho focus-visible:bg-admin-cabecalho motion-reduce:transition-none`}>
                         <Image
                           src={caminho}
                           alt=''
@@ -114,7 +117,7 @@ export default async function ImagensPage() {
                         <span className='truncate font-mono text-xs'>
                           {arquivo}
                         </span>
-                        <span className='truncate text-[#5a6172]'>
+                        <span className='truncate text-admin-apagado'>
                           {tituloDoPost === null
                             ? slug
                             : tituloDoPost || 'Sem título'}
@@ -123,10 +126,10 @@ export default async function ImagensPage() {
                           className={`justify-self-start rounded-xs px-2 py-0.5 text-xs font-medium whitespace-nowrap ${selos[uso].classe}`}>
                           {selos[uso].rotulo}
                         </span>
-                        <span className='text-right font-mono text-xs text-[#5a6172]'>
+                        <span className='text-right font-mono text-xs text-admin-apagado'>
                           {tamanhoDoArquivo(tamanho)}
                         </span>
-                        <span className='text-[#5a6172]'>
+                        <span className='text-admin-apagado'>
                           {dataPorExtenso(enviadaEm)}
                         </span>
                       </a>

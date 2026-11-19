@@ -61,7 +61,7 @@ export function EscolherImagem({
         <FileInputTrigger
           aria-label={src ? `Trocar ${rotulo}` : `Enviar ${rotulo}`}
           aria-busy={enviando}
-          className={`relative block w-full overflow-hidden rounded-xs border border-dashed border-[#8a90a0] bg-[#0f172b] bg-contain bg-center bg-no-repeat transition-colors outline-none group-data-dragging/zona:border-solid group-data-dragging/zona:border-[#3b80f6] hover:border-solid hover:border-[#3b80f6] focus-visible:border-solid focus-visible:border-[#3b80f6] motion-reduce:transition-none ${proporcao === 'larga' ? 'aspect-[16/7]' : 'aspect-[4/3]'}`}
+          className={`relative block w-full overflow-hidden rounded-xs border border-dashed border-[#8a90a0] bg-admin-lateral bg-contain bg-center bg-no-repeat transition-colors outline-none group-data-dragging/zona:border-solid group-data-dragging/zona:border-[#3b80f6] hover:border-solid hover:border-[#3b80f6] focus-visible:border-solid focus-visible:border-[#3b80f6] motion-reduce:transition-none ${proporcao === 'larga' ? 'aspect-[16/7]' : 'aspect-[4/3]'}`}
           style={src ? { backgroundImage: `url(${src})` } : undefined}>
           {enviando ? (
             <span className='flex h-full items-center justify-center gap-2 bg-[rgba(15,23,43,0.7)] text-xs font-medium text-white'>
@@ -72,11 +72,11 @@ export function EscolherImagem({
               Enviando imagem
             </span>
           ) : src ? (
-            <span className='absolute right-2 bottom-2 rounded-xs bg-white px-2 py-1 text-xs font-medium text-[#1b1c1f]'>
+            <span className='absolute right-2 bottom-2 rounded-xs bg-white px-2 py-1 text-xs font-medium text-admin-texto'>
               Trocar imagem
             </span>
           ) : (
-            <span className='flex h-full flex-col items-center justify-center gap-2 p-3 text-center text-xs text-[#b6c5e2]'>
+            <span className='flex h-full flex-col items-center justify-center gap-2 p-3 text-center text-xs text-admin-lateral-texto'>
               <ImagePlus aria-hidden='true' className='size-5 text-white' />
               Clique para enviar ou solte a imagem aqui
               <span className='text-xs'>PNG, JPEG, WebP ou AVIF, até 5 MB</span>

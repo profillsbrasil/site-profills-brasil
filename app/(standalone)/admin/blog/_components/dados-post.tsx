@@ -46,7 +46,7 @@ export function DadosPost({
   dispatch: Dispatch<AcaoEditor>;
 }) {
   return (
-    <div className='grid gap-4 rounded-xs border border-[#dfe2e8] bg-white p-4'>
+    <div className='grid gap-4 rounded-xs border border-admin-borda bg-white p-4'>
       <div className='grid gap-2'>
         <Label htmlFor='post-assunto' className={classeRotulo}>
           Assunto
@@ -69,7 +69,9 @@ export function DadosPost({
                 className='h-12 rounded-xs py-0'>
                 <span className='flex flex-col'>
                   <span>{nome}</span>
-                  <span className='text-xs text-[#5a6172]'>{descricao}</span>
+                  <span className='text-xs text-admin-apagado'>
+                    {descricao}
+                  </span>
                 </span>
               </SelectItem>
             ))}

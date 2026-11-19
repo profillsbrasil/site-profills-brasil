@@ -103,7 +103,7 @@ function textoStatus(fase: Fase, gravacao: PostGuardado | null, sujo: boolean) {
 }
 
 const classeAba =
-  'h-full flex-none gap-2 rounded-xs border-0 px-3 py-0 text-xs text-[#5a6172] shadow-none hover:bg-[#eceef2] hover:text-[#1b1c1f] focus-visible:bg-[#eceef2] focus-visible:text-[#1b1c1f] focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-[#0f172b] data-[state=active]:text-white data-[state=active]:shadow-none';
+  'h-full flex-none gap-2 rounded-xs border-0 px-3 py-0 text-xs text-admin-apagado shadow-none hover:bg-admin-borda-sutil hover:text-admin-texto focus-visible:bg-admin-borda-sutil focus-visible:text-admin-texto focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-admin-acao data-[state=active]:text-white data-[state=active]:shadow-none';
 
 function Vao({ ativo }: { ativo: boolean }) {
   return (
@@ -170,9 +170,9 @@ export function EditorPostNovo({ totais }: { totais: TotaisLateral }) {
 
   if (trocando) {
     return (
-      <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
+      <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
         <Lateral atual='editor' totais={totais} />
-        <div aria-busy='true' className='my-2 mr-2 rounded-xs bg-[#f3f4f6]' />
+        <div aria-busy='true' className='my-2 mr-2 rounded-xs bg-admin-chao' />
       </div>
     );
   }
@@ -437,7 +437,7 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
 
   return (
     <EnvioImagemContext value={envioImagem}>
-      <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
+      <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
         <Lateral
           atual={inicial ? 'editor' : 'novo'}
           totais={{
@@ -447,16 +447,16 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
           aoNavegar={aoNavegar}
         />
 
-        <div className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-[#f3f4f6] text-[#1b1c1f]'>
-          <header className='flex flex-wrap items-center gap-3 border-b border-[#dfe2e8] bg-white px-5 py-3'>
+        <div className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-admin-chao text-admin-texto'>
+          <header className='flex flex-wrap items-center gap-3 border-b border-admin-borda bg-white px-5 py-3'>
             <h1 className='text-lg font-semibold'>
               {gravacao ? 'Editar post' : 'Novo post'}
             </h1>
             <span
-              className={`rounded-xs px-2 py-0.5 text-xs font-medium ${publicado ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
+              className={`rounded-xs px-2 py-0.5 text-xs font-medium ${publicado ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-admin-borda-sutil text-admin-apagado'}`}>
               {publicado ? 'Publicado' : 'Rascunho'}
             </span>
-            <p aria-live='polite' className='text-xs text-[#5a6172]'>
+            <p aria-live='polite' className='text-xs text-admin-apagado'>
               {gravandoParaSair
                 ? `${textoGravando.salvar}…`
                 : textoStatus(fase, gravacao, sujo)}
@@ -521,7 +521,7 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
               <h2 id='titulo-paleta' className='text-base font-semibold'>
                 Blocos
               </h2>
-              <p className='mt-1 mb-3 text-xs text-[#5a6172]'>
+              <p className='mt-1 mb-3 text-xs text-admin-apagado'>
                 Arraste para o texto ou clique para pôr no fim
               </p>
               <Paleta
@@ -569,7 +569,7 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
                 ))}
                 <Vao ativo={vaoAtivo === post.linhas.length} />
                 {post.linhas.length === 0 ? (
-                  <p className='rounded-xs border border-dashed border-[#8a90a0] p-6 text-center text-xs text-[#5a6172]'>
+                  <p className='rounded-xs border border-dashed border-[#8a90a0] p-6 text-center text-xs text-admin-apagado'>
                     Arraste um bloco para cá
                   </p>
                 ) : null}
@@ -589,7 +589,7 @@ export function EditorBlog({ inicial, totais, aoTrocarEndereco }: Props) {
                   <h2 id='titulo-previa' className='text-base font-semibold'>
                     Como fica no site
                   </h2>
-                  <TabsList className='h-8 rounded-xs bg-white p-1 shadow-[inset_0_0_0_1px_#dfe2e8]'>
+                  <TabsList className='h-8 rounded-xs bg-white p-1 shadow-[inset_0_0_0_1px_var(--admin-borda)]'>
                     <TabsTrigger value='computador' className={classeAba}>
                       <Monitor aria-hidden='true' />
                       Computador
