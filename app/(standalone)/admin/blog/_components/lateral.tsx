@@ -75,6 +75,10 @@ export function Lateral({ atual, totais, usuario, aoNavegar }: Props) {
   const rotuloRecolher = recolhida ? 'Abrir o menu' : 'Recolher o menu';
   const nome = usuario || 'Admin';
 
+  const marcado = (pagina: PaginaAdmin) =>
+    atual === pagina ||
+    (recolhida && pagina === 'todos' && Object.hasOwn(filtrosPosts, atual));
+
   const posts: ItemLateral[] = [
     {
       ...filtroComoItem('todos', totais.posts),
@@ -113,7 +117,7 @@ export function Lateral({ atual, totais, usuario, aoNavegar }: Props) {
       key={pagina}
       href={href}
       aria-label={recolhida ? titulo : undefined}
-      aria-current={atual === pagina ? 'page' : undefined}
+      aria-current={marcado(pagina) ? 'page' : undefined}
       title={titulo}
       onClick={(e) => aoNavegar?.(e, href)}
       className={`${classeLink} ${Icone ? '' : 'py-1.5 pl-[37px] text-[13px]'}`}>
@@ -125,7 +129,7 @@ export function Lateral({ atual, totais, usuario, aoNavegar }: Props) {
           <span className={fade}>{nome}</span>
           {total === null ? null : (
             <span
-              className={`ml-auto font-mono text-xs tabular-nums ${total === 0 ? 'opacity-40' : 'opacity-85'} ${fade}`}>
+              className={`ml-auto font-mono text-xs tabular-nums ${total === 0 ? 'opacity-70' : 'opacity-100'} ${fade}`}>
               {total}
             </span>
           )}

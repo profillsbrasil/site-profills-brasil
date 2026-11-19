@@ -94,8 +94,8 @@ describe('Lateral', () => {
   it('total zero aparece apagado e o armazém mudo deixa Imagens sem número', () => {
     abrir('todos', { publicados: 0, imagens: null });
 
-    expect(screen.getByText('0').className).toContain('opacity-40');
-    expect(screen.getByText('11').className).not.toContain('opacity-40');
+    expect(screen.getByText('0').className).toContain('opacity-70');
+    expect(screen.getByText('11').className).not.toContain('opacity-70');
     expect(link('Imagens').textContent).toBe('Imagens');
   });
 
@@ -143,6 +143,12 @@ describe('Lateral', () => {
 
       expect(item.getAttribute('title')).toBeTruthy();
     }
+
+    expect(
+      screen
+        .getByRole('link', { name: 'Todos os posts' })
+        .getAttribute('aria-current')
+    ).toBe('page');
 
     expect(screen.getByRole('button', { name: 'Sair' })).toBeTruthy();
   });
