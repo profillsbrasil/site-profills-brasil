@@ -23,6 +23,10 @@ vi.mock('@/lib/blog/admin', () => ({
 
 vi.mock('next/image', () => ({ default: () => null }));
 
+vi.mock('@/lib/admin/sessao', () => ({
+  autorAtual: async () => ({ usuario: 'profills' })
+}));
+
 const posts: ResumoAdmin[] = [
   {
     slug: 'teste-pouch',
@@ -44,7 +48,7 @@ const posts: ResumoAdmin[] = [
 
 async function abrir() {
   listar.mockResolvedValue(posts);
-  render(await PostsPage());
+  render(await PostsPage({ searchParams: Promise.resolve({}) }));
 }
 
 const lixeira = () =>

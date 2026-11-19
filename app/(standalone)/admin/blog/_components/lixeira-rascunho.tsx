@@ -169,7 +169,7 @@ export function LixeiraRascunho({
             <DialogTitle>Apagar rascunho?</DialogTitle>
             <DialogDescription>
               O rascunho{' '}
-              <strong className='font-semibold text-[#1b1c1f]'>
+              <strong className='font-semibold text-admin-texto'>
                 {`"${titulo}"`}
               </strong>{' '}
               sai da lista. As imagens dele saem do armazém junto, menos as que

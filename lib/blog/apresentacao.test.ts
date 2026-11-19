@@ -1,12 +1,15 @@
 import {
   agruparPorAssunto,
   dataCurta,
+  filtrosPosts,
   idYoutube,
+  lerFiltroPosts,
   minutosDeLeitura,
   montarListagem,
   outrosPosts,
   primeiraMaquina,
   tamanhoDoArquivo,
+  totaisDosPosts,
   usoDasImagens
 } from './apresentacao';
 import type { Post, ResumoAdmin, ResumoPublicado } from './tipos';
@@ -248,6 +251,57 @@ describe('usoDasImagens', () => {
       '/blog/a/texto.png': 'texto',
       '/blog/a/dupla.png': 'capa',
       '/blog/a/capa.png': 'capa'
+    });
+  });
+});
+
+describe('filtros da lista de posts', () => {
+  const posts = [
+    { estado: 'publicado' },
+    { estado: 'rascunho' },
+    { estado: 'publicado' }
+  ] as const;
+
+  it('lê o ?estado= e cai em todos sem ele ou com valor desconhecido', () => {
+    expect(lerFiltroPosts('publicados')).toBe('publicados');
+    expect(lerFiltroPosts('rascunhos')).toBe('rascunhos');
+    expect(lerFiltroPosts(undefined)).toBe('todos');
+    expect(lerFiltroPosts('arquivados')).toBe('todos');
+    expect(lerFiltroPosts('toString')).toBe('todos');
+    expect(lerFiltroPosts(['publicados', 'rascunhos'])).toBe('todos');
+  });
+
+  it('cada filtro leva à URL que o lê de volta', () => {
+    for (const [filtro, { href }] of Object.entries(filtrosPosts)) {
+      const estado = new URL(href, 'https://www.profills.com').searchParams.get(
+        'estado'
+      );
+
+      expect(lerFiltroPosts(estado ?? undefined)).toBe(filtro);
+    }
+  });
+
+  it('separa publicados e rascunhos, e todos inclui os dois', () => {
+    expect(posts.filter(filtrosPosts.todos.inclui)).toHaveLength(3);
+    expect(posts.filter(filtrosPosts.publicados.inclui)).toEqual([
+      { estado: 'publicado' },
+      { estado: 'publicado' }
+    ]);
+    expect(posts.filter(filtrosPosts.rascunhos.inclui)).toEqual([
+      { estado: 'rascunho' }
+    ]);
+  });
+
+  it('conta os totais da lateral', () => {
+    expect(totaisDosPosts(posts)).toEqual({
+      posts: 3,
+      publicados: 2,
+      rascunhos: 1
+    });
+    expect(totaisDosPosts([])).toEqual({
+      posts: 0,
+      publicados: 0,
+      rascunhos: 0
     });
   });
 });

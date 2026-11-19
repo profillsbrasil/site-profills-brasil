@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
+import { autorAtual } from '@/lib/admin/sessao';
 import { abrirAdminBlog } from '@/lib/blog/admin';
+import { totaisDosPosts } from '@/lib/blog/apresentacao';
 import { slugSchema } from '@/lib/schemas/post-blog';
 
 import { enderecoDeEntrada } from '../../entrar/volta';
@@ -23,10 +25,11 @@ export default async function EditarPostPage({
 
   if (!slug.success) notFound();
 
-  const [guardado, posts, imagens] = await Promise.all([
+  const [guardado, posts, imagens, autor] = await Promise.all([
     admin.ler(slug.data),
     admin.listar(),
-    admin.contarImagens()
+    admin.contarImagens(),
+    autorAtual()
   ]);
 
   if (!guardado) notFound();
@@ -35,7 +38,8 @@ export default async function EditarPostPage({
     <EditorBlog
       key={guardado.slug}
       inicial={guardado}
-      totais={{ posts: posts.length, imagens }}
+      totais={{ ...totaisDosPosts(posts), imagens }}
+      usuario={autor?.usuario ?? null}
     />
   );
 }

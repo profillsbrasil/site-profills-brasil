@@ -47,9 +47,9 @@ function CartaoBloco({
   return (
     <div
       data-bloco={bloco.tipo}
-      className='min-w-0 rounded-xs border border-[#dfe2e8] bg-white px-4 pt-2 pb-4'>
+      className='min-w-0 rounded-xs border border-admin-borda bg-white px-4 pt-2 pb-4'>
       <div className='mb-2 flex items-center gap-2'>
-        <Icone aria-hidden='true' className='size-4 text-[#5a6172]' />
+        <Icone aria-hidden='true' className='size-4 text-admin-apagado' />
         <b className='flex-1 truncate text-sm font-medium'>{nome}</b>
         <Button
           type='button'
@@ -126,13 +126,13 @@ export function LinhaEditor({
           }>
           <GripVertical />
         </Button>
-        <span className='font-mono text-xs text-[#5a6172]'>
+        <span className='font-mono text-xs text-admin-apagado'>
           {numeroComZero}
         </span>
         {linha.colunas.length === 2 ? (
           <span
             data-proporcao={linha.proporcao}
-            className='ml-2 font-mono text-xs text-[#5a6172]'>
+            className='ml-2 font-mono text-xs text-admin-apagado'>
             {linha.proporcao}% | {100 - linha.proporcao}%
           </span>
         ) : null}
@@ -212,7 +212,7 @@ export function LinhaEditor({
             aria-label={`Largura das colunas da linha ${numero}`}
             className='group/alca relative flex w-4 items-center justify-center outline-none'>
             <span className='h-full w-px border-l border-dashed border-[#8a90a0] transition-colors group-data-dragging/alca:border-solid group-data-dragging/alca:border-[#3b80f6] group-data-hovering/alca:border-solid group-data-hovering/alca:border-[#3b80f6] group-focus-visible/alca:border-solid group-focus-visible/alca:border-[#3b80f6] motion-reduce:transition-none' />
-            <span className='absolute grid h-8 w-3 place-items-center rounded-xs border border-[#dfe2e8] bg-white text-[#5a6172] transition-colors group-data-dragging/alca:border-[#3b80f6] group-data-dragging/alca:text-[#3b80f6] group-data-hovering/alca:border-[#3b80f6] group-data-hovering/alca:text-[#3b80f6] group-focus-visible/alca:border-[#3b80f6] group-focus-visible/alca:text-[#3b80f6] motion-reduce:transition-none'>
+            <span className='absolute grid h-8 w-3 place-items-center rounded-xs border border-admin-borda bg-white text-admin-apagado transition-colors group-data-dragging/alca:border-[#3b80f6] group-data-dragging/alca:text-[#3b80f6] group-data-hovering/alca:border-[#3b80f6] group-data-hovering/alca:text-[#3b80f6] group-focus-visible/alca:border-[#3b80f6] group-focus-visible/alca:text-[#3b80f6] motion-reduce:transition-none'>
               <GripVertical aria-hidden='true' className='size-3' />
             </span>
           </ResizableHandle>

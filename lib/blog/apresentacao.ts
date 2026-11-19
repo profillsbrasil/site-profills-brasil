@@ -40,6 +40,66 @@ export function dataCurta(iso: string) {
   return `${partes.day} ${MESES[Number(partes.month) - 1]} ${partes.year}`;
 }
 
+const FILTROS_POSTS = ['todos', 'publicados', 'rascunhos'] as const;
+
+export type FiltroPosts = (typeof FILTROS_POSTS)[number];
+
+type RegistroFiltro = {
+  rotulo: string;
+  titulo: string;
+  href: string;
+  inclui: (post: Pick<ResumoAdmin, 'estado'>) => boolean;
+  vazio: { titulo: string; texto: string };
+};
+
+/** Os filtros da lista de posts do admin, na ordem da lateral. */
+export const filtrosPosts: Record<FiltroPosts, RegistroFiltro> = {
+  todos: {
+    rotulo: 'Todos',
+    titulo: 'Posts',
+    href: '/admin/blog',
+    inclui: () => true,
+    vazio: {
+      titulo: 'Nenhum post ainda',
+      texto:
+        'Clique em Novo post para escrever o primeiro. Ele fica guardado como rascunho até você publicar.'
+    }
+  },
+  publicados: {
+    rotulo: 'Publicados',
+    titulo: 'Publicados',
+    href: '/admin/blog?estado=publicados',
+    inclui: (post) => post.estado === 'publicado',
+    vazio: {
+      titulo: 'Nenhum post publicado',
+      texto: 'Abra um rascunho e clique em Publicar para ele aparecer no blog.'
+    }
+  },
+  rascunhos: {
+    rotulo: 'Rascunhos',
+    titulo: 'Rascunhos',
+    href: '/admin/blog?estado=rascunhos',
+    inclui: (post) => post.estado === 'rascunho',
+    vazio: {
+      titulo: 'Nenhum rascunho',
+      texto: 'Os posts que você salva sem publicar ficam aqui até a publicação.'
+    }
+  }
+};
+
+/** O valor de ?estado= da lista de posts; ausente ou desconhecido vira 'todos'. */
+export function lerFiltroPosts(valor: string | string[] | undefined) {
+  return FILTROS_POSTS.find((filtro) => filtro === valor) ?? 'todos';
+}
+
+export function totaisDosPosts(posts: readonly Pick<ResumoAdmin, 'estado'>[]) {
+  return {
+    posts: posts.length,
+    publicados: posts.filter(filtrosPosts.publicados.inclui).length,
+    rascunhos: posts.filter(filtrosPosts.rascunhos.inclui).length
+  };
+}
+
 /** Cada assunto do registry, na ordem dele, com os posts que o usam; assunto sem post vem com a lista vazia. */
 export function agruparPorAssunto(posts: ResumoAdmin[]) {
   return Object.keys(assuntos)

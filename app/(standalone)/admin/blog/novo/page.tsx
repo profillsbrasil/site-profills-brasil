@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
+import { autorAtual } from '@/lib/admin/sessao';
 import { abrirAdminBlog } from '@/lib/blog/admin';
+import { totaisDosPosts } from '@/lib/blog/apresentacao';
 
 import { enderecoDeEntrada } from '../../entrar/volta';
 import { EditorPostNovo } from '../_components/editor-blog';
@@ -13,10 +15,16 @@ export default async function NovoPostPage() {
 
   if (!admin) redirect(enderecoDeEntrada('/admin/blog/novo'));
 
-  const [posts, imagens] = await Promise.all([
+  const [posts, imagens, autor] = await Promise.all([
     admin.listar(),
-    admin.contarImagens()
+    admin.contarImagens(),
+    autorAtual()
   ]);
 
-  return <EditorPostNovo totais={{ posts: posts.length, imagens }} />;
+  return (
+    <EditorPostNovo
+      totais={{ ...totaisDosPosts(posts), imagens }}
+      usuario={autor?.usuario ?? null}
+    />
+  );
 }

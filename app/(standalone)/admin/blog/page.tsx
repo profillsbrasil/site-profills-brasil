@@ -2,7 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import { autorAtual } from '@/lib/admin/sessao';
 import { abrirAdminBlog } from '@/lib/blog/admin';
+import {
+  filtrosPosts,
+  lerFiltroPosts,
+  totaisDosPosts
+} from '@/lib/blog/apresentacao';
 import { assuntos } from '@/lib/blog/tipos';
 
 import { enderecoDeEntrada } from '../entrar/volta';
@@ -13,46 +19,57 @@ import {
   LixeiraRascunho
 } from './_components/lixeira-rascunho';
 
+type Busca = { searchParams: Promise<{ estado?: string | string[] }> };
+
 export const metadata: Metadata = { title: 'Posts' };
 
 const colunas =
   'grid grid-cols-[minmax(0,1fr)_8rem_11rem_6.5rem_2rem] items-center gap-4 px-4';
 
-export default async function PostsPage() {
+export default async function PostsPage({ searchParams }: Busca) {
   const admin = await abrirAdminBlog();
 
   if (!admin) redirect(enderecoDeEntrada('/admin/blog'));
 
-  const [posts, imagens] = await Promise.all([
+  const [{ estado }, todos, imagens, autor] = await Promise.all([
+    searchParams,
     admin.listar(),
-    admin.contarImagens()
+    admin.contarImagens(),
+    autorAtual()
   ]);
 
-  return (
-    <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-[#0f172b] text-sm'>
-      <Lateral atual='posts' totais={{ posts: posts.length, imagens }} />
+  const filtro = lerFiltroPosts(estado);
+  const { titulo, inclui, vazio } = filtrosPosts[filtro];
+  const posts = todos.filter(inclui);
 
-      <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-[#f3f4f6] text-[#1b1c1f]'>
+  return (
+    <div className='grid h-dvh grid-cols-[auto_minmax(0,1fr)] bg-admin-lateral text-sm'>
+      <Lateral
+        atual={filtro}
+        totais={{ ...totaisDosPosts(todos), imagens }}
+        usuario={autor?.usuario ?? null}
+      />
+
+      <main className='my-2 mr-2 flex min-h-0 flex-col overflow-hidden rounded-xs bg-admin-chao text-admin-texto'>
         <AvisosDeApagar
           cabecalho={
-            <header className='flex min-h-14 items-center gap-3 border-b border-[#dfe2e8] bg-white px-5 py-3'>
-              <h1 className='text-lg font-semibold'>Posts</h1>
+            <header className='flex min-h-14 items-center gap-3 border-b border-admin-borda bg-white px-5 py-3'>
+              <h1 className='text-lg font-semibold'>{titulo}</h1>
             </header>
           }>
           <div className='min-h-0 flex-1 overflow-y-auto p-5'>
             {posts.length === 0 ? (
               <div className='grid justify-items-center gap-3 rounded-xs border border-dashed border-[#8a90a0] bg-white p-10 text-center'>
-                <h2 className='text-base font-semibold'>Nenhum post ainda</h2>
-                <p className='max-w-sm text-xs text-[#5a6172]'>
-                  Clique em Novo post para escrever o primeiro. Ele fica
-                  guardado como rascunho até você publicar.
+                <h2 className='text-base font-semibold'>{vazio.titulo}</h2>
+                <p className='max-w-sm text-xs text-admin-apagado'>
+                  {vazio.texto}
                 </p>
               </div>
             ) : (
-              <div className='overflow-hidden rounded-xs border border-[#dfe2e8] bg-white'>
+              <div className='overflow-hidden rounded-xs border border-admin-borda bg-white'>
                 <div
                   aria-hidden='true'
-                  className={`${colunas} border-b border-[#dfe2e8] bg-[#f7f8fa] py-2 text-xs font-medium text-[#5a6172]`}>
+                  className={`${colunas} border-b border-admin-borda bg-admin-cabecalho py-2 text-xs font-medium text-admin-apagado`}>
                   <span>Título</span>
                   <span>Assunto</span>
                   <span>Atualizado em</span>
@@ -71,21 +88,21 @@ export default async function PostsPage() {
                     }) => (
                       <li
                         key={slug}
-                        className='group relative border-b border-[#eceef2] last:border-b-0'>
+                        className='group relative border-b border-admin-borda-sutil last:border-b-0'>
                         <Link
                           href={`/admin/blog/${slug}`}
-                          className={`${colunas} py-3 transition-colors outline-none group-hover:bg-[#f7f8fa] focus-visible:bg-[#f7f8fa] motion-reduce:transition-none`}>
+                          className={`${colunas} py-3 transition-colors outline-none group-hover:bg-admin-cabecalho focus-visible:bg-admin-cabecalho motion-reduce:transition-none`}>
                           <span className='truncate font-medium'>
                             {titulo || 'Sem título'}
                           </span>
-                          <span className='text-[#5a6172]'>
+                          <span className='text-admin-apagado'>
                             {assuntos[assunto].nome}
                           </span>
-                          <span className='text-[#5a6172]'>
+                          <span className='text-admin-apagado'>
                             {dataPorExtenso(atualizadoEm)}
                           </span>
                           <span
-                            className={`justify-self-start rounded-xs px-2 py-0.5 text-xs font-medium ${estado === 'publicado' ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-[#eceef2] text-[#5a6172]'}`}>
+                            className={`justify-self-start rounded-xs px-2 py-0.5 text-xs font-medium ${estado === 'publicado' ? 'bg-[#e3f3ea] text-[#1f7a4d]' : 'bg-admin-borda-sutil text-admin-apagado'}`}>
                             {estado === 'publicado' ? 'Publicado' : 'Rascunho'}
                           </span>
                         </Link>

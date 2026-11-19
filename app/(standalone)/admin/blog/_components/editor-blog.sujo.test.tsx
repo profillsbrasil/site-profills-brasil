@@ -43,7 +43,13 @@ function apertarVoltar() {
 }
 
 async function digitarEApagar() {
-  render(<EditorBlog inicial={inicial} totais={{ posts: 1, imagens: 0 }} />);
+  render(
+    <EditorBlog
+      inicial={inicial}
+      totais={{ posts: 1, publicados: 0, rascunhos: 1, imagens: 0 }}
+      usuario='profills'
+    />
+  );
 
   const titulo = screen.getByRole('textbox', { name: /^Título/ });
 
@@ -76,7 +82,7 @@ describe('mudança desfeita no editor', () => {
     await digitarEApagar();
     expect(screen.queryByText('Mudanças não salvas')).not.toBeInTheDocument();
 
-    const posts = screen.getByRole('link', { name: /^Posts/ });
+    const posts = screen.getByRole('link', { name: /^Todos/ });
     const clique = new MouseEvent('click', { bubbles: true, cancelable: true });
 
     posts.addEventListener('click', (e) => e.preventDefault(), { once: true });

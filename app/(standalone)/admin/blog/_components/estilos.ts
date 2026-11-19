@@ -1,15 +1,15 @@
 export const classeCampo =
-  'rounded-xs border-[#dfe2e8] bg-white shadow-none transition-colors hover:border-[#8a90a0] focus-visible:border-[#3b80f6] focus-visible:ring-0 motion-reduce:transition-none';
+  'rounded-xs border-admin-borda bg-white shadow-none transition-colors hover:border-[#8a90a0] focus-visible:border-[#3b80f6] focus-visible:ring-0 motion-reduce:transition-none';
 
 export const classeBotaoCheio =
-  'rounded-xs bg-[#0f172b] text-white shadow-none hover:bg-[#243049] focus-visible:bg-[#243049] focus-visible:ring-0 motion-reduce:transition-none';
+  'rounded-xs bg-admin-acao text-white shadow-none hover:bg-admin-acao-hover focus-visible:bg-admin-acao-hover focus-visible:ring-0 motion-reduce:transition-none';
 
 export const classeBotaoContorno =
-  'rounded-xs border-[#dfe2e8] bg-white text-[#1b1c1f] shadow-none hover:border-[#8a90a0] hover:bg-[#f7f8fa] focus-visible:border-[#8a90a0] focus-visible:bg-[#f7f8fa] focus-visible:ring-0 motion-reduce:transition-none';
+  'rounded-xs border-admin-borda bg-white text-admin-texto shadow-none hover:border-[#8a90a0] hover:bg-admin-cabecalho focus-visible:border-[#8a90a0] focus-visible:bg-admin-cabecalho focus-visible:ring-0 motion-reduce:transition-none';
 
 export const classeBotaoPequeno = 'gap-2 has-[>svg]:px-2';
 
 export const classeIcone =
-  'size-8 rounded-xs text-[#5a6172] hover:bg-[#eceef2] hover:text-[#1b1c1f] focus-visible:bg-[#eceef2] focus-visible:text-[#1b1c1f] focus-visible:ring-0 motion-reduce:transition-none';
+  'size-8 rounded-xs text-admin-apagado hover:bg-admin-borda-sutil hover:text-admin-texto focus-visible:bg-admin-borda-sutil focus-visible:text-admin-texto focus-visible:ring-0 motion-reduce:transition-none';
 
-export const classeRotulo = 'text-xs font-medium text-[#5a6172]';
+export const classeRotulo = 'text-xs font-medium text-admin-apagado';

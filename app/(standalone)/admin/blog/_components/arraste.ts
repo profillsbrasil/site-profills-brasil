@@ -26,7 +26,7 @@ const FOLGA_DO_PONTEIRO = 14;
 const FOLGA_DA_LINHA_ALVO = 16;
 
 const CLASSE_FICHA =
-  'fixed top-0 left-0 flex items-center gap-2 rounded-xs border border-[#3b80f6] bg-white px-2 py-1 text-[13px] font-medium whitespace-nowrap text-[#1b1c1f] shadow-[0_6px_18px_rgba(15,23,43,0.18)] [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-[#5a6172]';
+  'tema-admin fixed top-0 left-0 flex items-center gap-2 rounded-xs border border-[#3b80f6] bg-white px-2 py-1 text-[13px] font-medium whitespace-nowrap text-admin-texto shadow-[0_6px_18px_rgba(15,23,43,0.18)] [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-admin-apagado';
 
 type Ponto = { x: number; y: number };
 

@@ -95,6 +95,19 @@
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
+  --color-admin-lateral: var(--admin-lateral);
+  --color-admin-lateral-texto: var(--admin-lateral-texto);
+  --color-admin-lateral-hover: var(--admin-lateral-hover);
+  --color-admin-lateral-ativo: var(--admin-lateral-ativo);
+  --color-admin-lateral-linha: var(--admin-lateral-linha);
+  --color-admin-chao: var(--admin-chao);
+  --color-admin-cabecalho: var(--admin-cabecalho);
+  --color-admin-borda: var(--admin-borda);
+  --color-admin-borda-sutil: var(--admin-borda-sutil);
+  --color-admin-texto: var(--admin-texto);
+  --color-admin-apagado: var(--admin-apagado);
+  --color-admin-acao: var(--admin-acao);
+  --color-admin-acao-hover: var(--admin-acao-hover);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -283,8 +296,24 @@ input[type='number']::-webkit-outer-spin-button {
    (item de Select, botão outline e ghost). Aqui ele vira um azul bem claro com texto escuro.
    Conteúdo em portal (SelectContent, DialogContent) fica fora da subárvore e leva a classe também. */
 .tema-admin {
+  --admin-lateral: #0b1220;
+  --admin-lateral-texto: #9fb3d9;
+  --admin-lateral-hover: rgba(96, 140, 255, 0.14);
+  --admin-lateral-ativo: #2563eb;
+  --admin-lateral-linha: rgba(120, 160, 255, 0.18);
+  --admin-lateral-grade:
+    linear-gradient(rgba(120, 160, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 160, 255, 0.07) 1px, transparent 1px);
+  --admin-chao: #f1f4f9;
+  --admin-cabecalho: #f6f8fb;
+  --admin-borda: #d9dfea;
+  --admin-borda-sutil: #e9edf4;
+  --admin-texto: #121826;
+  --admin-apagado: #56607a;
+  --admin-acao: #1d4ed8;
+  --admin-acao-hover: #1e40af;
   --accent: #e8f0fe;
-  --accent-foreground: #1b1c1f;
+  --accent-foreground: var(--admin-texto);
   --ring: #3b80f6;
 }
 

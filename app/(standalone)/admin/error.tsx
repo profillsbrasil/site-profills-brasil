@@ -11,10 +11,10 @@ export default function ErroAdmin({
   unstable_retry: () => void;
 }) {
   return (
-    <main className='grid min-h-dvh place-items-center bg-white px-4 text-sm text-[#1b1c1f]'>
+    <main className='grid min-h-dvh place-items-center bg-white px-4 text-sm text-admin-texto'>
       <div role='alert' className='grid max-w-sm gap-3'>
         <h1 className='text-lg font-semibold'>O banco do blog não respondeu</h1>
-        <p className='text-[#5a6172]'>
+        <p className='text-admin-apagado'>
           Nada foi perdido do que já estava salvo. Tente de novo em alguns
           segundos.
         </p>
