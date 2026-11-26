@@ -15,5 +15,9 @@ export const CONTATO_PADRAO = {
   compras: {
     telefone: '5541997851998',
     email: 'compras@profillsdobrasil.com.br'
+  },
+  privacidade: {
+    telefone: '5541997851998',
+    email: 'dev@profills.com'
   }
 } as const;

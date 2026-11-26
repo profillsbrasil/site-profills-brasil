@@ -247,6 +247,11 @@ export default function Footer() {
                 className='transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none'>
                 Blog
               </Link>
+              <Link
+                href='/politica-de-privacidade'
+                className='transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none'>
+                Política de Privacidade
+              </Link>
               <p className='text-center'>
                 <span className='text-accent'>&copy;</span> {ANO_ATUAL} Profills
                 Brasil. Todos os direitos reservados.
