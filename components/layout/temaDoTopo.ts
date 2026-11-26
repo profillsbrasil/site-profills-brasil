@@ -11,6 +11,7 @@ export type TemaDoTopo = 'navy' | 'claro';
 export const TEMA_POR_ROTA = {
   '/': 'navy',
   '/blog': 'navy',
+  '/politica-de-privacidade': 'navy',
   '/clientes': 'claro',
   '/download': 'navy',
   '/maquinas': 'navy',

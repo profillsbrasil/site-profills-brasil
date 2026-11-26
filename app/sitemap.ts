@@ -26,6 +26,11 @@ const rotasEstaticas: Rota[] = [
   { path: '/clientes', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/download', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/blog', priority: 0.6, changeFrequency: 'weekly' },
+  {
+    path: '/politica-de-privacidade',
+    priority: 0.3,
+    changeFrequency: 'yearly'
+  },
   { path: '/projetos/profills-hub', priority: 0.5, changeFrequency: 'yearly' },
   { path: '/projetos/profills-erp', priority: 0.5, changeFrequency: 'yearly' },
   { path: '/projetos/profills-bank', priority: 0.5, changeFrequency: 'yearly' },

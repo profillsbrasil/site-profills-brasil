@@ -88,6 +88,13 @@ describe('Footer', () => {
     );
   });
 
+  it('leva à política de privacidade', () => {
+    renderFooter();
+    expect(
+      screen.getByRole('link', { name: 'Política de Privacidade' })
+    ).toHaveAttribute('href', '/politica-de-privacidade');
+  });
+
   it('com Indicação troca só o card Vendas/Peças', () => {
     document.cookie = `profills_indicacao=${jwtFalso({
       codigo: 'MARIA-10',

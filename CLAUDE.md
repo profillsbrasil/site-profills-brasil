@@ -21,6 +21,7 @@ app/
 ├── globals.css           ← tokens do tema (@theme, oklch), keyframes CSS — Tailwind v4 não tem tailwind.config
 ├── (site)/               ← páginas com navbar + footer (layout do grupo injeta a casca)
 │   ├── <rota>/_components/   ← componentes privados da rota (o _ tira do roteamento)
+│   ├── politica-de-privacidade/ ← política da LGPD em folhas de prancha; o texto fica em _components/secoes.tsx e o contato sai de CONTATO_PADRAO.privacidade
 │   └── blog/             ← listagem e leitura públicas, dinâmicas, por lib/blog/leitura.ts; not-found.tsx próprio dá 404 de verdade (ADR 0006)
 ├── (standalone)/         ← páginas sem casca (landings, ex.: sorteio-fispal-2026)
 │   └── admin/            ← admin do blog atrás de login: entrar/ (login e sair), blog/ (lista, novo, [slug] com o editor, imagens/ com o uso de cada imagem do armazém e assuntos/ com os posts de cada assunto); toda página, action e route handler abre por `abrirAdminBlog()` (teste em admin/guarda.node.test.ts); grava pela Server Action `gravarPost`, apaga rascunho por `apagarRascunho` (as duas em blog/acoes.ts) e envia imagem por blog/[slug]/imagem/route.ts
@@ -41,7 +42,7 @@ lib/
 ├── schemas/              ← schemas zod dos forms — compartilhados entre client e route.ts
 ├── emails/<form>/        ← template + envio nodemailer; _shared/ tem transporter e template-engine
 ├── data/                 ← dados estruturados de conteúdo (listaClientes); data/maquinas/ é a fonte única das máquinas — registry por slug, 1 arquivo por máquina
-└── images/<categoria>/   ← imagens importadas no código (catalogo2026, projetos, logoClientes…); blog/ guarda os sketches do fundo do blog, nunca capa de post
+└── images/<categoria>/   ← imagens importadas no código (catalogo2026, projetos, logoClientes…); blog/ guarda os sketches do fundo do blog, nunca capa de post; privacidade/ guarda os desenhos da política
 
 public/                   ← só o que precisa de URL direta: videos/, embalagens-3d/*.glb, logos, geojson
 private/downloads/        ← arquivos NÃO públicos (catálogo 77MB), servidos via api/download/[token] com JWT
@@ -58,7 +59,7 @@ proxy.ts                  ← captura ?ref, grava o cookie de Indicação e redi
 lib/crm/                  ← cliente server-only da API do CRM (referral code)
 lib/indicacao/            ← cookie assinado, tipos e destinatário do lead
 components/indicacao/     ← IndicacaoProvider, useContatoComercial, BotaoEspecialista
-lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte, compras)
+lib/data/contatos.ts      ← fonte única dos contatos padrão (vendas, suporte, compras, privacidade)
 lib/blog/                 ← tipos (o registry `assuntos` dá plural, chamada e fim do post), regras.ts (transição, conflito de versão e slugs reservados, que a migração 0005 repete, puro), apresentacao.ts (listagem, data, minutos de leitura, uso das imagens, agrupamento por assunto, puro), repositorio.ts (SQL); as portas são admin.ts (escrita) e leitura.ts (publicados)
 lib/banco/                ← conexão (pg ou PGlite), migrar.mjs e migracoes/*.sql; só lib/blog, lib/admin e scripts/ importam (regra profills/sem-banco-direto)
 lib/admin/                ← login do admin: senha.mjs (scrypt, JS puro para o script) e sessao.ts (JWT no cookie, limite de tentativas, atalho de dev)
